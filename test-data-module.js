@@ -93,4 +93,24 @@ const changedSegments = {
 };
 assert.equal(Selectors.segYoY(changedSegments, "FY2", "B"), null);
 
+// cash & capital intensity (FCF derived, never stored)
+const cashYear = { fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 };
+assert.equal(Selectors.capexIntensity(cashYear), 0.3);
+assert.equal(Selectors.fcf(cashYear), 20);          // 50 − 30
+assert.equal(Selectors.fcfMargin(cashYear), 0.2);   // 20 / 100
+assert.equal(Selectors.cashConversion(cashYear), 1);// 20 / 20
+const downturn = { fy: "FY0", status: "actual", revenue: 16, net_income: -6, capex: 7, cfo: 1.5 };
+assert.equal(Math.round(Selectors.fcf(downturn) * 10) / 10, -5.5);   // negative FCF in a downcycle
+assert.equal(Math.round(Selectors.fcfMargin(downturn) * 1000) / 1000, -0.344); // -5.5 / 16
+const noCash = { fy: "FY2", status: "actual", revenue: 100, net_income: 20 };
+assert.equal(Selectors.fcf(noCash), null);
+assert.equal(Selectors.capexIntensity(noCash), null);
+assert.equal(Selectors.fcfMargin(noCash), null);
+assert.equal(Selectors.cashConversion(noCash), null);
+const halfCash = { fy: "FY3", status: "actual", revenue: 100, net_income: 20, capex: 30 }; // cfo missing
+assert.equal(Selectors.fcf(halfCash), null);        // both inputs required
+assert.equal(Selectors.capexIntensity(halfCash), 0.3); // capex intensity needs only capex
+assert.equal(Selectors.homeMetric({ years: [cashYear] }, "fcfMargin"), 0.2);
+assert.equal(Selectors.homeMetric({ years: [cashYear] }, "capexInt"), 0.3);
+
 console.log("data-module tests passed");

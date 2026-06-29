@@ -88,6 +88,14 @@ def check(data):
                 # sanity
                 if rev is not None and ni is not None and ni > rev + TOL:
                     errors.append(f"ERROR {tag}: net_income({ni}) > revenue({rev})")
+                # cash & capital intensity (raw facts; FCF is derived, never stored)
+                capex, cfo = y.get("capex"), y.get("cfo")
+                if capex is not None and capex < 0:
+                    errors.append(f"ERROR {tag}: capex({capex}) < 0（请存非负量级，方向由派生层处理）")
+                if (capex is None) != (cfo is None):
+                    warns.append(f"WARN  {tag}: capex 与 cfo 只录了一个，FCF 无法派生（建议成对录入）")
+                if capex is not None and cfo is not None:
+                    oks.append(f"INFO  {tag}: FCF 可派生 = CFO {cfo} − capex {capex} = {round(cfo - capex, 4)}（capex 强度 {round(capex / rev * 100, 1) if rev else '—'}%）")
                 for mkey in ("gross_margin",):
                     mv = y.get(mkey)
                     if mv is not None and not (0 <= mv <= 1):

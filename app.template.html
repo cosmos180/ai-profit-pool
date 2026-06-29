@@ -174,6 +174,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
       <button class="chip" data-m="revenue" aria-pressed="true">营收</button>
       <button class="chip" data-m="netIncome" aria-pressed="false">净利润</button>
       <button class="chip" data-m="netM" aria-pressed="false">净利率</button>
+      <button class="chip" data-m="fcfMargin" aria-pressed="false">FCF 利润率</button>
+      <button class="chip" data-m="capexInt" aria-pressed="false">capex 强度</button>
     </div>
     <div class="dir" id="popDir"></div>
     <div class="section-h">预留槽位 · 待补录 <span class="count" id="pendCount"></span></div>
@@ -196,6 +198,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
         <div class="i"><span class="lg" style="background:transparent;border-top:2px dashed var(--ink-soft);height:2px;border-radius:0;margin-top:5px"></span>净利率 %</div>
       </div>
     </div>
+    <div class="section-h" id="cCashH">质量与现金 · 最新实际</div>
+    <div id="cCash"></div>
     <div class="section-h">按财年下钻 · 点击进入业务板块明细</div>
     <div class="years" id="cYears"></div>
     <div class="note-block" id="cNote"></div>
@@ -235,8 +239,8 @@ const Fmt={
   yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
   segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
 };
-const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率"};
-const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v)};
+const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度"};
+const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v)};
 const Safe={
   text(v){return v==null?"":String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));},
   attr(v){return Safe.text(v);},
@@ -322,6 +326,7 @@ function renderCompany(id){
   $("#cKpis").innerHTML=cards.map(k=>`<div class="card kpi ${Safe.cls(k.cls)}"><div class="k-lbl"><span class="swatch" style="background:${Safe.attr(k.sw)}"></span>${Safe.text(k.lbl)}</div><div class="k-val">${Safe.text(k.val)}</div><div class="k-sub">${Safe.text(k.sub)}</div></div>`).join("");
   $("#cTrendH").textContent=c.years.length?`营收与净利润 · ${c.years[0].fy} → ${c.years[c.years.length-1].fy}`:"营收与净利润";
   renderTrend(c);
+  renderCash(c);
   $("#cYears").innerHTML=c.years.map(y=>{
     const fcc=y.status==="forecast",ry=Selectors.revYoY(c,y.fy);
     return `<button class="ycard ${fcc?'is-fc':''}" data-fy="${Safe.attr(y.fy)}">
@@ -336,6 +341,28 @@ function renderCompany(id){
   $("#cNote").innerHTML=c.id==="nvda"
     ? `<b>口径说明：</b>本页“利润”均为公司层面 GAAP 净利润，可同口径逐年对比。<b>FY2026 净利润 $120.1B 略高于经营利润 $130.4B 的税后水平</b>，因当年含较大股权投资收益（GAAP 计入、非经营性）。下钻可见真实约束：营收拆 5 个平台，利润只披露到 2 个分部。`
     : `<b>口径说明：</b>公司层面 GAAP / IFRS 净利润，按主要经营年度映射。`;
+}
+function renderCash(c){
+  const h=$("#cCashH"),box=$("#cCash");
+  if(!Selectors.actualYears(c).length){h.style.display="none";box.innerHTML="";return;}
+  h.style.display="";
+  // show the most recent actual year that actually carries cash data; honest gap otherwise
+  const la=Selectors.latestCashYear(c);
+  if(!la){
+    h.textContent="质量与现金";box.className="";
+    box.innerHTML=`<div class="note-block" style="margin-top:0"><b>现金流数据未录入。</b>本页“现金”指标需要 <code style="font-family:var(--mono)">capex</code> 与 <code style="font-family:var(--mono)">cfo</code>（经营现金流）两个原始字段——诚实做法是留空，而不是估一个数填进去。补录后此处自动出现 FCF、FCF 利润率、现金转化率与 capex 强度。</div>`;
+    return;
+  }
+  h.textContent=`质量与现金 · ${la.fy}`;
+  const fcf=Selectors.fcf(la);
+  const cards=[
+    {lbl:"capex 强度",val:Fmt.pct(Selectors.capexIntensity(la)),sub:la.capex!=null?"capex "+Fmt.bn(la.capex,1)+" / 营收":"未录入 capex",cls:"",sw:"var(--est)"},
+    {lbl:"自由现金流 FCF",val:Fmt.bn(fcf,1),sub:la.cfo!=null?"CFO "+Fmt.bn(la.cfo,1)+" − capex":"缺 CFO 无法派生",cls:fcf!=null&&fcf<0?"":"accent",sw:"var(--ok)"},
+    {lbl:"FCF 利润率",val:Fmt.pct(Selectors.fcfMargin(la)),sub:"FCF / 营收",cls:"accent",sw:"var(--ok)"},
+    {lbl:"现金转化率",val:Fmt.pct(Selectors.cashConversion(la)),sub:"FCF / 净利润 · 利润含金量",cls:"accent",sw:"var(--ok)"},
+  ];
+  box.className="kpis";
+  box.innerHTML=cards.map(k=>`<div class="card kpi ${Safe.cls(k.cls)}"><div class="k-lbl"><span class="swatch" style="background:${Safe.attr(k.sw)}"></span>${Safe.text(k.lbl)}</div><div class="k-val">${Safe.text(k.val)}</div><div class="k-sub">${Safe.text(k.sub)}</div></div>`).join("");
 }
 function renderTrend(c){
   const svg=$("#trend"),data=c.years||[];
@@ -391,6 +418,11 @@ function actualView(c,y){
       <div class="ptrack"><div class="pfill" style="width:${(p.revenue/maxV*100).toFixed(1)}%"></div></div>
       <div class="pyoy">${yoyHtml}</div></div>`;
   }).join("");
+  const fcf=Selectors.fcf(y);
+  const cashCells=(y.capex!=null||y.cfo!=null)?
+     `<div class="c"><div class="cl">capex 强度</div><div class="cv num">${Fmt.pct(Selectors.capexIntensity(y))}</div></div>`
+    +`<div class="c"><div class="cl">自由现金流</div><div class="cv num ${fcf!=null&&fcf>=0?'green':''}">${Fmt.bn(fcf,1)}</div></div>`
+    +`<div class="c"><div class="cl">现金转化率</div><div class="cv num">${Fmt.pct(Selectors.cashConversion(y))}</div></div>`:"";
   const rec=Selectors.reconcile(y);
   const reconLine = rec.partition
     ? `平台合计 ${Fmt.bn(rec.sum,2)} ${rec.ok?'<span class="ok">＝</span>':'≠'} 公司总营收 ${Fmt.bn(rec.revenue,2)} ${rec.ok?'<span class="ok">✓ 对账通过</span>':'（差 '+rec.diff.toFixed(2)+'）'}`
@@ -428,6 +460,7 @@ function actualView(c,y){
     <div class="c"><div class="cl">经营利润率</div><div class="cv num">${Fmt.pct(Selectors.opMargin(y))}</div></div>
     <div class="c"><div class="cl">净利润</div><div class="cv num green">${Fmt.bn(y.net_income,1)}</div></div>
     <div class="c"><div class="cl">净利率</div><div class="cv num green">${Fmt.pct(Selectors.netMargin(y))}</div></div>
+    ${cashCells}
   </div>
   <div class="section-h">业务板块营收 · 降序</div>
   <div class="card"><div class="plat">${platHtml}</div>
