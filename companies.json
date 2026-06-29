@@ -22,6 +22,7 @@
         {
           "fy": "FY2024", "period_end": "截至 2024-01-28", "status": "actual",
           "revenue": 60.92, "gross_margin": 0.727, "op_income": 32.97, "net_income": 29.76,
+          "capex": 1.07, "cfo": 28.09,
           "segments": [
             {"name": "Data Center 数据中心", "kind": "platform", "revenue": 47.52, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Gaming 游戏", "kind": "platform", "revenue": 10.45, "op_income": null, "op_margin": null, "is_ai": false},
@@ -31,12 +32,14 @@
           ],
           "reportable_note": {"Compute & Networking": "≈ 78%", "Graphics": "≈ 22%"},
           "sources": [
-            {"label": "FY2024 业绩（FY2025 新闻稿含上一年对比）", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"}
+            {"label": "FY2024 业绩（FY2025 新闻稿含上一年对比）", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "estimate"}
           ]
         },
         {
           "fy": "FY2025", "period_end": "截至 2025-01-26", "status": "actual",
           "revenue": 130.50, "gross_margin": 0.750, "op_income": 81.45, "net_income": 72.88,
+          "capex": 3.24, "cfo": 64.09,
           "segments": [
             {"name": "Data Center 数据中心", "kind": "platform", "revenue": 115.19, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Gaming 游戏", "kind": "platform", "revenue": 11.35, "op_income": null, "op_margin": null, "is_ai": false},
@@ -47,7 +50,8 @@
           "reportable_note": {"Compute & Networking": "≈ 88%", "Graphics": "≈ 12%"},
           "sources": [
             {"label": "FY2025 业绩新闻稿", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"},
-            {"label": "FY2025 10-K（Note 16）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "official"}
+            {"label": "FY2025 10-K（Note 16）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "estimate"}
           ]
         },
         {
@@ -231,6 +235,7 @@
         {
           "fy": "FY2023", "period_end": "截至 2023-08-31", "status": "actual",
           "revenue": 15.540, "gross_margin": null, "op_income": -5.745, "net_income": -5.833,
+          "capex": 7.00, "cfo": 1.56,
           "segments": [
             {"name": "CMBU 云存储", "kind": "platform", "revenue": 1.872, "op_income": -0.768, "op_margin": -0.410, "is_ai": true},
             {"name": "CDBU 核心数据中心", "kind": "platform", "revenue": 2.124, "op_income": -0.563, "op_margin": -0.265, "is_ai": false},
@@ -239,12 +244,14 @@
             {"name": "Other 其他", "kind": "platform", "revenue": 0.011, "op_income": 0.008, "op_margin": 0.727, "is_ai": false}
           ],
           "sources": [
-            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"}
+            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "estimate"}
           ]
         },
         {
           "fy": "FY2024", "period_end": "截至 2024-08-29", "status": "actual",
           "revenue": 25.111, "gross_margin": 0.224, "op_income": 1.304, "net_income": 0.778,
+          "capex": 8.39, "cfo": 8.51,
           "segments": [
             {"name": "CMBU 云存储", "kind": "platform", "revenue": 3.792, "op_income": 0.244, "op_margin": 0.064, "is_ai": true},
             {"name": "CDBU 核心数据中心", "kind": "platform", "revenue": 4.984, "op_income": 0.255, "op_margin": 0.051, "is_ai": false},
@@ -253,7 +260,8 @@
             {"name": "Other 其他", "kind": "platform", "revenue": 0.037, "op_income": 0.018, "op_margin": 0.486, "is_ai": false}
           ],
           "sources": [
-            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"}
+            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "estimate"}
           ]
         },
         {
@@ -327,6 +335,7 @@
         {
           "fy": "FY2023", "period_end": "自然年 2023（截至 2023-12-31）", "status": "actual",
           "revenue": 70.599, "gross_margin": 0.544, "op_income": 30.094, "net_income": 27.816,
+          "capex": 30.45, "cfo": 40.00,
           "segments": [
             {"name": "HPC 高性能计算", "kind": "platform", "revenue": 30.357, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Smartphone 智能手机", "kind": "platform", "revenue": 26.828, "op_income": null, "op_margin": null, "is_ai": false},
@@ -336,12 +345,14 @@
             {"name": "Other 其他", "kind": "platform", "revenue": 2.118, "op_income": null, "op_margin": null, "is_ai": false}
           ],
           "sources": [
-            {"label": "TSMC FY2023 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm", "data_status": "official"}
+            {"label": "TSMC FY2023 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm", "data_status": "official"},
+            {"label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm", "data_status": "estimate"}
           ]
         },
         {
           "fy": "FY2024", "period_end": "自然年 2024（截至 2024-12-31）", "status": "actual",
           "revenue": 88.268, "gross_margin": 0.561, "op_income": 40.319, "net_income": 35.327,
+          "capex": 29.76, "cfo": 56.00,
           "segments": [
             {"name": "HPC 高性能计算", "kind": "platform", "revenue": 45.017, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Smartphone 智能手机", "kind": "platform", "revenue": 30.894, "op_income": null, "op_margin": null, "is_ai": false},
@@ -351,7 +362,8 @@
             {"name": "Other 其他", "kind": "platform", "revenue": 1.765, "op_income": null, "op_margin": null, "is_ai": false}
           ],
           "sources": [
-            {"label": "TSMC FY2024 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm", "data_status": "official"}
+            {"label": "TSMC FY2024 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm", "data_status": "official"},
+            {"label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm", "data_status": "estimate"}
           ]
         },
         {

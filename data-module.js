@@ -35,6 +35,14 @@ const Selectors = {
   netMargin(y) { return (y && y.revenue && y.net_income != null) ? y.net_income / y.revenue : null; },
   opMargin(y)  { return (y && y.revenue && y.op_income  != null) ? y.op_income  / y.revenue : null; },
 
+  /* ---- cash & capital intensity (the "who burns cash on fabs vs who mints it" lens) ----
+     capex is stored as a sign-neutral magnitude; FCF = operating cash flow − capex.
+     All null-safe: a missing input yields null (honest gap), never a fabricated 0. */
+  capexIntensity(y) { return (y && y.revenue && y.capex != null) ? y.capex / y.revenue : null; },
+  fcf(y)            { return (y && y.cfo != null && y.capex != null) ? y.cfo - y.capex : null; },
+  fcfMargin(y)      { const f = this.fcf(y); return (f != null && y.revenue) ? f / y.revenue : null; },
+  cashConversion(y) { const f = this.fcf(y); return (f != null && y.net_income) ? f / y.net_income : null; },
+
   /* ---- company-level helpers ---- */
   actualYears(c)   { return c.years.filter(y => y.status === "actual"); },
   forecastYear(c)  { return c.years.find(y => y.status === "forecast"); },
@@ -79,7 +87,15 @@ const Selectors = {
                                     .sort((a, b) => b.op_income - a.op_income); },
 
   /* ---- directory metric accessors (cross-company) ---- */
+  /* latest actual year that carries cash inputs (capex/cfo may lag the headline year) */
+  latestCashYear(c) { return this.actualYears(c).reverse().find(y => y.capex != null || y.cfo != null) || null; },
+
   homeMetric(c, key) {
+    if (key === "fcfMargin" || key === "capexInt") {
+      const cy = this.latestCashYear(c);
+      if (!cy) return null;
+      return key === "fcfMargin" ? this.fcfMargin(cy) : this.capexIntensity(cy);
+    }
     const y = this.latestActual(c);
     if (!y) return null;
     if (key === "revenue")   return y.revenue;

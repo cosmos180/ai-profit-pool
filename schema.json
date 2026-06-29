@@ -50,6 +50,8 @@
         "gross_margin": {"type": ["number", "null"]},
         "op_income": {"type": ["number", "null"]},
         "net_income": {"type": ["number", "null"]},
+        "capex": {"type": ["number", "null"], "description": "Capital expenditures (raw, from cash-flow statement). Sign-neutral magnitude in meta.unit."},
+        "cfo": {"type": ["number", "null"], "description": "Net cash from operating activities (raw, from cash-flow statement) in meta.unit."},
         "segments": {"type": "array", "items": {"$ref": "#/definitions/segment"}},
         "reportable_note": {"type": "object"},
         "framework_change": {"type": "string"},

@@ -35,7 +35,10 @@ header.top{padding:26px 0 6px}
 .crumb.cur{color:var(--ink);font-weight:600;cursor:default}.crumb.cur:hover{text-decoration:none}
 .crumb-sep{color:var(--ink-faint);font-size:12px}
 h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;letter-spacing:-.015em}
-.lead{color:var(--ink-soft);font-size:13.5px;max-width:66ch;margin:0}.lead b{color:var(--ink)}
+.lead{color:var(--ink-soft);font-size:13.5px;max-width:66ch;margin:0;line-height:1.6}.lead b{color:var(--ink)}
+.cmeta-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 14px}
+.cmeta-row .tickerbadge{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:3px 10px}
+.cmeta-row .tagx,.cmeta-row .segtag{font-size:11px;padding:3px 9px}
 .section-h{font-size:12px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:28px 0 13px;display:flex;align-items:center;gap:10px}
 .section-h::after{content:"";flex:1;height:1px;background:var(--line-soft)}
 .section-h .count{font-family:var(--mono);text-transform:none;letter-spacing:0;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px;font-size:11px}
@@ -174,6 +177,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
       <button class="chip" data-m="revenue" aria-pressed="true">营收</button>
       <button class="chip" data-m="netIncome" aria-pressed="false">净利润</button>
       <button class="chip" data-m="netM" aria-pressed="false">净利率</button>
+      <button class="chip" data-m="fcfMargin" aria-pressed="false">FCF 利润率</button>
+      <button class="chip" data-m="capexInt" aria-pressed="false">capex 强度</button>
     </div>
     <div class="dir" id="popDir"></div>
     <div class="section-h">预留槽位 · 待补录 <span class="count" id="pendCount"></span></div>
@@ -183,6 +188,7 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
 
   <section id="company">
     <h1 class="title" id="cTitle"></h1>
+    <div class="cmeta-row" id="cMeta"></div>
     <p class="lead" id="cLead"></p>
     <div class="section-h">公司层面 · 量级</div>
     <div class="kpis" id="cKpis"></div>
@@ -196,6 +202,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
         <div class="i"><span class="lg" style="background:transparent;border-top:2px dashed var(--ink-soft);height:2px;border-radius:0;margin-top:5px"></span>净利率 %</div>
       </div>
     </div>
+    <div class="section-h" id="cCashH">质量与现金 · 最新实际</div>
+    <div id="cCash"></div>
     <div class="section-h">按财年下钻 · 点击进入业务板块明细</div>
     <div class="years" id="cYears"></div>
     <div class="note-block" id="cNote"></div>
@@ -240,6 +248,7 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
         {
           "fy": "FY2024", "period_end": "截至 2024-01-28", "status": "actual",
           "revenue": 60.92, "gross_margin": 0.727, "op_income": 32.97, "net_income": 29.76,
+          "capex": 1.07, "cfo": 28.09,
           "segments": [
             {"name": "Data Center 数据中心", "kind": "platform", "revenue": 47.52, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Gaming 游戏", "kind": "platform", "revenue": 10.45, "op_income": null, "op_margin": null, "is_ai": false},
@@ -249,12 +258,14 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
           ],
           "reportable_note": {"Compute & Networking": "≈ 78%", "Graphics": "≈ 22%"},
           "sources": [
-            {"label": "FY2024 业绩（FY2025 新闻稿含上一年对比）", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"}
+            {"label": "FY2024 业绩（FY2025 新闻稿含上一年对比）", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "estimate"}
           ]
         },
         {
           "fy": "FY2025", "period_end": "截至 2025-01-26", "status": "actual",
           "revenue": 130.50, "gross_margin": 0.750, "op_income": 81.45, "net_income": 72.88,
+          "capex": 3.24, "cfo": 64.09,
           "segments": [
             {"name": "Data Center 数据中心", "kind": "platform", "revenue": 115.19, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Gaming 游戏", "kind": "platform", "revenue": 11.35, "op_income": null, "op_margin": null, "is_ai": false},
@@ -265,7 +276,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
           "reportable_note": {"Compute & Networking": "≈ 88%", "Graphics": "≈ 12%"},
           "sources": [
             {"label": "FY2025 业绩新闻稿", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"},
-            {"label": "FY2025 10-K（Note 16）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "official"}
+            {"label": "FY2025 10-K（Note 16）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "estimate"}
           ]
         },
         {
@@ -449,6 +461,7 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
         {
           "fy": "FY2023", "period_end": "截至 2023-08-31", "status": "actual",
           "revenue": 15.540, "gross_margin": null, "op_income": -5.745, "net_income": -5.833,
+          "capex": 7.00, "cfo": 1.56,
           "segments": [
             {"name": "CMBU 云存储", "kind": "platform", "revenue": 1.872, "op_income": -0.768, "op_margin": -0.410, "is_ai": true},
             {"name": "CDBU 核心数据中心", "kind": "platform", "revenue": 2.124, "op_income": -0.563, "op_margin": -0.265, "is_ai": false},
@@ -457,12 +470,14 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
             {"name": "Other 其他", "kind": "platform", "revenue": 0.011, "op_income": 0.008, "op_margin": 0.727, "is_ai": false}
           ],
           "sources": [
-            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"}
+            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "estimate"}
           ]
         },
         {
           "fy": "FY2024", "period_end": "截至 2024-08-29", "status": "actual",
           "revenue": 25.111, "gross_margin": 0.224, "op_income": 1.304, "net_income": 0.778,
+          "capex": 8.39, "cfo": 8.51,
           "segments": [
             {"name": "CMBU 云存储", "kind": "platform", "revenue": 3.792, "op_income": 0.244, "op_margin": 0.064, "is_ai": true},
             {"name": "CDBU 核心数据中心", "kind": "platform", "revenue": 4.984, "op_income": 0.255, "op_margin": 0.051, "is_ai": false},
@@ -471,7 +486,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
             {"name": "Other 其他", "kind": "platform", "revenue": 0.037, "op_income": 0.018, "op_margin": 0.486, "is_ai": false}
           ],
           "sources": [
-            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"}
+            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"},
+            {"label": "capex / CFO（现金流量表，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "estimate"}
           ]
         },
         {
@@ -545,6 +561,7 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
         {
           "fy": "FY2023", "period_end": "自然年 2023（截至 2023-12-31）", "status": "actual",
           "revenue": 70.599, "gross_margin": 0.544, "op_income": 30.094, "net_income": 27.816,
+          "capex": 30.45, "cfo": 40.00,
           "segments": [
             {"name": "HPC 高性能计算", "kind": "platform", "revenue": 30.357, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Smartphone 智能手机", "kind": "platform", "revenue": 26.828, "op_income": null, "op_margin": null, "is_ai": false},
@@ -554,12 +571,14 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
             {"name": "Other 其他", "kind": "platform", "revenue": 2.118, "op_income": null, "op_margin": null, "is_ai": false}
           ],
           "sources": [
-            {"label": "TSMC FY2023 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm", "data_status": "official"}
+            {"label": "TSMC FY2023 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm", "data_status": "official"},
+            {"label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm", "data_status": "estimate"}
           ]
         },
         {
           "fy": "FY2024", "period_end": "自然年 2024（截至 2024-12-31）", "status": "actual",
           "revenue": 88.268, "gross_margin": 0.561, "op_income": 40.319, "net_income": 35.327,
+          "capex": 29.76, "cfo": 56.00,
           "segments": [
             {"name": "HPC 高性能计算", "kind": "platform", "revenue": 45.017, "op_income": null, "op_margin": null, "is_ai": true},
             {"name": "Smartphone 智能手机", "kind": "platform", "revenue": 30.894, "op_income": null, "op_margin": null, "is_ai": false},
@@ -569,7 +588,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
             {"name": "Other 其他", "kind": "platform", "revenue": 1.765, "op_income": null, "op_margin": null, "is_ai": false}
           ],
           "sources": [
-            {"label": "TSMC FY2024 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm", "data_status": "official"}
+            {"label": "TSMC FY2024 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm", "data_status": "official"},
+            {"label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm", "data_status": "estimate"}
           ]
         },
         {
@@ -679,6 +699,14 @@ const Selectors = {
   netMargin(y) { return (y && y.revenue && y.net_income != null) ? y.net_income / y.revenue : null; },
   opMargin(y)  { return (y && y.revenue && y.op_income  != null) ? y.op_income  / y.revenue : null; },
 
+  /* ---- cash & capital intensity (the "who burns cash on fabs vs who mints it" lens) ----
+     capex is stored as a sign-neutral magnitude; FCF = operating cash flow − capex.
+     All null-safe: a missing input yields null (honest gap), never a fabricated 0. */
+  capexIntensity(y) { return (y && y.revenue && y.capex != null) ? y.capex / y.revenue : null; },
+  fcf(y)            { return (y && y.cfo != null && y.capex != null) ? y.cfo - y.capex : null; },
+  fcfMargin(y)      { const f = this.fcf(y); return (f != null && y.revenue) ? f / y.revenue : null; },
+  cashConversion(y) { const f = this.fcf(y); return (f != null && y.net_income) ? f / y.net_income : null; },
+
   /* ---- company-level helpers ---- */
   actualYears(c)   { return c.years.filter(y => y.status === "actual"); },
   forecastYear(c)  { return c.years.find(y => y.status === "forecast"); },
@@ -723,7 +751,15 @@ const Selectors = {
                                     .sort((a, b) => b.op_income - a.op_income); },
 
   /* ---- directory metric accessors (cross-company) ---- */
+  /* latest actual year that carries cash inputs (capex/cfo may lag the headline year) */
+  latestCashYear(c) { return this.actualYears(c).reverse().find(y => y.capex != null || y.cfo != null) || null; },
+
   homeMetric(c, key) {
+    if (key === "fcfMargin" || key === "capexInt") {
+      const cy = this.latestCashYear(c);
+      if (!cy) return null;
+      return key === "fcfMargin" ? this.fcfMargin(cy) : this.capexIntensity(cy);
+    }
     const y = this.latestActual(c);
     if (!y) return null;
     if (key === "revenue")   return y.revenue;
@@ -749,8 +785,8 @@ const Fmt={
   yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
   segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
 };
-const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率"};
-const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v)};
+const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度"};
+const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v)};
 const Safe={
   text(v){return v==null?"":String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));},
   attr(v){return Safe.text(v);},
@@ -823,9 +859,14 @@ function renderHome(){
 function goCompany(id){state.companyId=id;state.fy=null;show("company");renderCompany(id);}
 function renderCompany(id){
   const c=Store.byId(id);
-  if(!c){$("#cTitle").textContent="公司不存在";$("#cLead").textContent="";$("#cKpis").innerHTML="";$("#cYears").innerHTML="";$("#cNote").textContent="";return;}
+  if(!c){$("#cTitle").textContent="公司不存在";$("#cMeta").innerHTML="";$("#cLead").textContent="";$("#cKpis").innerHTML="";$("#cYears").innerHTML="";$("#cNote").textContent="";return;}
   $("#cTitle").textContent=c.name;
-  $("#cLead").innerHTML=`<b>${Safe.text(c.ticker)}</b> · ${Safe.text(c.region)} · ${Safe.text(c.sector)} · ${Safe.text(Fmt.segLabel(c.seg_profit))}。${Safe.text(c.lead||"")}`;
+  $("#cMeta").innerHTML=`<span class="tickerbadge">${Safe.text(c.ticker)}</span>`
+    +`<span class="tagx">${Safe.text(c.region)}</span>`
+    +`<span class="tagx">${Safe.text(c.sector)}</span>`
+    +`<span class="segtag ${Safe.cls(c.seg_profit)}">${Safe.text(Fmt.segLabel(c.seg_profit))}</span>`;
+  $("#cLead").innerHTML=Safe.text(c.lead||"");
+  $("#cLead").style.display=c.lead?"":"none";
   const la=Selectors.latestActual(c),fc=Selectors.forecastYear(c);
   const cards=la?[
     {lbl:`${la.fy} 营收`,val:Fmt.bn(la.revenue),sub:"最新实际",cls:"",sw:"var(--past)"},
@@ -836,6 +877,7 @@ function renderCompany(id){
   $("#cKpis").innerHTML=cards.map(k=>`<div class="card kpi ${Safe.cls(k.cls)}"><div class="k-lbl"><span class="swatch" style="background:${Safe.attr(k.sw)}"></span>${Safe.text(k.lbl)}</div><div class="k-val">${Safe.text(k.val)}</div><div class="k-sub">${Safe.text(k.sub)}</div></div>`).join("");
   $("#cTrendH").textContent=c.years.length?`营收与净利润 · ${c.years[0].fy} → ${c.years[c.years.length-1].fy}`:"营收与净利润";
   renderTrend(c);
+  renderCash(c);
   $("#cYears").innerHTML=c.years.map(y=>{
     const fcc=y.status==="forecast",ry=Selectors.revYoY(c,y.fy);
     return `<button class="ycard ${fcc?'is-fc':''}" data-fy="${Safe.attr(y.fy)}">
@@ -850,6 +892,28 @@ function renderCompany(id){
   $("#cNote").innerHTML=c.id==="nvda"
     ? `<b>口径说明：</b>本页“利润”均为公司层面 GAAP 净利润，可同口径逐年对比。<b>FY2026 净利润 $120.1B 略高于经营利润 $130.4B 的税后水平</b>，因当年含较大股权投资收益（GAAP 计入、非经营性）。下钻可见真实约束：营收拆 5 个平台，利润只披露到 2 个分部。`
     : `<b>口径说明：</b>公司层面 GAAP / IFRS 净利润，按主要经营年度映射。`;
+}
+function renderCash(c){
+  const h=$("#cCashH"),box=$("#cCash");
+  if(!Selectors.actualYears(c).length){h.style.display="none";box.innerHTML="";return;}
+  h.style.display="";
+  // show the most recent actual year that actually carries cash data; honest gap otherwise
+  const la=Selectors.latestCashYear(c);
+  if(!la){
+    h.textContent="质量与现金";box.className="";
+    box.innerHTML=`<div class="note-block" style="margin-top:0"><b>现金流数据未录入。</b>本页“现金”指标需要 <code style="font-family:var(--mono)">capex</code> 与 <code style="font-family:var(--mono)">cfo</code>（经营现金流）两个原始字段——诚实做法是留空，而不是估一个数填进去。补录后此处自动出现 FCF、FCF 利润率、现金转化率与 capex 强度。</div>`;
+    return;
+  }
+  h.textContent=`质量与现金 · ${la.fy}`;
+  const fcf=Selectors.fcf(la);
+  const cards=[
+    {lbl:"capex 强度",val:Fmt.pct(Selectors.capexIntensity(la)),sub:la.capex!=null?"capex "+Fmt.bn(la.capex,1)+" / 营收":"未录入 capex",cls:"",sw:"var(--est)"},
+    {lbl:"自由现金流 FCF",val:Fmt.bn(fcf,1),sub:la.cfo!=null?"CFO "+Fmt.bn(la.cfo,1)+" − capex":"缺 CFO 无法派生",cls:fcf!=null&&fcf<0?"":"accent",sw:"var(--ok)"},
+    {lbl:"FCF 利润率",val:Fmt.pct(Selectors.fcfMargin(la)),sub:"FCF / 营收",cls:"accent",sw:"var(--ok)"},
+    {lbl:"现金转化率",val:Fmt.pct(Selectors.cashConversion(la)),sub:"FCF / 净利润 · 利润含金量",cls:"accent",sw:"var(--ok)"},
+  ];
+  box.className="kpis";
+  box.innerHTML=cards.map(k=>`<div class="card kpi ${Safe.cls(k.cls)}"><div class="k-lbl"><span class="swatch" style="background:${Safe.attr(k.sw)}"></span>${Safe.text(k.lbl)}</div><div class="k-val">${Safe.text(k.val)}</div><div class="k-sub">${Safe.text(k.sub)}</div></div>`).join("");
 }
 function renderTrend(c){
   const svg=$("#trend"),data=c.years||[];
@@ -905,6 +969,11 @@ function actualView(c,y){
       <div class="ptrack"><div class="pfill" style="width:${(p.revenue/maxV*100).toFixed(1)}%"></div></div>
       <div class="pyoy">${yoyHtml}</div></div>`;
   }).join("");
+  const fcf=Selectors.fcf(y);
+  const cashCells=(y.capex!=null||y.cfo!=null)?
+     `<div class="c"><div class="cl">capex 强度</div><div class="cv num">${Fmt.pct(Selectors.capexIntensity(y))}</div></div>`
+    +`<div class="c"><div class="cl">自由现金流</div><div class="cv num ${fcf!=null&&fcf>=0?'green':''}">${Fmt.bn(fcf,1)}</div></div>`
+    +`<div class="c"><div class="cl">现金转化率</div><div class="cv num">${Fmt.pct(Selectors.cashConversion(y))}</div></div>`:"";
   const rec=Selectors.reconcile(y);
   const reconLine = rec.partition
     ? `平台合计 ${Fmt.bn(rec.sum,2)} ${rec.ok?'<span class="ok">＝</span>':'≠'} 公司总营收 ${Fmt.bn(rec.revenue,2)} ${rec.ok?'<span class="ok">✓ 对账通过</span>':'（差 '+rec.diff.toFixed(2)+'）'}`
@@ -942,6 +1011,7 @@ function actualView(c,y){
     <div class="c"><div class="cl">经营利润率</div><div class="cv num">${Fmt.pct(Selectors.opMargin(y))}</div></div>
     <div class="c"><div class="cl">净利润</div><div class="cv num green">${Fmt.bn(y.net_income,1)}</div></div>
     <div class="c"><div class="cl">净利率</div><div class="cv num green">${Fmt.pct(Selectors.netMargin(y))}</div></div>
+    ${cashCells}
   </div>
   <div class="section-h">业务板块营收 · 降序</div>
   <div class="card"><div class="plat">${platHtml}</div>
