@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 利润池 · 2024–2026 口径对比</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Ledger palette — color encodes data trustworthiness.
+   real/grounded = teal · estimate = hatched amber · broken = brick
+   ============================================================ */
+:root{
+  --bg:#E7ECE9; --card:#FBFCFB; --card-2:#F2F5F3;
+  --ink:#18211D; --ink-soft:#54625B; --ink-faint:#8B988F;
+  --line:#D4DBD6; --line-soft:#E3E8E4;
+  --ok:#0E7C6B;            /* real, recent, comparable      */
+  --ok-soft:#CDE7E1;
+  --past:#AEBBB3;          /* 2024 grounded but older       */
+  --est:#BC7A12;           /* 2026E image estimate          */
+  --est-soft:#F0E0C2;
+  --warn:#B26A00;
+  --bad:#A6321F;           /* anomaly / very-low caliber    */
+  --bad-soft:#EED4CD;
+  --muted:#7C8A84;         /* residual / unknown            */
+  --focus:#0E7C6B;
+  --shadow:0 1px 2px rgba(24,33,29,.05),0 8px 24px -16px rgba(24,33,29,.25);
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"IBM Plex Sans","IBM Plex Sans SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+a{color:var(--ok);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2.5px solid var(--focus);outline-offset:2px;border-radius:3px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+/* ---------- header ---------- */
+header.top{padding:30px 0 16px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-faint);display:flex;gap:10px;align-items:center}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.08;margin:10px 0 6px;font-weight:700;letter-spacing:-.015em}
+.sub{color:var(--ink-soft);max-width:60ch;font-size:14.5px}
+.unit-tag{font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+  border:1px solid var(--line);border-radius:6px;padding:3px 9px;background:var(--card);white-space:nowrap}
+
+/* ---------- signature: reconciliation strip ---------- */
+.recon{margin:22px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);overflow:hidden}
+.recon-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:15px 20px 6px;flex-wrap:wrap}
+.recon-head h2{font-size:14px;margin:0;font-weight:600;letter-spacing:-.01em}
+.recon-head .tag{font-family:var(--mono);font-size:11px;color:var(--bad);
+  background:var(--bad-soft);padding:2px 8px;border-radius:5px}
+.recon-body{padding:6px 20px 20px}
+.recon-rows{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.recon-row{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:14px}
+.recon-row .lbl{font-size:12.5px;color:var(--ink-soft)}
+.recon-row .bar{height:14px;border-radius:4px;position:relative;background:var(--card-2)}
+.recon-row .fill{height:100%;border-radius:4px}
+.recon-row .val{font-family:var(--mono);font-size:15px;font-weight:600;text-align:right;width:64px}
+.recon-note{margin-top:14px;display:flex;gap:18px;flex-wrap:wrap;
+  font-size:12.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:13px}
+.recon-note b{font-family:var(--mono);color:var(--bad);font-weight:600}
+.recon-note .ok{color:var(--ok)}
+
+/* ---------- caveat banner ---------- */
+.caveat{display:flex;gap:12px;align-items:flex-start;margin:16px 0 4px;
+  background:linear-gradient(0deg,var(--est-soft),var(--card));
+  border:1px solid #E4CFA4;border-left:4px solid var(--est);border-radius:11px;padding:13px 16px}
+.caveat svg{flex:none;margin-top:1px}
+.caveat p{margin:0;font-size:13.5px;color:#6b4e16}
+.caveat b{color:#4d3a10}
+
+/* ---------- tabs ---------- */
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);
+  padding:18px 0 12px;margin-top:8px}
+.tabs-inner{display:inline-flex;background:var(--card);border:1px solid var(--line);
+  border-radius:11px;padding:4px;box-shadow:var(--shadow);max-width:100%;overflow:auto}
+.tab{appearance:none;border:0;background:transparent;font-family:var(--sans);font-size:13.5px;
+  font-weight:500;color:var(--ink-soft);padding:8px 15px;border-radius:8px;cursor:pointer;
+  white-space:nowrap;transition:background .15s,color .15s}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.tab:hover:not([aria-selected="true"]){color:var(--ink);background:var(--card-2)}
+
+/* ---------- cards / panels ---------- */
+.panel{display:none}
+.panel.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.section-h{font-size:12px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-faint);margin:26px 0 12px;display:flex;align-items:center;gap:10px}
+.section-h::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+
+/* KPI grid */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px;margin-bottom:6px}
+.kpi{padding:16px 17px}
+.kpi .k-lbl{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:6px}
+.kpi .k-val{font-family:var(--mono);font-size:27px;font-weight:600;margin-top:7px;letter-spacing:-.01em}
+.kpi .k-sub{font-size:11.5px;color:var(--ink-faint);margin-top:3px;font-family:var(--mono)}
+.kpi.accent .k-val{color:var(--ok)}
+.kpi.est .k-val{color:var(--est)}
+.swatch{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;padding:14px 17px;font-size:12.5px;color:var(--ink-soft)}
+.legend .item{display:flex;align-items:center;gap:7px}
+.lg-box{width:18px;height:12px;border-radius:3px;flex:none}
+.lg-hatch{background:var(--est);background-image:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,.55) 2px,rgba(255,255,255,.55) 4px)}
+
+/* anomaly list */
+.anoms{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.anom{padding:14px 15px;border-left:3px solid var(--bad);display:flex;flex-direction:column;gap:5px}
+.anom .a-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.anom .a-name{font-weight:600;font-size:14px}
+.anom .a-fig{font-family:var(--mono);font-size:12.5px}
+.anom .a-fig .down{color:var(--bad)}
+.anom .a-why{font-size:12.5px;color:var(--ink-soft)}
+
+/* ---------- toolbar (entities) ---------- */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:14px 16px;margin-bottom:14px}
+.tb-group{display:flex;align-items:center;gap:8px}
+.tb-lbl{font-size:12px;color:var(--ink-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+  font-family:var(--sans);font-size:12.5px;padding:5px 11px;border-radius:20px;cursor:pointer;transition:.12s}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip:hover:not([aria-pressed="true"]){border-color:var(--ink-soft);color:var(--ink)}
+select.sortsel{font-family:var(--sans);font-size:12.5px;padding:6px 9px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.toggle{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--ok);width:15px;height:15px}
+
+/* ---------- chart ---------- */
+.chart-card{padding:18px 18px 12px}
+.chart-wrap{width:100%;overflow:visible}
+.barrow .bg{fill:var(--card-2)}
+.bar-2024{fill:var(--past)}
+.bar-2025{fill:var(--ok)}
+.bar-2026{fill:var(--est)}
+.lbl-y{font-family:var(--sans);font-size:12.5px;fill:var(--ink);font-weight:500}
+.lbl-region{font-family:var(--mono);font-size:10px;fill:var(--ink-faint)}
+.val-lbl{font-family:var(--mono);font-size:10.5px;fill:var(--ink-soft);font-variant-numeric:tabular-nums}
+.barrow{cursor:pointer}
+.barrow:hover .hit{fill:rgba(14,124,107,.06)}
+.flag-anom{font-family:var(--mono);font-size:9px;fill:var(--bad);font-weight:600}
+
+/* ---------- table ---------- */
+.tbl-card{overflow:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:760px}
+thead th{position:sticky;top:0;background:var(--card-2);text-align:right;font-size:11px;
+  font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);
+  padding:11px 13px;border-bottom:1px solid var(--line);white-space:nowrap;z-index:1}
+thead th.l{text-align:left}
+tbody td{padding:11px 13px;border-bottom:1px solid var(--line-soft);text-align:right;white-space:nowrap}
+tbody td.l{text-align:left;white-space:normal}
+tbody tr{cursor:pointer;transition:background .1s}
+tbody tr:hover{background:var(--card-2)}
+.ename{font-weight:600;font-size:13.5px}
+.region-pill{display:inline-block;font-size:10.5px;font-family:var(--mono);color:var(--ink-soft);
+  background:var(--card-2);border:1px solid var(--line-soft);padding:1px 7px;border-radius:5px;margin-top:3px}
+td .down{color:var(--bad);font-weight:600}
+td .up{color:var(--ok)}
+.cmp{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-family:var(--mono);
+  padding:2px 8px;border-radius:6px;font-weight:500}
+.cmp .d{width:7px;height:7px;border-radius:50%}
+.cmp.hi{background:#D7EBE6;color:#0a5e51}.cmp.hi .d{background:var(--ok)}
+.cmp.mid{background:#E7EAE8;color:#4a5750}.cmp.mid .d{background:var(--muted)}
+.cmp.lo{background:#F1E3C6;color:#7a5510}.cmp.lo .d{background:var(--warn)}
+.cmp.vlo{background:var(--bad-soft);color:#822717}.cmp.vlo .d{background:var(--bad)}
+.rt{font-family:var(--mono);font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em}
+.dash{color:var(--ink-faint)}
+
+/* ---------- regions ---------- */
+.region-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.rcard{padding:16px 17px;display:flex;flex-direction:column;gap:12px}
+.rcard .rhead{display:flex;justify-content:space-between;align-items:baseline}
+.rcard .rname{font-weight:700;font-size:16px}
+.rcard .rshare{font-family:var(--mono);font-size:12px;color:var(--est);
+  background:var(--est-soft);padding:2px 8px;border-radius:6px}
+.rcard .rstack{height:13px;border-radius:5px;overflow:hidden;display:flex;background:var(--card-2)}
+.rcard .seg24{background:var(--past)}.rcard .seg25{background:var(--ok)}
+.rmeta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:11.5px}
+.rmeta .m{display:flex;flex-direction:column;gap:2px}
+.rmeta .m .ml{color:var(--ink-faint);font-family:var(--mono);font-size:10px}
+.rmeta .m .mv{font-family:var(--mono);font-size:14px;font-weight:600}
+.rcov{font-size:12px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:9px}
+
+/* ---------- sources / raw ---------- */
+.fx-row{display:flex;flex-wrap:wrap;gap:8px;padding:14px 16px}
+.fx{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:8px;
+  padding:7px 11px;background:var(--card)}
+.fx b{color:var(--ink)}.fx span{color:var(--ink-faint)}
+.src-note{font-size:12px;color:var(--ink-soft);padding:0 2px}
+
+/* ---------- detail drawer ---------- */
+.scrim{position:fixed;inset:0;background:rgba(24,33,29,.34);opacity:0;pointer-events:none;
+  transition:opacity .2s;z-index:50;backdrop-filter:blur(1.5px)}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);background:var(--card);
+  box-shadow:-12px 0 40px -18px rgba(24,33,29,.4);transform:translateX(100%);
+  transition:transform .26s cubic-bezier(.4,0,.2,1);z-index:60;overflow-y:auto;padding:0}
+.drawer.open{transform:none}
+@media(prefers-reduced-motion:reduce){.drawer{transition:none}.scrim{transition:none}.panel.active{animation:none}}
+.dr-head{position:sticky;top:0;background:var(--card);padding:20px 22px 14px;border-bottom:1px solid var(--line);z-index:1}
+.dr-head .dr-region{font-family:var(--mono);font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.1em}
+.dr-head h3{margin:6px 0 0;font-size:21px;letter-spacing:-.01em}
+.dr-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);cursor:pointer;font-size:17px;color:var(--ink-soft);line-height:1}
+.dr-close:hover{background:var(--card-2);color:var(--ink)}
+.dr-body{padding:18px 22px 40px}
+.dr-figs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.dr-fig{background:var(--card-2);border-radius:10px;padding:11px 12px;text-align:left}
+.dr-fig .y{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+.dr-fig .v{font-family:var(--mono);font-size:19px;font-weight:600;margin-top:2px}
+.dr-fig.e .v{color:var(--est)}
+.dr-fig .hatchtag{font-family:var(--mono);font-size:9px;color:var(--est)}
+.dr-kv{display:grid;grid-template-columns:96px 1fr;gap:9px 14px;font-size:13px;margin:4px 0 18px}
+.dr-kv dt{color:var(--ink-faint);font-family:var(--mono);font-size:11px;padding-top:2px}
+.dr-kv dd{margin:0;color:var(--ink)}
+.dr-convert{background:var(--card-2);border-radius:11px;padding:14px 15px;margin-bottom:16px}
+.dr-convert .ct{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
+.conv-row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.conv-row:last-child{border:0}
+.conv-row .cl{color:var(--ink-soft)}
+.conv-row .cv{font-family:var(--mono);font-weight:500}
+.dr-note{font-size:13px;color:var(--ink-soft);background:var(--est-soft);border-radius:10px;padding:12px 14px;line-height:1.55}
+.dr-anom{background:var(--bad-soft);color:#822717;border-radius:10px;padding:11px 13px;font-size:12.5px;margin-bottom:14px;display:flex;gap:9px;align-items:flex-start}
+.dr-src{margin-top:16px;font-size:12.5px}
+.dr-src a{word-break:break-all}
+
+footer{color:var(--ink-faint);font-size:12px;padding:34px 0 50px;text-align:center;line-height:1.7}
+footer b{color:var(--ink-soft)}
+
+@media(max-width:560px){
+  .recon-row{grid-template-columns:88px 1fr auto}
+  .dr-figs{grid-template-columns:1fr 1fr}
+  .rmeta{grid-template-columns:1fr 1fr}
+  .kpi .k-val{font-size:23px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow"><span class="dot"></span>半导体 · AI 供应链 · 净利润</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+      <div>
+        <h1>AI 利润池 · 2024–2026 口径对比</h1>
+        <p class="sub">2024 / 2025 为公司官方披露净利润；2026E 来自用户图片估算。本工具的首要任务不是把三年画成漂亮的柱子，而是<b style="color:var(--ink)">让你看清哪些数字能比、哪些不能比</b>。</p>
+      </div>
+      <span class="unit-tag">单位 · 十亿美元 (USD bn)</span>
+    </div>
+  </header>
+
+  <!-- SIGNATURE: reconciliation strip -->
+  <section class="recon" aria-label="图片三套总额对账">
+    <div class="recon-head">
+      <h2>图片自身就对不上账 — 三套「全球总额」并不一致</h2>
+      <span class="tag">对账缺口</span>
+    </div>
+    <div class="recon-body">
+      <div class="recon-rows" id="reconRows"></div>
+      <div class="recon-note" id="reconNote"></div>
+    </div>
+  </section>
+
+  <div class="caveat">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3 2 20h20L12 3z" stroke="#BC7A12" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v5M12 17h.01" stroke="#BC7A12" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <p><b>口径警示：</b>图片「AI 净利润」定义不透明，明显混用了公司整体利润、业务分部利润、组合估算与残差项。台积电、ASML、博通、华为组合的 2026E 甚至低于其 2025 实际净利润 —— 直接证明图片并非统一使用公司总净利润。<b>请勿只看 2026E/2025 倍数。</b></p>
+  </div>
+</div>
+
+<nav class="tabs">
+  <div class="wrap" style="padding-top:0;padding-bottom:0">
+    <div class="tabs-inner" role="tablist" aria-label="视图切换">
+      <button class="tab" role="tab" aria-selected="true"  data-tab="overview">总览</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="entities">实体对比</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="regions">地区结构</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="sources">原始数据与来源</button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="panel active" id="panel-overview" role="tabpanel">
+    <div class="section-h">关键量级</div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="section-h">颜色即可信度 — 图例</div>
+    <div class="card legend" id="legend">
+      <div class="item"><span class="lg-box" style="background:var(--ok)"></span>2025 实际（最近的真实披露）</div>
+      <div class="item"><span class="lg-box" style="background:var(--past)"></span>2024 实际（更早的真实披露）</div>
+      <div class="item"><span class="lg-box lg-hatch"></span>2026E 图片估算（口径不明，谨慎对待）</div>
+      <div class="item"><span class="cmp hi" style="padding:1px 7px"><span class="d"></span>可比</span> 口径接近、可同比</div>
+      <div class="item"><span class="cmp vlo" style="padding:1px 7px"><span class="d"></span>很低</span> 口径冲突 / 缺披露</div>
+    </div>
+
+    <div class="section-h">异常信号 — 2026E 低于 2025 实际净利润</div>
+    <p class="src-note" style="margin-bottom:12px">在 2024→2025 普遍大涨的年份里，下列已披露实体的 2026E 反而<b>低于</b>其 2025 实际净利润。这只在「图片并非记录公司总利润」时才说得通，是口径不统一最硬的证据。</p>
+    <div class="anoms" id="anoms"></div>
+  </section>
+
+  <!-- ============ ENTITIES ============ -->
+  <section class="panel" id="panel-entities" role="tabpanel">
+    <div class="card toolbar" id="toolbar">
+      <div class="tb-group" id="regionChips">
+        <span class="tb-lbl">地区</span>
+      </div>
+      <div class="tb-group">
+        <span class="tb-lbl">排序</span>
+        <select class="sortsel" id="sortSel">
+          <option value="v2026e">按 2026E 估值</option>
+          <option value="v2025">按 2025 实际</option>
+          <option value="growth">按 2024→2025 增长</option>
+          <option value="mult">按 2026E/2025 倍数</option>
+        </select>
+      </div>
+      <div class="tb-group" style="gap:16px">
+        <label class="toggle"><input type="checkbox" id="hideResid"> 隐藏残差项</label>
+        <label class="toggle"><input type="checkbox" id="onlyAnom"> 仅看异常</label>
+      </div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="chart-wrap"><svg id="chart" role="img" aria-label="实体净利润对比图"></svg></div>
+    </div>
+
+    <div class="section-h">明细表 — 点击任意行查看口径、换算与来源</div>
+    <div class="card tbl-card">
+      <table>
+        <thead><tr>
+          <th class="l">实体 / 组合</th>
+          <th>2024</th><th>2025</th><th>2026E</th>
+          <th>24→25</th><th>26E/25</th>
+          <th class="l">口径可比性</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ REGIONS ============ -->
+  <section class="panel" id="panel-regions" role="tabpanel">
+    <div class="section-h">六大地区 — 可见样本 vs 2026 图片地区总额</div>
+    <p class="src-note" style="margin-bottom:14px">2024/25 仅汇总图片中<b>可明确映射且有公开财报</b>的公司，不代表该地区完整 AI 利润池。条形显示可见样本 2024→2025 的增长。</p>
+    <div class="region-grid" id="regionGrid"></div>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="panel" id="panel-sources" role="tabpanel">
+    <div class="section-h">年度平均汇率假设 (外币 / 美元 · IRS)</div>
+    <div class="card fx-row" id="fxRow"></div>
+    <p class="src-note" style="margin:8px 2px 0">换算方法：美元金额 = 本币金额 ÷ 年度平均汇率。NVIDIA / Micron / Broadcom / TSMC 直接以美元披露。</p>
+
+    <div class="section-h">原始披露数据与统一换算</div>
+    <div class="card tbl-card">
+      <table>
+        <thead><tr>
+          <th class="l">公司 / 实体</th><th class="l">指标</th><th>币种</th>
+          <th>2024 本币</th><th>2024 美元</th>
+          <th>2025 本币</th><th>2025 美元</th>
+          <th class="l">纳入汇总</th><th class="l">来源</th>
+        </tr></thead>
+        <tbody id="rawBody"></tbody>
+      </table>
+    </div>
+    <p class="src-note" style="margin-top:12px">数据状态：2024/2025 = 官方实际（财报 / 年报披露）；2026E = 二手图片，原始出处未识别。Samsung DS 部门为补充参考行，<b>不计入</b>核心汇总以免与集团净利润重复。</p>
+  </section>
+
+  <footer>
+    M (数据) · P (口径/对账/异常推导) · V (此界面) 三层分离的演示 ·
+    <b>2024/25</b> 官方披露 · <b>2026E</b> 用户图片估算（口径混合，仅供量级参考）
+  </footer>
+</div>
+
+<!-- detail drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drName">
+  <div class="dr-head">
+    <button class="dr-close" id="drClose" aria-label="关闭">✕</button>
+    <div class="dr-region" id="drRegion"></div>
+    <h3 id="drName"></h3>
+  </div>
+  <div class="dr-body" id="drBody"></div>
+</aside>
+
+<script>
+/* =====================================================================
+   M  —  MODEL.  The data, kept close to the workbook (USD billions).
+   ===================================================================== */
+const M = {
+  imageTotals:{ title:637.0, lineItemSum:636.9, regionSum:637.9 },
+  reconciliation:[
+    {label:"标题（全球 AI 净利润池）", value:637.0, kind:"title"},
+    {label:"图片明细条目相加",        value:636.9, kind:"line"},
+    {label:"图片地区总额相加",        value:637.9, kind:"region"},
+  ],
+  reconGaps:[
+    {a:"明细 636.9", b:"标题 637.0", diff:-0.1},
+    {a:"地区 637.9", b:"标题 637.0", diff:+0.9},
+    {a:"韩国地区 223.0", b:"SK+三星明细 222.0", diff:-1.0, hard:true},
+  ],
+  // rowType: disclosed | combo | residual
+  // caliber: company | group | comboSum | residual | unknown
+  entities:[
+    {id:"nvda", name:"NVIDIA 英伟达", region:"美国", rowType:"disclosed", caliber:"company",
+     v2024:72.88, v2025:120.067, v2026e:207, comparability:"中-高",
+     composition:"NVIDIA 公司净利润", note:"财年映射（FY2025→2024, FY2026→2025）；2026 图片未给出估算方法。",
+     metric:"归母净利润（GAAP）", currency:"USD"},
+    {id:"us-rest", name:"其余美国", region:"美国", rowType:"residual", caliber:"residual",
+     v2024:null, v2025:null, v2026e:47, comparability:"低",
+     composition:"未知残差项", note:"残差项，无 2024/25 可复原明细。", metric:null, currency:null},
+    {id:"mu", name:"Micron 美光", region:"美国", rowType:"disclosed", caliber:"company",
+     v2024:0.778, v2025:8.539, v2026e:37, comparability:"中-高",
+     composition:"美光公司净利润", note:"存储公司整体利润，AI/HBM 只是其中一部分；存储周期反转致利润大幅修复。",
+     metric:"公司净利润（GAAP）", currency:"USD"},
+    {id:"avgo", name:"Broadcom 博通", region:"美国", rowType:"disclosed", caliber:"company",
+     v2024:5.895, v2025:23.126, v2026e:23, comparability:"中",
+     composition:"博通公司净利润", note:"包含基础设施软件（VMware）及非 AI 业务。",
+     metric:"公司净利润（GAAP）", currency:"USD"},
+    {id:"sk", name:"SK hynix", region:"韩国", rowType:"disclosed", caliber:"company",
+     v2024:14.512228, v2025:30.207156, v2026e:113, comparability:"中",
+     composition:"SK hynix 公司净利润", note:"公司整体利润；HBM 驱动显著但非全部。含 HBM/DRAM/NAND。",
+     metric:"归母净利润", currency:"KRW"},
+    {id:"ss", name:"Samsung（三星存储）", region:"韩国", rowType:"disclosed", caliber:"group",
+     v2024:24.646329, v2025:31.130686, v2026e:109, comparability:"低",
+     composition:"2024/25 为三星电子集团净利润；2026 图片为「存储」估值",
+     note:"口径错位：2024/25 是集团，2026 是存储分部估值，不能直接同比。DS 部门营业利润见原始数据补充行。",
+     metric:"归属于母公司股东的净利润", currency:"KRW"},
+    {id:"tsmc", name:"TSMC 台积电", region:"中国台湾", rowType:"disclosed", caliber:"company",
+     v2024:36.52, v2025:55.21, v2026e:33, comparability:"中",
+     composition:"台积电公司净利润（官方美元口径）", note:"2026 图片值甚至低于 2025 实际，显示其可能并非公司总利润口径。",
+     metric:"公司净利润（官方美元口径）", currency:"USD"},
+    {id:"tw-rest", name:"其余中国台湾", region:"中国台湾", rowType:"residual", caliber:"residual",
+     v2024:null, v2025:null, v2026e:14, comparability:"低",
+     composition:"未知残差项", note:"残差项，无 2024/25 明细。", metric:null, currency:null},
+    {id:"cn-optic", name:"中际旭创 + 工业富联 + 新易盛", region:"中国大陆", rowType:"combo", caliber:"comboSum",
+     v2024:4.343548, v2025:7.801198, v2026e:11, comparability:"中",
+     composition:"三家公司净利润合计", note:"公司总利润合计，与图中 AI 归因口径仍可能不同（含通信设备等非 AI 业务）。",
+     metric:"归属于上市公司股东净利润（合计）", currency:"CNY"},
+    {id:"hw", name:"华为 + 长鑫 + 长存（估）", region:"中国大陆", rowType:"combo", caliber:"comboSum",
+     v2024:8.704131, v2025:9.543554, v2026e:8, comparability:"很低",
+     composition:"仅华为已披露；长鑫 / 长存缺失",
+     note:"2024/25 只显示已披露下限（华为集团总利润）；图中组合值反而更低，明确不是同口径。",
+     metric:"公司净利润（仅华为）", currency:"CNY"},
+    {id:"cn-rest", name:"其余中国大陆", region:"中国大陆", rowType:"residual", caliber:"residual",
+     v2024:null, v2025:null, v2026e:7, comparability:"低",
+     composition:"未知残差项", note:"残差项，无 2024/25 明细。", metric:null, currency:null},
+    {id:"jp-rest", name:"其余日本", region:"日本", rowType:"residual", caliber:"residual",
+     v2024:null, v2025:null, v2026e:9.1, comparability:"低",
+     composition:"未知残差项", note:"残差项，无 2024/25 明细。", metric:null, currency:null},
+    {id:"kioxia", name:"Kioxia 铠侠", region:"日本", rowType:"disclosed", caliber:"company",
+     v2024:1.799205, v2025:3.705691, v2026e:5.1, comparability:"中-高",
+     composition:"铠侠公司净利润（IFRS）", note:"FY 截止次年 3 月，映射到主要经营年度。",
+     metric:"归属于母公司股东净利润（IFRS）", currency:"JPY"},
+    {id:"asml", name:"ASML", region:"欧洲", rowType:"disclosed", caliber:"company",
+     v2024:8.194372, v2025:10.845824, v2026e:7.3, comparability:"中",
+     composition:"ASML 公司净利润（US GAAP）", note:"2026 图片值低于 2025 实际，疑似只归因 AI 需求；设备面向全半导体产业。",
+     metric:"公司净利润（US GAAP）", currency:"EUR"},
+    {id:"eu-rest", name:"其余欧洲（推算）", region:"欧洲", rowType:"residual", caliber:"residual",
+     v2024:null, v2025:null, v2026e:6.4, comparability:"很低",
+     composition:"由地区总额倒算（13.7 − 7.3）", note:"图片底部被截断，数值为倒算结果。", metric:null, currency:null},
+  ],
+  regions:[
+    {region:"美国",     s2024:79.553,     s2025:151.732,   img2026:314,  share:0.49,  coverage:"NVIDIA + Micron + Broadcom；不含其余美国"},
+    {region:"韩国",     s2024:39.158557,  s2025:61.337842, img2026:223,  share:0.35,  coverage:"SK hynix + 三星电子集团；三星口径与 2026 不一致"},
+    {region:"中国台湾", s2024:36.52,      s2025:55.21,     img2026:47,   share:0.074, coverage:"仅台积电"},
+    {region:"中国大陆", s2024:13.04768,   s2025:17.344752, img2026:26,   share:0.041, coverage:"光模块/服务器组合 + 仅华为披露值；不含长鑫、长存"},
+    {region:"日本",     s2024:1.799205,   s2025:3.705691,  img2026:14.2, share:0.022, coverage:"仅铠侠"},
+    {region:"欧洲",     s2024:8.194372,   s2025:10.845824, img2026:13.7, share:0.022, coverage:"仅 ASML"},
+  ],
+  fx:[
+    {cur:"USD", r2024:1,        r2025:1},
+    {cur:"CNY", r2024:7.189,    r2025:7.129},
+    {cur:"KRW", r2024:1364.153, r2025:1421.779},
+    {cur:"JPY", r2024:151.353,  r2025:149.632},
+    {cur:"EUR", r2024:0.924,    r2025:0.886},
+    {cur:"TWD", r2024:32.117,   r2025:31.167},
+  ],
+  raw:[
+    {name:"NVIDIA", region:"美国", metric:"归母净利润（GAAP）", cur:"USD", l24:72.88,    u24:72.88,     l25:120.067,  u25:120.067,  incl:true,  src:"https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/default.aspx"},
+    {name:"Micron 美光", region:"美国", metric:"公司净利润（GAAP）", cur:"USD", l24:0.778,  u24:0.778,     l25:8.539,    u25:8.539,    incl:true,  src:"https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-fourth-quarter-and-full-8"},
+    {name:"Broadcom 博通", region:"美国", metric:"公司净利润（GAAP）", cur:"USD", l24:5.895, u24:5.895,    l25:23.126,   u25:23.126,   incl:true,  src:"https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025"},
+    {name:"SK hynix", region:"韩国", metric:"归母净利润", cur:"KRW", l24:19796.9,    u24:14.512228, l25:42947.9,  u25:30.207156, incl:true, src:"https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/"},
+    {name:"Samsung Electronics 三星电子", region:"韩国", metric:"归属母公司股东净利润", cur:"KRW", l24:33621.363, u24:24.646329, l25:44260.956, u25:31.130686, incl:true, src:"https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf"},
+    {name:"Samsung DS 部门（补充）", region:"韩国", metric:"DS 部门营业利润（非净利润）", cur:"KRW", l24:15094.486, u24:11.065098, l25:24858.075, u25:17.483783, incl:false, src:"https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf"},
+    {name:"TSMC 台积电", region:"中国台湾", metric:"公司净利润（官方美元口径）", cur:"USD", l24:36.52, u24:36.52, l25:55.21, u25:55.21, incl:true, src:"https://investor.tsmc.com/static/annualReports/2025/english/index.html"},
+    {name:"中际旭创", region:"中国大陆", metric:"归属上市公司股东净利润", cur:"CNY", l24:5.171486, u24:0.719361, l25:10.797254, u25:1.514554, incl:true, src:"https://static.cninfo.com.cn/finalpage/2026-03-31/1225056468.PDF"},
+    {name:"工业富联", region:"中国大陆", metric:"归属上市公司股东净利润", cur:"CNY", l24:23.216469, u24:3.229443, l25:35.285561, u25:4.949581, incl:true, src:"https://static.cninfo.com.cn/finalpage/2026-03-11/1225004416.PDF"},
+    {name:"新易盛", region:"中国大陆", metric:"归属上市公司股东净利润", cur:"CNY", l24:2.837814, u24:0.394744, l25:9.531923, u25:1.337063, incl:true, src:"https://static.cninfo.com.cn/finalpage/2026-04-24/1225172597.PDF"},
+    {name:"Huawei 华为", region:"中国大陆", metric:"公司净利润", cur:"CNY", l24:62.574, u24:8.704131, l25:68.036, u25:9.543554, incl:true, src:"https://www.huawei.com/en/bond-investor-relations/financial-highlights"},
+    {name:"Kioxia 铠侠", region:"日本", metric:"归属母公司股东净利润（IFRS）", cur:"JPY", l24:272.315, u24:1.799205, l25:554.49, u25:3.705691, incl:true, src:"https://www.kioxia-holdings.com/content/dam/kioxia-hd/en-jp/ir/library/securities/asset/Annual-Securities-Report-FY2025-EN.pdf"},
+    {name:"ASML", region:"欧洲", metric:"公司净利润（US GAAP）", cur:"EUR", l24:7.5716, u24:8.194372, l25:9.6094, u25:10.845824, incl:true, src:"https://ourbrand.asml.com/m/419103cb23dfeaa4/original/asml-2025-annual-report-financial-performance-section.pdf"},
+  ],
+};
+
+/* =====================================================================
+   P  —  PRESENTER.  Derive everything the View needs from M.
+   ===================================================================== */
+const P = {
+  fmt:(v,d=1)=> v==null ? "—" : v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}),
+  pct:(v)=> v==null ? "—" : (v>=0?"+":"")+(v*100).toFixed(1)+"%",
+  mult:(v)=> v==null ? "—" : v.toFixed(2)+"x",
+  growth:(e)=> (e.v2024!=null && e.v2025!=null && e.v2024!==0) ? (e.v2025-e.v2024)/e.v2024 : null,
+  multiple:(e)=> (e.v2025!=null && e.v2026e!=null && e.v2025!==0) ? e.v2026e/e.v2025 : null,
+  // anomaly: a real (disclosed/combo) entity whose 2026E sits BELOW its 2025 actual
+  isAnomaly:(e)=> (e.rowType==="disclosed"||e.rowType==="combo") && e.v2025!=null && e.v2026e!=null && e.v2026e < e.v2025,
+  cmpClass:(c)=> ({"中-高":"hi","中":"mid","低":"lo","很低":"vlo"}[c]||"mid"),
+  rowTypeLabel:(t)=> ({disclosed:"披露实体",combo:"组合",residual:"残差项"}[t]||t),
+  enrich(){ M.entities.forEach(e=>{ e._g=this.growth(e); e._m=this.multiple(e); e._anom=this.isAnomaly(e); }); },
+  totals(){
+    const disclosed = M.entities.filter(e=>e.v2025!=null);
+    return {
+      s2024: M.regions.reduce((a,r)=>a+r.s2024,0),
+      s2025: M.regions.reduce((a,r)=>a+r.s2025,0),
+      regionImg: M.regions.reduce((a,r)=>a+r.img2026,0),
+    };
+  },
+};
+P.enrich();
+
+/* =====================================================================
+   V  —  VIEW.  Render. State lives here; re-render on change.
+   ===================================================================== */
+const state = {
+  tab:"overview",
+  regionFilter:new Set(),        // empty = all
+  sort:"v2026e",
+  hideResid:false,
+  onlyAnom:false,
+};
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const REGIONS = [...new Set(M.entities.map(e=>e.region))];
+
+/* ---- reconciliation strip ---- */
+function renderRecon(){
+  const max = Math.max(...M.reconciliation.map(r=>r.value));
+  const min = Math.min(...M.reconciliation.map(r=>r.value));
+  // exaggerate tiny differences so the "doesn't line up" is visible
+  const lo = min - 1.4, hi = max + 0.3, span = hi-lo;
+  const colorOf = k => k==="title" ? "var(--ink)" : k==="line" ? "var(--est)" : "var(--bad)";
+  $("#reconRows").innerHTML = M.reconciliation.map(r=>{
+    const w = ((r.value-lo)/span*100).toFixed(2);
+    return `<div class="recon-row">
+      <span class="lbl">${r.label}</span>
+      <span class="bar"><span class="fill" style="width:${w}%;background:${colorOf(r.kind)}"></span></span>
+      <span class="val num">${r.value.toFixed(1)}</span>
+    </div>`;
+  }).join("");
+  $("#reconNote").innerHTML = M.reconGaps.map(g=>{
+    const sign = g.diff>0?"+":"";
+    const cls = g.hard ? "" : "";
+    return `<span>${g.a} − ${g.b} = <b>${sign}${g.diff.toFixed(1)}</b></span>`;
+  }).join("") + `<span class="ok">三套总额本应相等 · 实际相差最高达 1.0</span>`;
+}
+
+/* ---- overview KPIs ---- */
+function renderKPIs(){
+  const t = P.totals();
+  const cards = [
+    {lbl:'2026 图片标题总额', val:M.imageTotals.title.toFixed(1), sub:'明细 636.9 · 地区 637.9', cls:'est', sw:'var(--est)'},
+    {lbl:'2025 可见样本', val:P.fmt(t.s2025), sub:'仅可映射的披露主体', cls:'accent', sw:'var(--ok)'},
+    {lbl:'2024 可见样本', val:P.fmt(t.s2024), sub:'同口径基准年', cls:'', sw:'var(--past)'},
+    {lbl:'可见样本 24→25', val:P.pct((t.s2025-t.s2024)/t.s2024), sub:'NVIDIA·存储·光模块拉动', cls:'accent', sw:'var(--ok)'},
+    {lbl:'异常实体数', val:M.entities.filter(e=>e._anom).length, sub:'2026E < 2025 实际', cls:'', sw:'var(--bad)'},
+  ];
+  $("#kpis").innerHTML = cards.map(c=>`
+    <div class="card kpi ${c.cls}">
+      <div class="k-lbl"><span class="swatch" style="background:${c.sw}"></span>${c.lbl}</div>
+      <div class="k-val">${c.val}</div>
+      <div class="k-sub">${c.sub}</div>
+    </div>`).join("");
+}
+
+/* ---- overview anomalies ---- */
+function renderAnoms(){
+  const list = M.entities.filter(e=>e._anom);
+  $("#anoms").innerHTML = list.map(e=>`
+    <div class="card anom" data-id="${e.id}" tabindex="0" role="button">
+      <div class="a-top">
+        <span class="a-name">${e.name}</span>
+        <span class="cmp ${P.cmpClass(e.comparability)}"><span class="d"></span>${e.comparability}</span>
+      </div>
+      <div class="a-fig">2025 实际 <b class="num">${P.fmt(e.v2025)}</b> → 2026E <b class="num down">${P.fmt(e.v2026e)}</b> <span class="num">(${P.mult(e._m)})</span></div>
+      <div class="a-why">${e.note}</div>
+    </div>`).join("");
+  $$("#anoms .anom").forEach(el=>{
+    el.onclick = ()=>openDrawer(el.dataset.id);
+    el.onkeydown = ev=>{ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); openDrawer(el.dataset.id);} };
+  });
+}
+
+/* ---- entity filtering / sorting ---- */
+function filteredEntities(){
+  let arr = M.entities.slice();
+  if(state.regionFilter.size) arr = arr.filter(e=>state.regionFilter.has(e.region));
+  if(state.hideResid) arr = arr.filter(e=>e.rowType!=="residual");
+  if(state.onlyAnom)  arr = arr.filter(e=>e._anom);
+  const key = state.sort;
+  arr.sort((a,b)=>{
+    const get = e => key==="growth" ? (e._g??-Infinity) : key==="mult" ? (e._m??-Infinity) : (e[key]??-Infinity);
+    return get(b)-get(a);
+  });
+  return arr;
+}
+
+/* ---- region chips ---- */
+function renderChips(){
+  const host = $("#regionChips");
+  host.querySelectorAll(".chip").forEach(c=>c.remove());
+  const mk = (label,active,fn)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label; b.setAttribute("aria-pressed",active);
+    b.onclick=fn; host.appendChild(b);
+  };
+  mk("全部", state.regionFilter.size===0, ()=>{ state.regionFilter.clear(); renderEntities(); });
+  REGIONS.forEach(r=> mk(r, state.regionFilter.has(r), ()=>{
+    state.regionFilter.has(r)?state.regionFilter.delete(r):state.regionFilter.add(r);
+    renderEntities();
+  }));
+}
+
+/* ---- SVG grouped bar chart ---- */
+function renderChart(){
+  const data = filteredEntities();
+  const svg = $("#chart");
+  if(!data.length){ svg.innerHTML=`<text x="20" y="40" class="val-lbl">没有匹配的实体。请放宽筛选条件。</text>`; svg.setAttribute("viewBox","0 0 600 80"); svg.style.height="80px"; return; }
+  const padL=200, padR=70, padT=20, rowH=46, gap=6, barH=10;
+  const W=Math.max(640, svg.clientWidth||820), innerW=W-padL-padR;
+  const H=padT+data.length*rowH+12;
+  const allVals=[]; data.forEach(e=>{[e.v2024,e.v2025,e.v2026e].forEach(v=>{if(v!=null)allVals.push(v)});});
+  const max=Math.max(...allVals)*1.02;
+  const x=v=> padL + (v/max)*innerW;
+  let s=`<g>`;
+  // gridlines
+  for(let i=0;i<=4;i++){ const gv=max*i/4, gx=x(gv);
+    s+=`<line x1="${gx}" y1="${padT-4}" x2="${gx}" y2="${H-14}" stroke="var(--line-soft)" stroke-width="1"/>`;
+    s+=`<text x="${gx}" y="${H-2}" text-anchor="middle" class="val-lbl">${gv.toFixed(0)}</text>`;
+  }
+  data.forEach((e,i)=>{
+    const y0=padT+i*rowH;
+    const bars=[
+      {v:e.v2024, cls:"bar-2024", yy:y0+4},
+      {v:e.v2025, cls:"bar-2025", yy:y0+4+barH+gap},
+      {v:e.v2026e,cls:"bar-2026", yy:y0+4+2*(barH+gap), est:true},
+    ];
+    s+=`<g class="barrow" data-id="${e.id}">`;
+    s+=`<rect class="hit" x="0" y="${y0}" width="${W}" height="${rowH}" fill="transparent"/>`;
+    // y label (truncate long combo names)
+    const nm = e.name.length>16 ? e.name.slice(0,15)+"…" : e.name;
+    s+=`<text x="${padL-12}" y="${y0+rowH/2-4}" text-anchor="end" class="lbl-y">${nm}</text>`;
+    s+=`<text x="${padL-12}" y="${y0+rowH/2+11}" text-anchor="end" class="lbl-region">${e.region} · ${P.rowTypeLabel(e.rowType)}</text>`;
+    bars.forEach(b=>{
+      if(b.v==null){
+        s+=`<text x="${padL+4}" y="${b.yy+barH-1}" class="val-lbl" opacity=".6">—</text>`;
+        return;
+      }
+      const w=Math.max(1.5,x(b.v)-padL);
+      const hatch = b.est ? ` fill="url(#hatch)"` : "";
+      s+=`<rect class="${b.cls}" x="${padL}" y="${b.yy}" width="${w}" height="${barH}" rx="2.5"${b.est?hatch:""}/>`;
+      s+=`<text x="${padL+w+6}" y="${b.yy+barH-1}" class="val-lbl">${P.fmt(b.v)}</text>`;
+    });
+    if(e._anom) s+=`<text x="${padL-12}" y="${y0+rowH/2+11}" class="flag-anom" text-anchor="end" dx="-58">▼异常</text>`;
+    s+=`</g>`;
+  });
+  s+=`</g>`;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.style.height=H+"px"; svg.style.width="100%";
+  svg.innerHTML =
+    `<defs><pattern id="hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+       <rect width="5" height="5" fill="var(--est)"/>
+       <line x1="0" y1="0" x2="0" y2="5" stroke="#fff" stroke-width="2" opacity=".55"/>
+     </pattern></defs>`+s;
+  $$("#chart .barrow").forEach(g=> g.addEventListener("click",()=>openDrawer(g.dataset.id)));
+}
+
+/* ---- entity table ---- */
+function renderTable(){
+  const data=filteredEntities();
+  $("#tbody").innerHTML = data.map(e=>{
+    const gCls=e._g==null?"":(e._g>=0?"up":"down");
+    const mCls=e._m==null?"":(e._m<1?"down":"");
+    return `<tr data-id="${e.id}">
+      <td class="l"><div class="ename">${e.name}</div><span class="region-pill">${e.region} · ${P.rowTypeLabel(e.rowType)}</span></td>
+      <td class="num">${e.v2024==null?'<span class="dash">—</span>':P.fmt(e.v2024)}</td>
+      <td class="num">${e.v2025==null?'<span class="dash">—</span>':P.fmt(e.v2025)}</td>
+      <td class="num"><b>${P.fmt(e.v2026e)}</b></td>
+      <td class="num ${gCls}">${e._g==null?'<span class="dash">—</span>':P.pct(e._g)}</td>
+      <td class="num"><span class="${mCls}">${e._m==null?'<span class="dash">—</span>':P.mult(e._m)}</span></td>
+      <td class="l"><span class="cmp ${P.cmpClass(e.comparability)}"><span class="d"></span>${e.comparability}</span></td>
+    </tr>`;
+  }).join("");
+  $$("#tbody tr").forEach(tr=> tr.onclick=()=>openDrawer(tr.dataset.id));
+}
+
+function renderEntities(){
+  renderChips(); renderChart(); renderTable();
+  $("#sortSel").value=state.sort;
+  $("#hideResid").checked=state.hideResid;
+  $("#onlyAnom").checked=state.onlyAnom;
+}
+
+/* ---- regions ---- */
+function renderRegions(){
+  $("#regionGrid").innerHTML = M.regions.map(r=>{
+    const tot=Math.max(r.s2024,r.s2025);
+    const w24=(r.s2024/tot*100).toFixed(1), w25=((r.s2025-r.s2024)/tot*100).toFixed(1);
+    const g=(r.s2025-r.s2024)/r.s2024;
+    return `<div class="card rcard">
+      <div class="rhead"><span class="rname">${r.region}</span>
+        <span class="rshare">2026 占比 ${(r.share*100).toFixed(1)}%</span></div>
+      <div>
+        <div class="rstack" title="可见样本 2024→2025">
+          <span class="seg24" style="width:${w24}%"></span>
+          <span class="seg25" style="width:${Math.max(0,w25)}%"></span>
+        </div>
+        <div style="font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:5px">
+          可见样本 ${P.fmt(r.s2024)} → ${P.fmt(r.s2025)} (${P.pct(g)})</div>
+      </div>
+      <div class="rmeta">
+        <div class="m"><span class="ml">2024 样本</span><span class="mv num">${P.fmt(r.s2024)}</span></div>
+        <div class="m"><span class="ml">2025 样本</span><span class="mv num">${P.fmt(r.s2025)}</span></div>
+        <div class="m"><span class="ml">2026 图片</span><span class="mv num" style="color:var(--est)">${P.fmt(r.img2026)}</span></div>
+      </div>
+      <div class="rcov">${r.coverage}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---- sources / raw ---- */
+function renderSources(){
+  $("#fxRow").innerHTML = M.fx.map(f=>`
+    <div class="fx"><b>${f.cur}</b> <span>·</span> 2024 ${f.r2024} <span>/</span> 2025 ${f.r2025}</div>`).join("");
+  $("#rawBody").innerHTML = M.raw.map(r=>`
+    <tr style="cursor:default">
+      <td class="l"><div class="ename" style="font-size:13px">${r.name}</div><span class="region-pill">${r.region}</span></td>
+      <td class="l" style="font-size:12px;color:var(--ink-soft)">${r.metric}</td>
+      <td class="num">${r.cur}</td>
+      <td class="num">${r.cur==="USD"?'<span class="dash">—</span>':P.fmt(r.l24,r.l24<100?2:1)}</td>
+      <td class="num">${P.fmt(r.u24,2)}</td>
+      <td class="num">${r.cur==="USD"?'<span class="dash">—</span>':P.fmt(r.l25,r.l25<100?2:1)}</td>
+      <td class="num">${P.fmt(r.u25,2)}</td>
+      <td class="l">${r.incl?'<span class="cmp hi" style="padding:1px 8px"><span class="d"></span>是</span>':'<span class="cmp mid" style="padding:1px 8px"><span class="d"></span>补充</span>'}</td>
+      <td class="l"><a href="${r.src}" target="_blank" rel="noopener">官方来源 ↗</a></td>
+    </tr>`).join("");
+}
+
+/* ---- detail drawer ---- */
+function openDrawer(id){
+  const e=M.entities.find(x=>x.id===id); if(!e)return;
+  $("#drRegion").textContent = `${e.region} · ${P.rowTypeLabel(e.rowType)} · 口径 ${e.comparability}`;
+  $("#drName").textContent = e.name;
+  const raw = M.raw.find(r=> r.name.includes(e.name.split(" ")[0]) || e.name.includes((r.name.split(" ")[0]||"§")) );
+  let html="";
+  if(e._anom){
+    html += `<div class="dr-anom">
+      <svg width="16" height="16" viewBox="0 0 24 24" style="flex:none;margin-top:1px"><path d="M12 3 2 20h20L12 3z" stroke="#A6321F" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M12 9v5M12 17h.01" stroke="#A6321F" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div><b>异常：</b>2026E (${P.fmt(e.v2026e)}) 低于 2025 实际净利润 (${P.fmt(e.v2025)})。在增长年里这只能说明图片并未记录公司总利润。</div></div>`;
+  }
+  html += `<div class="dr-figs">
+    <div class="dr-fig"><div class="y">2024 实际</div><div class="v num">${P.fmt(e.v2024)}</div></div>
+    <div class="dr-fig"><div class="y">2025 实际</div><div class="v num">${P.fmt(e.v2025)}</div></div>
+    <div class="dr-fig e"><div class="y">2026E 图片</div><div class="v num">${P.fmt(e.v2026e)}</div><div class="hatchtag">▦ 估算</div></div>
+  </div>`;
+  html += `<dl class="dr-kv">
+    <dt>行类型</dt><dd>${P.rowTypeLabel(e.rowType)}</dd>
+    <dt>构成口径</dt><dd>${e.composition}</dd>
+    <dt>采用指标</dt><dd>${e.metric||"—（残差，无披露）"}</dd>
+    <dt>24→25 增长</dt><dd class="num">${P.pct(e._g)}</dd>
+    <dt>26E/25 倍数</dt><dd class="num">${P.mult(e._m)}</dd>
+  </dl>`;
+  if(raw && raw.cur!=="USD"){
+    const f=M.fx.find(x=>x.cur===raw.cur);
+    html += `<div class="dr-convert"><div class="ct">本币 → 美元换算 (÷ 年度平均汇率)</div>
+      <div class="conv-row"><span class="cl">2024 · ${raw.cur} ${P.fmt(raw.l24,2)} ÷ ${f.r2024}</span><span class="cv num">$${P.fmt(raw.u24,2)} bn</span></div>
+      <div class="conv-row"><span class="cl">2025 · ${raw.cur} ${P.fmt(raw.l25,2)} ÷ ${f.r2025}</span><span class="cv num">$${P.fmt(raw.u25,2)} bn</span></div>
+    </div>`;
+  }
+  html += `<div class="dr-note"><b style="display:block;margin-bottom:4px">关键说明</b>${e.note}</div>`;
+  if(raw) html += `<div class="dr-src">官方来源：<a href="${raw.src}" target="_blank" rel="noopener">${raw.src}</a></div>`;
+  else if(e.rowType==="residual") html += `<div class="dr-src" style="color:var(--ink-faint)">无官方来源：残差项由图片地区总额倒算，非披露主体。</div>`;
+  $("#drBody").innerHTML=html;
+  $("#scrim").classList.add("open"); $("#drawer").classList.add("open");
+  $("#drClose").focus();
+}
+function closeDrawer(){ $("#scrim").classList.remove("open"); $("#drawer").classList.remove("open"); }
+
+/* ---- tabs ---- */
+function switchTab(name){
+  state.tab=name;
+  $$(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.tab===name));
+  $$(".panel").forEach(p=>p.classList.toggle("active", p.id===`panel-${name}`));
+  if(name==="entities") renderEntities();
+}
+
+/* ---- wire up ---- */
+function init(){
+  renderRecon(); renderKPIs(); renderAnoms(); renderRegions(); renderSources();
+  $$(".tab").forEach(t=> t.onclick=()=>switchTab(t.dataset.tab));
+  $("#sortSel").onchange=e=>{ state.sort=e.target.value; renderChart(); renderTable(); };
+  $("#hideResid").onchange=e=>{ state.hideResid=e.target.checked; renderChart(); renderTable(); };
+  $("#onlyAnom").onchange=e=>{ state.onlyAnom=e.target.checked; renderChart(); renderTable(); };
+  $("#drClose").onclick=closeDrawer;
+  $("#scrim").onclick=closeDrawer;
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeDrawer(); });
+  let rT; window.addEventListener("resize",()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if(state.tab==="entities") renderChart(); },150); });
+}
+init();
+</script>
+</body>
+</html>

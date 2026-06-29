@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Profit Pool — company dataset",
+  "type": "object",
+  "required": ["meta", "companies"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["schema_version", "unit"],
+      "properties": {
+        "schema_version": {"type": "string"},
+        "unit": {"type": "string"},
+        "note": {"type": "string"}
+      }
+    },
+    "companies": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/company"}
+    }
+  },
+  "definitions": {
+    "company": {
+      "type": "object",
+      "required": ["id", "name", "ticker", "region", "sector", "currency", "seg_profit", "status", "years"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9_-]+$"},
+        "name": {"type": "string"},
+        "ticker": {"type": "string"},
+        "region": {"type": "string"},
+        "sector": {"type": "string"},
+        "currency": {"type": "string"},
+        "seg_profit": {"enum": ["yes", "partial", "no"]},
+        "status": {"enum": ["populated", "pending"]},
+        "logo_text": {"type": "string"},
+        "logo_class": {"type": "string"},
+        "lead": {"type": "string"},
+        "fy_note": {"type": "string"},
+        "planned_source": {"type": "string"},
+        "years": {"type": "array", "items": {"$ref": "#/definitions/year"}}
+      }
+    },
+    "year": {
+      "type": "object",
+      "required": ["fy", "status"],
+      "properties": {
+        "fy": {"type": "string"},
+        "period_end": {"type": "string"},
+        "status": {"enum": ["actual", "forecast"]},
+        "revenue": {"type": "number"},
+        "gross_margin": {"type": ["number", "null"]},
+        "op_income": {"type": ["number", "null"]},
+        "net_income": {"type": ["number", "null"]},
+        "segments": {"type": "array", "items": {"$ref": "#/definitions/segment"}},
+        "reportable_note": {"type": "object"},
+        "framework_change": {"type": "string"},
+        "consensus_rev": {"type": "string"},
+        "consensus_eps": {"type": "string"},
+        "anchors": {"type": "array", "items": {"$ref": "#/definitions/anchor"}},
+        "sources": {"type": "array", "items": {"$ref": "#/definitions/source"}}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "actual"}}},
+          "then": {"required": ["revenue", "net_income", "sources"]}
+        }
+      ]
+    },
+    "segment": {
+      "type": "object",
+      "required": ["name", "kind", "revenue"],
+      "properties": {
+        "name": {"type": "string"},
+        "kind": {"enum": ["platform", "division", "reportable"]},
+        "revenue": {"type": "number"},
+        "op_income": {"type": ["number", "null"]},
+        "op_margin": {"type": ["number", "null"]},
+        "is_ai": {"type": "boolean"}
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": ["label", "value"],
+      "properties": {
+        "label": {"type": "string"},
+        "value": {"type": "string"},
+        "note": {"type": "string"},
+        "data_status": {"enum": ["official", "guidance", "consensus", "estimate", "derived"]}
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["label", "url", "data_status"],
+      "properties": {
+        "label": {"type": "string"},
+        "url": {"type": "string", "format": "uri"},
+        "data_status": {"enum": ["official", "guidance", "consensus", "estimate", "derived"]}
+      }
+    }
+  }
+}

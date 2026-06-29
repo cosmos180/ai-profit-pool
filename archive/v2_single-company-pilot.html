@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA · 经营数据样板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E7ECE9; --card:#FBFCFB; --card-2:#F2F5F3;
+  --ink:#18211D; --ink-soft:#54625B; --ink-faint:#8B988F;
+  --line:#D4DBD6; --line-soft:#E3E8E4;
+  --ok:#0E7C6B; --ok-deep:#0a5a4e; --ok-soft:#CDE7E1;
+  --past:#AEBBB3;
+  --est:#BC7A12; --est-soft:#F0E0C2;
+  --bad:#A6321F; --bad-soft:#EED4CD;
+  --muted:#7C8A84;
+  --ai:#1F6FB2; --ai-soft:#D6E6F2;
+  --shadow:0 1px 2px rgba(24,33,29,.05),0 8px 24px -16px rgba(24,33,29,.25);
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"IBM Plex Sans","IBM Plex Sans SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+a{color:var(--ok)}
+:focus-visible{outline:2.5px solid var(--ok);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* header */
+header.top{padding:30px 0 8px}
+.brand{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.logo{width:42px;height:42px;border-radius:10px;background:#18211D;display:grid;place-items:center;flex:none}
+.logo span{font-family:var(--mono);font-weight:600;color:#76B900;font-size:19px;letter-spacing:-.04em}
+.brand h1{font-size:clamp(23px,3.4vw,31px);margin:0;font-weight:700;letter-spacing:-.015em}
+.brand .tick{font-family:var(--mono);font-size:12px;color:var(--ink-soft);border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:var(--card)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px;display:flex;align-items:center;gap:9px}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#76B900}
+.fy-note{color:var(--ink-soft);font-size:13px;margin:12px 0 0;max-width:64ch}
+.fy-note b{color:var(--ink)}
+
+.section-h{font-size:12px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:30px 0 13px;display:flex;align-items:center;gap:10px}
+.section-h::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.kpi{padding:16px 17px}
+.kpi .k-lbl{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
+.kpi .k-val{font-family:var(--mono);font-size:27px;font-weight:600;margin-top:7px;letter-spacing:-.01em}
+.kpi .k-sub{font-size:11.5px;color:var(--ink-faint);margin-top:3px;font-family:var(--mono)}
+.kpi.accent .k-val{color:var(--ok)}
+.kpi.est .k-val{color:var(--est)}
+.swatch{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+/* trend chart */
+.chart-card{padding:20px 20px 14px}
+.chart-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);margin-top:10px}
+.chart-legend .i{display:flex;align-items:center;gap:7px}
+.lg{width:16px;height:11px;border-radius:3px}
+.lg-hatch{background:var(--est);background-image:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,.55) 2px,rgba(255,255,255,.55) 4px)}
+
+/* year cards */
+.years{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px}
+.ycard{padding:17px 18px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;position:relative;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:14px;font-family:inherit}
+.ycard:hover{transform:translateY(-2px);box-shadow:0 10px 30px -18px rgba(24,33,29,.4);border-color:var(--ink-soft)}
+.ycard .yhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:13px}
+.ycard .yfy{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.ycard .ybadge{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.06em}
+.ybadge.act{background:var(--ok-soft);color:var(--ok-deep)}
+.ybadge.fc{background:var(--est-soft);color:#8a5a0f}
+.ycard .yrev{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.01em}
+.ycard .yrevlbl{font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:1px}
+.ycard .yrow{display:flex;justify-content:space-between;font-size:12.5px;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+.ycard .yrow .l{color:var(--ink-soft)}
+.ycard .yrow .v{font-family:var(--mono);font-weight:500}
+.ycard .yopen{position:absolute;right:15px;bottom:14px;color:var(--ink-faint);font-size:12px;font-family:var(--mono)}
+.ycard:hover .yopen{color:var(--ok)}
+.ycard.is-fc{border-style:dashed}
+
+/* ===== detail view ===== */
+#detail{display:none}
+.back{appearance:none;border:1px solid var(--line);background:var(--card);font-family:var(--sans);font-size:13px;color:var(--ink-soft);padding:7px 13px 7px 10px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin:4px 0 4px}
+.back:hover{border-color:var(--ink-soft);color:var(--ink)}
+.dhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:14px 0 2px}
+.dhead .dfy{font-size:30px;font-weight:700;letter-spacing:-.015em}
+.dhead .dperiod{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+.dbadge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.06em}
+
+/* company summary strip */
+.csum{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0;overflow:hidden}
+.csum .c{padding:15px 17px;border-right:1px solid var(--line-soft)}
+.csum .c:last-child{border-right:0}
+.csum .cl{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+.csum .cv{font-family:var(--mono);font-size:21px;font-weight:600;margin-top:5px}
+.csum .cv.green{color:var(--ok)}
+
+/* platform bars */
+.plat{padding:6px 18px 16px}
+.platrow{display:grid;grid-template-columns:1fr;gap:0;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+.platrow:last-child{border-bottom:0}
+.platrow .pt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+.platrow .pname{font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:9px}
+.aitag{font-family:var(--mono);font-size:9.5px;background:var(--ai-soft);color:var(--ai);padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em}
+.platrow .pv{font-family:var(--mono);font-size:15px;font-weight:600;white-space:nowrap}
+.platrow .pv .sh{color:var(--ink-faint);font-weight:400;font-size:12px;margin-left:6px}
+.platrow .ptrack{height:11px;border-radius:5px;background:var(--card-2);overflow:hidden;position:relative}
+.platrow .pfill{height:100%;border-radius:5px;background:var(--ok)}
+.platrow.ai .pfill{background:var(--ai)}
+.platrow .pyoy{font-family:var(--mono);font-size:11px;margin-top:5px}
+.pyoy .up{color:var(--ok)} .pyoy .dn{color:var(--bad)} .pyoy .na{color:var(--ink-faint)}
+.recon-line{font-size:12px;color:var(--ink-soft);font-family:var(--mono);padding:11px 18px;border-top:1px dashed var(--line);display:flex;align-items:center;gap:8px}
+.recon-line .ok{color:var(--ok);font-weight:600}
+
+/* gap panel */
+.gap{padding:17px 18px;background:linear-gradient(0deg,var(--est-soft),var(--card));border:1px solid #E4CFA4;border-left:4px solid var(--est);border-radius:13px}
+.gap h3{margin:0 0 6px;font-size:15px;color:#5d4410}
+.gap p{margin:0 0 12px;font-size:13px;color:#6b4e16;line-height:1.55}
+.gap .seg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gap .seg{background:var(--card);border:1px solid #E4CFA4;border-radius:10px;padding:11px 13px}
+.gap .seg .sn{font-size:12.5px;font-weight:600}
+.gap .seg .sv{font-family:var(--mono);font-size:20px;font-weight:600;margin-top:3px}
+.gap .seg .sl{font-size:10.5px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
+.gap .locked{margin-top:13px;display:flex;align-items:center;gap:9px;font-size:12.5px;color:#6b4e16;background:var(--card);border-radius:9px;padding:10px 12px}
+
+/* forecast detail */
+.fcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.fcc{padding:14px 15px}
+.fcc .fl{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+.fcc .fv{font-family:var(--mono);font-size:21px;font-weight:600;margin-top:4px}
+.fcc .fs{font-size:11px;color:var(--ink-soft);margin-top:3px}
+.fcc.big .fv{color:var(--est)}
+
+/* sources */
+.srcs{padding:6px 18px 14px}
+.srcrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
+.srcrow:last-child{border-bottom:0}
+.srcrow .sl{color:var(--ink-soft)}
+.srcrow a{word-break:break-all;font-size:12px}
+
+.note-block{font-size:12.5px;color:var(--ink-soft);background:var(--card-2);border-radius:10px;padding:12px 15px;line-height:1.6;margin-top:13px}
+.note-block b{color:var(--ink)}
+
+footer{color:var(--ink-faint);font-size:12px;padding:32px 0 50px;text-align:center;line-height:1.7}
+footer b{color:var(--ink-soft)}
+
+@media(max-width:520px){
+  .csum{grid-template-columns:1fr 1fr}
+  .gap .seg2{grid-template-columns:1fr}
+  .kpi .k-val{font-size:23px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow"><span class="dot"></span>单公司样板 · AI 利润池工具 · v0</div>
+    <div class="brand">
+      <div class="logo"><span>nv</span></div>
+      <h1>NVIDIA 英伟达</h1>
+      <span class="tick">NASDAQ · NVDA</span>
+    </div>
+    <p class="fy-note">先用一家把链路跑通。<b>主页</b>是公司层面的客观经营事实（近三年实际 + 本财年预测）；<b>点任一财年</b>进入那一年的业务板块明细。所有实际数据为 GAAP 口径、取自 NVIDIA 财报；预测为卖方一致预期。注意：NVIDIA 财年截至每年 1 月末，例如 FY2026 = 2025-01 至 2026-01。</p>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <section id="home">
+    <div class="section-h">公司层面 · 量级</div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="section-h">营收与净利润 · FY2024 → FY2027E</div>
+    <div class="card chart-card">
+      <svg id="trend" role="img" aria-label="营收与净利润趋势"></svg>
+      <div class="chart-legend">
+        <div class="i"><span class="lg" style="background:var(--past)"></span>营收（实际）</div>
+        <div class="i"><span class="lg" style="background:var(--ok)"></span>净利润（实际）</div>
+        <div class="i"><span class="lg lg-hatch"></span>FY2027E 预测（卖方一致预期）</div>
+        <div class="i"><span class="lg" style="background:transparent;border-top:2px dashed var(--ink-soft);border-radius:0;height:2px;margin-top:5px"></span>净利率 %</div>
+      </div>
+    </div>
+
+    <div class="section-h">按财年下钻 · 点击进入业务板块明细</div>
+    <div class="years" id="years"></div>
+
+    <div class="note-block" id="homeNote"></div>
+  </section>
+
+  <!-- ============ DETAIL ============ -->
+  <section id="detail">
+    <button class="back" id="backBtn">← 返回主页</button>
+    <div class="dhead">
+      <span class="dfy" id="dFy"></span>
+      <span class="dperiod" id="dPeriod"></span>
+      <span class="dbadge" id="dBadge"></span>
+    </div>
+    <div id="detailBody"></div>
+  </section>
+
+  <footer>
+    样板范围：1 家公司（NVIDIA）· M（数据）/ P（口径·换算·校验）/ V（界面）三层分离 ·
+    <b>实际</b> = NVIDIA 财报 GAAP · <b>FY2027E</b> = 卖方一致预期 · 业务板块利润/毛利率：公司不披露到平台级
+  </footer>
+</div>
+
+<script>
+/* =====================================================================
+   M — MODEL.  NVIDIA, USD billions, GAAP. Fiscal years end late January.
+   Sources: NVIDIA 8-K/10-K filings & press releases (FY2024–FY2026);
+   sell-side consensus for FY2027E.
+   ===================================================================== */
+const M = {
+  company:{ name:"NVIDIA 英伟达", ticker:"NVDA", unit:"十亿美元 (USD bn)",
+    aiPlatform:"Data Center" },
+  years:[
+    { fy:"FY2024", periodEnd:"截至 2024-01-28", status:"actual",
+      revenue:60.92, grossM:0.727, opIncome:32.97, netIncome:29.76,
+      platforms:[
+        {name:"Data Center 数据中心", value:47.52, ai:true},
+        {name:"Gaming 游戏", value:10.45},
+        {name:"Professional Visualization 专业可视化", value:1.55},
+        {name:"Automotive 汽车", value:1.09},
+        {name:"OEM & Other", value:0.31},
+      ],
+      seg:{cn:"≈ 78%", gfx:"≈ 22%"},
+      sources:[
+        {label:"FY2024 业绩（营收/利润/平台）", url:"https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025"},
+      ]},
+    { fy:"FY2025", periodEnd:"截至 2025-01-26", status:"actual",
+      revenue:130.50, grossM:0.750, opIncome:81.45, netIncome:72.88,
+      platforms:[
+        {name:"Data Center 数据中心", value:115.19, ai:true},
+        {name:"Gaming 游戏", value:11.35},
+        {name:"Professional Visualization 专业可视化", value:1.88},
+        {name:"Automotive 汽车", value:1.69},
+        {name:"OEM & Other", value:0.39},
+      ],
+      seg:{cn:"≈ 88%", gfx:"≈ 12%"},
+      sources:[
+        {label:"FY2025 业绩新闻稿", url:"https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025"},
+        {label:"FY2025 10-K（Note 16 分部与平台）", url:"https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm"},
+      ]},
+    { fy:"FY2026", periodEnd:"截至 2026-01-25", status:"actual",
+      revenue:215.94, grossM:0.711, opIncome:130.39, netIncome:120.10,
+      platforms:[
+        {name:"Data Center 数据中心", value:193.74, ai:true},
+        {name:"Gaming 游戏", value:16.04},
+        {name:"Professional Visualization 专业可视化", value:3.19},
+        {name:"Automotive 汽车", value:2.35},
+        {name:"OEM & Other", value:0.62},
+      ],
+      seg:{cn:"≈ 90%", gfx:"≈ 10%"},
+      sources:[
+        {label:"Q4 & FY2026 业绩新闻稿", url:"https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026"},
+        {label:"FY2026 10-K（2026-01-25 财年）", url:"https://www.publicnow.com/view/2882BBE40A7C6C824C8A8D4C36B7AE84D3C63264?1772059708="},
+      ]},
+    { fy:"FY2027E", periodEnd:"本财年进行中 · 截至 2027-01", status:"forecast",
+      revenue:390, netIncome:225, consensusRev:"$367–391B", consensusEps:"$9.34",
+      anchors:[
+        {label:"Q1 FY2027 实际营收", value:"$81.6B", note:"已公布，同比 +85%"},
+        {label:"Q1 数据中心营收", value:"$75.2B", note:"占比 92%，同比 +92%"},
+        {label:"Q2 FY2027 营收指引", value:"$91.0B", note:"公司官方，±2%"},
+        {label:"全年营收一致预期", value:"≈ $390B", note:"卖方综合，区间 $367–391B"},
+      ],
+      sources:[
+        {label:"Q1 FY2027 业绩新闻稿（实际 + Q2 指引）", url:"https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027"},
+        {label:"FY2027 一致预期（卖方汇总）", url:"https://simplywall.st/stocks/us/semiconductors/nasdaq-nvda/nvidia/future"},
+      ]},
+  ],
+};
+
+/* =====================================================================
+   P — PRESENTER.  Derive margins, YoY, ordering, reconciliation.
+   ===================================================================== */
+const P = {
+  bn:(v,d=1)=> v==null?"—":"$"+v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d})+"B",
+  pct:(v,d=1)=> v==null?"—":(v*100).toFixed(d)+"%",
+  yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
+  netM:(y)=> y.revenue&&y.netIncome!=null ? y.netIncome/y.revenue : null,
+  opM:(y)=> y.revenue&&y.opIncome!=null ? y.opIncome/y.revenue : null,
+  revYoY(i){ if(i<=0)return null; const a=M.years[i-1].revenue,b=M.years[i].revenue; return a?(b-a)/a:null; },
+  niYoY(i){ if(i<=0)return null; const a=M.years[i-1].netIncome,b=M.years[i].netIncome; return (a!=null&&b!=null&&a)?(b-a)/a:null; },
+  platformsSorted:(y)=> (y.platforms||[]).slice().sort((a,b)=>b.value-a.value),
+  platformTotal:(y)=> (y.platforms||[]).reduce((s,p)=>s+p.value,0),
+  // YoY for a platform vs same platform in prior year
+  platYoY(year, platName){
+    const i=M.years.indexOf(year); if(i<=0)return null;
+    const prev=(M.years[i-1].platforms||[]).find(p=>p.name===platName);
+    const cur=(year.platforms||[]).find(p=>p.name===platName);
+    return (prev&&cur&&prev.value)?(cur.value-prev.value)/prev.value:null;
+  },
+};
+
+/* =====================================================================
+   V — VIEW.
+   ===================================================================== */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function renderKPIs(){
+  const fy26=M.years.find(y=>y.fy==="FY2026");
+  const fy27=M.years.find(y=>y.fy==="FY2027E");
+  const cards=[
+    {lbl:"FY2026 营收",   val:P.bn(fy26.revenue),   sub:"同比 +65%",        cls:"",      sw:"var(--past)"},
+    {lbl:"FY2026 净利润", val:P.bn(fy26.netIncome), sub:"净利率 "+P.pct(P.netM(fy26)), cls:"accent", sw:"var(--ok)"},
+    {lbl:"FY2026 毛利率", val:P.pct(fy26.grossM),   sub:"GAAP",             cls:"accent",sw:"var(--ok)"},
+    {lbl:"FY2027E 营收",  val:"≈"+P.bn(fy27.revenue,0), sub:"卖方一致预期", cls:"est",   sw:"var(--est)"},
+  ];
+  $("#kpis").innerHTML=cards.map(c=>`
+    <div class="card kpi ${c.cls}">
+      <div class="k-lbl"><span class="swatch" style="background:${c.sw}"></span>${c.lbl}</div>
+      <div class="k-val">${c.val}</div>
+      <div class="k-sub">${c.sub}</div>
+    </div>`).join("");
+}
+
+function renderTrend(){
+  const svg=$("#trend");
+  const data=M.years;
+  const W=Math.max(560, svg.clientWidth||820), padL=40,padR=20,padT=24,padB=46;
+  const innerW=W-padL-padR;
+  const H=320, innerH=H-padT-padB;
+  const max=Math.max(...data.map(y=>y.revenue))*1.08;
+  const groupW=innerW/data.length;
+  const barW=Math.min(46,groupW*0.30);
+  const yScale=v=>padT+innerH-(v/max)*innerH;
+  let s=`<defs><pattern id="h2" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="var(--past)"/><line x1="0" y1="0" x2="0" y2="5" stroke="#fff" stroke-width="2" opacity=".55"/></pattern>
+    <pattern id="h3" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="var(--ok)"/><line x1="0" y1="0" x2="0" y2="5" stroke="#fff" stroke-width="2" opacity=".55"/></pattern></defs>`;
+  // gridlines
+  for(let i=0;i<=4;i++){ const gv=max*i/4, gy=yScale(gv);
+    s+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="var(--line-soft)"/>`;
+    s+=`<text x="${padL-6}" y="${gy+3}" text-anchor="end" font-family="var(--mono)" font-size="9.5" fill="var(--ink-faint)">${gv.toFixed(0)}</text>`;
+  }
+  // margin line points
+  const mpts=[];
+  data.forEach((y,i)=>{
+    const cx=padL+groupW*i+groupW/2;
+    const revH=(y.revenue/max)*innerH, niH=((y.netIncome||0)/max)*innerH;
+    const revFill=y.status==="forecast"?"url(#h2)":"var(--past)";
+    const niFill=y.status==="forecast"?"url(#h3)":"var(--ok)";
+    const x1=cx-barW-3, x2=cx+3;
+    // revenue bar
+    s+=`<rect x="${x1}" y="${yScale(y.revenue)}" width="${barW}" height="${revH}" rx="3" fill="${revFill}"/>`;
+    s+=`<text x="${x1+barW/2}" y="${yScale(y.revenue)-5}" text-anchor="middle" font-family="var(--mono)" font-size="10" font-weight="600" fill="var(--ink-soft)">${y.revenue}</text>`;
+    // net income bar
+    s+=`<rect x="${x2}" y="${yScale(y.netIncome||0)}" width="${barW}" height="${niH}" rx="3" fill="${niFill}"/>`;
+    s+=`<text x="${x2+barW/2}" y="${yScale(y.netIncome||0)-5}" text-anchor="middle" font-family="var(--mono)" font-size="10" font-weight="600" fill="var(--ok-deep)">${y.netIncome||"—"}</text>`;
+    // x label
+    s+=`<text x="${cx}" y="${H-padB+18}" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="${y.status==='forecast'?'400':'600'}" fill="${y.status==='forecast'?'var(--est)':'var(--ink)'}">${y.fy}</text>`;
+    const nm=P.netM(y);
+    if(nm!=null) mpts.push({x:cx,y:padT+8+(1-nm)*0+ ( (1-nm) ), nm, cx});
+  });
+  // net margin dashed line (mapped to its own faint scale at top band)
+  const mvals=data.map(y=>P.netM(y));
+  const mline=data.map((y,i)=>{
+    const nm=mvals[i]; if(nm==null)return null;
+    const cx=padL+groupW*i+groupW/2;
+    const my=padT+ (1-nm)*innerH*0.42; // compressed top band
+    return {cx,my,nm};
+  }).filter(Boolean);
+  if(mline.length){
+    s+=`<polyline points="${mline.map(p=>p.cx+','+p.my).join(' ')}" fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-dasharray="4 3"/>`;
+    mline.forEach(p=>{ s+=`<circle cx="${p.cx}" cy="${p.my}" r="2.6" fill="var(--ink-soft)"/>
+      <text x="${p.cx}" y="${p.my-7}" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-soft)">${(p.nm*100).toFixed(0)}%</text>`; });
+  }
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.style.width="100%"; svg.style.height=H+"px";
+  svg.innerHTML=s;
+}
+
+function renderYears(){
+  $("#years").innerHTML=M.years.map((y,i)=>{
+    const fc=y.status==="forecast";
+    const ry=P.revYoY(i);
+    return `<button class="ycard ${fc?'is-fc':''}" data-fy="${y.fy}">
+      <div class="yhead"><span class="yfy">${y.fy}</span>
+        <span class="ybadge ${fc?'fc':'act'}">${fc?'预测':'实际'}</span></div>
+      <div class="yrev num">${fc?'≈':''}${P.bn(y.revenue, fc?0:1)}</div>
+      <div class="yrevlbl">营收${ry!=null?' · 同比 '+P.yoy(ry):''}</div>
+      <div class="yrow"><span class="l">净利润</span><span class="v num">${y.netIncome!=null?(fc?'≈':'')+P.bn(y.netIncome,fc?0:1):'—'}</span></div>
+      <div class="yrow"><span class="l">净利率</span><span class="v num">${P.pct(P.netM(y))}</span></div>
+      <span class="yopen">查看板块 →</span>
+    </button>`;
+  }).join("");
+  $$("#years .ycard").forEach(b=> b.onclick=()=>openDetail(b.dataset.fy));
+}
+
+function renderHomeNote(){
+  $("#homeNote").innerHTML=`<b>口径说明：</b>本页一切“利润”均为公司层面 GAAP 净利润，可同口径逐年对比。这正是首页该承担的任务——客观、可比、有来源。注意 <b>FY2026 净利润 $120.1B 略高于经营利润 $130.4B 的税后水平</b>，是因为当年含较大的股权投资收益（GAAP 计入、非经营性）。点进任一财年，你会看到一个真实约束：<b>NVIDIA 把营收拆到 5 个市场平台，却只把利润披露到 2 个报告分部</b>——这就是“分部毛利率往往拿不到”的活样本。`;
+}
+
+/* ---------- detail ---------- */
+function openDetail(fy){
+  const y=M.years.find(x=>x.fy===fy); if(!y)return;
+  $("#home").style.display="none"; $("#detail").style.display="block";
+  window.scrollTo({top:0,behavior:"instant"});
+  $("#dFy").textContent=y.fy;
+  $("#dPeriod").textContent=y.periodEnd;
+  const badge=$("#dBadge");
+  if(y.status==="forecast"){ badge.className="dbadge ybadge fc"; badge.textContent="预测 · 卖方一致预期"; }
+  else { badge.className="dbadge ybadge act"; badge.textContent="实际 · GAAP"; }
+  $("#detailBody").innerHTML = y.status==="forecast" ? forecastView(y) : actualView(y);
+}
+
+function actualView(y){
+  const total=P.platformTotal(y);
+  const sorted=P.platformsSorted(y);
+  const maxV=sorted[0].value;
+  let platHtml=sorted.map(p=>{
+    const share=p.value/total;
+    const yoy=P.platYoY(y,p.name);
+    const yoyHtml = yoy==null
+      ? `<span class="na">同比 —（无上一年样本）</span>`
+      : `<span class="${yoy>=0?'up':'dn'}">同比 ${P.yoy(yoy)}</span>`;
+    return `<div class="platrow ${p.ai?'ai':''}">
+      <div class="pt">
+        <span class="pname">${p.name}${p.ai?'<span class="aitag">AI 主战场</span>':''}</span>
+        <span class="pv num">${P.bn(p.value,2)}<span class="sh">${P.pct(share,1)}</span></span>
+      </div>
+      <div class="ptrack"><div class="pfill" style="width:${(p.value/maxV*100).toFixed(1)}%"></div></div>
+      <div class="pyoy">${yoyHtml}</div>
+    </div>`;
+  }).join("");
+
+  const reconOk=Math.abs(total-y.revenue)<0.05;
+
+  return `
+  <div class="section-h" style="margin-top:18px">公司层面 · ${y.fy}</div>
+  <div class="card csum">
+    <div class="c"><div class="cl">营收</div><div class="cv num">${P.bn(y.revenue,1)}</div></div>
+    <div class="c"><div class="cl">毛利率</div><div class="cv num">${P.pct(y.grossM)}</div></div>
+    <div class="c"><div class="cl">经营利润率</div><div class="cv num">${P.pct(P.opM(y))}</div></div>
+    <div class="c"><div class="cl">净利润</div><div class="cv num green">${P.bn(y.netIncome,1)}</div></div>
+    <div class="c"><div class="cl">净利率</div><div class="cv num green">${P.pct(P.netM(y))}</div></div>
+  </div>
+
+  <div class="section-h">业务板块营收 · 按市场平台 · 降序</div>
+  <div class="card">
+    <div class="plat">${platHtml}</div>
+    <div class="recon-line">平台合计 ${P.bn(total,2)} ${reconOk?'<span class="ok">＝</span>':'≠'} 公司总营收 ${P.bn(y.revenue,2)} ${reconOk?'<span class="ok">✓ 对账通过</span>':''}</div>
+  </div>
+
+  <div class="section-h">利润 / 毛利率 · 数据缺口（真实约束）</div>
+  <div class="gap">
+    <h3>NVIDIA 不把利润拆到上面 5 个平台</h3>
+    <p>公司只把经营利润披露到 <b>2 个报告分部</b>（Compute &amp; Networking / Graphics），并且<b>不披露各市场平台的毛利率</b>。所以“每个板块的利润、毛利率降序”这一项，对 NVIDIA 在公开财报里只能做到营收级，利润级拿不到——这就是你担心的那个缺口，在真实数据里长这样：</p>
+    <div class="seg2">
+      <div class="seg"><div class="sn">Compute &amp; Networking</div><div class="sv num">${y.seg.cn}</div><div class="sl">占营收 · 含数据中心/网络/汽车</div></div>
+      <div class="seg"><div class="sn">Graphics</div><div class="sv num">${y.seg.gfx}</div><div class="sl">占营收 · 含游戏/专业可视化</div></div>
+    </div>
+    <div class="locked">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex:none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="#8a5a0f" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#8a5a0f" stroke-width="1.8"/></svg>
+      <span><b>平台级毛利率 / 净利润：未披露。</b>诚实做法是留空并标注，而不是估一个数填进去——填了，整个工具就退化成那张对不上账的图。</span>
+    </div>
+  </div>
+
+  ${sourcesBlock(y)}
+  `;
+}
+
+function forecastView(y){
+  const anchors=(y.anchors||[]).map((a,i)=>`
+    <div class="card fcc ${i===3?'big':''}">
+      <div class="fl">${a.label}</div>
+      <div class="fv num">${a.value}</div>
+      <div class="fs">${a.note}</div>
+    </div>`).join("");
+  return `
+  <div class="section-h" style="margin-top:18px">本财年 · 预测（非实际）</div>
+  <div class="note-block" style="margin-top:0">
+    <b>这是预测，不是已实现的经营事实。</b>全年一致预期约 ${P.bn(y.revenue,0)}（区间 ${y.consensusRev}），一致预期 EPS 约 ${y.consensusEps}。下方锚点里，Q1 为<b>已公布实际</b>、Q2 为<b>公司官方指引</b>、全年为<b>卖方综合</b>——三种可靠度不同，已分别标注。
+  </div>
+  <div class="section-h">预测锚点</div>
+  <div class="fcgrid">${anchors}</div>
+
+  <div class="section-h">板块口径 · 重要变化</div>
+  <div class="gap">
+    <h3>从本财年起，NVIDIA 改了板块划分</h3>
+    <p>自 FY2027 Q1 起，NVIDIA 不再用“数据中心 / 游戏 / 专业可视化 / 汽车 / OEM”五平台，而改为两大平台：<b>Data Center</b>（内含 Hyperscale 与 ACIE 两个子市场）与 <b>Edge Computing</b>。这意味着 FY2027 起的板块明细<b>无法和 FY2024–FY2026 直接逐项对比</b>——分部定义变了，是趋势分析里非常现实的坑。工具里必须显式标注这条断点，否则又会在不知不觉中“拿总数比切片”。</p>
+  </div>
+
+  ${sourcesBlock(y)}
+  `;
+}
+
+function sourcesBlock(y){
+  const rows=(y.sources||[]).map(s=>`
+    <div class="srcrow"><span class="sl">${s.label}</span><a href="${s.url}" target="_blank" rel="noopener">官方来源 ↗</a></div>`).join("");
+  return `<div class="section-h">数据来源</div><div class="card srcs">${rows}</div>`;
+}
+
+function closeDetail(){ $("#detail").style.display="none"; $("#home").style.display="block"; }
+
+/* ---------- init ---------- */
+function init(){
+  renderKPIs(); renderTrend(); renderYears(); renderHomeNote();
+  $("#backBtn").onclick=closeDetail;
+  let rT; window.addEventListener("resize",()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if($("#home").style.display!=="none") renderTrend(); },150); });
+}
+init();
+</script>
+</body>
+</html>

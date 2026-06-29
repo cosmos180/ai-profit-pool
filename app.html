@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 利润池 · 公司经营数据</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E7ECE9; --card:#FBFCFB; --card-2:#F2F5F3;
+  --ink:#18211D; --ink-soft:#54625B; --ink-faint:#8B988F;
+  --line:#D4DBD6; --line-soft:#E3E8E4;
+  --ok:#0E7C6B; --ok-deep:#0a5a4e; --ok-soft:#CDE7E1;
+  --past:#AEBBB3; --est:#BC7A12; --est-soft:#F0E0C2;
+  --bad:#A6321F; --bad-soft:#EED4CD; --muted:#7C8A84;
+  --ai:#1F6FB2; --ai-soft:#D6E6F2;
+  --shadow:0 1px 2px rgba(24,33,29,.05),0 8px 24px -16px rgba(24,33,29,.25);
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"IBM Plex Sans","IBM Plex Sans SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+a{color:var(--ok)}
+:focus-visible{outline:2.5px solid var(--ok);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header.top{padding:26px 0 6px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
+.crumbs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px}
+.crumb{appearance:none;border:0;background:none;font-family:inherit;font-size:13.5px;color:var(--ink-soft);cursor:pointer;padding:2px 0}
+.crumb:hover{color:var(--ink);text-decoration:underline}
+.crumb.cur{color:var(--ink);font-weight:600;cursor:default}.crumb.cur:hover{text-decoration:none}
+.crumb-sep{color:var(--ink-faint);font-size:12px}
+h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;letter-spacing:-.015em}
+.lead{color:var(--ink-soft);font-size:13.5px;max-width:66ch;margin:0}.lead b{color:var(--ink)}
+.section-h{font-size:12px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:28px 0 13px;display:flex;align-items:center;gap:10px}
+.section-h::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.section-h .count{font-family:var(--mono);text-transform:none;letter-spacing:0;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px;font-size:11px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.cover{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:4px}
+.cover .cv{padding:15px 18px;flex:1;min-width:150px}
+.cover .cv .l{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
+.cover .cv .v{font-family:var(--mono);font-size:25px;font-weight:600;margin-top:6px;letter-spacing:-.01em}
+.cover .cv .s{font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
+.cover .cv.accent .v{color:var(--ok)}
+.metricbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.metricbar .ml{font-size:12px;color:var(--ink-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-family:var(--sans);font-size:12.5px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:.12s}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip:hover:not([aria-pressed="true"]){border-color:var(--ink-soft);color:var(--ink)}
+.dir{display:flex;flex-direction:column;gap:11px}
+.crow{display:grid;grid-template-columns:46px 1.5fr 1.3fr 1fr;gap:14px;align-items:center;padding:15px 17px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;border:1px solid var(--line);background:var(--card);border-radius:14px;text-align:left;font-family:inherit;width:100%}
+.crow:hover{transform:translateY(-2px);box-shadow:0 10px 30px -18px rgba(24,33,29,.4);border-color:var(--ink-soft)}
+.logo{width:46px;height:46px;border-radius:11px;display:grid;place-items:center;flex:none;background:#18211D}
+.logo span{font-family:var(--mono);font-weight:600;font-size:16px;letter-spacing:-.04em;color:#9fb2a8}
+.logo.nv span{color:#76B900}
+.cinfo .cn{font-weight:700;font-size:16px;letter-spacing:-.01em}
+.cinfo .cmeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.tagx{font-family:var(--mono);font-size:10px;color:var(--ink-soft);background:var(--card-2);border:1px solid var(--line-soft);padding:1px 7px;border-radius:5px}
+.segtag{font-family:var(--mono);font-size:10px;padding:1px 7px;border-radius:5px}
+.segtag.yes{background:var(--ok-soft);color:var(--ok-deep)}
+.segtag.partial{background:var(--est-soft);color:#8a5a0f}
+.segtag.no{background:var(--bad-soft);color:#822717}
+.cmetric{text-align:right}
+.cmetric .mv{font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:-.01em}
+.cmetric .ms{font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
+.cmetric .ms .up{color:var(--ok)}.cmetric .ms .dn{color:var(--bad)}
+.cbarcell{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.cbar{width:100%;height:9px;border-radius:5px;background:var(--card-2);overflow:hidden}
+.cbar .f{height:100%;border-radius:5px;background:var(--ok)}
+.cfore{font-family:var(--mono);font-size:11px;color:var(--est)}
+.copen{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}.crow:hover .copen{color:var(--ok)}
+.prow{display:grid;grid-template-columns:46px 1.6fr 1fr;gap:14px;align-items:center;padding:14px 17px;border:1px dashed var(--line);border-radius:14px}
+.prow .logo{background:#E1E7E3;opacity:.85}.prow .logo span{color:var(--ink-faint)}
+.prow .cn{font-weight:600;font-size:15px;color:var(--ink-soft)}
+.pendbadge{font-family:var(--mono);font-size:10px;background:var(--card-2);color:var(--ink-faint);border:1px solid var(--line);padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.06em}
+.psrc{font-size:11.5px;color:var(--ink-faint);text-align:right}
+.addhint{font-size:12.5px;color:var(--ink-soft);background:var(--card-2);border-radius:11px;padding:13px 15px;margin-top:14px;line-height:1.6}
+.addhint code{font-family:var(--mono);font-size:11.5px;background:var(--card);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+.addhint b{color:var(--ink)}
+#company,#detail{display:none}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px}
+.kpi{padding:16px 17px}
+.kpi .k-lbl{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
+.kpi .k-val{font-family:var(--mono);font-size:26px;font-weight:600;margin-top:7px;letter-spacing:-.01em}
+.kpi .k-sub{font-size:11.5px;color:var(--ink-faint);margin-top:3px;font-family:var(--mono)}
+.kpi.accent .k-val{color:var(--ok)}.kpi.est .k-val{color:var(--est)}
+.swatch{width:9px;height:9px;border-radius:2px;display:inline-block}
+.chart-card{padding:20px 20px 14px}
+.chart-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);margin-top:10px}
+.chart-legend .i{display:flex;align-items:center;gap:7px}
+.lg{width:16px;height:11px;border-radius:3px}
+.lg-hatch{background:var(--est);background-image:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,.55) 2px,rgba(255,255,255,.55) 4px)}
+.years{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:14px}
+.ycard{padding:17px 18px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;position:relative;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:14px;font-family:inherit}
+.ycard:hover{transform:translateY(-2px);box-shadow:0 10px 30px -18px rgba(24,33,29,.4);border-color:var(--ink-soft)}
+.ycard.is-fc{border-style:dashed}
+.ycard .yhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.ycard .yfy{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.ybadge{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.06em}
+.ybadge.act{background:var(--ok-soft);color:var(--ok-deep)}.ybadge.fc{background:var(--est-soft);color:#8a5a0f}
+.ycard .yrev{font-family:var(--mono);font-size:25px;font-weight:600;letter-spacing:-.01em}
+.ycard .yrevlbl{font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:1px}
+.ycard .yrow{display:flex;justify-content:space-between;font-size:12.5px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.ycard .yrow .l{color:var(--ink-soft)}.ycard .yrow .v{font-family:var(--mono);font-weight:500}
+.ycard .yopen{position:absolute;right:15px;bottom:14px;color:var(--ink-faint);font-size:12px;font-family:var(--mono)}
+.ycard:hover .yopen{color:var(--ok)}
+.dhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:8px 0 2px}
+.dhead .dfy{font-size:29px;font-weight:700;letter-spacing:-.015em}
+.dhead .dperiod{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+.dbadge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.06em}
+.csum{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));overflow:hidden}
+.csum .c{padding:15px 17px;border-right:1px solid var(--line-soft)}.csum .c:last-child{border-right:0}
+.csum .cl{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+.csum .cv{font-family:var(--mono);font-size:20px;font-weight:600;margin-top:5px}.csum .cv.green{color:var(--ok)}
+.plat{padding:6px 18px 16px}
+.platrow{padding:13px 0;border-bottom:1px solid var(--line-soft)}.platrow:last-child{border-bottom:0}
+.platrow .pt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+.platrow .pname{font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:9px}
+.aitag{font-family:var(--mono);font-size:9.5px;background:var(--ai-soft);color:var(--ai);padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em}
+.platrow .pv{font-family:var(--mono);font-size:15px;font-weight:600;white-space:nowrap}
+.platrow .pv .sh{color:var(--ink-faint);font-weight:400;font-size:12px;margin-left:6px}
+.platrow .ptrack{height:11px;border-radius:5px;background:var(--card-2);overflow:hidden}
+.platrow .pfill{height:100%;border-radius:5px;background:var(--ok)}.platrow.ai .pfill{background:var(--ai)}
+.platrow .pyoy{font-family:var(--mono);font-size:11px;margin-top:5px}
+.pyoy .up{color:var(--ok)}.pyoy .dn{color:var(--bad)}.pyoy .na{color:var(--ink-faint)}
+.recon-line{font-size:12px;color:var(--ink-soft);font-family:var(--mono);padding:11px 18px;border-top:1px dashed var(--line)}
+.recon-line .ok{color:var(--ok);font-weight:600}
+.gap{padding:17px 18px;background:linear-gradient(0deg,var(--est-soft),var(--card));border:1px solid #E4CFA4;border-left:4px solid var(--est);border-radius:13px}
+.gap h3{margin:0 0 6px;font-size:15px;color:#5d4410}
+.gap p{margin:0 0 12px;font-size:13px;color:#6b4e16;line-height:1.55}
+.gap .seg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gap .seg{background:var(--card);border:1px solid #E4CFA4;border-radius:10px;padding:11px 13px}
+.gap .seg .sn{font-size:12.5px;font-weight:600}.gap .seg .sv{font-family:var(--mono);font-size:20px;font-weight:600;margin-top:3px}
+.gap .seg .sl{font-size:10.5px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
+.gap .locked{margin-top:13px;display:flex;align-items:center;gap:9px;font-size:12.5px;color:#6b4e16;background:var(--card);border-radius:9px;padding:10px 12px}
+.fcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.fcc{padding:14px 15px}.fcc .fl{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+.fcc .fv{font-family:var(--mono);font-size:20px;font-weight:600;margin-top:4px}.fcc .fs{font-size:11px;color:var(--ink-soft);margin-top:3px}
+.fcc.big .fv{color:var(--est)}
+.srcs{padding:6px 18px 14px}
+.srcrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
+.srcrow:last-child{border-bottom:0}.srcrow .sl{color:var(--ink-soft)}.srcrow a{word-break:break-all;font-size:12px}
+.note-block{font-size:12.5px;color:var(--ink-soft);background:var(--card-2);border-radius:10px;padding:12px 15px;line-height:1.6;margin-top:13px}.note-block b{color:var(--ink)}
+footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:center;line-height:1.7}footer b{color:var(--ink-soft)}
+@media(max-width:640px){
+  .logo{width:42px;height:42px}.logo span{font-size:14px}
+  .crow{grid-template-columns:42px 1fr auto}.crow .cbarcell{display:none}
+  .prow{grid-template-columns:42px 1fr}.prow .psrc{display:none}
+  .csum{grid-template-columns:1fr 1fr}.csum .c{border-right:0;border-bottom:1px solid var(--line-soft)}.csum .c:last-child{border-bottom:0}
+  .gap .seg2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow"><span class="dot"></span>AI 利润池 · 公司经营数据 · v0 · 数据已解耦</div>
+    <nav class="crumbs" id="crumbs"></nav>
+  </header>
+
+  <section id="home">
+    <h1 class="title">公司对比</h1>
+    <p class="lead">数据已从界面剥离到 <code style="font-family:var(--mono)">companies.json</code>（受 <code style="font-family:var(--mono)">schema.json</code> 约束、由 <code style="font-family:var(--mono)">validate.py</code> 把关）。此页只负责<b>呈现与跳转</b>；一切派生（利润率、同比、对账）由数据访问层现算。</p>
+    <div class="section-h">覆盖情况</div>
+    <div class="cover" id="cover"></div>
+    <div class="section-h">已补录公司 <span class="count" id="popCount"></span></div>
+    <div class="metricbar">
+      <span class="ml">对比指标</span>
+      <button class="chip" data-m="revenue" aria-pressed="true">营收</button>
+      <button class="chip" data-m="netIncome" aria-pressed="false">净利润</button>
+      <button class="chip" data-m="netM" aria-pressed="false">净利率</button>
+    </div>
+    <div class="dir" id="popDir"></div>
+    <div class="section-h">预留槽位 · 待补录 <span class="count" id="pendCount"></span></div>
+    <div class="dir" id="pendDir"></div>
+    <div class="addhint" id="addHint"></div>
+  </section>
+
+  <section id="company">
+    <h1 class="title" id="cTitle"></h1>
+    <p class="lead" id="cLead"></p>
+    <div class="section-h">公司层面 · 量级</div>
+    <div class="kpis" id="cKpis"></div>
+    <div class="section-h" id="cTrendH">营收与净利润</div>
+    <div class="card chart-card">
+      <svg id="trend" role="img" aria-label="营收与净利润趋势"></svg>
+      <div class="chart-legend">
+        <div class="i"><span class="lg" style="background:var(--past)"></span>营收（实际）</div>
+        <div class="i"><span class="lg" style="background:var(--ok)"></span>净利润（实际）</div>
+        <div class="i"><span class="lg lg-hatch"></span>预测</div>
+        <div class="i"><span class="lg" style="background:transparent;border-top:2px dashed var(--ink-soft);height:2px;border-radius:0;margin-top:5px"></span>净利率 %</div>
+      </div>
+    </div>
+    <div class="section-h">按财年下钻 · 点击进入业务板块明细</div>
+    <div class="years" id="cYears"></div>
+    <div class="note-block" id="cNote"></div>
+  </section>
+
+  <section id="detail">
+    <div class="dhead">
+      <span class="dfy" id="dFy"></span>
+      <span class="dperiod" id="dPeriod"></span>
+      <span class="dbadge" id="dBadge"></span>
+    </div>
+    <div id="detailBody"></div>
+  </section>
+
+  <footer>
+    三层抽象：<b>登记表（公司）→ 公司（多年）→ 财年（板块）</b> · 数据：<b>companies.json</b> · 契约：<b>schema.json</b> · 校验：<b>validate.py</b> · 读取/派生：<b>data-module.js</b>
+  </footer>
+</div>
+
+<!-- ===== serving format: dataset embedded as JSON (byte-identical to companies.json) ===== -->
+<script type="application/json" id="dataset">{
+  "meta": {
+    "schema_version": "0.1",
+    "unit": "USD bn",
+    "note": "Raw, sourced facts only. Derived metrics (margins, YoY, reconciliation, anomalies) are NOT stored here — they are computed by the data-access layer at read time."
+  },
+  "companies": [
+    {
+      "id": "nvda",
+      "name": "NVIDIA 英伟达",
+      "ticker": "NASDAQ · NVDA",
+      "region": "美国",
+      "sector": "AI 加速计算",
+      "currency": "USD",
+      "seg_profit": "partial",
+      "logo_text": "nv",
+      "logo_class": "nv",
+      "status": "populated",
+      "lead": "营收拆到 5 个市场平台，利润只披露到 2 个报告分部 —— “分部毛利率拿不到”的活样本。",
+      "fy_note": "财年截至每年 1 月末，例如 FY2026 = 2025-01 至 2026-01。",
+      "years": [
+        {
+          "fy": "FY2024", "period_end": "截至 2024-01-28", "status": "actual",
+          "revenue": 60.92, "gross_margin": 0.727, "op_income": 32.97, "net_income": 29.76,
+          "segments": [
+            {"name": "Data Center 数据中心", "kind": "platform", "revenue": 47.52, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Gaming 游戏", "kind": "platform", "revenue": 10.45, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Professional Visualization 专业可视化", "kind": "platform", "revenue": 1.55, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Automotive 汽车", "kind": "platform", "revenue": 1.09, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "OEM & Other", "kind": "platform", "revenue": 0.31, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "reportable_note": {"Compute & Networking": "≈ 78%", "Graphics": "≈ 22%"},
+          "sources": [
+            {"label": "FY2024 业绩（FY2025 新闻稿含上一年对比）", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "截至 2025-01-26", "status": "actual",
+          "revenue": 130.50, "gross_margin": 0.750, "op_income": 81.45, "net_income": 72.88,
+          "segments": [
+            {"name": "Data Center 数据中心", "kind": "platform", "revenue": 115.19, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Gaming 游戏", "kind": "platform", "revenue": 11.35, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Professional Visualization 专业可视化", "kind": "platform", "revenue": 1.88, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Automotive 汽车", "kind": "platform", "revenue": 1.69, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "OEM & Other", "kind": "platform", "revenue": 0.39, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "reportable_note": {"Compute & Networking": "≈ 88%", "Graphics": "≈ 12%"},
+          "sources": [
+            {"label": "FY2025 业绩新闻稿", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025", "data_status": "official"},
+            {"label": "FY2025 10-K（Note 16）", "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2026", "period_end": "截至 2026-01-25", "status": "actual",
+          "revenue": 215.94, "gross_margin": 0.711, "op_income": 130.39, "net_income": 120.10,
+          "segments": [
+            {"name": "Data Center 数据中心", "kind": "platform", "revenue": 193.74, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Gaming 游戏", "kind": "platform", "revenue": 16.04, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Professional Visualization 专业可视化", "kind": "platform", "revenue": 3.19, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Automotive 汽车", "kind": "platform", "revenue": 2.35, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "OEM & Other", "kind": "platform", "revenue": 0.62, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "reportable_note": {"Compute & Networking": "≈ 90%", "Graphics": "≈ 10%"},
+          "sources": [
+            {"label": "Q4 & FY2026 业绩新闻稿", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026", "data_status": "official"},
+            {"label": "FY2026 10-K", "url": "https://www.publicnow.com/view/2882BBE40A7C6C824C8A8D4C36B7AE84D3C63264?1772059708=", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2027E", "period_end": "本财年进行中 · 截至 2027-01", "status": "forecast",
+          "revenue": 390, "net_income": 225, "consensus_rev": "$367–391B", "consensus_eps": "$9.34",
+          "framework_change": "自 FY2027 Q1 起，板块由五平台改为 Data Center / Edge Computing 两平台，FY2027 起无法与 FY2024–FY2026 逐项对比。",
+          "anchors": [
+            {"label": "Q1 FY2027 实际营收", "value": "$81.6B", "note": "已公布，同比 +85%", "data_status": "official"},
+            {"label": "Q1 数据中心营收", "value": "$75.2B", "note": "占比 92%，同比 +92%", "data_status": "official"},
+            {"label": "Q2 FY2027 营收指引", "value": "$91.0B", "note": "公司官方，±2%", "data_status": "guidance"},
+            {"label": "全年营收一致预期", "value": "≈ $390B", "note": "卖方综合，区间 $367–391B", "data_status": "consensus"}
+          ],
+          "sources": [
+            {"label": "Q1 FY2027 业绩新闻稿（实际 + Q2 指引）", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027", "data_status": "official"},
+            {"label": "FY2027 一致预期（卖方汇总）", "url": "https://simplywall.st/stocks/us/semiconductors/nasdaq-nvda/nvidia/future", "data_status": "consensus"}
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "samsung", "name": "Samsung 三星电子", "ticker": "KRX · 005930", "region": "韩国",
+      "sector": "存储 / 代工 / 消费电子", "currency": "KRW", "seg_profit": "yes",
+      "logo_text": "SS", "status": "populated",
+      "lead": "按 DX/DS/SDC/Harman 四个报告分部披露营收与营业利润 —— 所以下钻能给出真实的分部利润与利润率（NVIDIA 做不到的）。看点：DX 营收最大，但 DS（半导体/HBM）利润最大。",
+      "fy_note": "KRW→USD 采用 IRS 年度平均汇率（2024: 1364.153 / 2025: 1421.779），与工作簿一致。分部营收含内部交易（inter-divisional），故合计大于合并营收。",
+      "years": [
+        {
+          "fy": "FY2024", "period_end": "自然年 2024（截至 2024-12-31）", "status": "actual",
+          "revenue": 220.576, "gross_margin": null, "op_income": 23.971, "net_income": 24.646,
+          "segments": [
+            {"name": "DX 终端体验（手机/家电/网络）", "kind": "division", "revenue": 128.202, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "DS 半导体（存储/代工/LSI）", "kind": "division", "revenue": 81.418, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "SDC 显示面板", "kind": "division", "revenue": 21.374, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Harman 车载/音频", "kind": "division", "revenue": 10.464, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Samsung Q4 & FY2024 业绩新闻稿", "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2024-results", "data_status": "official"},
+            {"label": "Samsung 2024 사업보고서（分部营收，含内部交易）", "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2024_4Q_Interim_Report.pdf", "data_status": "official"},
+            {"label": "Samsung 2024 合并财报（净利润）", "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2024_con_quarter04_all.pdf", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "自然年 2025（截至 2025-12-31）", "status": "actual",
+          "revenue": 234.636, "gross_margin": null, "op_income": 30.666, "net_income": 31.131,
+          "segments": [
+            {"name": "DX 终端体验（手机/家电/网络）", "kind": "division", "revenue": 132.229, "op_income": 9.073, "op_margin": 0.069, "is_ai": false},
+            {"name": "DS 半导体（存储/代工/LSI）", "kind": "division", "revenue": 91.505, "op_income": 17.513, "op_margin": 0.191, "is_ai": true},
+            {"name": "SDC 显示面板", "kind": "division", "revenue": 20.960, "op_income": 2.884, "op_margin": 0.138, "is_ai": false},
+            {"name": "Harman 车载/音频", "kind": "division", "revenue": 11.113, "op_income": 1.055, "op_margin": 0.095, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Samsung Q4 & FY2025 业绩新闻稿（分部营收/营业利润）", "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results", "data_status": "official"},
+            {"label": "Samsung 2025 合并财报（净利润）", "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf", "data_status": "official"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "broadcom", "name": "Broadcom 博通", "ticker": "NASDAQ · AVGO", "region": "美国",
+      "sector": "半导体 + 基础设施软件", "currency": "USD", "seg_profit": "yes",
+      "logo_text": "av", "logo_class": "av", "status": "populated",
+      "lead": "按 Semiconductor solutions / Infrastructure software 两个报告分部披露营收与营业利润。分部营收合计等于合并营收，分部营业利润之和高于合并营业利润，差额来自未分配费用（收购无形资产摊销、股权激励等）。",
+      "fy_note": "财年截止于 10 月最后一个星期日。分部营业利润用于经营分部表现评估；合并营业利润还扣除了未分配费用。",
+      "years": [
+        {
+          "fy": "FY2023", "period_end": "截至 2023-10-29", "status": "actual",
+          "revenue": 35.819, "gross_margin": 0.689, "op_income": 16.207, "net_income": 14.082,
+          "segments": [
+            {"name": "Semiconductor solutions 半导体解决方案", "kind": "platform", "revenue": 28.182, "op_income": 16.486, "op_margin": 0.585, "is_ai": true},
+            {"name": "Infrastructure software 基础设施软件", "kind": "platform", "revenue": 7.637, "op_income": 5.639, "op_margin": 0.738, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Broadcom FY2023 10-K（Segment Information）", "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016823000096/avgo-20231029.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2024", "period_end": "截至 2024-11-03", "status": "actual",
+          "revenue": 51.574, "gross_margin": 0.630, "op_income": 13.463, "net_income": 5.895,
+          "segments": [
+            {"name": "Semiconductor solutions 半导体解决方案", "kind": "platform", "revenue": 30.096, "op_income": 16.759, "op_margin": 0.557, "is_ai": true},
+            {"name": "Infrastructure software 基础设施软件", "kind": "platform", "revenue": 21.478, "op_income": 13.977, "op_margin": 0.651, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Broadcom FY2024 10-K（Segment Information）", "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016824000139/avgo-20241103.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "截至 2025-11-02", "status": "actual",
+          "revenue": 63.887, "gross_margin": 0.678, "op_income": 25.484, "net_income": 23.126,
+          "segments": [
+            {"name": "Semiconductor solutions 半导体解决方案", "kind": "platform", "revenue": 36.858, "op_income": 21.232, "op_margin": 0.576, "is_ai": true},
+            {"name": "Infrastructure software 基础设施软件", "kind": "platform", "revenue": 27.029, "op_income": 20.765, "op_margin": 0.768, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Broadcom FY2025 10-K（Segment Information）", "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm", "data_status": "official"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "softbank", "name": "SoftBank Group 软银集团", "ticker": "TSE · 9984", "region": "日本",
+      "sector": "投资 / AI 产业生态", "currency": "JPY", "seg_profit": "no",
+      "logo_text": "sb", "logo_class": "sb", "status": "populated",
+      "lead": "以投资控股、SoftBank Vision Funds、SoftBank 电信与 AI Computing（Arm/Ampere/Graphcore）为核心。利润高度受 OpenAI、Arm 等资产估值与投资损益影响，官方分部利润是税前利润口径，不等同于经营利润。",
+      "fy_note": "财年截至每年 3 月 31 日，例如 FY2025 = 2025-04-01 至 2026-03-31。JPY→USD 采用 SoftBank 官方财报披露的期末汇率（FY2023: 151.41 / FY2024: 149.52 / FY2025: 159.88）。分部 income 为 income before income tax 且包含投资损益，因此 op_income 留空。",
+      "years": [
+        {
+          "fy": "FY2023", "period_end": "截至 2024-03-31", "status": "actual",
+          "revenue": 44.624, "gross_margin": null, "op_income": null, "net_income": -1.504,
+          "segments": [
+            {"name": "Investment Business of Holding Companies 控股公司投资业务", "kind": "platform", "revenue": 0.000, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "SoftBank Vision Funds 软银愿景基金", "kind": "platform", "revenue": 0.000, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "SoftBank segment 软银电信与互联网", "kind": "platform", "revenue": 40.164, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Arm 芯片 IP", "kind": "platform", "revenue": 3.065, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Other 其他", "kind": "platform", "revenue": 1.395, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "SoftBank Group FY2024 Consolidated Financial Report（FY2023 对比期）", "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2024_01_en.pdf", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2024", "period_end": "截至 2025-03-31", "status": "actual",
+          "revenue": 48.447, "gross_margin": null, "op_income": null, "net_income": 7.714,
+          "segments": [
+            {"name": "Investment Business of Holding Companies 控股公司投资业务", "kind": "platform", "revenue": 0.000, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "SoftBank Vision Funds 软银愿景基金", "kind": "platform", "revenue": 0.000, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "SoftBank segment 软银电信与互联网", "kind": "platform", "revenue": 43.749, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "AI Computing segment AI 计算", "kind": "platform", "revenue": 3.948, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Other 其他", "kind": "platform", "revenue": 0.750, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "SoftBank Group FY2025 Consolidated Financial Report（FY2024 对比期，按 AI Computing 重分类）", "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "截至 2026-03-31", "status": "actual",
+          "revenue": 48.778, "gross_margin": null, "op_income": null, "net_income": 31.288,
+          "segments": [
+            {"name": "Investment Business of Holding Companies 控股公司投资业务", "kind": "platform", "revenue": 0.000, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "SoftBank Vision Funds 软银愿景基金", "kind": "platform", "revenue": 0.000, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "SoftBank segment 软银电信与互联网", "kind": "platform", "revenue": 43.995, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "AI Computing segment AI 计算", "kind": "platform", "revenue": 4.005, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Other 其他", "kind": "platform", "revenue": 0.778, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "SoftBank Group FY2025 Consolidated Financial Report", "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf", "data_status": "official"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "micron",
+      "name": "Micron 美光",
+      "ticker": "NASDAQ · MU",
+      "region": "美国",
+      "sector": "存储 (DRAM/NAND/HBM)",
+      "currency": "USD",
+      "seg_profit": "partial",
+      "logo_text": "mu",
+      "status": "populated",
+      "lead": "DRAM/NAND 存储巨头。FY2025 起按 CMBU（云/HBM）、CDBU（核心数据中心）、MCBU（移动/PC）与 AEBU（汽车/嵌入式）披露，CMBU 直接受益于 AI/HBM 需求。",
+      "fy_note": "财年通常在每年 8 月底结束。FY2025 10-K 对 FY2023/FY2024 分部数据做了追溯重列，本页统一采用 FY2025 10-K 的 CMBU/CDBU/MCBU/AEBU 口径。",
+      "years": [
+        {
+          "fy": "FY2023", "period_end": "截至 2023-08-31", "status": "actual",
+          "revenue": 15.540, "gross_margin": null, "op_income": -5.745, "net_income": -5.833,
+          "segments": [
+            {"name": "CMBU 云存储", "kind": "platform", "revenue": 1.872, "op_income": -0.768, "op_margin": -0.410, "is_ai": true},
+            {"name": "CDBU 核心数据中心", "kind": "platform", "revenue": 2.124, "op_income": -0.563, "op_margin": -0.265, "is_ai": false},
+            {"name": "MCBU 移动和客户端", "kind": "platform", "revenue": 7.394, "op_income": -3.189, "op_margin": -0.431, "is_ai": false},
+            {"name": "AEBU 汽车和嵌入式", "kind": "platform", "revenue": 4.139, "op_income": 0.680, "op_margin": 0.164, "is_ai": false},
+            {"name": "Other 其他", "kind": "platform", "revenue": 0.011, "op_income": 0.008, "op_margin": 0.727, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2024", "period_end": "截至 2024-08-29", "status": "actual",
+          "revenue": 25.111, "gross_margin": 0.224, "op_income": 1.304, "net_income": 0.778,
+          "segments": [
+            {"name": "CMBU 云存储", "kind": "platform", "revenue": 3.792, "op_income": 0.244, "op_margin": 0.064, "is_ai": true},
+            {"name": "CDBU 核心数据中心", "kind": "platform", "revenue": 4.984, "op_income": 0.255, "op_margin": 0.051, "is_ai": false},
+            {"name": "MCBU 移动和客户端", "kind": "platform", "revenue": 11.667, "op_income": -0.001, "op_margin": 0.000, "is_ai": false},
+            {"name": "AEBU 汽车和嵌入式", "kind": "platform", "revenue": 4.631, "op_income": 0.432, "op_margin": 0.093, "is_ai": false},
+            {"name": "Other 其他", "kind": "platform", "revenue": 0.037, "op_income": 0.018, "op_margin": 0.486, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "截至 2025-08-28", "status": "actual",
+          "revenue": 37.378, "gross_margin": 0.398, "op_income": 9.770, "net_income": 8.539,
+          "segments": [
+            {"name": "CMBU 云存储", "kind": "platform", "revenue": 13.524, "op_income": 6.129, "op_margin": 0.453, "is_ai": true},
+            {"name": "CDBU 核心数据中心", "kind": "platform", "revenue": 7.229, "op_income": 2.180, "op_margin": 0.302, "is_ai": false},
+            {"name": "MCBU 移动和客户端", "kind": "platform", "revenue": 11.859, "op_income": 1.981, "op_margin": 0.167, "is_ai": false},
+            {"name": "AEBU 汽车和嵌入式", "kind": "platform", "revenue": 4.753, "op_income": 0.557, "op_margin": 0.117, "is_ai": false},
+            {"name": "Other 其他", "kind": "platform", "revenue": 0.013, "op_income": -0.001, "op_margin": -0.077, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "Micron FY2025 10-K（Note 26 Segment Disclosures）", "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm", "data_status": "official"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skhynix", "name": "SK hynix", "ticker": "KRX · 000660", "region": "韩国",
+      "sector": "存储 / HBM", "currency": "KRW", "seg_profit": "partial",
+      "logo_text": "sk", "status": "populated",
+      "lead": "全球 HBM 核心领头羊，存储器业务几乎贡献全部营收。官方没有可与合并营收精确对账的 DRAM/NAND 年度绝对分部表，因此以 Memory 单一平台承接营收。",
+      "fy_note": "KRW→USD 采用 IRS 年度平均汇率（2023: 1306.686 / 2024: 1364.153 / 2025: 1421.779），与三星折算口径保持一致。分部利润未按 DRAM/NAND 对外披露。",
+      "years": [
+        {
+          "fy": "FY2023", "period_end": "自然年 2023（截至 2023-12-31）", "status": "actual",
+          "revenue": 25.075, "gross_margin": null, "op_income": -5.916, "net_income": -6.993,
+          "segments": [
+            {"name": "Memory 存储器", "kind": "platform", "revenue": 25.075, "op_income": null, "op_margin": null, "is_ai": true}
+          ],
+          "sources": [
+            {"label": "SK hynix FY2023 Financial Results（4Q23）", "url": "https://news.skhynix.com/sk-hynix-reports-fourth-quarter-2023-financial-results/", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2024", "period_end": "自然年 2024（截至 2024-12-31）", "status": "actual",
+          "revenue": 48.523, "gross_margin": null, "op_income": 17.203, "net_income": 14.512,
+          "segments": [
+            {"name": "Memory 存储器", "kind": "platform", "revenue": 48.523, "op_income": null, "op_margin": null, "is_ai": true}
+          ],
+          "sources": [
+            {"label": "SK hynix FY2024 Financial Results（4Q24）", "url": "https://news.skhynix.com/sk-hynix-announces-4q24-financial-results/", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "自然年 2025（截至 2025-12-31）", "status": "actual",
+          "revenue": 68.328, "gross_margin": null, "op_income": 33.202, "net_income": 30.207,
+          "segments": [
+            {"name": "Memory 存储器", "kind": "platform", "revenue": 68.328, "op_income": null, "op_margin": null, "is_ai": true}
+          ],
+          "sources": [
+            {"label": "SK hynix FY2025 Financial Results", "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/", "data_status": "official"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tsmc",
+      "name": "TSMC 台积电",
+      "ticker": "TWSE 2330 · NYSE TSM",
+      "region": "中国台湾",
+      "sector": "晶圆代工",
+      "currency": "TWD",
+      "seg_profit": "no",
+      "logo_text": "ts",
+      "status": "populated",
+      "lead": "全球最大的半导体代工企业，AI 计算与先进芯片制程的核心制造者。HPC 平台包含 AI 加速器、服务器 CPU 与其他高性能计算芯片，并不等同于纯 AI 收入。",
+      "fy_note": "TWD→USD 采用 SEC Form 20-F 披露的期末 Noon Buying Rate（2023: 30.62 / 2024: 32.79 / 2025: 31.37）。平台营收基于官方 HPC/Smartphone/IoT/Automotive/DCE/Other 占比并与合并营收对账。",
+      "years": [
+        {
+          "fy": "FY2023", "period_end": "自然年 2023（截至 2023-12-31）", "status": "actual",
+          "revenue": 70.599, "gross_margin": 0.544, "op_income": 30.094, "net_income": 27.816,
+          "segments": [
+            {"name": "HPC 高性能计算", "kind": "platform", "revenue": 30.357, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Smartphone 智能手机", "kind": "platform", "revenue": 26.828, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "IoT 物联网", "kind": "platform", "revenue": 5.648, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Automotive 车用电子", "kind": "platform", "revenue": 4.236, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "DCE 数字消费电子", "kind": "platform", "revenue": 1.412, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Other 其他", "kind": "platform", "revenue": 2.118, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "TSMC FY2023 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2024", "period_end": "自然年 2024（截至 2024-12-31）", "status": "actual",
+          "revenue": 88.268, "gross_margin": 0.561, "op_income": 40.319, "net_income": 35.327,
+          "segments": [
+            {"name": "HPC 高性能计算", "kind": "platform", "revenue": 45.017, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Smartphone 智能手机", "kind": "platform", "revenue": 30.894, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "IoT 物联网", "kind": "platform", "revenue": 5.296, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Automotive 车用电子", "kind": "platform", "revenue": 4.413, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "DCE 数字消费电子", "kind": "platform", "revenue": 0.883, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Other 其他", "kind": "platform", "revenue": 1.765, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "TSMC FY2024 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "自然年 2025（截至 2025-12-31）", "status": "actual",
+          "revenue": 121.423, "gross_margin": 0.599, "op_income": 61.718, "net_income": 54.116,
+          "segments": [
+            {"name": "HPC 高性能计算", "kind": "platform", "revenue": 71.640, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "Smartphone 智能手机", "kind": "platform", "revenue": 33.999, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "IoT 物联网", "kind": "platform", "revenue": 6.071, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Automotive 车用电子", "kind": "platform", "revenue": 6.071, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "DCE 数字消费电子", "kind": "platform", "revenue": 1.214, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Other 其他", "kind": "platform", "revenue": 2.428, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "TSMC FY2025 Form 20-F（SEC Filing）", "url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm", "data_status": "official"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asml", "name": "ASML", "ticker": "NASDAQ / Euronext · ASML", "region": "欧洲",
+      "sector": "半导体设备 / 光刻系统", "currency": "EUR", "seg_profit": "no",
+      "logo_text": "as", "logo_class": "as", "status": "populated",
+      "lead": "全球光刻机核心供应商，独家提供 EUV 光刻系统。EUV/High-NA EUV 是先进制程 AI 芯片制造的底层关键设备，但 ASML 是单一报告经营分部，不披露产品级利润。",
+      "fy_note": "自然年，财年截至 12 月 31 日。EUR→USD 按 ECB 每日历史汇率年度平均值折算（2023: 1.081269 / 2024: 1.082380 / 2025: 1.129983）。产品平台拆分为 EUV、DUV、量测与检测、装机基地管理。",
+      "years": [
+        {
+          "fy": "FY2023", "period_end": "自然年 2023（截至 2023-12-31）", "status": "actual",
+          "revenue": 29.798, "gross_margin": 0.513, "op_income": 9.777, "net_income": 8.476,
+          "segments": [
+            {"name": "EUV 先进光刻系统", "kind": "platform", "revenue": 9.865, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "DUV 成熟光刻系统", "kind": "platform", "revenue": 13.276, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Metrology & Inspection 量测与检测", "kind": "platform", "revenue": 0.580, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Installed Base Management 装机基地管理", "kind": "platform", "revenue": 6.077, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "ASML FY2025 Form 20-F（含 FY2023 对比数据）", "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2024", "period_end": "自然年 2024（截至 2024-12-31）", "status": "actual",
+          "revenue": 30.591, "gross_margin": 0.513, "op_income": 9.766, "net_income": 8.195,
+          "segments": [
+            {"name": "EUV 先进光刻系统", "kind": "platform", "revenue": 9.007, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "DUV 成熟光刻系统", "kind": "platform", "revenue": 13.856, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Metrology & Inspection 量测与检测", "kind": "platform", "revenue": 0.699, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Installed Base Management 装机基地管理", "kind": "platform", "revenue": 7.029, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "ASML FY2025 Form 20-F（含 FY2024 对比数据）", "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm", "data_status": "official"}
+          ]
+        },
+        {
+          "fy": "FY2025", "period_end": "自然年 2025（截至 2025-12-31）", "status": "actual",
+          "revenue": 36.913, "gross_margin": 0.528, "op_income": 12.770, "net_income": 10.858,
+          "segments": [
+            {"name": "EUV 先进光刻系统", "kind": "platform", "revenue": 13.111, "op_income": null, "op_margin": null, "is_ai": true},
+            {"name": "DUV 成熟光刻系统", "kind": "platform", "revenue": 13.612, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Metrology & Inspection 量测与检测", "kind": "platform", "revenue": 0.932, "op_income": null, "op_margin": null, "is_ai": false},
+            {"name": "Installed Base Management 装机基地管理", "kind": "platform", "revenue": 9.258, "op_income": null, "op_margin": null, "is_ai": false}
+          ],
+          "sources": [
+            {"label": "ASML FY2025 Form 20-F（SEC Edgar）", "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm", "data_status": "official"}
+          ]
+        }
+      ]
+    }
+  ]
+}</script>
+
+<!-- ===== data-access layer (Store + Selectors): same file as data-module.js ===== -->
+<script>
+/* =====================================================================
+   data-module.js — the data-access layer. NO DOM, NO formatting.
+   Responsibilities: load the canonical JSON, and DERIVE everything the
+   view needs (margins, YoY, reconciliation, segment ordering). Raw facts
+   are never recomputed; derived values are never stored.
+   Consumed by the view via the globals `Store` and `Selectors`.
+   ===================================================================== */
+const Store = {
+  _data: null,
+
+  /* Serving format is JSON. Same schema whether embedded or external:
+     (A) embedded <script id="dataset"> for single-file / offline use;
+     (B) external companies.json when served over HTTP — the swap is one line. */
+  async load() {
+    if (this._data) return this._data;
+    const el = (typeof document !== "undefined") && document.getElementById("dataset");
+    if (el && el.textContent.trim()) {
+      this._data = JSON.parse(el.textContent);
+    } else {
+      const res = await fetch("companies.json");   // <-- the only line that changes when serving over HTTP
+      this._data = await res.json();
+    }
+    return this._data;
+  },
+
+  meta()        { return this._data.meta; },
+  companies()   { return this._data.companies; },
+  byId(id)      { return this._data.companies.find(c => c.id === id); },
+  populated()   { return this._data.companies.filter(c => c.status === "populated" && c.years.length); },
+  pending()     { return this._data.companies.filter(c => c.status !== "populated" || !c.years.length); },
+};
+
+const Selectors = {
+  /* ---- year-level derivations ---- */
+  netMargin(y) { return (y && y.revenue && y.net_income != null) ? y.net_income / y.revenue : null; },
+  opMargin(y)  { return (y && y.revenue && y.op_income  != null) ? y.op_income  / y.revenue : null; },
+
+  /* ---- company-level helpers ---- */
+  actualYears(c)   { return c.years.filter(y => y.status === "actual"); },
+  forecastYear(c)  { return c.years.find(y => y.status === "forecast"); },
+  latestActual(c)  { const a = this.actualYears(c); return a.length ? a[a.length - 1] : null; },
+  yearIndex(c, fy) { return c.years.findIndex(y => y.fy === fy); },
+  yearByFy(c, fy)  { return c.years.find(y => y.fy === fy); },
+
+  revYoY(c, fy) {
+    const i = this.yearIndex(c, fy);
+    if (i <= 0) return null;
+    const a = c.years[i - 1].revenue, b = c.years[i].revenue;
+    return a ? (b - a) / a : null;
+  },
+
+  /* ---- segments ---- */
+  revenueSegs(y)   { return (y.segments || []).filter(s => s.revenue != null); },
+  revenueSorted(y) { return this.revenueSegs(y).slice().sort((a, b) => b.revenue - a.revenue); },
+  revenueTotal(y)  { return this.revenueSegs(y).reduce((s, p) => s + p.revenue, 0); },
+
+  /* "platform" segments cleanly partition revenue (NVIDIA → sum == revenue);
+     "division" segments include inter-segment sales (Samsung → sum > revenue). */
+  segmentKind(y) { return this.revenueSegs(y).some(s => s.kind === "division") ? "division" : "platform"; },
+
+  reconcile(y) {
+    const sum = this.revenueTotal(y), rev = y.revenue, kind = this.segmentKind(y);
+    const partition = kind === "platform";
+    return { sum, revenue: rev, diff: sum - rev, kind, partition, ok: partition && Math.abs(sum - rev) < 0.05 };
+  },
+
+  segYoY(c, fy, name) {
+    const i = this.yearIndex(c, fy);
+    if (i <= 0) return null;
+    const prev = (c.years[i - 1].segments || []).find(s => s.name === name);
+    const cur  = (this.yearByFy(c, fy).segments || []).find(s => s.name === name);
+    return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
+  },
+
+  /* Does this year disclose profit at the segment level?
+     Drives whether the drill-down shows a real profit table or an honest gap. */
+  hasSegmentProfit(y) { return this.revenueSegs(y).some(s => s.op_income != null); },
+  profitSorted(y)     { return this.revenueSegs(y).filter(s => s.op_income != null)
+                                    .sort((a, b) => b.op_income - a.op_income); },
+
+  /* ---- directory metric accessors (cross-company) ---- */
+  homeMetric(c, key) {
+    const y = this.latestActual(c);
+    if (!y) return null;
+    if (key === "revenue")   return y.revenue;
+    if (key === "netIncome") return y.net_income;
+    if (key === "netM")      return this.netMargin(y);
+    return null;
+  },
+};
+
+/* Allow reuse in Node (validator/tests) as well as the browser */
+if (typeof module !== "undefined" && module.exports) module.exports = { Store, Selectors };
+</script>
+
+<!-- ===== VIEW: presentation + navigation only ===== -->
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+/* presentation-only formatters (no compute lives here) */
+const Fmt={
+  bn:(v,d=1)=> v==null?"—":"$"+v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d})+"B",
+  pct:(v,d=1)=> v==null?"—":(v*100).toFixed(d)+"%",
+  yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
+  segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
+};
+const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率"};
+const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v)};
+const Safe={
+  text(v){return v==null?"":String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));},
+  attr(v){return Safe.text(v);},
+  cls(v){return String(v||"").replace(/[^a-z0-9_-]/gi,"");},
+  url(v){const s=String(v||"").trim();return /^https?:\/\//i.test(s)?Safe.attr(s):"#";}
+};
+
+const state={view:"home",companyId:null,fy:null,homeMetric:"revenue"};
+
+function show(view){
+  state.view=view;
+  $("#home").style.display=view==="home"?"block":"none";
+  $("#company").style.display=view==="company"?"block":"none";
+  $("#detail").style.display=view==="detail"?"block":"none";
+  renderCrumbs(); window.scrollTo({top:0,behavior:"instant"});
+}
+function renderCrumbs(){
+  const parts=[{label:"公司对比",go:()=>goHome()}];
+  if(state.companyId){const c=Store.byId(state.companyId);parts.push({label:c.name,go:()=>goCompany(c.id)});}
+  if(state.view==="detail"&&state.fy)parts.push({label:state.fy,go:null});
+  $("#crumbs").innerHTML=parts.map((p,i)=>{const cur=i===parts.length-1;
+    return `${i?'<span class="crumb-sep">/</span>':''}<button class="crumb ${cur?'cur':''}" data-i="${i}">${Safe.text(p.label)}</button>`;}).join("");
+  $$("#crumbs .crumb").forEach(b=>{const p=parts[+b.dataset.i];if(p.go&&!b.classList.contains("cur"))b.onclick=p.go;});
+}
+
+/* ---------- HOME ---------- */
+function goHome(){state.companyId=null;state.fy=null;show("home");renderHome();}
+function renderHome(){
+  const pop=Store.populated(),pend=Store.pending(),total=Store.companies().length;
+  const totalRev=pop.reduce((s,c)=>{const y=Selectors.latestActual(c);return s+(y?y.revenue:0);},0);
+  $("#cover").innerHTML=`
+    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>已补录</div>
+      <div class="v num">${pop.length} / ${total}</div><div class="s">家公司</div></div>
+    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--past)"></span>已补录合计营收</div>
+      <div class="v num">${Fmt.bn(totalRev,0)}</div><div class="s">最新实际财年</div></div>
+    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--est)"></span>预留槽位</div>
+      <div class="v num">${pend.length}</div><div class="s">待补录</div></div>`;
+  $("#popCount").textContent=`${pop.length} 家`; $("#pendCount").textContent=`${pend.length} 家`;
+  const key=state.homeMetric;
+  const ranked=pop.slice().sort((a,b)=>(Selectors.homeMetric(b,key)??-Infinity)-(Selectors.homeMetric(a,key)??-Infinity));
+  const maxV=Math.max(...ranked.map(c=>Selectors.homeMetric(c,key)??0),0.0001);
+  $("#popDir").innerHTML=ranked.map(c=>{
+    const la=Selectors.latestActual(c),fc=Selectors.forecastYear(c);
+    const ry=la?Selectors.revYoY(c,la.fy):null,val=Selectors.homeMetric(c,key),barVal=val??0;
+    return `<button class="crow" data-id="${Safe.attr(c.id)}">
+      <div class="logo ${Safe.cls(c.logo_class)}"><span>${Safe.text(c.logo_text||c.name.slice(0,2))}</span></div>
+      <div class="cinfo"><div class="cn">${Safe.text(c.name)}</div>
+        <div class="cmeta"><span class="tagx">${Safe.text(c.region)}</span><span class="tagx">${Safe.text(c.sector)}</span>
+          <span class="segtag ${Safe.cls(c.seg_profit)}">${Safe.text(Fmt.segLabel(c.seg_profit))}</span></div></div>
+      <div class="cmetric"><div class="mv num">${HOME_METRIC_FMT[key](val)}</div>
+        <div class="ms">最新实际 · ${la?Safe.text(la.period_end||la.fy):"无实际年"}${ry!=null?` · <span class="${ry>=0?'up':'dn'}">${Fmt.yoy(ry)}</span>`:''}</div></div>
+      <div class="cbarcell"><div class="cbar"><div class="f" style="width:${Math.max(0,Math.min(100,barVal/maxV*100)).toFixed(1)}%"></div></div>
+        ${fc?`<div class="cfore">${Safe.text(fc.fy)} 预测 ≈ ${Fmt.bn(fc.revenue,0)}</div>`:''}
+        <div class="copen">查看 →</div></div></button>`;
+  }).join("");
+  $$("#popDir .crow").forEach(b=>b.onclick=()=>goCompany(b.dataset.id));
+  $("#pendDir").innerHTML=pend.map(c=>`
+    <div class="prow"><div class="logo"><span>${Safe.text(c.logo_text||c.name.slice(0,2))}</span></div>
+      <div class="cinfo"><div class="cn">${Safe.text(c.name)}</div>
+        <div class="cmeta"><span class="tagx">${Safe.text(c.region)}</span><span class="tagx">${Safe.text(c.sector)}</span>
+          <span class="segtag ${Safe.cls(c.seg_profit)}">${Safe.text(Fmt.segLabel(c.seg_profit))}</span>
+          <span class="pendbadge">待补录</span></div></div>
+      <div class="psrc">计划来源：${Safe.text(c.planned_source||"—")}</div></div>`).join("");
+  $("#addHint").innerHTML=`<b>扩展方式：</b>补录一家公司 = 给它的 <code>years[]</code> 填入各财年对象，跑一遍 <code>validate.py</code>，主页与下钻无需改动。槽位上的 <span class="segtag yes" style="display:inline">可得</span>/<span class="segtag partial" style="display:inline">部分</span>/<span class="segtag no" style="display:inline">不可得</span> 已预判补录后下钻能做到什么：可得的公司（三星、博通）下钻会自动出现真实分部利润与利润率，不可得的（台积电、ASML）会显式留空。`;
+  $$("#home .chip").forEach(ch=>ch.onclick=()=>{state.homeMetric=ch.dataset.m;
+    $$("#home .chip").forEach(x=>x.setAttribute("aria-pressed",x===ch));renderHome();});
+}
+
+/* ---------- COMPANY ---------- */
+function goCompany(id){state.companyId=id;state.fy=null;show("company");renderCompany(id);}
+function renderCompany(id){
+  const c=Store.byId(id);
+  if(!c){$("#cTitle").textContent="公司不存在";$("#cLead").textContent="";$("#cKpis").innerHTML="";$("#cYears").innerHTML="";$("#cNote").textContent="";return;}
+  $("#cTitle").textContent=c.name;
+  $("#cLead").innerHTML=`<b>${Safe.text(c.ticker)}</b> · ${Safe.text(c.region)} · ${Safe.text(c.sector)} · ${Safe.text(Fmt.segLabel(c.seg_profit))}。${Safe.text(c.lead||"")}`;
+  const la=Selectors.latestActual(c),fc=Selectors.forecastYear(c);
+  const cards=la?[
+    {lbl:`${la.fy} 营收`,val:Fmt.bn(la.revenue),sub:"最新实际",cls:"",sw:"var(--past)"},
+    {lbl:`${la.fy} 净利润`,val:Fmt.bn(la.net_income),sub:"净利率 "+Fmt.pct(Selectors.netMargin(la)),cls:"accent",sw:"var(--ok)"},
+    {lbl:`${la.fy} 毛利率`,val:Fmt.pct(la.gross_margin),sub:"GAAP",cls:"accent",sw:"var(--ok)"},
+  ]:[{lbl:"实际财年",val:"—",sub:"尚未补录 actual 年",cls:"",sw:"var(--past)"}];
+  if(fc)cards.push({lbl:`${fc.fy} 营收`,val:"≈"+Fmt.bn(fc.revenue,0),sub:"卖方一致预期",cls:"est",sw:"var(--est)"});
+  $("#cKpis").innerHTML=cards.map(k=>`<div class="card kpi ${Safe.cls(k.cls)}"><div class="k-lbl"><span class="swatch" style="background:${Safe.attr(k.sw)}"></span>${Safe.text(k.lbl)}</div><div class="k-val">${Safe.text(k.val)}</div><div class="k-sub">${Safe.text(k.sub)}</div></div>`).join("");
+  $("#cTrendH").textContent=c.years.length?`营收与净利润 · ${c.years[0].fy} → ${c.years[c.years.length-1].fy}`:"营收与净利润";
+  renderTrend(c);
+  $("#cYears").innerHTML=c.years.map(y=>{
+    const fcc=y.status==="forecast",ry=Selectors.revYoY(c,y.fy);
+    return `<button class="ycard ${fcc?'is-fc':''}" data-fy="${Safe.attr(y.fy)}">
+      <div class="yhead"><span class="yfy">${Safe.text(y.fy)}</span><span class="ybadge ${fcc?'fc':'act'}">${fcc?'预测':'实际'}</span></div>
+      <div class="yrev num">${fcc?'≈':''}${Fmt.bn(y.revenue,fcc?0:1)}</div>
+      <div class="yrevlbl">营收${ry!=null?' · 同比 '+Fmt.yoy(ry):''}</div>
+      <div class="yrow"><span class="l">净利润</span><span class="v num">${y.net_income!=null?(fcc?'≈':'')+Fmt.bn(y.net_income,fcc?0:1):'—'}</span></div>
+      <div class="yrow"><span class="l">净利率</span><span class="v num">${Fmt.pct(Selectors.netMargin(y))}</span></div>
+      <span class="yopen">查看板块 →</span></button>`;
+  }).join("");
+  $$("#cYears .ycard").forEach(b=>b.onclick=()=>goDetail(c.id,b.dataset.fy));
+  $("#cNote").innerHTML=c.id==="nvda"
+    ? `<b>口径说明：</b>本页“利润”均为公司层面 GAAP 净利润，可同口径逐年对比。<b>FY2026 净利润 $120.1B 略高于经营利润 $130.4B 的税后水平</b>，因当年含较大股权投资收益（GAAP 计入、非经营性）。下钻可见真实约束：营收拆 5 个平台，利润只披露到 2 个分部。`
+    : `<b>口径说明：</b>公司层面 GAAP / IFRS 净利润，按主要经营年度映射。`;
+}
+function renderTrend(c){
+  const svg=$("#trend"),data=c.years||[];
+  if(!data.length){svg.setAttribute("viewBox","0 0 560 120");svg.style.width="100%";svg.style.height="120px";svg.innerHTML=`<text x="280" y="64" text-anchor="middle" font-family="var(--mono)" font-size="12" fill="var(--ink-faint)">无趋势数据</text>`;return;}
+  const W=Math.max(560,svg.clientWidth||820),padL=40,padR=20,padT=24,padB=46;
+  const innerW=W-padL-padR,H=320,innerH=H-padT-padB;
+  let max=Math.max(...data.map(y=>y.revenue||0)); if(max<=0)max=1; max*=1.08;
+  const groupW=innerW/data.length,barW=Math.min(46,groupW*0.30);
+  const yS=v=>padT+innerH-(v/max)*innerH;
+  let s=`<defs><pattern id="h2" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="var(--past)"/><line x1="0" y1="0" x2="0" y2="5" stroke="#fff" stroke-width="2" opacity=".55"/></pattern><pattern id="h3" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="var(--ok)"/><line x1="0" y1="0" x2="0" y2="5" stroke="#fff" stroke-width="2" opacity=".55"/></pattern></defs>`;
+  for(let i=0;i<=4;i++){const gv=max*i/4,gy=yS(gv);
+    s+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="var(--line-soft)"/>`;
+    s+=`<text x="${padL-6}" y="${gy+3}" text-anchor="end" font-family="var(--mono)" font-size="9.5" fill="var(--ink-faint)">${gv.toFixed(0)}</text>`;}
+  data.forEach((y,i)=>{
+    const cx=padL+groupW*i+groupW/2,revH=(y.revenue/max)*innerH,niH=((y.net_income||0)/max)*innerH;
+    const revFill=y.status==="forecast"?"url(#h2)":"var(--past)",niFill=y.status==="forecast"?"url(#h3)":"var(--ok)";
+    const x1=cx-barW-3,x2=cx+3;
+    s+=`<rect x="${x1}" y="${yS(y.revenue)}" width="${barW}" height="${revH}" rx="3" fill="${revFill}"/>`;
+    s+=`<text x="${x1+barW/2}" y="${yS(y.revenue)-5}" text-anchor="middle" font-family="var(--mono)" font-size="10" font-weight="600" fill="var(--ink-soft)">${y.revenue}</text>`;
+    s+=`<rect x="${x2}" y="${yS(y.net_income||0)}" width="${barW}" height="${niH}" rx="3" fill="${niFill}"/>`;
+    s+=`<text x="${x2+barW/2}" y="${yS(y.net_income||0)-5}" text-anchor="middle" font-family="var(--mono)" font-size="10" font-weight="600" fill="var(--ok-deep)">${y.net_income||"—"}</text>`;
+    s+=`<text x="${cx}" y="${H-padB+18}" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="${y.status==='forecast'?'400':'600'}" fill="${y.status==='forecast'?'var(--est)':'var(--ink)'}">${Safe.text(y.fy)}</text>`;
+  });
+  const mline=data.map(y=>{const nm=Selectors.netMargin(y);if(nm==null)return null;
+    const cx=padL+groupW*data.indexOf(y)+groupW/2;return {cx,my:padT+(1-nm)*innerH*0.42,nm};}).filter(Boolean);
+  if(mline.length>1){
+    s+=`<polyline points="${mline.map(p=>p.cx+','+p.my).join(' ')}" fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-dasharray="4 3"/>`;
+    mline.forEach(p=>s+=`<circle cx="${p.cx}" cy="${p.my}" r="2.6" fill="var(--ink-soft)"/><text x="${p.cx}" y="${p.my-7}" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-soft)">${(p.nm*100).toFixed(0)}%</text>`);
+  }
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);svg.style.width="100%";svg.style.height=H+"px";svg.innerHTML=s;
+}
+
+/* ---------- DETAIL ---------- */
+function goDetail(id,fy){state.companyId=id;state.fy=fy;show("detail");renderDetail(id,fy);}
+function renderDetail(id,fy){
+  const c=Store.byId(id),y=Selectors.yearByFy(c,fy);
+  if(!c||!y){$("#detailBody").innerHTML=`<div class="note-block">未找到对应公司或财年。</div>`;return;}
+  $("#dFy").textContent=`${c.name} · ${y.fy}`;
+  $("#dPeriod").textContent=y.period_end||"";
+  const badge=$("#dBadge");
+  if(y.status==="forecast"){badge.className="dbadge ybadge fc";badge.textContent="预测 · 卖方一致预期";}
+  else{badge.className="dbadge ybadge act";badge.textContent="实际 · GAAP";}
+  $("#detailBody").innerHTML=y.status==="forecast"?forecastView(c,y):actualView(c,y);
+}
+function actualView(c,y){
+  const total=Selectors.revenueTotal(y),sorted=Selectors.revenueSorted(y),maxV=sorted[0]?sorted[0].revenue:1;
+  const platHtml=sorted.map(p=>{
+    const share=total?p.revenue/total:0,yoy=Selectors.segYoY(c,y.fy,p.name);
+    const yoyHtml=yoy==null?`<span class="na">同比 —（无上一年样本）</span>`:`<span class="${yoy>=0?'up':'dn'}">同比 ${Fmt.yoy(yoy)}</span>`;
+    return `<div class="platrow ${p.is_ai?'ai':''}">
+      <div class="pt"><span class="pname">${Safe.text(p.name)}${p.is_ai?'<span class="aitag">AI 主战场</span>':''}</span>
+        <span class="pv num">${Fmt.bn(p.revenue,2)}<span class="sh">${Fmt.pct(share,1)}</span></span></div>
+      <div class="ptrack"><div class="pfill" style="width:${(p.revenue/maxV*100).toFixed(1)}%"></div></div>
+      <div class="pyoy">${yoyHtml}</div></div>`;
+  }).join("");
+  const rec=Selectors.reconcile(y);
+  const reconLine = rec.partition
+    ? `平台合计 ${Fmt.bn(rec.sum,2)} ${rec.ok?'<span class="ok">＝</span>':'≠'} 公司总营收 ${Fmt.bn(rec.revenue,2)} ${rec.ok?'<span class="ok">✓ 对账通过</span>':'（差 '+rec.diff.toFixed(2)+'）'}`
+    : `分部合计 ${Fmt.bn(rec.sum,2)} > 合并营收 ${Fmt.bn(rec.revenue,2)}（差额 ${Fmt.bn(rec.diff,2)} 为内部交易抵销，<span class="ok">正常</span>）`;
+  // profit block adapts to disclosure: real table / disclosed-but-unentered / structural gap.
+  let profitBlock;
+  if(Selectors.hasSegmentProfit(y)){
+    const ps=Selectors.profitSorted(y),pmax=ps[0].op_income;
+    profitBlock=`<div class="section-h">业务板块利润与利润率 · 降序</div><div class="card"><div class="plat">`+
+      ps.map(p=>{const m=p.op_margin!=null?p.op_margin:(p.revenue?p.op_income/p.revenue:null);
+        return `<div class="platrow ${p.is_ai?'ai':''}"><div class="pt">
+        <span class="pname">${Safe.text(p.name)}${p.is_ai?'<span class="aitag">AI 主战场</span>':''}</span>
+        <span class="pv num">${Fmt.bn(p.op_income,2)}<span class="sh">利润率 ${Fmt.pct(m)}</span></span></div>
+        <div class="ptrack"><div class="pfill" style="width:${(p.op_income/pmax*100).toFixed(1)}%"></div></div></div>`;}).join("")+
+      `</div><div class="recon-line">看点：<b>营收最大的不是利润最大的</b> —— 正是“只看营收会误判”的实证。</div></div>`;
+  }else if(c.seg_profit==="yes"){
+    profitBlock=`<div class="section-h">业务板块利润与利润率</div>
+    <div class="gap"><h3>该公司按部门披露营业利润，本财年暂未录入</h3>
+      <p>${Safe.text(c.name.split(" ")[0])} 标记 <code style="font-family:var(--mono)">seg_profit:"yes"</code> —— 分部营业利润是<b>可得</b>的，只是此财年还没录进 <code style="font-family:var(--mono)">companies.json</code>。切到已录入的财年即可看到完整的利润/利润率表。这是“数据待补录”，不同于下面那种“公司根本不披露”。</p></div>`;
+  }else{
+    const rn=y.reportable_note||{};
+    const segs=Object.entries(rn).map(([k,v])=>`<div class="seg"><div class="sn">${Safe.text(k)}</div><div class="sv num">${Safe.text(v)}</div><div class="sl">占营收 · 报告分部</div></div>`).join("");
+    profitBlock=`<div class="section-h">利润 / 毛利率 · 数据缺口（真实约束）</div>
+    <div class="gap"><h3>${Safe.text(c.name.split(" ")[0])} 不把利润拆到上面的市场平台</h3>
+      <p>公司只把经营利润披露到报告分部，且<b>不披露各平台毛利率</b>。所以“每个板块利润、毛利率降序”对它在公开财报里只能到营收级 —— 这就是 <code style="font-family:var(--mono)">seg_profit:"${Safe.text(c.seg_profit)}"</code> 的含义，在真实数据里的样子：</p>
+      <div class="seg2">${segs}</div>
+      <div class="locked"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex:none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="#8a5a0f" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#8a5a0f" stroke-width="1.8"/></svg>
+        <span><b>平台级毛利率 / 净利润：未披露。</b>诚实做法是留空并标注，而不是估一个数填进去。</span></div></div>`;
+  }
+  return `
+  <div class="section-h" style="margin-top:18px">公司层面 · ${y.fy}</div>
+  <div class="card csum">
+    <div class="c"><div class="cl">营收</div><div class="cv num">${Fmt.bn(y.revenue,1)}</div></div>
+    <div class="c"><div class="cl">毛利率</div><div class="cv num">${Fmt.pct(y.gross_margin)}</div></div>
+    <div class="c"><div class="cl">经营利润率</div><div class="cv num">${Fmt.pct(Selectors.opMargin(y))}</div></div>
+    <div class="c"><div class="cl">净利润</div><div class="cv num green">${Fmt.bn(y.net_income,1)}</div></div>
+    <div class="c"><div class="cl">净利率</div><div class="cv num green">${Fmt.pct(Selectors.netMargin(y))}</div></div>
+  </div>
+  <div class="section-h">业务板块营收 · 降序</div>
+  <div class="card"><div class="plat">${platHtml}</div>
+    <div class="recon-line">${reconLine}</div>
+  </div>
+  ${profitBlock}
+  ${sourcesBlock(y)}`;
+}
+function forecastView(c,y){
+  const anchors=(y.anchors||[]).map((a,i)=>`<div class="card fcc ${i===(y.anchors.length-1)?'big':''}"><div class="fl">${Safe.text(a.label)}</div><div class="fv num">${Safe.text(a.value)}</div><div class="fs">${Safe.text(a.note||"")}</div></div>`).join("");
+  const fwk=y.framework_change?`<div class="section-h">板块口径 · 重要变化</div><div class="gap"><h3>本财年起板块划分有变</h3><p>${Safe.text(y.framework_change)}</p></div>`:"";
+  return `
+  <div class="section-h" style="margin-top:18px">本财年 · 预测（非实际）</div>
+  <div class="note-block" style="margin-top:0"><b>这是预测，不是已实现的经营事实。</b>全年一致预期约 ${Fmt.bn(y.revenue,0)}${y.consensus_rev?`（区间 ${Safe.text(y.consensus_rev)}）`:''}${y.consensus_eps?`，一致预期 EPS 约 ${Safe.text(y.consensus_eps)}`:''}。下方锚点按可靠度分别标注。</div>
+  <div class="section-h">预测锚点</div>
+  <div class="fcgrid">${anchors}</div>
+  ${fwk}
+  ${sourcesBlock(y)}`;
+}
+function sourcesBlock(y){
+  const rows=(y.sources||[]).map(s=>`<div class="srcrow"><span class="sl">${Safe.text(s.label)}<span class="tagx" style="margin-left:8px">${Safe.text(s.data_status||"")}</span></span><a href="${Safe.url(s.url)}" target="_blank" rel="noopener">来源 ↗</a></div>`).join("");
+  return `<div class="section-h">数据来源</div><div class="card srcs">${rows}</div>`;
+}
+
+/* ---------- init: load data, then render ---------- */
+async function init(){
+  try{ await Store.load(); }
+  catch(e){ $("#home").innerHTML=`<div class="note-block">数据加载失败：${Safe.text(e.message)}。若通过 http 访问，请确保 companies.json 同目录可达。</div>`; return; }
+  goHome();
+  let rT; window.addEventListener("resize",()=>{clearTimeout(rT);rT=setTimeout(()=>{if(state.view==="company"&&state.companyId)renderTrend(Store.byId(state.companyId));},150);});
+}
+init();
+</script>
+</body>
+</html>
