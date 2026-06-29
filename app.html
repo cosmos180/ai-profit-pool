@@ -816,14 +816,25 @@ function renderCrumbs(){
 function goHome(){state.companyId=null;state.fy=null;show("home");renderHome();}
 function renderHome(){
   const pop=Store.populated(),pend=Store.pending(),total=Store.companies().length;
-  const totalRev=pop.reduce((s,c)=>{const y=Selectors.latestActual(c);return s+(y?y.revenue:0);},0);
+  // "利润池" = sum of latest-actual net income. Profit (unlike revenue) doesn't double-count
+  // across a value chain, so summing it is meaningful: the economic profit these players capture.
+  const niList=pop.map(c=>({c,ni:Selectors.homeMetric(c,"netIncome")})).filter(x=>x.ni!=null).sort((a,b)=>b.ni-a.ni);
+  const pool=niList.reduce((s,x)=>s+x.ni,0);
+  const leader=niList[0],leaderShare=(leader&&pool)?leader.ni/pool:null;
+  // pool momentum: aggregate latest-actual vs prior-actual net income across companies that have both
+  const grow=pop.map(c=>{const a=Selectors.actualYears(c);if(a.length<2)return null;
+    const cur=a[a.length-1].net_income,prev=a[a.length-2].net_income;
+    return (cur!=null&&prev!=null)?{cur,prev}:null;}).filter(Boolean);
+  const curSum=grow.reduce((s,x)=>s+x.cur,0),prevSum=grow.reduce((s,x)=>s+x.prev,0);
+  const poolYoY=prevSum>0?(curSum-prevSum)/prevSum:null;
+  const shortName=c=>c.name.split(" ")[0];
   $("#cover").innerHTML=`
-    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>已补录</div>
-      <div class="v num">${pop.length} / ${total}</div><div class="s">家公司</div></div>
-    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--past)"></span>已补录合计营收</div>
-      <div class="v num">${Fmt.bn(totalRev,0)}</div><div class="s">最新实际财年</div></div>
-    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--est)"></span>预留槽位</div>
-      <div class="v num">${pend.length}</div><div class="s">待补录</div></div>`;
+    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>AI 利润池</div>
+      <div class="v num">${Fmt.bn(pool,0)}</div><div class="s">${pop.length} 家最新实际财年合计净利润</div></div>
+    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--est)"></span>利润最集中</div>
+      <div class="v num">${leaderShare!=null?Fmt.pct(leaderShare,0):"—"}</div><div class="s">${leader?Safe.text(shortName(leader.c))+" 占利润池比重":"—"}</div></div>
+    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--past)"></span>利润池同比</div>
+      <div class="v num">${poolYoY!=null?Fmt.yoy(poolYoY):"—"}</div><div class="s">合计净利润较上一财年</div></div>`;
   $("#popCount").textContent=`${pop.length} 家`; $("#pendCount").textContent=`${pend.length} 家`;
   const key=state.homeMetric;
   const ranked=pop.slice().sort((a,b)=>(Selectors.homeMetric(b,key)??-Infinity)-(Selectors.homeMetric(a,key)??-Infinity));
