@@ -4,8 +4,8 @@ const { Store, Selectors, STAGE_OF, STAGE_ORDER, STAGE_LABEL } = require("./data
 
 Store._data = data;
 
-assert.equal(Store.companies().length, 8);
-assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml"]);
+assert.equal(Store.companies().length, 9);
+assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml", "tencent"]);
 assert.deepEqual(Store.pending().map((c) => c.id), []);
 
 const nvda = Store.byId("nvda");
@@ -228,6 +228,20 @@ assert.equal(sbFlow.taxOther, null);             // op null → taxOther 不可�
 assert.equal(sbFlow.revenue, sbFlowY.revenue);   // revenue 仍在
 assert.equal(sbFlow.netIncome, sbFlowY.net_income);
 
+// ---- real data: Tencent latest actual (app stage) — gross 有、op_income null → has.gross=true / has.opex=false ----
+const txFlowY = Selectors.latestActual(Store.byId("tencent"));
+const txFlow = Selectors.incomeFlow(txFlowY);
+assert.equal(txFlow.has.gross, true);            // gross_margin 已录 → 毛利可画
+assert.ok(txFlow.grossProfit > 0);
+assert.equal(txFlow.has.opex, false);            // op_income 留空 → opex 不可画
+assert.equal(txFlow.opProfit, null);
+assert.equal(txFlow.taxOther, null);             // op null → taxOther 不可算
+assert.equal(txFlow.revenue, txFlowY.revenue);
+assert.equal(txFlow.netIncome, txFlowY.net_income);
+assert.equal(txFlow.has.segments, true);
+assert.equal(txFlow.segments[0].name, "增值服务 VAS（游戏·社交网络）"); // 最大分部 = VAS
+assert.equal(txFlow.segments.find(s => s.name === "网络广告 / 营销服务").is_ai, true); // 广告标 AI
+
 // ---- real data: Micron FY2023 — gross_margin null → has.gross=false ----
 const micFy23 = Selectors.yearByFy(Store.byId("micron"), "FY2023");
 const micFlow = Selectors.incomeFlow(micFy23);
@@ -305,6 +319,16 @@ assert.equal(Selectors.valuationCaveat(sbReal, "fcf_yield"), "na");
 assert.equal(Selectors.pe(sbReal), null);
 assert.equal(Selectors.fcfYield(sbReal), null);
 assert.ok(Selectors.ps(sbReal) > 0);               // PS 照常出值（失真，视图警示）
+
+// 真实数据：Tencent caveat 落地（pe=distorted 仍出值；ps/fcf_yield/ev_sales=ok 正常）
+const txReal = Store.byId("tencent");
+assert.equal(Selectors.valuationCaveat(txReal, "pe"), "distorted"); // 净利含投资公允价值收益 → PE 失真
+assert.equal(Selectors.valuationCaveat(txReal, "ps"), "ok");
+assert.equal(Selectors.valuationCaveat(txReal, "fcf_yield"), "ok");
+assert.ok(Selectors.pe(txReal) > 0);               // distorted 仍出值（视图警示）
+assert.ok(Selectors.ps(txReal) > 0);
+assert.ok(Selectors.fcfYield(txReal) > 0);         // 有真实经营现金流 → FCF yield 有意义
+assert.ok(Selectors.ev(txReal) < Selectors.marketCap(txReal)); // 净现金 → EV<市值
 
 // 真实数据：NVDA 有市值、无 caveat → PE/PS 正常；FCF yield 缺 cfo/capex → null
 const nvdaReal = Store.byId("nvda");
@@ -459,7 +483,7 @@ assert.ok(Selectors.ev(softbank) > Selectors.marketCap(softbank), "SoftBank 高�
 // =====================================================================
 
 // ---- stage map constants ----
-assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest"]);
+assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest", "app"]);
 assert.equal(STAGE_OF.nvda, "design");
 assert.equal(STAGE_OF.broadcom, "design");
 assert.equal(STAGE_OF.tsmc, "foundry");
@@ -468,8 +492,10 @@ assert.equal(STAGE_OF.skhynix, "memory");
 assert.equal(STAGE_OF.micron, "memory");
 assert.equal(STAGE_OF.asml, "equipment");
 assert.equal(STAGE_OF.softbank, "invest");
+assert.equal(STAGE_OF.tencent, "app");
 assert.equal(STAGE_LABEL.design, "设计");
 assert.equal(STAGE_LABEL.invest, "投资");
+assert.equal(STAGE_LABEL.app, "应用");
 
 // ---- synthetic: full coverage of edge cases (8 companies, one per real id) ----
 // pos 0 (latest) complete for all; pos 1 missing one company → dropped;
@@ -491,17 +517,19 @@ const synCos = [
   syn("asml",     [A("FY24", "自然年 2024", 6), A("FY25", "自然年 2025", 10)]),
   // invest = 10
   syn("softbank", [A("FY24", "截至 2025-03", 1), A("FY25", "截至 2026-03", 10)]),
+  // app = 10 (needs-side, new stage)
+  syn("tencent",  [A("FY24", "自然年 2024", 7), A("FY25", "自然年 2025", 10)]),
 ];
 const synMig = Selectors.profitPoolMigration(synCos);
 
 // samsung has no pos-1 actual → pos 1 incomplete → only pos 0 survives
 assert.equal(synMig.length, 1);
 const sp0 = synMig[0];
-assert.equal(sp0.n, 8);
+assert.equal(sp0.n, 9);
 // label = mode of years at pos 0 (all 2025/2026; 2025 dominates) = ≈2025
 assert.equal(sp0.label, "≈2025");
-// total = 30+10+20+15-5+10+10+10 = 100
-assert.equal(sp0.total, 100);
+// total = 30+10+20+15-5+10+10+10+10 = 110
+assert.equal(sp0.total, 110);
 // stages ordered per STAGE_ORDER
 assert.deepEqual(sp0.stages.map(s => s.stage), STAGE_ORDER);
 const byStage = Object.fromEntries(sp0.stages.map(s => [s.stage, s]));
@@ -510,6 +538,7 @@ assert.equal(byStage.foundry.value, 20);
 assert.equal(byStage.memory.value, 20);   // 15 + (-5) + 10, negative folded in, no crash
 assert.equal(byStage.equipment.value, 10);
 assert.equal(byStage.invest.value, 10);
+assert.equal(byStage.app.value, 10);      // new needs-side stage
 // shares sum to 1 (positive total scenario)
 assert.equal(sp0.stages.reduce((s, x) => s + x.share, 0), 1);
 // company-level traceability (hover), incl. the negative member
@@ -527,6 +556,7 @@ const synNull = [
   syn("micron",   [A("FY25", "截至 2025-08", 5)]),
   syn("asml",     [A("FY25", "自然年 2025", 10)]),
   syn("softbank", [A("FY25", "截至 2026-03", 10)]),
+  syn("tencent",  [A("FY25", "自然年 2025", 10)]),
 ];
 assert.equal(Selectors.profitPoolMigration(synNull).length, 0); // null NI → not complete
 assert.deepEqual(Selectors.profitPoolMigration([]), []);        // empty → empty
@@ -541,19 +571,20 @@ const synTwo = [
   syn("micron",   [A("FY24", "截至 2024-08", 1), A("FY25", "截至 2025-08", 2)]),
   syn("asml",     [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
   syn("softbank", [A("FY24", "截至 2025-03", 1), A("FY25", "截至 2026-03", 2)]),
+  syn("tencent",  [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
 ];
 const twoMig = Selectors.profitPoolMigration(synTwo);
 assert.equal(twoMig.length, 2);
 assert.equal(twoMig[0].label, "≈2024"); // older first
 assert.equal(twoMig[1].label, "≈2025"); // newer last
-assert.equal(twoMig[0].total, 8);
-assert.equal(twoMig[1].total, 16);
+assert.equal(twoMig[0].total, 9);
+assert.equal(twoMig[1].total, 18);
 
 // ---- real data: two complete positions, newest = ≈2025 ----
 const realMig = Selectors.profitPoolMigration(Store.populated());
 assert.equal(realMig.length, 2);                 // pos 0 & 1 complete; pos 2 drops (samsung 2-yr only)
 const newest = realMig[realMig.length - 1];
-assert.equal(newest.n, 8);
+assert.equal(newest.n, 9);                       // 9 companies incl. tencent (app stage)
 assert.equal(newest.label, "≈2025");
 
 // newest total == home-page "profit pool" 口径: sum of each company's latest-actual net_income
@@ -567,13 +598,16 @@ assert.ok(Math.abs(newest.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
 // NOTE: these are the TRUE shares under the data; they differ materially from the
 // brief's pre-data estimate (design~37/memory~27/foundry~21/invest~12/equip~4).
 // See report — flagged as a data/expectation mismatch, asserting reality not the estimate.
+// (shares recomputed after adding tencent → app stage; total NI grew so all
+// upstream shares dilute slightly. These are the TRUE shares under current data.)
 const nb = Object.fromEntries(newest.stages.map(s => [s.stage, s.share]));
 const near = (a, b) => Math.abs(a - b) <= 0.005; // ±0.5pp
-assert.ok(near(nb.design, 0.463), "design share " + nb.design);
-assert.ok(near(nb.foundry, 0.175), "foundry share " + nb.foundry);
-assert.ok(near(nb.memory, 0.226), "memory share " + nb.memory);
-assert.ok(near(nb.equipment, 0.035), "equipment share " + nb.equipment);
-assert.ok(near(nb.invest, 0.101), "invest share " + nb.invest);
+assert.ok(near(nb.design, 0.415), "design share " + nb.design);
+assert.ok(near(nb.foundry, 0.157), "foundry share " + nb.foundry);
+assert.ok(near(nb.memory, 0.202), "memory share " + nb.memory);
+assert.ok(near(nb.equipment, 0.031), "equipment share " + nb.equipment);
+assert.ok(near(nb.invest, 0.091), "invest share " + nb.invest);
+assert.ok(near(nb.app, 0.104), "app share " + nb.app);
 
 // all stages positive in the latest two real positions (no downcycle in-sample)
 for (const p of realMig)

@@ -1951,6 +1951,220 @@
           ]
         }
       ]
+    },
+    {
+      "id": "tencent",
+      "name": "Tencent 腾讯控股",
+      "ticker": "HKEX 0700 · OTC TCEHY",
+      "region": "中国",
+      "sector": "应用/平台 (游戏·广告·金融科技·云)",
+      "currency": "CNY",
+      "seg_profit": "no",
+      "logo_text": "tx",
+      "logo_class": "tx",
+      "status": "populated",
+      "lead": "价值链需求侧的“应用/平台”样本：营收按三大业务线（增值服务VAS、营销服务、金融科技及企业服务）披露，但营业利润仅到合并层、不到分部级 → seg_profit='no'。归母净利含大额联营/被投公司公允价值收益，PE 失真（类软银），但经营现金流真实、FCF 口径有意义。",
+      "fy_note": "财年=自然年（截至每年 12 月 31 日）。归母净利为 IFRS 口径（含投资公允价值损益），非 Non-IFRS。CNY→USD 用年均汇率换算（FY2023≈7.20、FY2024≈7.185[由腾讯官方披露的 RMB/USD 对照反推]、FY2025≈7.187[全年均值]）；分部营收同口径换算。op_income 留空：腾讯 IFRS 全年营业利润未在摘要中可靠取得（避免误用季度数）。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 481.0,
+        "net_debt": -14.9,
+        "price": 411.8,
+        "price_currency": "HKD",
+        "sources": [
+          {
+            "label": "stockanalysis.com — Tencent (0700.HK) 市值 ~HKD 3.78T；2026-06-29 收 420.20 HKD（前收 411.80 = 2026-06-26 收盘）",
+            "url": "https://stockanalysis.com/quote/hkg/0700/",
+            "data_status": "official"
+          },
+          {
+            "label": "派生：市值 HKD 3.78T ÷ HKD/USD 7.8488(联系汇率) ≈ USD 481B；companiesmarketcap/Yahoo 同期口径 ~$473–483B，取 $481B（as_of 2026-06-26 就近）",
+            "url": "https://companiesmarketcap.com/tencent/marketcap/",
+            "data_status": "derived"
+          },
+          {
+            "label": "net_debt：FY2025 财报披露净现金(net cash position) RMB107.1B ÷ 7.187 = +$14.9B 净现金 → net_debt = −14.9（口径：现金及等价物+定期存款 − 有息债务，排经营租赁；腾讯长期净现金）",
+            "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "valuation_caveat": {
+        "pe": "distorted",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok",
+        "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。"
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "截至 2023-12-31",
+          "status": "actual",
+          "revenue": 84.6,
+          "gross_margin": 0.481,
+          "op_income": null,
+          "net_income": 21.9,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 41.444,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 14.097,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 28.3,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 0.744,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2023 Annual & Q4 Results（2024-03-20）— 全年营收 RMB609.015B(USD84.6B)、归母净利 RMB157.68B、毛利 RMB293.1B(毛利率48%)；分部：VAS RMB298.4B、网络广告 RMB101.5B、金融科技及企业服务 RMB203.76B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2023-annual-and-fourth-quarter-results-302094552.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "截至 2024-12-31",
+          "status": "actual",
+          "revenue": 91.9,
+          "gross_margin": 0.529,
+          "op_income": null,
+          "net_income": 27.0,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 44.426,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 16.896,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 29.506,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.072,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2024 Annual & Q4 Results（2025-03-19）— 全年营收 RMB660.3B(USD91.9B)、归母净利 RMB194.1B(USD27.0B,+68%)、毛利 RMB349.2B(USD48.6B)；分部：VAS RMB319.2B、营销服务 RMB121.4B、金融科技及企业服务 RMB212.0B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "截至 2025-12-31",
+          "status": "actual",
+          "revenue": 104.6,
+          "gross_margin": 0.562,
+          "op_income": null,
+          "net_income": 36.1,
+          "capex": 11.02,
+          "cfo": 36.43,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 51.384,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 20.175,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 31.919,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.127,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2025 Annual & Q4 Results（2026-03-18）— 全年营收 RMB751.8B(+14%)、归母净利(IFRS) RMB259.6B、毛利 RMB422.6B；分部：VAS RMB369.3B、营销服务 RMB145.0B、金融科技及企业服务 RMB229.4B；FCF RMB182.6B、capex RMB79.2B、净现金 RMB107.1B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

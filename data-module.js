@@ -42,10 +42,11 @@ const STAGE_OF = {
   samsung: "memory", skhynix: "memory", micron: "memory",
   asml: "equipment",
   softbank: "invest",
+  tencent: "app",
 };
-const STAGE_ORDER = ["design", "foundry", "memory", "equipment", "invest"];
+const STAGE_ORDER = ["design", "foundry", "memory", "equipment", "invest", "app"];
 const STAGE_LABEL = {
-  design: "设计", foundry: "代工", memory: "存储", equipment: "设备", invest: "投资",
+  design: "设计", foundry: "代工", memory: "存储", equipment: "设备", invest: "投资", app: "应用",
 };
 
 const Selectors = {

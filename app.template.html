@@ -16,7 +16,7 @@
   --past:#AEBBB3; --est:#BC7A12; --est-soft:#F0E0C2;
   --bad:#A6321F; --bad-soft:#EED4CD; --muted:#7C8A84;
   --ai:#1F6FB2; --ai-soft:#D6E6F2;
-  --stg-design:#0E7C6B; --stg-foundry:#1F6FB2; --stg-memory:#BC7A12; --stg-equipment:#9AA8A0; --stg-invest:#6B5B95;
+  --stg-design:#0E7C6B; --stg-foundry:#1F6FB2; --stg-memory:#BC7A12; --stg-equipment:#9AA8A0; --stg-invest:#6B5B95; --stg-app:#C44569; /* app(应用)=玫红/品红，暖色区隔上游硬件，色环上避开青绿/蓝/琥珀/灰/紫与砖红(--bad) */
   --shadow:0 1px 2px rgba(24,33,29,.05),0 8px 24px -16px rgba(24,33,29,.25);
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   --sans:"IBM Plex Sans","IBM Plex Sans SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
@@ -327,7 +327,7 @@ const Fmt={
   yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
   segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
 };
-const STAGE_COLOR={design:"var(--stg-design)",foundry:"var(--stg-foundry)",memory:"var(--stg-memory)",equipment:"var(--stg-equipment)",invest:"var(--stg-invest)"};
+const STAGE_COLOR={design:"var(--stg-design)",foundry:"var(--stg-foundry)",memory:"var(--stg-memory)",equipment:"var(--stg-equipment)",invest:"var(--stg-invest)",app:"var(--stg-app)"};
 const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度",pe:"PE",ps:"PS",evSales:"EV/Sales",fcfYield:"FCF yield"};
 const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v),pe:v=>Fmt.mult(v),ps:v=>Fmt.mult(v),evSales:v=>Fmt.mult(v),fcfYield:v=>Fmt.pct(v)};
 // 越低越便宜的估值指标：列表降序排列，需提示"排第一≠最便宜"
