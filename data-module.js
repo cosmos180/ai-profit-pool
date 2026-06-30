@@ -388,10 +388,13 @@ const Selectors = {
     return dq.length ? dq[dq.length - 1].q.period_end : null;
   },
 
-  /* ---- TTM profit pool (value-chain stacked, self-rolled per company) ----
-     Per-company null-safe: a company whose ttmNetIncome is null simply does not
-     contribute (not imputed); total accumulates only non-null TTMs. Reuses the same
-     _aggregateStages atom as the annual migration so stage口径 cannot drift.
+  /* ---- TTM profit pool (value-chain stacked, self-rolled per company, AI-weighted) ----
+     口径统一 (ADR-3): TTM 净利同样按 aiShare(c) 加权,与 profitPoolAI / profitPoolMigration
+     的三根年度柱完全同口径 —— 同一张迁移图不再混"全额 TTM vs 加权年度"。
+       ni = ttmNetIncome(c) × aiShare(c).value (公司级,用 latestActual 的 is_ai 代理)。
+     Per-company null-safe & honest-gap: ttmNetIncome 为 null 或 aiShare.value 为 null 的
+     公司一律 DROP(绝不计 0、不 impute),与年度口径一致。total 仅累计加权后的贡献者。
+     Reuses the same _aggregateStages atom as the annual migration so stage口径 cannot drift.
      asOfSpreadDays = max−min of contributing companies' latest-quarter dates — lets
      the view warn that the TTM cross-section is not perfectly date-aligned. */
   profitPoolTTM(companies) {
@@ -401,21 +404,26 @@ const Selectors = {
     for (const c of list) {
       const ttm = this.ttmNetIncome(c);
       if (ttm == null) continue;                        // honest gap: skip, never impute
+      const share = this.aiShare(c).value;              // company-level, latestActual is_ai proxy
+      if (share == null) continue;                      // no aiShare → drop (ADR-3, same as annual)
       const asOf = this.ttmAsOf(c);
       const t = this._parseDate(asOf);
       if (t != null) { if (t < spreadMin) spreadMin = t; if (t > spreadMax) spreadMax = t; }
-      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: ttm, asOf });
+      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: ttm * share, asOf, aiShare: share });
     }
     const total = rows.reduce((s, r) => s + r.ni, 0);
     const stages = this._aggregateStages(rows, total).map(s => ({
       ...s,
-      companies: s.companies.map(m => ({ id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf })),
+      companies: s.companies.map(m => {
+        const src = rows.find(r => r.id === m.id);
+        return { id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf, aiShare: src ? src.aiShare : null };
+      }),
     }));
     const asOfSpreadDays = rows.length
       ? Math.round((spreadMax - spreadMin) / this.DAY_MS)
       : null;
     return {
-      label: "TTM(截至各家最近季报)",
+      label: "TTM(AI 加权,截至各家最近季报)",
       total,
       n: rows.length,
       asOfSpreadDays,

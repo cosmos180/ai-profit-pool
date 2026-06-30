@@ -785,47 +785,66 @@ const ttmNeg = synQ("skhynix", [FY("FY2025", 5)], [Q("2025-03-31", 8), Q("2026-0
 assert.equal(Selectors.ttmNetIncome(ttmNeg), -6);
 
 // =====================================================================
-// profitPoolTTM: per-company null-safe, n count, asOfSpreadDays, stage reuse
+// profitPoolTTM: AI-weighted, per-company null-safe, n count, asOfSpreadDays, stage reuse
+//   ni = ttmNetIncome × aiShare.value, 与 profitPoolAI/profitPoolMigration 同口径 (ADR-3)。
+//   aiShare 来自公司级 ai_profit_share(synAI 注入)；缺则 DROP(不计 0)。
 // =====================================================================
+
+// synthetic helper that pins a company-level ai_profit_share (sourced basis) so
+// aiShare(c).value is deterministic — mirrors the real proxy path which all TTM heads have.
+const synAI = (id, share, years, quarters) => ({ ...synQ(id, years, quarters), ai_profit_share: share });
 
 // design=nvda, foundry=tsmc, memory=samsung+skhynix(+micron null), equipment=asml, invest=softbank(null)
 const ttmCos = [
-  synQ("nvda",     [FY("FY2026", 120.1)], [Q("2025-04-27", 18.8), Q("2026-04-26", 58.3)]), // TTM 159.6, asOf 2026-04-26
-  synQ("tsmc",     [FY("FY2025", 50)],    [Q("2025-03-31", 10),   Q("2026-03-31", 18)]),   // TTM 58, asOf 2026-03-31
-  synQ("samsung",  [FY("FY2025", 31)],    [Q("2025-03-31", 6),    Q("2026-03-31", 33)]),   // TTM 58
-  synQ("skhynix",  [FY("FY2025", 30)],    [Q("2025-03-31", 6),    Q("2026-03-31", 28)]),   // TTM 52
-  synQ("micron",   [FY("FY2025", 8)],     []),                                              // null → skipped
-  synQ("asml",     [FY("FY2025", 10)],    [Q("2025-03-31", 2),    Q("2026-03-31", 3)]),     // TTM 11
-  synQ("softbank", [FY("FY2025", 31)],    []),                                              // null → skipped
+  synAI("nvda",     1.0, [FY("FY2026", 120.1)], [Q("2025-04-27", 18.8), Q("2026-04-26", 58.3)]), // TTM 159.6 ×1.0 = 159.6, asOf 2026-04-26
+  synAI("tsmc",     0.5, [FY("FY2025", 50)],    [Q("2025-03-31", 10),   Q("2026-03-31", 18)]),   // TTM 58 ×0.5 = 29, asOf 2026-03-31
+  synAI("samsung",  0.5, [FY("FY2025", 31)],    [Q("2025-03-31", 6),    Q("2026-03-31", 33)]),   // TTM 58 ×0.5 = 29
+  synAI("skhynix",  1.0, [FY("FY2025", 30)],    [Q("2025-03-31", 6),    Q("2026-03-31", 28)]),   // TTM 52 ×1.0 = 52
+  synAI("micron",   0.5, [FY("FY2025", 8)],     []),                                              // ttm null → skipped (aiShare irrelevant)
+  synAI("asml",     0.4, [FY("FY2025", 10)],    [Q("2025-03-31", 2),    Q("2026-03-31", 3)]),     // TTM 11 ×0.4 = 4.4
+  synAI("softbank", 0.1, [FY("FY2025", 31)],    []),                                              // ttm null → skipped
 ];
 const ttmPool = Selectors.profitPoolTTM(ttmCos);
-assert.equal(ttmPool.label, "TTM(截至各家最近季报)");
-assert.equal(ttmPool.n, 5);                              // micron & softbank null → excluded
-// total = 159.6 + 58 + 58 + 52 + 11 = 338.6 (micron/softbank not imputed)
-assert.equal(Math.round(ttmPool.total * 10) / 10, 338.6);
-// asOfSpreadDays = 2026-04-26 − 2026-03-31 = 26 days
+assert.equal(ttmPool.label, "TTM(AI 加权,截至各家最近季报)");
+assert.equal(ttmPool.n, 5);                              // micron & softbank ttm null → excluded
+// total = 159.6 + 29 + 29 + 52 + 4.4 = 274.0 (AI-weighted; micron/softbank not imputed)
+assert.equal(Math.round(ttmPool.total * 10) / 10, 274.0);
+// asOfSpreadDays = 2026-04-26 − 2026-03-31 = 26 days (unaffected by weighting)
 assert.equal(ttmPool.asOfSpreadDays, 26);
 // stages ordered per STAGE_ORDER (same atom as annual migration)
 assert.deepEqual(ttmPool.stages.map(s => s.stage), STAGE_ORDER);
 const tb = Object.fromEntries(ttmPool.stages.map(s => [s.stage, s]));
-assert.equal(tb.design.value, 159.6);
-assert.equal(tb.foundry.value, 58);
-assert.equal(Math.round(tb.memory.value), 110);          // 58 + 52
-assert.equal(tb.equipment.value, 11);
-assert.equal(tb.invest.value, 0);                        // softbank null → invest empty (not imputed)
+assert.equal(Math.round(tb.design.value * 10) / 10, 159.6);   // nvda 159.6 ×1.0
+assert.equal(tb.foundry.value, 29);                           // tsmc 58 ×0.5
+assert.equal(Math.round(tb.memory.value * 10) / 10, 81);      // samsung 29 + skhynix 52
+assert.ok(Math.abs(tb.equipment.value - 4.4) < 1e-9);        // asml 11 ×0.4
+assert.equal(tb.invest.value, 0);                            // softbank null → invest empty (not imputed)
 assert.equal(tb.invest.companies.length, 0);
 // shares sum to 1 (positive total)
 assert.ok(Math.abs(ttmPool.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
-// per-company traceability carries ttm + asOf
-assert.deepEqual(tb.design.companies, [{ id: "nvda", name: "NVDA", ttm: 159.6, asOf: "2026-04-26" }]);
+// per-company traceability carries weighted ttm + asOf + aiShare
+assert.deepEqual(tb.design.companies, [{ id: "nvda", name: "NVDA", ttm: 159.6, asOf: "2026-04-26", aiShare: 1.0 }]);
 assert.deepEqual(tb.memory.companies.map(c => c.id), ["samsung", "skhynix"]);
+assert.deepEqual(tb.memory.companies.map(c => c.aiShare), [0.5, 1.0]);
+
+// ---- AI-weighting drops a company whose aiShare is null (has TTM but no share) ----
+// synQ (no ai_profit_share, no is_ai segments) → aiShare.value null → DROP, never counted as 0.
+const ttmShareNull = Selectors.profitPoolTTM([
+  synAI("nvda", 1.0, [FY("FY2026", 100)], [Q("2025-04-27", 10), Q("2026-04-26", 30)]), // ttm 120, share 1 → 120
+  synQ("tsmc",       [FY("FY2025", 50)],  [Q("2025-03-31", 10), Q("2026-03-31", 18)]), // ttm 58, share null → DROP
+]);
+assert.equal(ttmShareNull.n, 1);                         // tsmc dropped for null aiShare (not 0-counted)
+assert.equal(ttmShareNull.total, 120);                   // only nvda contributes
+const tsb = Object.fromEntries(ttmShareNull.stages.map(s => [s.stage, s]));
+assert.equal(tsb.foundry.value, 0);                      // tsmc absent, not imputed
+assert.equal(tsb.foundry.companies.length, 0);
 
 // ---- empty / all-null pools ----
 const ttmEmpty = Selectors.profitPoolTTM([]);
 assert.equal(ttmEmpty.n, 0);
 assert.equal(ttmEmpty.total, 0);
 assert.equal(ttmEmpty.asOfSpreadDays, null);             // no contributors → null spread
-const ttmAllNull = Selectors.profitPoolTTM([synQ("micron", [FY("FY2025", 8)], [])]);
+const ttmAllNull = Selectors.profitPoolTTM([synAI("micron", 0.5, [FY("FY2025", 8)], [])]);
 assert.equal(ttmAllNull.n, 0);
 assert.equal(ttmAllNull.asOfSpreadDays, null);
 
@@ -843,6 +862,7 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
 const realTtm = Selectors.profitPoolTTM(Store.populated());
 // recorded heads: nvda, tsmc, samsung, skhynix, asml, broadcom, micron (7);
 // softbank still null (consensus 不录 → no quarters → honest null)
+// 全 7 家都有 is_ai 代理 → aiShare 非 null,AI 加权不会额外剔除任何一家,n 仍 7。
 assert.equal(realTtm.n, 7);
 assert.equal(Selectors.ttmNetIncome(Store.byId("softbank")), null);
 // NVDA TTM = FY2026 120.1 + (Q1FY27 58.3 − Q1FY26 18.8) = 159.6
@@ -858,7 +878,22 @@ assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("micron")) * 1000) / 1
 assert.equal(Selectors.ttmAsOf(Store.byId("micron")), "2026-05-28");
 // asOf spread now wider: Micron 季末 2026-05-28 vs 最早 2026-03-31 = 58 天（上限 62）
 assert.ok(realTtm.asOfSpreadDays >= 0 && realTtm.asOfSpreadDays <= 62, "spread " + realTtm.asOfSpreadDays);
-// all recorded heads positive in current up-cycle
+// ---- AI-weighted total/stages (vs former full-amount $423.5B) ----
+// 各家 weighted = ttm × aiShare(latestActual is_ai proxy):
+//   nvda 159.6×0.8972=143.19 + broadcom 29.317×0.5769=16.91 → design 160.11
+//   tsmc 61.236×0.59=36.13 → foundry; samsung 58.561×0.3577 + micron 50.469×0.3618
+//   + skhynix 52.887×1.0 = 92.10 → memory; asml 11.408×0.3552=4.05 → equipment
+// total ≈ 292.38 (全额口径曾为 423.48 → 加权后显著收口,与三根年度柱可比)
+assert.ok(Math.abs(realTtm.total - 292.383) < 0.5, "ttm AI total " + realTtm.total);
+assert.ok(realTtm.total < 423, "AI-weighted TTM must be below full-amount $423B: " + realTtm.total);
+const rwb = Object.fromEntries(realTtm.stages.map(s => [s.stage, s]));
+assert.ok(Math.abs(rwb.design.value    - 160.11) < 0.5, "design "    + rwb.design.value);
+assert.ok(Math.abs(rwb.foundry.value   -  36.13) < 0.5, "foundry "   + rwb.foundry.value);
+assert.ok(Math.abs(rwb.memory.value    -  92.10) < 0.5, "memory "    + rwb.memory.value);
+assert.ok(Math.abs(rwb.equipment.value -   4.05) < 0.5, "equipment " + rwb.equipment.value);
+// per-company traceability now carries the AI share used
+assert.ok(rwb.design.companies.every(m => m.aiShare != null && m.aiShare > 0));
+// all recorded heads positive in current up-cycle (weighted)
 for (const s of realTtm.stages)
   for (const m of s.companies) assert.ok(m.ttm > 0, m.id + " ttm " + m.ttm);
 // invest empty (softbank no quarters) → 0 share in TTM cross-section (coverage caveat, not imputed)
