@@ -30,6 +30,24 @@ const Store = {
   pending()     { return this._data.companies.filter(c => c.status !== "populated" || !c.years.length); },
 };
 
+/* =====================================================================
+   Value-chain stage map for the "profit-pool migration" view.
+   Pure constants — NO new collection fields, derived entirely from the
+   existing company `id`. View consumes STAGE_ORDER for layout/colour and
+   STAGE_LABEL for display names.
+   ===================================================================== */
+const STAGE_OF = {
+  nvda: "design", broadcom: "design",
+  tsmc: "foundry",
+  samsung: "memory", skhynix: "memory", micron: "memory",
+  asml: "equipment",
+  softbank: "invest",
+};
+const STAGE_ORDER = ["design", "foundry", "memory", "equipment", "invest"];
+const STAGE_LABEL = {
+  design: "设计", foundry: "代工", memory: "存储", equipment: "设备", invest: "投资",
+};
+
 const Selectors = {
   /* ---- year-level derivations ---- */
   netMargin(y) { return (y && y.revenue && y.net_income != null) ? y.net_income / y.revenue : null; },
@@ -132,7 +150,74 @@ const Selectors = {
     if (key === "netM")      return this.netMargin(y);
     return null;
   },
+
+  /* ---- profit-pool migration (value-chain stacked, sample-complete years only) ----
+     Aligns companies by "position from latest actual year" (pos 0 = each company's
+     newest actual, pos 1 = prior actual, …) — same source as the home-page YoY
+     (reuses actualYears, reversed). A position is kept ONLY if all 8 companies carry
+     an actual year there with a non-null net_income; partial positions are dropped
+     (honest gap, never imputed). Returns positions in chronological order (old→new)
+     so the view can paint left→right. Net income may be negative (memory downcycle);
+     share = value/total is computed as-is when total > 0, the view renders negatives. */
+  profitPoolMigration(companies) {
+    const list = companies || [];
+    // per-company actual years, newest-first, so index = position-from-latest
+    const byCo = list.map(c => ({ c, ys: this.actualYears(c).slice().reverse() }));
+    const maxPos = byCo.reduce((m, x) => Math.max(m, x.ys.length), 0);
+
+    const positions = [];
+    for (let pos = 0; pos < maxPos; pos++) {
+      const rows = [];
+      let complete = true;
+      for (const { c, ys } of byCo) {
+        const y = ys[pos];
+        if (!y || y.net_income == null) { complete = false; break; }
+        rows.push({ id: c.id, name: c.name, ni: y.net_income, year: this._yearOf(y) });
+      }
+      if (!complete || rows.length !== list.length) continue;
+
+      const total = rows.reduce((s, r) => s + r.ni, 0);
+      const stages = STAGE_ORDER.map(stage => {
+        const members = rows.filter(r => STAGE_OF[r.id] === stage);
+        const value = members.reduce((s, r) => s + r.ni, 0);
+        return {
+          stage,
+          label: STAGE_LABEL[stage],
+          value,
+          share: total ? value / total : null,
+          companies: members.map(r => ({ id: r.id, name: r.name, ni: r.ni })),
+        };
+      });
+
+      positions.push({
+        pos,
+        label: "≈" + this._modeYear(rows.map(r => r.year)),
+        total,
+        stages,
+        n: rows.length,
+      });
+    }
+    return positions.reverse(); // chronological: old → new
+  },
+
+  /* extract a 4-digit year from a year record's period_end (null-safe) */
+  _yearOf(y) {
+    const m = (y && typeof y.period_end === "string") ? y.period_end.match(/(\d{4})/) : null;
+    return m ? m[1] : null;
+  },
+  /* most-frequent value (ties → first seen); ignores null */
+  _modeYear(years) {
+    const counts = new Map();
+    let best = null, bestN = 0;
+    for (const y of years) {
+      if (y == null) continue;
+      const n = (counts.get(y) || 0) + 1;
+      counts.set(y, n);
+      if (n > bestN) { bestN = n; best = y; }
+    }
+    return best;
+  },
 };
 
 /* Allow reuse in Node (validator/tests) as well as the browser */
-if (typeof module !== "undefined" && module.exports) module.exports = { Store, Selectors };
+if (typeof module !== "undefined" && module.exports) module.exports = { Store, Selectors, STAGE_OF, STAGE_ORDER, STAGE_LABEL };

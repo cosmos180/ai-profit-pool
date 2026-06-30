@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const data = require("./companies.json");
-const { Store, Selectors } = require("./data-module.js");
+const { Store, Selectors, STAGE_OF, STAGE_ORDER, STAGE_LABEL } = require("./data-module.js");
 
 Store._data = data;
 
@@ -196,5 +196,130 @@ const lagCash = { id: "lag", status: "populated", quote: { as_of: "2026-06-26", 
 assert.equal(Selectors.fcf(Selectors.latestActual(lagCash)), null); // 最新年算不出 FCF
 assert.equal(Selectors.fcfYield(lagCash), 0.1);                     // 回退 FY1：fcf 10 / mcap 100
 assert.equal(Selectors.homeMetric(lagCash, "fcfYield"), 0.1);
+
+// =====================================================================
+// profit-pool migration (value-chain stacked, sample-complete years only)
+// =====================================================================
+
+// ---- stage map constants ----
+assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest"]);
+assert.equal(STAGE_OF.nvda, "design");
+assert.equal(STAGE_OF.broadcom, "design");
+assert.equal(STAGE_OF.tsmc, "foundry");
+assert.equal(STAGE_OF.samsung, "memory");
+assert.equal(STAGE_OF.skhynix, "memory");
+assert.equal(STAGE_OF.micron, "memory");
+assert.equal(STAGE_OF.asml, "equipment");
+assert.equal(STAGE_OF.softbank, "invest");
+assert.equal(STAGE_LABEL.design, "设计");
+assert.equal(STAGE_LABEL.invest, "投资");
+
+// ---- synthetic: full coverage of edge cases (8 companies, one per real id) ----
+// pos 0 (latest) complete for all; pos 1 missing one company → dropped;
+// negative net income present (memory downcycle) to prove no crash.
+function syn(id, years) { return { id, name: id.toUpperCase(), status: "populated", years }; }
+const A = (fy, pe, ni) => ({ fy, period_end: pe, status: "actual", revenue: 100, net_income: ni });
+
+const synCos = [
+  // design = 30 + 10 = 40
+  syn("nvda",     [A("FY24", "截至 2024-01", 5), A("FY25", "截至 2025-01", 30)]),
+  syn("broadcom", [A("FY24", "截至 2024-11", 4), A("FY25", "截至 2025-11", 10)]),
+  // foundry = 20
+  syn("tsmc",     [A("FY24", "自然年 2024", 8), A("FY25", "自然年 2025", 20)]),
+  // memory = 15 + (-5) + 10 = 20
+  syn("samsung",  [/* no pos-1 actual */         A("FY25", "自然年 2025", 15)]),
+  syn("skhynix",  [A("FY24", "自然年 2024", 3), A("FY25", "自然年 2025", -5)]), // negative
+  syn("micron",   [A("FY24", "截至 2024-08", 2), A("FY25", "截至 2025-08", 10)]),
+  // equipment = 10
+  syn("asml",     [A("FY24", "自然年 2024", 6), A("FY25", "自然年 2025", 10)]),
+  // invest = 10
+  syn("softbank", [A("FY24", "截至 2025-03", 1), A("FY25", "截至 2026-03", 10)]),
+];
+const synMig = Selectors.profitPoolMigration(synCos);
+
+// samsung has no pos-1 actual → pos 1 incomplete → only pos 0 survives
+assert.equal(synMig.length, 1);
+const sp0 = synMig[0];
+assert.equal(sp0.n, 8);
+// label = mode of years at pos 0 (all 2025/2026; 2025 dominates) = ≈2025
+assert.equal(sp0.label, "≈2025");
+// total = 30+10+20+15-5+10+10+10 = 100
+assert.equal(sp0.total, 100);
+// stages ordered per STAGE_ORDER
+assert.deepEqual(sp0.stages.map(s => s.stage), STAGE_ORDER);
+const byStage = Object.fromEntries(sp0.stages.map(s => [s.stage, s]));
+assert.equal(byStage.design.value, 40);
+assert.equal(byStage.foundry.value, 20);
+assert.equal(byStage.memory.value, 20);   // 15 + (-5) + 10, negative folded in, no crash
+assert.equal(byStage.equipment.value, 10);
+assert.equal(byStage.invest.value, 10);
+// shares sum to 1 (positive total scenario)
+assert.equal(sp0.stages.reduce((s, x) => s + x.share, 0), 1);
+// company-level traceability (hover), incl. the negative member
+assert.deepEqual(byStage.design.companies.map(c => c.id), ["nvda", "broadcom"]);
+assert.deepEqual(byStage.memory.companies.map(c => ({ id: c.id, ni: c.ni })),
+  [{ id: "samsung", ni: 15 }, { id: "skhynix", ni: -5 }, { id: "micron", ni: 10 }]);
+
+// ---- synthetic: a company with net_income null at a position → position dropped ----
+const synNull = [
+  syn("nvda",     [A("FY25", "截至 2025-01", 30)]),
+  syn("broadcom", [A("FY25", "截至 2025-11", 10)]),
+  syn("tsmc",     [A("FY25", "自然年 2025", 20)]),
+  syn("samsung",  [{ fy: "FY25", period_end: "自然年 2025", status: "actual", revenue: 100, net_income: null }]),
+  syn("skhynix",  [A("FY25", "自然年 2025", 5)]),
+  syn("micron",   [A("FY25", "截至 2025-08", 5)]),
+  syn("asml",     [A("FY25", "自然年 2025", 10)]),
+  syn("softbank", [A("FY25", "截至 2026-03", 10)]),
+];
+assert.equal(Selectors.profitPoolMigration(synNull).length, 0); // null NI → not complete
+assert.deepEqual(Selectors.profitPoolMigration([]), []);        // empty → empty
+
+// ---- synthetic: chronological ordering (old → new) ----
+const synTwo = [
+  syn("nvda",     [A("FY24", "截至 2024-01", 1), A("FY25", "截至 2025-01", 2)]),
+  syn("broadcom", [A("FY24", "截至 2024-11", 1), A("FY25", "截至 2025-11", 2)]),
+  syn("tsmc",     [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
+  syn("samsung",  [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
+  syn("skhynix",  [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
+  syn("micron",   [A("FY24", "截至 2024-08", 1), A("FY25", "截至 2025-08", 2)]),
+  syn("asml",     [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
+  syn("softbank", [A("FY24", "截至 2025-03", 1), A("FY25", "截至 2026-03", 2)]),
+];
+const twoMig = Selectors.profitPoolMigration(synTwo);
+assert.equal(twoMig.length, 2);
+assert.equal(twoMig[0].label, "≈2024"); // older first
+assert.equal(twoMig[1].label, "≈2025"); // newer last
+assert.equal(twoMig[0].total, 8);
+assert.equal(twoMig[1].total, 16);
+
+// ---- real data: two complete positions, newest = ≈2025 ----
+const realMig = Selectors.profitPoolMigration(Store.populated());
+assert.equal(realMig.length, 2);                 // pos 0 & 1 complete; pos 2 drops (samsung 2-yr only)
+const newest = realMig[realMig.length - 1];
+assert.equal(newest.n, 8);
+assert.equal(newest.label, "≈2025");
+
+// newest total == home-page "profit pool" 口径: sum of each company's latest-actual net_income
+const homePool = Store.populated().reduce((s, c) => s + Selectors.latestActual(c).net_income, 0);
+assert.ok(Math.abs(newest.total - homePool) < 1e-9);
+
+// shares sum to 1
+assert.ok(Math.abs(newest.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
+
+// stage shares reflect the canonical data (current companies.json: NVDA FY2026 NI 120.1).
+// NOTE: these are the TRUE shares under the data; they differ materially from the
+// brief's pre-data estimate (design~37/memory~27/foundry~21/invest~12/equip~4).
+// See report — flagged as a data/expectation mismatch, asserting reality not the estimate.
+const nb = Object.fromEntries(newest.stages.map(s => [s.stage, s.share]));
+const near = (a, b) => Math.abs(a - b) <= 0.005; // ±0.5pp
+assert.ok(near(nb.design, 0.463), "design share " + nb.design);
+assert.ok(near(nb.foundry, 0.175), "foundry share " + nb.foundry);
+assert.ok(near(nb.memory, 0.226), "memory share " + nb.memory);
+assert.ok(near(nb.equipment, 0.035), "equipment share " + nb.equipment);
+assert.ok(near(nb.invest, 0.101), "invest share " + nb.invest);
+
+// all stages positive in the latest two real positions (no downcycle in-sample)
+for (const p of realMig)
+  for (const s of p.stages) assert.ok(s.value > 0, p.label + "/" + s.stage + " should be positive");
 
 console.log("data-module tests passed");

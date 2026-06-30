@@ -16,6 +16,7 @@
   --past:#AEBBB3; --est:#BC7A12; --est-soft:#F0E0C2;
   --bad:#A6321F; --bad-soft:#EED4CD; --muted:#7C8A84;
   --ai:#1F6FB2; --ai-soft:#D6E6F2;
+  --stg-design:#0E7C6B; --stg-foundry:#1F6FB2; --stg-memory:#BC7A12; --stg-equipment:#9AA8A0; --stg-invest:#6B5B95;
   --shadow:0 1px 2px rgba(24,33,29,.05),0 8px 24px -16px rgba(24,33,29,.25);
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   --sans:"IBM Plex Sans","IBM Plex Sans SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
@@ -160,6 +161,28 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .srcrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
 .srcrow:last-child{border-bottom:0}.srcrow .sl{color:var(--ink-soft)}.srcrow a{word-break:break-all;font-size:12px}
 .note-block{font-size:12.5px;color:var(--ink-soft);background:var(--card-2);border-radius:10px;padding:12px 15px;line-height:1.6;margin-top:13px}.note-block b{color:var(--ink)}
+/* ---- profit-pool migration (100% stacked columns) ---- */
+.mig-card{padding:20px 22px 16px}
+.mig-lead{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 4px;max-width:72ch}.mig-lead b{color:var(--ink)}
+.mig-body{display:flex;gap:26px;align-items:stretch;flex-wrap:wrap;margin-top:6px}
+.mig-chart{flex:0 0 auto}
+.mig-side{flex:1 1 260px;min-width:240px;display:flex;flex-direction:column;gap:9px;justify-content:center}
+.mig-seg{cursor:pointer;transition:opacity .12s}
+.mig-seg:focus-visible rect{outline:none}
+.mig-svg.dim .mig-seg:not(.on){opacity:.32}
+.mig-legend{display:flex;flex-direction:column;gap:2px}
+.mig-li{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border:1px solid transparent;border-radius:9px;cursor:pointer;text-align:left;background:none;font-family:inherit;width:100%;transition:.12s}
+.mig-li:hover,.mig-li.on{background:var(--card-2);border-color:var(--line-soft)}
+.mig-li .sw{width:13px;height:13px;border-radius:3px;flex:none;margin-top:2px}
+.mig-li .lt{flex:1;min-width:0}
+.mig-li .ln{font-size:13px;font-weight:600;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.mig-li .lsh{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);font-weight:500}
+.mig-li .lc{font-size:11.5px;color:var(--ink-faint);margin-top:2px;line-height:1.5}
+.mig-li .lc .neg{color:var(--bad)}
+.mig-li .lar{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);margin-top:3px}
+.mig-li .lar .up{color:var(--ok)}.mig-li .lar .dn{color:var(--bad)}
+.mig-foot{font-size:11.5px;color:var(--ink-soft);background:var(--card-2);border-radius:10px;padding:11px 14px;line-height:1.65;margin-top:16px}
+.mig-foot b{color:var(--ink)}.mig-foot .n{font-family:var(--mono);color:var(--ink-faint);font-weight:600;margin-right:3px}
 footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:center;line-height:1.7}footer b{color:var(--ink-soft)}
 @media(max-width:640px){
   .logo{width:42px;height:42px}.logo span{font-size:14px}
@@ -167,6 +190,10 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
   .prow{grid-template-columns:42px 1fr}.prow .psrc{display:none}
   .csum{grid-template-columns:1fr 1fr}.csum .c{border-right:0;border-bottom:1px solid var(--line-soft)}.csum .c:last-child{border-bottom:0}
   .gap .seg2{grid-template-columns:1fr}
+  .mig-card{padding:16px 15px 14px}
+  .mig-body{gap:14px}
+  .mig-chart{flex:1 1 100%;display:flex;justify-content:center}
+  .mig-side{flex:1 1 100%;min-width:0}
 }
 </style>
 </head>
@@ -183,6 +210,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
     <p class="lead">数据已从界面剥离到 <code style="font-family:var(--mono)">companies.json</code>（受 <code style="font-family:var(--mono)">schema.json</code> 约束、由 <code style="font-family:var(--mono)">validate.py</code> 把关）。此页只负责<b>呈现与跳转</b>；一切派生（利润率、同比、对账）由数据访问层现算。</p>
     <div class="section-h">覆盖情况</div>
     <div class="cover" id="cover"></div>
+    <div class="section-h">利润池如何迁移</div>
+    <div class="card mig-card" id="migCard"></div>
     <div class="section-h">已补录公司 <span class="count" id="popCount"></span></div>
     <div class="metricbar">
       <span class="ml">对比指标</span>
@@ -263,6 +292,7 @@ const Fmt={
   yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
   segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
 };
+const STAGE_COLOR={design:"var(--stg-design)",foundry:"var(--stg-foundry)",memory:"var(--stg-memory)",equipment:"var(--stg-equipment)",invest:"var(--stg-invest)"};
 const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度",pe:"PE",ps:"PS",fcfYield:"FCF yield"};
 const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v),pe:v=>Fmt.mult(v),ps:v=>Fmt.mult(v),fcfYield:v=>Fmt.pct(v)};
 // 越低越便宜的估值指标：列表降序排列，需提示"排第一≠最便宜"
@@ -315,6 +345,7 @@ function renderHome(){
       <div class="v num">${leaderShare!=null?Fmt.pct(leaderShare,0):"—"}</div><div class="s">${leader?Safe.text(shortName(leader.c))+" 占利润池比重":"—"}</div></div>
     <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--past)"></span>利润池同比</div>
       <div class="v num">${poolYoY!=null?Fmt.yoy(poolYoY):"—"}</div><div class="s">合计净利润较上一财年</div></div>`;
+  renderMigration();
   $("#popCount").textContent=`${pop.length} 家`; $("#pendCount").textContent=`${pend.length} 家`;
   const key=state.homeMetric;
   const hint=$("#metricHint");
@@ -354,6 +385,101 @@ function renderHome(){
   $("#addHint").innerHTML=`<b>扩展方式：</b>补录一家公司 = 给它的 <code>years[]</code> 填入各财年对象，跑一遍 <code>validate.py</code>，主页与下钻无需改动。槽位上的 <span class="segtag yes" style="display:inline">可得</span>/<span class="segtag partial" style="display:inline">部分</span>/<span class="segtag no" style="display:inline">不可得</span> 已预判补录后下钻能做到什么：可得的公司（三星、博通）下钻会自动出现真实分部利润与利润率，不可得的（台积电、ASML）会显式留空。`;
   $$("#home .chip").forEach(ch=>ch.onclick=()=>{state.homeMetric=ch.dataset.m;
     $$("#home .chip").forEach(x=>x.setAttribute("aria-pressed",x===ch));renderHome();});
+}
+
+/* ---------- HOME · 利润池迁移视图（100% 堆叠柱，手绘 SVG） ---------- */
+function renderMigration(){
+  const card=$("#migCard");
+  const positions=Selectors.profitPoolMigration(Store.populated());
+  if(!positions||positions.length<2){
+    card.innerHTML=`<div class="note-block" style="margin-top:0"><b>样本不足。</b>利润池迁移需要至少两个所有公司都有实际净利润的完整财年位置，当前不足，诚实留空。</div>`;
+    return;
+  }
+  const first=positions[0],last=positions[positions.length-1];
+  // —— 手绘 100% 堆叠柱 ——
+  const colW=92,gap=110,padL=14,padT=30,barH=300,padB=30;
+  const W=padL*2+positions.length*colW+(positions.length-1)*(gap-colW);
+  const H=padT+barH+padB;
+  const xOf=i=>padL+i*gap;
+  let svg=`<svg class="mig-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="AI 利润池利润结构按环节的百分比堆叠迁移图">`;
+  positions.forEach((p,pi)=>{
+    const x=xOf(pi);
+    // 柱顶绝对总量
+    svg+=`<text x="${x+colW/2}" y="${padT-13}" text-anchor="middle" font-family="var(--mono)" font-size="14" font-weight="600" fill="var(--ink)">${Safe.text(Fmt.bn(p.total,0))}</text>`;
+    svg+=`<text x="${x+colW/2}" y="${padT+barH+19}" text-anchor="middle" font-family="var(--mono)" font-size="11.5" font-weight="600" fill="var(--ink-soft)">${Safe.text(p.label)}</text>`;
+    // 自下而上按 STAGE_ORDER（接口已排序）累计 share 切段
+    let acc=0; // 已累计 share（从底部起）
+    p.stages.forEach(st=>{
+      const sh=st.share||0;
+      const segH=sh*barH;
+      const yTop=padT+barH-(acc+sh)*barH;
+      acc+=sh;
+      if(segH<=0)return;
+      const showLbl=sh>=0.06;
+      svg+=`<g class="mig-seg" data-stage="${Safe.attr(st.stage)}" tabindex="0" role="button" `
+        +`aria-label="${Safe.attr(p.label+" "+st.label+" 占 "+Fmt.pct(st.share,1)+"，净利润 "+Fmt.bn(st.value,1))}">`
+        +`<rect x="${x}" y="${yTop.toFixed(2)}" width="${colW}" height="${segH.toFixed(2)}" fill="${STAGE_COLOR[st.stage]}"/>`;
+      if(showLbl){
+        svg+=`<text x="${x+colW/2}" y="${(yTop+segH/2+3.5).toFixed(2)}" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#fff" pointer-events="none">${Safe.text(Fmt.pct(st.share,0))}</text>`;
+      }
+      svg+=`</g>`;
+    });
+    // 柱体外框
+    svg+=`<rect x="${x}" y="${padT}" width="${colW}" height="${barH}" fill="none" stroke="rgba(24,33,29,.10)"/>`;
+    // 相邻柱之间的同环节连带（leader segment 视觉牵引：仅画设计环节顶/底引导，保持克制 → 略）
+  });
+  svg+=`</svg>`;
+
+  // —— 图例（环节→颜色→所含公司），并显示最新年占比、份额变化 ——
+  const legend=last.stages.map(st=>{
+    const prev=first.stages.find(s=>s.stage===st.stage);
+    const dShare=(prev&&prev.share!=null&&st.share!=null)?st.share-prev.share:null;
+    const arrow=dShare==null?"":(dShare>=0?`<span class="up">▲ ${(dShare*100).toFixed(1)}pt</span>`:`<span class="dn">▼ ${(Math.abs(dShare)*100).toFixed(1)}pt</span>`);
+    const members=st.companies.map(m=>{
+      const neg=m.ni<0;
+      return `<span class="${neg?'neg':''}">${Safe.text(m.name.split(" ")[0])} ${Fmt.bn(m.ni,1)}</span>`;
+    }).join("、")||"—";
+    return `<button class="mig-li" data-stage="${Safe.attr(st.stage)}" aria-label="${Safe.attr(st.label+" 含 "+st.companies.map(m=>m.name).join("、"))}">
+      <span class="sw" style="background:${STAGE_COLOR[st.stage]}"></span>
+      <span class="lt">
+        <span class="ln">${Safe.text(st.label)}<span class="lsh">${Fmt.pct(st.share,1)} · ${Fmt.bn(st.value,1)}</span></span>
+        <span class="lc">${members}</span>
+        <span class="lar">${last.label} 占比　较 ${first.label} ${arrow||"—"}</span>
+      </span></button>`;
+  }).join("");
+
+  card.innerHTML=`
+    <p class="mig-lead">同一批 ${last.n} 家公司的净利润，按价值链<b>环节</b>归桶后看结构。柱越往上堆，越能看出<b>总量在做大（柱顶绝对额）</b>的同时<b>结构在迁移（各色段占比）</b>。下钻仍是单家公司；这里是把它们拼回一张利润地图。</p>
+    <div class="mig-body">
+      <div class="mig-chart">${svg}</div>
+      <div class="mig-side"><div class="mig-legend">${legend}</div></div>
+    </div>
+    <div class="mig-foot">
+      <span class="n">①</span>各公司财年口径不一（英伟达 1 月末、软银 3 月末、美光 8 月末、博通 10 月末，余为自然年），此处按实际年位置近似对齐为同一“年”，<b>存在数月错位、非精确同期可比</b>。
+      <span class="n">②</span>混业公司按主营归桶：三星（存储+代工+消费）计入<b>存储</b>，博通（含软件）计入<b>设计</b>。
+      <span class="n">③</span>投资环节（软银）为<b>投资损益口径、非经营利润</b>，与其余经营利润性质不同，同图并列仅为看结构。
+    </div>`;
+
+  // —— 交互：图例 ↔ 色块联动高亮（hover + 键盘 focus + 点击）——
+  const svgEl=$(".mig-svg",card);
+  const setActive=(stage)=>{
+    if(stage){svgEl.classList.add("dim");}else{svgEl.classList.remove("dim");}
+    $$(".mig-seg",card).forEach(g=>g.classList.toggle("on",!!stage&&g.dataset.stage===stage));
+    $$(".mig-li",card).forEach(b=>b.classList.toggle("on",!!stage&&b.dataset.stage===stage));
+  };
+  $$(".mig-li",card).forEach(b=>{
+    b.addEventListener("mouseenter",()=>setActive(b.dataset.stage));
+    b.addEventListener("mouseleave",()=>setActive(null));
+    b.addEventListener("focus",()=>setActive(b.dataset.stage));
+    b.addEventListener("blur",()=>setActive(null));
+    b.addEventListener("click",()=>setActive(b.classList.contains("on")?null:b.dataset.stage));
+  });
+  $$(".mig-seg",card).forEach(g=>{
+    g.addEventListener("mouseenter",()=>setActive(g.dataset.stage));
+    g.addEventListener("mouseleave",()=>setActive(null));
+    g.addEventListener("focus",()=>setActive(g.dataset.stage));
+    g.addEventListener("blur",()=>setActive(null));
+  });
 }
 
 /* ---------- COMPANY ---------- */
