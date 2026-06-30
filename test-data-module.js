@@ -52,6 +52,9 @@ const skhynix2025 = Selectors.yearByFy(skhynix, "FY2025");
 assert.equal(Selectors.latestActual(skhynix).fy, "FY2025");
 assert.equal(Selectors.reconcile(skhynix2025).ok, true);
 assert.equal(Selectors.hasSegmentProfit(skhynix2025), false);
+// FY2025 现金已补录（capex 19.36 / cfo 37.3，KRW→USD 换算）：FCF 派生、FCF yield 出值
+assert.equal(Math.round(Selectors.fcf(skhynix2025) * 100) / 100, 17.94); // 37.3 − 19.36
+assert.equal(Math.round(Selectors.fcfYield(skhynix) * 10000) / 10000, 0.0145); // fcf 17.94 / mcap 1236
 
 const tsmc = Store.byId("tsmc");
 const tsmc2025 = Selectors.yearByFy(tsmc, "FY2025");
