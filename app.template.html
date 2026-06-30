@@ -50,6 +50,7 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .cover .cv .v{font-family:var(--mono);font-size:25px;font-weight:600;margin-top:6px;letter-spacing:-.01em}
 .cover .cv .s{font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
 .cover .cv.accent .v{color:var(--ok)}
+.cover .cv .l .caliper{margin-left:auto;font-size:9.5px;font-weight:600;letter-spacing:.02em;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);border-radius:999px;padding:1px 7px;white-space:nowrap}
 .metricbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .metricbar .ml{font-size:12px;color:var(--ink-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
 .chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-family:var(--sans);font-size:12.5px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:.12s}
@@ -181,6 +182,7 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 /* ---- profit-pool migration (100% stacked columns) ---- */
 .mig-card{padding:20px 22px 16px}
 .mig-lead{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 4px;max-width:72ch}.mig-lead b{color:var(--ink)}
+.caliper-inline{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.02em;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);border-radius:999px;padding:1px 7px;margin-right:7px;vertical-align:1px;white-space:nowrap}
 .mig-body{display:flex;gap:26px;align-items:stretch;flex-wrap:wrap;margin-top:6px}
 .mig-chart{flex:0 0 auto}
 .mig-side{flex:1 1 260px;min-width:240px;display:flex;flex-direction:column;gap:9px;justify-content:center}
@@ -244,6 +246,7 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
     <p class="lead">数据已从界面剥离到 <code style="font-family:var(--mono)">companies.json</code>（受 <code style="font-family:var(--mono)">schema.json</code> 约束、由 <code style="font-family:var(--mono)">validate.py</code> 把关）。此页只负责<b>呈现与跳转</b>；一切派生（利润率、同比、对账）由数据访问层现算。</p>
     <div class="section-h">覆盖情况</div>
     <div class="cover" id="cover"></div>
+    <div class="note-block" id="poolNote"></div>
     <div class="section-h">利润池如何迁移</div>
     <div class="card mig-card" id="migCard"></div>
     <div class="section-h">已补录公司 <span class="count" id="popCount"></span></div>
@@ -327,7 +330,7 @@ const Fmt={
   yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
   segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
 };
-const STAGE_COLOR={design:"var(--stg-design)",foundry:"var(--stg-foundry)",memory:"var(--stg-memory)",equipment:"var(--stg-equipment)",invest:"var(--stg-invest)",app:"var(--stg-app)"};
+// STAGE_COLOR 由 data-module.js 从 meta.stages 数据派生（_refreshStages 填充），视图层直接复用，不再硬编码
 const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度",pe:"PE",ps:"PS",evSales:"EV/Sales",fcfYield:"FCF yield"};
 const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v),pe:v=>Fmt.mult(v),ps:v=>Fmt.mult(v),evSales:v=>Fmt.mult(v),fcfYield:v=>Fmt.pct(v)};
 // 越低越便宜的估值指标：列表降序排列，需提示"排第一≠最便宜"
@@ -361,25 +364,30 @@ function renderCrumbs(){
 function goHome(){state.companyId=null;state.fy=null;show("home");renderHome();}
 function renderHome(){
   const pop=Store.populated(),pend=Store.pending(),total=Store.companies().length;
-  // "利润池" = sum of latest-actual net income. Profit (unlike revenue) doesn't double-count
-  // across a value chain, so summing it is meaningful: the economic profit these players capture.
-  const niList=pop.map(c=>({c,ni:Selectors.homeMetric(c,"netIncome")})).filter(x=>x.ni!=null).sort((a,b)=>b.ni-a.ni);
-  const pool=niList.reduce((s,x)=>s+x.ni,0);
-  const leader=niList[0],leaderShare=(leader&&pool)?leader.ni/pool:null;
-  // pool momentum: aggregate latest-actual vs prior-actual net income across companies that have both
-  const grow=pop.map(c=>{const a=Selectors.actualYears(c);if(a.length<2)return null;
-    const cur=a[a.length-1].net_income,prev=a[a.length-2].net_income;
-    return (cur!=null&&prev!=null)?{cur,prev}:null;}).filter(Boolean);
-  const curSum=grow.reduce((s,x)=>s+x.cur,0),prevSum=grow.reduce((s,x)=>s+x.prev,0);
-  const poolYoY=prevSum>0?(curSum-prevSum)/prevSum:null;
-  const shortName=c=>c.name.split(" ")[0];
+  // 三卡统一口径 = AI 加权利润池（C 口径，ADR-3）：每家 净利润 × AI 占比，缺 AI 占比的公司剔除。
+  // 与下方迁移图最新位置同源，数字必须对得上（hero pool == 迁移图最新 total）。
+  const ai=Selectors.profitPoolAI(pop);
+  const pool=ai.total;
+  // 利润最集中：AI 加权后各公司贡献里的龙头占比（口径同池子）
+  const aiCos=ai.byStage.flatMap(s=>s.companies).slice().sort((a,b)=>b.ni-a.ni);
+  const leader=aiCos[0],leaderShare=(leader&&pool>0)?leader.ni/pool:null;
+  // 利润池同比：迁移图最新 vs 上一位置的 AI 加权 total（与池子、迁移图三者同口径）
+  const mig=Selectors.profitPoolMigration(pop);
+  const migLast=mig.length?mig[mig.length-1]:null,migPrev=mig.length>1?mig[mig.length-2]:null;
+  const poolYoY=(migLast&&migPrev&&migPrev.total>0)?(migLast.total-migPrev.total)/migPrev.total:null;
+  const shortName=c=>(c.name||"").split(" ")[0];
+  // 诚实标注：当前 n/N 家、basis 构成。9 家 AI 占比全部为 is_ai 营收代理估算（proxy），非披露的 AI 利润占比。
+  const basisAllProxy=ai.basisCount.sourced===0&&ai.basisCount.proxy>0;
   $("#cover").innerHTML=`
-    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>AI 利润池</div>
-      <div class="v num">${Fmt.bn(pool,0)}</div><div class="s">${pop.length} 家最新实际财年合计净利润</div></div>
+    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>AI 利润池<span class="caliper">AI 归因加权</span></div>
+      <div class="v num">${Fmt.bn(pool,0)}</div><div class="s">已按 AI 归因加权 · 覆盖 ${ai.n}/${ai.N} 家</div></div>
     <div class="card cv"><div class="l"><span class="swatch" style="background:var(--est)"></span>利润最集中</div>
-      <div class="v num">${leaderShare!=null?Fmt.pct(leaderShare,0):"—"}</div><div class="s">${leader?Safe.text(shortName(leader.c))+" 占利润池比重":"—"}</div></div>
+      <div class="v num">${leaderShare!=null?Fmt.pct(leaderShare,0):"—"}</div><div class="s">${leader?Safe.text(shortName(leader))+" 占 AI 加权池比重":"—"}</div></div>
     <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--past)"></span>利润池同比</div>
-      <div class="v num">${poolYoY!=null?Fmt.yoy(poolYoY):"—"}</div><div class="s">合计净利润较上一财年</div></div>`;
+      <div class="v num">${poolYoY!=null?Fmt.yoy(poolYoY):"—"}</div><div class="s">${migLast&&migPrev?`AI 加权池 ${Safe.text(migPrev.label)}→${Safe.text(migLast.label)}`:"AI 加权池较上一财年"}</div></div>`;
+  $("#poolNote").innerHTML=`<b>口径：AI 归因加权（C）。</b>利润池与下方迁移图均为「每家最新实际财年净利润 × 该公司 AI 占比」之和（${Fmt.bn(pool,0)}），而非全额净利润求和；缺 AI 占比的公司已诚实剔除，故覆盖 <b>${ai.n}/${ai.N}</b> 家。`
+    +(basisAllProxy?`当前 ${ai.basisCount.proxy} 家的 AI 占比<b>全部为 <code>is_ai</code> 营收代理估算</b>（basis=proxy），<b>并非公司披露的 AI 利润占比</b>——把营收代理当作利润占比是一种近似，口径在此明示，请据此理解所有 AI 加权数值。`
+      :`AI 占比来源构成：<b>${ai.basisCount.sourced}</b> 家有据可依（sourced）、<b>${ai.basisCount.proxy}</b> 家为 <code>is_ai</code> 营收代理估算（proxy，非披露的 AI 利润占比，属近似）。`);
   renderMigration();
   $("#popCount").textContent=`${pop.length} 家`; $("#pendCount").textContent=`${pend.length} 家`;
   const key=state.homeMetric;
@@ -456,7 +464,8 @@ function renderMigration(){
     // TTM 列柱上方还要留一道“投资·缺口”槽，故把总量/家数再上移 20px，避免压在缺口槽上
     const topShift=tt?20:0;
     svg+=`<text x="${x+colW/2}" y="${padT-25-topShift}" text-anchor="middle" font-family="var(--mono)" font-size="14" font-weight="600" fill="${tt?'#5b4d86':'var(--ink)'}">${Safe.text(Fmt.bn(p.total,0))}</text>`;
-    svg+=`<text x="${x+colW/2}" y="${padT-11-topShift}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="500" fill="var(--ink-faint)">对应 ${p.n} 家</text>`;
+    const covTxt=tt?`对应 ${p.n} 家`:`覆盖 ${p.n}/${p.N} 家`;
+    svg+=`<text x="${x+colW/2}" y="${padT-11-topShift}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="500" fill="var(--ink-faint)">${covTxt}</text>`;
     // 列名（TTM 两行：TTM / 截至各家最近季报）
     if(tt){
       svg+=`<text x="${x+colW/2}" y="${padT+barH+18}" text-anchor="middle" font-family="var(--mono)" font-size="12" font-weight="600" fill="#5b4d86">TTM</text>`;
@@ -531,7 +540,7 @@ function renderMigration(){
   }).join("");
 
   card.innerHTML=`
-    <p class="mig-lead">同一批公司的净利润，按价值链<b>环节</b>归桶后看结构。前两根是已完成财年（${first.label}→${last.label}，${last.n} 家），最右<b>斜纹虚线柱</b>是 <b>TTM 滚动 12 个月</b>（补最新季报、${ttm.n} 家）。柱越往上堆，越能看出<b>总量做大</b>的同时<b>结构在迁移</b>——TTM 让<b>存储环节明显鼓起</b>（HBM/AI 超级周期，年度口径看不到、TTM 才抓到）。</p>
+    <p class="mig-lead"><span class="caliper-inline">AI 归因加权</span>同一批公司的净利润<b>按 AI 占比加权后</b>，再按价值链<b>环节</b>归桶看结构（缺 AI 占比的公司不计入，故每根柱标<b>覆盖 n/N</b>）。前两根是已完成财年（${first.label}→${last.label}，覆盖 ${last.n}/${last.N} 家），最右<b>斜纹虚线柱</b>是 <b>TTM 滚动 12 个月</b>（补最新季报、${ttm.n} 家）。柱越往上堆，越能看出<b>总量做大</b>的同时<b>结构在迁移</b>——TTM 让<b>存储环节明显鼓起</b>（HBM/AI 超级周期，年度口径看不到、TTM 才抓到）。AI 占比口径见上方说明。</p>
     <div class="mig-body">
       <div class="mig-chart">${svg}</div>
       <div class="mig-side"><div class="mig-legend">${legend}</div></div>
