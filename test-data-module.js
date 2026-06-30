@@ -5,8 +5,8 @@ const { Store, Selectors, STAGE_OF_FALLBACK, STAGE_ORDER, STAGE_LABEL, STAGE_COL
 Store._data = data;
 _refreshStages(data.meta);   // derive STAGE_ORDER/LABEL/COLOR from meta.stages (Store.load does this in the browser)
 
-assert.equal(Store.companies().length, 9);
-assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml", "tencent"]);
+assert.equal(Store.companies().length, 13);
+assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml", "tencent", "google", "microsoft", "amazon", "oracle"]);
 assert.deepEqual(Store.pending().map((c) => c.id), []);
 
 const nvda = Store.byId("nvda");
@@ -484,7 +484,7 @@ assert.ok(Selectors.ev(softbank) > Selectors.marketCap(softbank), "SoftBank 高�
 // =====================================================================
 
 // ---- stage map: derived from meta.stages (ADR-1), fallback map intact ----
-assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest", "app"]);
+assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest", "app", "cloud"]);
 // STAGE_OF_FALLBACK = the former hard-coded id→stage map (still the兜底)
 assert.equal(STAGE_OF_FALLBACK.nvda, "design");
 assert.equal(STAGE_OF_FALLBACK.broadcom, "design");
@@ -501,6 +501,9 @@ assert.equal(STAGE_LABEL.invest, "投资");
 assert.equal(STAGE_LABEL.app, "应用");
 assert.equal(STAGE_COLOR.design, "var(--stg-design)");   // color now flows from data, not the template
 assert.equal(STAGE_COLOR.app, "var(--stg-app)");
+// 新增 cloud 环节：纯数据扩展，label/color 由 meta.stages 派生（color 用直接 hex，无需改模板）
+assert.equal(STAGE_LABEL.cloud, "云");
+assert.equal(STAGE_COLOR.cloud, "#3E7CB1");
 
 // stageOf: chain_stage 优先，缺则回退 STAGE_OF_FALLBACK[id]
 assert.equal(stageOf({ id: "nvda" }), "design");                          // fallback by id
@@ -524,7 +527,7 @@ assert.equal(stageOf({ id: "unknown-id" }), null);                        // nei
   assert.equal(STAGE_LABEL.design, "设计X");
   assert.equal(STAGE_COLOR.cloud, "#abc");
   _refreshStages(data.meta);                 // restore canonical stages for the rest of the suite
-  assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest", "app"]);
+  assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest", "app", "cloud"]);
 }
 
 // =====================================================================
@@ -688,33 +691,36 @@ assert.deepEqual(Selectors.profitPoolMigration([]), []);
 
 // ---- real data: AI-weighted migration, per-company coverage, n/N ----
 const realMig = Selectors.profitPoolMigration(Store.populated());
-assert.equal(realMig.length, 3);                 // gate removed → ≈2023 (8 co) / ≈2024 / ≈2025
+assert.equal(realMig.length, 3);                 // gate removed → ≈2023 / ≈2024 / ≈2025
 const realNew = realMig[realMig.length - 1];
 assert.equal(realNew.label, "≈2025");
-assert.equal(realNew.n, 9); assert.equal(realNew.N, 9); // all 9 contribute at latest position
-// ≈2023 position: samsung 2-yr only → not in coverage → N=8 (per-company coverage, no whole-position drop)
+assert.equal(realNew.n, 13); assert.equal(realNew.N, 13); // all 13 contribute at latest position
+// ≈2023 position: samsung 2-yr only + oracle 最早 FY2024（无 2023）→ 两家不在该年覆盖 → N=12
 assert.equal(realMig[0].label, "≈2023");
-assert.equal(realMig[0].N, 8); assert.equal(realMig[0].n, 8);
+assert.equal(realMig[0].N, 12); assert.equal(realMig[0].n, 12);
 
 // hero/migration consistency: newest migration total == profitPoolAI total (same C口径)
 const aiPool = Selectors.profitPoolAI(Store.populated());
 assert.ok(Math.abs(realNew.total - aiPool.total) < 1e-9, "migration newest == AI pool total");
-assert.equal(aiPool.n, 9); assert.equal(aiPool.N, 9);
-assert.deepEqual(aiPool.basisCount, { sourced: 0, proxy: 9 }); // current data: all proxy
+assert.equal(aiPool.n, 13); assert.equal(aiPool.N, 13);
+assert.deepEqual(aiPool.basisCount, { sourced: 0, proxy: 13 }); // current data: all proxy
 
 // shares sum to 1 at the latest position
 assert.ok(Math.abs(realNew.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
 
-// TRUE AI-weighted shares under current data (C口径). Differ from the full-amount shares:
-// invest/app/equipment shrink (low aiShare), design rises (NVDA .90 weight dominates).
+// TRUE AI-weighted shares under current data (C口径). 加 4 家 hyperscaler(google/microsoft/
+// amazon/oracle, chain_stage='cloud')后新增 cloud 环节：尽管四家净利合计巨大,但其 AI 占比
+// (云分部营收/总营收,约 15–38%/oracle 77%)远低于上游纯 AI 厂 → C 加权后 cloud 仅 ~27.6%,
+// 被显著折算,正是"整公司≠全 AI"的验证。
 const rnb = Object.fromEntries(realNew.stages.map(s => [s.stage, s.share]));
 const near = (a, b) => Math.abs(a - b) <= 0.005; // ±0.5pp
-assert.ok(near(rnb.design, 0.574), "design share " + rnb.design);
-assert.ok(near(rnb.foundry, 0.151), "foundry share " + rnb.foundry);
-assert.ok(near(rnb.memory, 0.211), "memory share " + rnb.memory);
-assert.ok(near(rnb.equipment, 0.018), "equipment share " + rnb.equipment);
-assert.ok(near(rnb.invest, 0.012), "invest share " + rnb.invest);
-assert.ok(near(rnb.app, 0.033), "app share " + rnb.app);
+assert.ok(near(rnb.design, 0.416), "design share " + rnb.design);
+assert.ok(near(rnb.foundry, 0.110), "foundry share " + rnb.foundry);
+assert.ok(near(rnb.memory, 0.153), "memory share " + rnb.memory);
+assert.ok(near(rnb.equipment, 0.013), "equipment share " + rnb.equipment);
+assert.ok(near(rnb.invest, 0.009), "invest share " + rnb.invest);
+assert.ok(near(rnb.app, 0.024), "app share " + rnb.app);
+assert.ok(near(rnb.cloud, 0.276), "cloud share " + rnb.cloud);   // 新环节: 4 家 hyperscaler 折算后占比
 
 // ≈2023 has a memory downcycle → negative stage value tolerated (no crash, view renders neg)
 assert.ok(realMig[0].stages.find(s => s.stage === "memory").value < 0, "2023 memory AI-weighted negative");
