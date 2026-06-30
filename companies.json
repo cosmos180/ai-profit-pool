@@ -188,6 +188,8 @@
           "gross_margin": 0.711,
           "op_income": 130.39,
           "net_income": 120.1,
+          "capex": 6.1,
+          "cfo": 102.7,
           "segments": [
             {
               "name": "Data Center 数据中心",
@@ -244,6 +246,11 @@
               "label": "FY2026 10-K",
               "url": "https://www.publicnow.com/view/2882BBE40A7C6C824C8A8D4C36B7AE84D3C63264?1772059708=",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2026 现金流量表，CFO $102.7B / capex（购建固定资产）$6.1B，待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+              "data_status": "estimate"
             }
           ]
         },
@@ -394,6 +401,8 @@
           "gross_margin": null,
           "op_income": 30.666,
           "net_income": 31.131,
+          "capex": 37.07,
+          "cfo": 60.01,
           "segments": [
             {
               "name": "DX 终端体验（手机/家电/网络）",
@@ -438,6 +447,11 @@
               "label": "Samsung 2025 合并财报（净利润）",
               "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 合并现金流：CFO KRW 85.32T ÷ 1421.779 = $60.01B；capex KRW 52.7T ÷ 1421.779 = $37.07B，KRW 换算待核验）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+              "data_status": "derived"
             }
           ]
         }
@@ -551,6 +565,8 @@
           "gross_margin": 0.678,
           "op_income": 25.484,
           "net_income": 23.126,
+          "capex": 0.623,
+          "cfo": 27.537,
           "segments": [
             {
               "name": "Semiconductor solutions 半导体解决方案",
@@ -574,6 +590,11 @@
               "label": "Broadcom FY2025 10-K（Segment Information）",
               "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 Q4 业绩新闻稿现金流，CFO $27,537M / capex $623M，待核验）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+              "data_status": "estimate"
             }
           ]
         }
@@ -958,6 +979,8 @@
           "gross_margin": 0.398,
           "op_income": 9.77,
           "net_income": 8.539,
+          "capex": 13.8,
+          "cfo": 17.53,
           "segments": [
             {
               "name": "CMBU 云存储",
@@ -1005,6 +1028,11 @@
               "label": "Micron FY2025 10-K（Note 26 Segment Disclosures）",
               "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 现金流量表，CFO $17.53B / capex（投资固定资产，净）$13.80B，待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
+              "data_status": "estimate"
             }
           ]
         }
@@ -1306,6 +1334,8 @@
           "gross_margin": 0.599,
           "op_income": 61.718,
           "net_income": 54.116,
+          "capex": 40.9,
+          "cfo": 73.3,
           "segments": [
             {
               "name": "HPC 高性能计算",
@@ -1361,6 +1391,11 @@
               "label": "TSMC FY2025 Form 20-F（SEC Filing）",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex（TSMC 自报美元 US$40.9B）/ CFO（NT$≈2.3T ÷ 31.37 = $73.3B；FCF 交叉校验 ≈ NT$1T ≈ $32B，换算待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617926000008/a4q25e_withguidancexfinal.htm",
+              "data_status": "estimate"
             }
           ]
         }
@@ -1506,6 +1541,8 @@
           "gross_margin": 0.528,
           "op_income": 12.77,
           "net_income": 10.858,
+          "capex": 1.574,
+          "cfo": 12.659,
           "segments": [
             {
               "name": "EUV 先进光刻系统",
@@ -1545,6 +1582,11 @@
               "label": "ASML FY2025 Form 20-F（SEC Edgar）",
               "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 现金流，EUR 口径与营收一致：CFO €12.659B / capex（购建固定资产）€1.574B，待核验）",
+              "url": "https://ourbrand.asml.com/m/419103cb23dfeaa4/original/asml-2025-annual-report-financial-performance-section.pdf",
+              "data_status": "estimate"
             }
           ]
         }
