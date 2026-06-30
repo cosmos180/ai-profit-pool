@@ -64,6 +64,12 @@ def check(data):
             price = q.get("price")
             if price is not None and price <= 0:
                 errors.append(f"ERROR {cid}/quote: price 若存在需 > 0（当前 {price}）")
+            nd = q.get("net_debt")
+            if nd is not None and not isinstance(nd, (int, float)):
+                errors.append(f"ERROR {cid}/quote: net_debt 若存在需为数值（当前 {nd!r}）")
+            # net_debt 不该等于 −market_cap 量级以下（EV<0 极不合理，提示口径错误）
+            if isinstance(nd, (int, float)) and mc and (mc + nd) < 0:
+                errors.append(f"ERROR {cid}/quote: net_debt {nd} 使 EV = 市值+净负债 < 0（口径异常）")
             qsrc = q.get("sources") or []
             if not qsrc:
                 errors.append(f"ERROR {cid}/quote: 缺少 sources")
@@ -100,6 +106,10 @@ def check(data):
                     parts.append(f"PS {round(mc / rev, 1)}" + ("(失真)" if cav.get("ps") == "distorted" else ""))
                 if cav.get("fcf_yield") != "na" and cfo is not None and capex is not None and mc:
                     parts.append(f"FCF yield {round((cfo - capex) / mc * 100, 1)}%" + ("(失真)" if cav.get("fcf_yield") == "distorted" else ""))
+                nd = q.get("net_debt")
+                if cav.get("ev_sales") != "na" and nd is not None and rev:
+                    ev = mc + nd
+                    parts.append(f"EV {round(ev, 1)}(净{'负债' if nd > 0 else '现金'} {abs(round(nd,1))}) · EV/Sales {round(ev / rev, 1)}" + ("(失真)" if cav.get("ev_sales") == "distorted" else ""))
                 if parts:
                     oks.append(f"INFO  {cid}/quote: 市值 {mc} USD bn @ {as_of_raw} → 可派生 {' · '.join(parts)}（基于 {ly.get('fy')}）")
                 else:

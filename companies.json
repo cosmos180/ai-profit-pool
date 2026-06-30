@@ -21,6 +21,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 4660.0,
+        "net_debt": -54.09,
         "price": 192.53,
         "price_currency": "USD",
         "sources": [
@@ -32,6 +33,11 @@
           {
             "label": "stockanalysis.com — NVDA close $192.53 @ 2026-06-26",
             "url": "https://stockanalysis.com/stocks/nvda/history/",
+            "data_status": "official"
+          },
+          {
+            "label": "net_debt：FY2026 10-K 资产负债表（截至 2026-01-25）有息债务 = 短债 $0.999B + 长债 $7.469B = $8.468B；减 现金及等价物 $10.605B + 有价证券 $51.951B = $62.556B → 净现金 −$54.09B（口径：排经营租赁；现金含有价证券）",
+            "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
             "data_status": "official"
           }
         ]
@@ -188,6 +194,8 @@
           "gross_margin": 0.711,
           "op_income": 130.39,
           "net_income": 120.1,
+          "capex": 6.1,
+          "cfo": 102.7,
           "segments": [
             {
               "name": "Data Center 数据中心",
@@ -244,6 +252,11 @@
               "label": "FY2026 10-K",
               "url": "https://www.publicnow.com/view/2882BBE40A7C6C824C8A8D4C36B7AE84D3C63264?1772059708=",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2026 现金流量表，CFO $102.7B / capex（购建固定资产）$6.1B，待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+              "data_status": "estimate"
             }
           ]
         },
@@ -312,6 +325,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 1340.0,
+        "net_debt": -64.39,
         "sources": [
           {
             "label": "companiesmarketcap.com — Samsung market cap (KRW 2,056.67T @ 2026-06-26)",
@@ -322,6 +336,11 @@
             "label": "派生：本地市值 KRW 2,056.67T ÷ USD/KRW 1535（含优先股 005935，仅近似）",
             "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
             "data_status": "derived"
+          },
+          {
+            "label": "net_debt（派生）：2025 年末合并资产负债表 有息债务 ≈ KRW 6.30T，现金及短期金融工具 ≈ KRW 105.13T → 净现金 KRW −98.83T ÷ USD/KRW 1535（与市值同口径汇率）= −$64.39B（口径：排经营租赁；现金含短期金融工具/投资；换算待核验）",
+            "url": "https://stockanalysis.com/quote/krx/005930/financials/balance-sheet/",
+            "data_status": "estimate"
           }
         ]
       },
@@ -394,6 +413,8 @@
           "gross_margin": null,
           "op_income": 30.666,
           "net_income": 31.131,
+          "capex": 37.07,
+          "cfo": 60.01,
           "segments": [
             {
               "name": "DX 终端体验（手机/家电/网络）",
@@ -438,6 +459,11 @@
               "label": "Samsung 2025 合并财报（净利润）",
               "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 合并现金流：CFO KRW 85.32T ÷ 1421.779 = $60.01B；capex KRW 52.7T ÷ 1421.779 = $37.07B，KRW 换算待核验）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+              "data_status": "derived"
             }
           ]
         }
@@ -459,6 +485,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 1736.0,
+        "net_debt": 49.6,
         "price": 365.02,
         "price_currency": "USD",
         "sources": [
@@ -471,6 +498,11 @@
             "label": "stockanalysis.com — AVGO close $365.02 @ 2026-06-26",
             "url": "https://stockanalysis.com/stocks/avgo/",
             "data_status": "official"
+          },
+          {
+            "label": "net_debt（估算）：FY2025（截至 2025-11-02）长期债务 ≈ $63.8B，减 现金及等价物 ≈ $14.2B → 净负债 ≈ +$49.6B（口径：排经营租赁；当前部分债务暂未单列，可能略低估总债务，待核验 10-K）",
+            "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
+            "data_status": "estimate"
           }
         ]
       },
@@ -551,6 +583,8 @@
           "gross_margin": 0.678,
           "op_income": 25.484,
           "net_income": 23.126,
+          "capex": 0.623,
+          "cfo": 27.537,
           "segments": [
             {
               "name": "Semiconductor solutions 半导体解决方案",
@@ -574,6 +608,11 @@
               "label": "Broadcom FY2025 10-K（Segment Information）",
               "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 Q4 业绩新闻稿现金流，CFO $27,537M / capex $623M，待核验）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+              "data_status": "estimate"
             }
           ]
         }
@@ -595,6 +634,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 206.0,
+        "net_debt": 125.47,
         "sources": [
           {
             "label": "stockanalysis.com — SoftBank Group 市值 ~JPY 33.34T @ 2026-06",
@@ -605,6 +645,11 @@
             "label": "派生：本地市值 JPY 33.34T ÷ USD/JPY 161.8",
             "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ja.htm",
             "data_status": "derived"
+          },
+          {
+            "label": "net_debt（估算）：FY2025（截至 2026-03-31）合并有息债务 ≈ JPY 25.66T，减 现金及等价物 ≈ JPY 5.36T → 净负债 JPY 20.30T ÷ USD/JPY 161.8 = +$125.47B（口径：合并报表含 SoftBank 电信/愿景基金子公司债务，排经营租赁；投资控股高杠杆，EV 口径特殊，待核验）",
+            "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+            "data_status": "estimate"
           }
         ]
       },
@@ -612,7 +657,8 @@
         "pe": "na",
         "fcf_yield": "na",
         "ps": "distorted",
-        "note": "投资控股公司，净利润含愿景基金投资公允价值损益，PE/FCF yield 不反映经营盈利能力；PS 仅供参考（营收主要来自电信，非其 AI 投资价值载体）"
+        "ev_sales": "distorted",
+        "note": "投资控股公司，净利润含愿景基金投资公允价值损益，PE/FCF yield 不反映经营盈利能力；PS / EV/Sales 仅供参考（营收主要来自电信子公司，非其 AI 投资价值载体；合并净负债含电信子公司债务，EV/Sales 失真，显示但降级）"
       },
       "years": [
         {
@@ -806,6 +852,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 1270.0,
+        "net_debt": 5.05,
         "sources": [
           {
             "label": "companiesmarketcap.com — Micron market cap (~US$1.27T @ 2026-06-28)",
@@ -816,6 +863,11 @@
             "label": "stockanalysis.com — MU 市值/价格历史",
             "url": "https://stockanalysis.com/stocks/mu/market-cap/",
             "data_status": "official"
+          },
+          {
+            "label": "net_debt（估算）：FY2025（截至 2025-08-28）有息债务 ≈ $15.352B，减 现金及等价物 $9.642B + 短期投资 $0.665B = $10.307B → 净负债 +$5.05B（口径：排经营租赁与长期有价投资 $1.629B；待核验 10-K）",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
+            "data_status": "estimate"
           }
         ]
       },
@@ -958,6 +1010,8 @@
           "gross_margin": 0.398,
           "op_income": 9.77,
           "net_income": 8.539,
+          "capex": 13.8,
+          "cfo": 17.53,
           "segments": [
             {
               "name": "CMBU 云存储",
@@ -1005,6 +1059,11 @@
               "label": "Micron FY2025 10-K（Note 26 Segment Disclosures）",
               "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 现金流量表，CFO $17.53B / capex（投资固定资产，净）$13.80B，待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
+              "data_status": "estimate"
             }
           ]
         }
@@ -1025,6 +1084,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 1236.0,
+        "net_debt": -8.27,
         "price": 2628000.0,
         "price_currency": "KRW",
         "sources": [
@@ -1037,6 +1097,11 @@
             "label": "派生：本地市值 KRW 1,897.44T ÷ USD/KRW 1535",
             "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
             "data_status": "derived"
+          },
+          {
+            "label": "net_debt（估算）：2025 年末公司转为净现金，借款 ≈ KRW 22.2T，现金及等价物 ≈ KRW 34.9T → 净现金 KRW −12.7T ÷ USD/KRW 1535（与市值同口径汇率）= −$8.27B（口径：排经营租赁；仅计现金及等价物，未加短期投资故偏保守；换算待核验）",
+            "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+            "data_status": "estimate"
           }
         ]
       },
@@ -1101,6 +1166,8 @@
           "gross_margin": null,
           "op_income": 33.202,
           "net_income": 30.207,
+          "capex": 19.36,
+          "cfo": 37.3,
           "segments": [
             {
               "name": "Memory 存储器",
@@ -1116,6 +1183,11 @@
               "label": "SK hynix FY2025 Financial Results",
               "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 연결 현금흐름표 / 사업보고서：CFO KRW 53.04T ÷ 1421.779 = $37.30B；capex（유형자산 취득）KRW 27.52T ÷ 1421.779 = $19.36B。CFO > 净利 42.95T、FCF≈+25.5T 与 2025 上行周期一致；KRW 换算待核验）",
+              "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+              "data_status": "derived"
             }
           ]
         }
@@ -1136,6 +1208,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 2360.0,
+        "net_debt": -69.26,
         "price": 432.35,
         "price_currency": "USD",
         "sources": [
@@ -1148,6 +1221,11 @@
             "label": "stockanalysis.com — TSM(ADR) close $432.35 @ 2026-06-26（ADR 计价，含台股+ADR 全口径）",
             "url": "https://stockanalysis.com/stocks/tsm/",
             "data_status": "official"
+          },
+          {
+            "label": "net_debt（估算）：4Q25（截至 2025-12-31）长期有息债务 ≈ NT$896.06B，减 现金及有价证券 ≈ NT$3,068.59B → 净现金 NT$−2,172.53B ÷ NT/USD 31.37（期末 Noon Buying，与营收换算一致）= −$69.26B（口径：排经营租赁；“现金及有价证券”或含部分长期有价金融资产，真实净现金或略小，方向稳健，待核验合并报表）",
+            "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617926000024/a2025q4consolidatedreport-.htm",
+            "data_status": "estimate"
           }
         ]
       },
@@ -1306,6 +1384,8 @@
           "gross_margin": 0.599,
           "op_income": 61.718,
           "net_income": 54.116,
+          "capex": 40.9,
+          "cfo": 73.3,
           "segments": [
             {
               "name": "HPC 高性能计算",
@@ -1361,6 +1441,11 @@
               "label": "TSMC FY2025 Form 20-F（SEC Filing）",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex（TSMC 自报美元 US$40.9B）/ CFO（NT$≈2.3T ÷ 31.37 = $73.3B；FCF 交叉校验 ≈ NT$1T ≈ $32B，换算待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617926000008/a4q25e_withguidancexfinal.htm",
+              "data_status": "estimate"
             }
           ]
         }
@@ -1382,6 +1467,7 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 711.0,
+        "net_debt": -11.33,
         "price": 1794.62,
         "price_currency": "USD",
         "sources": [
@@ -1394,6 +1480,11 @@
             "label": "stockanalysis.com — ASML(US) close $1,794.62 @ 2026-06-26",
             "url": "https://stockanalysis.com/stocks/asml/history/",
             "data_status": "official"
+          },
+          {
+            "label": "net_debt（估算）：FY2025（截至 2025-12-31）有息债务 ≈ €2.71B，减 现金及等价物+短期投资 ≈ €12.741B → 净现金 €−10.031B × EUR/USD 1.129983（与营收年均汇率一致）= −$11.33B（口径：排经营租赁；现金含短期投资；待核验年报）",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828025045043/pressreleasequarterlyresul.htm",
+            "data_status": "estimate"
           }
         ]
       },
@@ -1506,6 +1597,8 @@
           "gross_margin": 0.528,
           "op_income": 12.77,
           "net_income": 10.858,
+          "capex": 1.574,
+          "cfo": 12.659,
           "segments": [
             {
               "name": "EUV 先进光刻系统",
@@ -1545,6 +1638,11 @@
               "label": "ASML FY2025 Form 20-F（SEC Edgar）",
               "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
               "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 现金流，EUR 口径与营收一致：CFO €12.659B / capex（购建固定资产）€1.574B，待核验）",
+              "url": "https://ourbrand.asml.com/m/419103cb23dfeaa4/original/asml-2025-annual-report-financial-performance-section.pdf",
+              "data_status": "estimate"
             }
           ]
         }
