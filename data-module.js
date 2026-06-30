@@ -178,6 +178,136 @@ const Selectors = {
     return null;
   },
 
+  /* ---- shared value-chain aggregation atom ----
+     Given rows [{id, name, ni}] (ni = a net-income measure, FY or TTM) and a total,
+     fold them into the canonical STAGE_ORDER buckets. Reused by both the annual
+     profit-pool migration and the TTM profit pool so the two口径 never drift.
+     ni may be negative (memory downcycle); share = value/total when total>0 (the
+     view renders negatives), else null. companies[] preserves per-member traceability. */
+  _aggregateStages(rows, total) {
+    return STAGE_ORDER.map(stage => {
+      const members = rows.filter(r => STAGE_OF[r.id] === stage);
+      const value = members.reduce((s, r) => s + r.ni, 0);
+      return {
+        stage,
+        label: STAGE_LABEL[stage],
+        value,
+        share: total ? value / total : null,
+        companies: members.map(r => ({ id: r.id, name: r.name, ni: r.ni, asOf: r.asOf })),
+      };
+    });
+  },
+
+  /* ---- TTM (trailing-twelve-month) net income, self-rolled ----
+     口径 (architect): TTM = latest complete FY net_income
+                            + Σ quarters reported AFTER that FY-end
+                            − Σ the year-ago matching quarters (~365d earlier).
+     Works purely off quarters[].period_end (machine ISO date) — NEVER parses
+     `label`, NEVER touches years[].period_end (free text). Generalises to N
+     trailing quarters (e.g. Micron with 3 post-FY quarters).
+     Returns null (honest gap) if ANY required atom is missing:
+       no latest complete FY net_income / a post-FY quarter's net_income is null /
+       no ~365d-ago match for some add-on quarter / that match's net_income is null. */
+  DAY_MS: 86400000,
+  YEAR_TOL_DAYS: 45,
+
+  _parseDate(s) {
+    if (typeof s !== "string") return null;
+    const t = Date.parse(s);
+    return Number.isNaN(t) ? null : t;
+  },
+  /* quarters carrying a parseable period_end, ascending by date */
+  _datedQuarters(c) {
+    return (c.quarters || [])
+      .map(q => ({ q, t: this._parseDate(q.period_end) }))
+      .filter(x => x.t != null)
+      .sort((a, b) => a.t - b.t);
+  },
+
+  ttmNetIncome(c) {
+    if (!c) return null;
+    // anchor on the latest COMPLETE fiscal year with a non-null net_income
+    const fy = this.latestActual(c);
+    if (!fy || fy.net_income == null) return null;
+
+    const dq = this._datedQuarters(c);
+    if (!dq.length) return null;                       // no quarters → cannot self-roll → null (honest)
+
+    // Add-on quarters = the post-FY-end quarters, identified PURELY by date pairing
+    // (never by parsing label or the free-text years[].period_end):
+    // a quarter is an add-on iff it has a ~365-day-EARLIER counterpart also in the set
+    // (that earlier counterpart is the in-FY year-ago quarter we subtract). The
+    // year-ago quarters themselves are NOT add-ons (their own ~365d-ago twin isn't
+    // recorded). This generalises to N trailing quarters (Micron → 3 add-ons + 3 twins).
+    const addOns = dq.filter(x => {
+      const prior = this._matchYearAgo(dq, x.t);
+      return prior && prior.t < x.t;
+    });
+    if (!addOns.length) return null;                   // no complete add-on pair → cannot roll → null
+
+    let ttm = fy.net_income;
+    for (const a of addOns) {
+      if (a.q.net_income == null) return null;          // add-on quarter NI missing → null
+      const prior = this._matchYearAgo(dq, a.t);
+      if (!prior || prior.q.net_income == null) return null; // no/empty year-ago match → null
+      ttm += a.q.net_income - prior.q.net_income;
+    }
+    return ttm;
+  },
+
+  /* find the quarter ~365 days before time t, within ±YEAR_TOL_DAYS (closest wins) */
+  _matchYearAgo(dq, t) {
+    const target = t - 365 * this.DAY_MS;
+    const tol = this.YEAR_TOL_DAYS * this.DAY_MS;
+    let best = null, bestD = Infinity;
+    for (const x of dq) {
+      const d = Math.abs(x.t - target);
+      if (d <= tol && d < bestD) { bestD = d; best = x; }
+    }
+    return best;
+  },
+
+  /* as-of date (ISO string) of a company's latest reported quarter, or null */
+  ttmAsOf(c) {
+    const dq = this._datedQuarters(c);
+    return dq.length ? dq[dq.length - 1].q.period_end : null;
+  },
+
+  /* ---- TTM profit pool (value-chain stacked, self-rolled per company) ----
+     Per-company null-safe: a company whose ttmNetIncome is null simply does not
+     contribute (not imputed); total accumulates only non-null TTMs. Reuses the same
+     _aggregateStages atom as the annual migration so stage口径 cannot drift.
+     asOfSpreadDays = max−min of contributing companies' latest-quarter dates — lets
+     the view warn that the TTM cross-section is not perfectly date-aligned. */
+  profitPoolTTM(companies) {
+    const list = companies || [];
+    const rows = [];
+    let spreadMin = Infinity, spreadMax = -Infinity;
+    for (const c of list) {
+      const ttm = this.ttmNetIncome(c);
+      if (ttm == null) continue;                        // honest gap: skip, never impute
+      const asOf = this.ttmAsOf(c);
+      const t = this._parseDate(asOf);
+      if (t != null) { if (t < spreadMin) spreadMin = t; if (t > spreadMax) spreadMax = t; }
+      rows.push({ id: c.id, name: c.name, ni: ttm, asOf });
+    }
+    const total = rows.reduce((s, r) => s + r.ni, 0);
+    const stages = this._aggregateStages(rows, total).map(s => ({
+      ...s,
+      companies: s.companies.map(m => ({ id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf })),
+    }));
+    const asOfSpreadDays = rows.length
+      ? Math.round((spreadMax - spreadMin) / this.DAY_MS)
+      : null;
+    return {
+      label: "TTM(截至各家最近季报)",
+      total,
+      n: rows.length,
+      asOfSpreadDays,
+      stages,
+    };
+  },
+
   /* ---- profit-pool migration (value-chain stacked, sample-complete years only) ----
      Aligns companies by "position from latest actual year" (pos 0 = each company's
      newest actual, pos 1 = prior actual, …) — same source as the home-page YoY
@@ -204,17 +334,7 @@ const Selectors = {
       if (!complete || rows.length !== list.length) continue;
 
       const total = rows.reduce((s, r) => s + r.ni, 0);
-      const stages = STAGE_ORDER.map(stage => {
-        const members = rows.filter(r => STAGE_OF[r.id] === stage);
-        const value = members.reduce((s, r) => s + r.ni, 0);
-        return {
-          stage,
-          label: STAGE_LABEL[stage],
-          value,
-          share: total ? value / total : null,
-          companies: members.map(r => ({ id: r.id, name: r.name, ni: r.ni })),
-        };
-      });
+      const stages = this._aggregateStages(rows, total);
 
       positions.push({
         pos,
