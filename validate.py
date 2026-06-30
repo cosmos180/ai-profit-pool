@@ -39,11 +39,49 @@ def schema_check(data, schema_path):
 def check(data):
     errors, warns, oks = [], [], []
     seen_ids = set()
+
+    # ---- meta.stages 引用完整性（仅当存在；保持对旧数据非破坏）----
+    stage_keys = set()
+    stages = (data.get("meta") or {}).get("stages")
+    if stages is not None:
+        seen_stage = set()
+        for st in stages:
+            k = st.get("key")
+            if k in seen_stage:
+                errors.append(f"ERROR meta.stages: 环节 key 重复: {k}")
+            seen_stage.add(k)
+        stage_keys = seen_stage
+
     for c in data.get("companies", []):
         cid = c.get("id", "?")
         if cid in seen_ids:
             errors.append(f"ERROR 公司 id 重复: {cid}")
         seen_ids.add(cid)
+
+        # ---- chain_stage 引用完整性（仅当字段存在）----
+        cs = c.get("chain_stage")
+        if cs is not None:
+            if not stage_keys:
+                errors.append(f"ERROR {cid}: chain_stage='{cs}' 但 meta.stages 未定义，无法校验引用")
+            elif cs not in stage_keys:
+                errors.append(f"ERROR {cid}: chain_stage='{cs}' 不在 meta.stages 的 key 集合 {sorted(stage_keys)}")
+
+        # ---- AI 归因 share（仅当非空）：∈[0,1] 且必须带 ai_share_source（每条 url+data_status）----
+        ai_shares = {k: c.get(k) for k in ("ai_profit_share", "ai_revenue_share") if c.get(k) is not None}
+        if ai_shares:
+            for k, v in ai_shares.items():
+                if not isinstance(v, (int, float)) or not (0 <= v <= 1):
+                    errors.append(f"ERROR {cid}: {k}={v!r} 不在 [0,1]")
+            src = c.get("ai_share_source") or []
+            if not src:
+                errors.append(f"ERROR {cid}: {'/'.join(ai_shares)} 非空但缺少 ai_share_source（provenance 必填）")
+            for s in src:
+                url = s.get("url") or ""
+                parsed = urlparse(url)
+                if parsed.scheme not in ("http", "https") or not parsed.netloc:
+                    errors.append(f"ERROR {cid}/ai_share_source: source URL 非 http(s) 绝对链接: {url or '空'}")
+                if not s.get("url") or not s.get("data_status"):
+                    errors.append(f"ERROR {cid}/ai_share_source: source 缺少 url 或 data_status")
 
         if c.get("status") == "pending":
             if not c.get("planned_source"):
