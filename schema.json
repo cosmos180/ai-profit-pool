@@ -38,7 +38,8 @@
         "planned_source": {"type": "string"},
         "quote": {"$ref": "#/definitions/quote"},
         "valuation_caveat": {"$ref": "#/definitions/valuation_caveat"},
-        "years": {"type": "array", "items": {"$ref": "#/definitions/year"}}
+        "years": {"type": "array", "items": {"$ref": "#/definitions/year"}},
+        "quarters": {"type": "array", "items": {"$ref": "#/definitions/quarter"}, "description": "Optional quarterly atoms (raw facts only). TTM is DERIVED in Selectors (算不存): TTM = latest complete FY + quarters reported after that FY-end − the year-ago matching quarters. Never store TTM here. period_end is a machine-readable ISO date (deliberately NOT the free-text path of years[].period_end), so the Selector can date-align quarters."}
       }
     },
     "quote": {
@@ -94,6 +95,19 @@
           "then": {"required": ["revenue", "net_income", "sources"]}
         }
       ]
+    },
+    "quarter": {
+      "type": "object",
+      "description": "A single reported fiscal quarter — raw atoms only. Exists to power DERIVED TTM (净利率/PE 等 TTM 口径) in Selectors; TTM itself is never stored. Distortion (e.g. SoftBank quarterly net income carrying investment gains/losses) is handled in the derived layer via valuation_caveat, not here — such companies may simply omit quarters.",
+      "required": ["period_end", "label", "sources"],
+      "additionalProperties": false,
+      "properties": {
+        "period_end": {"type": "string", "format": "date", "description": "Quarter-end date, ISO 8601 (YYYY-MM-DD). Machine-readable — the Selector uses this to pick the latest quarter and find its ~365-day-ago match. Do NOT use the free-text style of years[].period_end."},
+        "label": {"type": "string", "description": "Human label for the quarter, e.g. 'Q1 FY2027' or 'CQ1 2026'. Display only; never parsed for date math (use period_end)."},
+        "net_income": {"type": ["number", "null"], "description": "Quarterly net income in meta.unit (USD bn). null = reported-but-unknown / not yet captured. The atom TTM net income rolls from."},
+        "revenue": {"type": ["number", "null"], "description": "Optional quarterly revenue in meta.unit (USD bn). Enables TTM revenue / PS-TTM derivation."},
+        "sources": {"type": "array", "items": {"$ref": "#/definitions/source"}, "description": "Provenance, mandatory per project invariant — each carries url + data_status."}
+      }
     },
     "segment": {
       "type": "object",
