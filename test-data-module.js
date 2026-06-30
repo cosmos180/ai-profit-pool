@@ -575,26 +575,16 @@ assert.equal(ab.design, 10); assert.equal(ab.foundry, 20); assert.equal(ab.equip
 assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
 
 // =====================================================================
-// real data: head-company TTM self-roll sanity (draft scope)
+// real data: no quarterly data recorded yet. Web sources are unreliable in
+// this environment (financial sites 403; search summaries conflated
+// cumulative/annual figures), so quarters[] was reverted — TTM is honestly
+// empty. The capability (contract + self-roll selectors above) stays; real
+// quarterly net income awaits primary sources (10-Q/IR).
 // =====================================================================
 const realTtm = Selectors.profitPoolTTM(Store.populated());
-// recorded heads: nvda, tsmc, samsung, skhynix, asml (5); broadcom/micron/softbank no quarters → null
-assert.equal(realTtm.n, 5);
-assert.equal(Selectors.ttmNetIncome(Store.byId("broadcom")), null); // no quarters → honest null
+assert.equal(realTtm.n, 0);
+assert.equal(realTtm.total, 0);
+assert.equal(Selectors.ttmNetIncome(Store.byId("nvda")), null);
 assert.equal(Selectors.ttmNetIncome(Store.byId("softbank")), null);
-assert.equal(Selectors.ttmNetIncome(Store.byId("micron")), null);
-// NVDA TTM = FY2026 120.1 + (Q1FY27 58.3 − Q1FY26 18.8) = 159.6
-assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("nvda")) * 10) / 10, 159.6);
-// TSMC TTM = FY2025 54.116 + (1Q26 18.12 − 1Q25 11.0) = 61.236
-assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("tsmc")) * 100) / 100, 61.24);
-// asOf spread small (Apr-26 vs Mar-31) and within a quarter
-assert.ok(realTtm.asOfSpreadDays >= 0 && realTtm.asOfSpreadDays <= 31, "spread " + realTtm.asOfSpreadDays);
-// all recorded heads positive in current up-cycle
-for (const s of realTtm.stages)
-  for (const m of s.companies) assert.ok(m.ttm > 0, m.id + " ttm " + m.ttm);
-// invest empty (softbank no quarters) → 0 share in TTM cross-section (coverage caveat, not imputed)
-const rb = Object.fromEntries(realTtm.stages.map(s => [s.stage, s]));
-assert.equal(rb.invest.companies.length, 0);
-assert.equal(rb.invest.value, 0);
 
 console.log("data-module tests passed");
