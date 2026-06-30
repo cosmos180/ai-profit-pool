@@ -98,6 +98,56 @@ const Selectors = {
     return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
   },
 
+  /* ---- income-statement flow (for the FY drill-down Sankey) ----
+     Left→right money flow of the P&L, in USD bn, derived ENTIRELY from existing
+     fields (算不存). Strictly null-safe: a missing input leaves that link null and
+     flips its has.* flag false so the view degrades honestly (renders a simplified
+     flow) instead of fabricating a 0 or estimating a margin.
+       segments[] = revenueSorted(y) (left tributaries into revenue; [] if undisclosed)
+       cogs/grossProfit  from gross_margin (both null if gross_margin missing)
+       opex              = grossProfit − opProfit (null unless BOTH known)
+       opProfit          = y.op_income
+       taxOther          = opProfit − netIncome, SIGNED — negative means net > op
+                           (non-operating gains, e.g. NVDA interest/investment income);
+                           never abs()'d, so the view can show an inflow vs outflow.
+     revenue null (rare) ⇒ whole flow unavailable. */
+  incomeFlow(y) {
+    if (!y || y.revenue == null) {
+      return {
+        segments: [], revenue: null,
+        grossProfit: null, cogs: null,
+        opProfit: null, opex: null,
+        netIncome: null, taxOther: null,
+        has: { gross: false, opex: false, taxOther: false, segments: false },
+      };
+    }
+    const revenue = y.revenue;
+    const segments = this.revenueSorted(y).map(s => ({ name: s.name, revenue: s.revenue, is_ai: !!s.is_ai }));
+
+    const gm = y.gross_margin;
+    const grossProfit = (gm != null) ? revenue * gm : null;
+    const cogs        = (grossProfit != null) ? revenue - grossProfit : null;
+
+    const opProfit = (y.op_income != null) ? y.op_income : null;
+    const opex     = (grossProfit != null && opProfit != null) ? grossProfit - opProfit : null;
+
+    const netIncome = (y.net_income != null) ? y.net_income : null;
+    const taxOther  = (opProfit != null && netIncome != null) ? opProfit - netIncome : null;
+
+    return {
+      segments, revenue,
+      grossProfit, cogs,
+      opProfit, opex,
+      netIncome, taxOther,
+      has: {
+        gross:    grossProfit != null,
+        opex:     opex != null,
+        taxOther: taxOther != null,
+        segments: segments.length > 0,
+      },
+    };
+  },
+
   /* Does this year disclose profit at the segment level?
      Drives whether the drill-down shows a real profit table or an honest gap. */
   hasSegmentProfit(y) { return this.revenueSegs(y).some(s => s.op_income != null); },

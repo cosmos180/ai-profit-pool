@@ -116,6 +116,129 @@ assert.equal(Selectors.capexIntensity(halfCash), 0.3); // capex intensity needs 
 assert.equal(Selectors.homeMetric({ years: [cashYear] }, "fcfMargin"), 0.2);
 assert.equal(Selectors.homeMetric({ years: [cashYear] }, "capexInt"), 0.3);
 
+// =====================================================================
+// incomeFlow: P&L left→right money flow for the FY-drill-down Sankey
+// (派生自现有字段, null-safe, taxOther 带符号)
+// =====================================================================
+
+// ---- synthetic: fully-populated year, every node derivable ----
+// rev 100, gross_margin .6 → grossProfit 60 / cogs 40; op 25 → opex 35; net 18 → taxOther 7
+const ifFull = {
+  fy: "FY1", status: "actual", revenue: 100, gross_margin: 0.6, op_income: 25, net_income: 18,
+  segments: [
+    { name: "AI 平台", kind: "platform", revenue: 70, is_ai: true },
+    { name: "其他",   kind: "platform", revenue: 30, is_ai: false },
+  ],
+};
+const flowFull = Selectors.incomeFlow(ifFull);
+assert.equal(flowFull.revenue, 100);
+assert.equal(flowFull.grossProfit, 60);          // 100 * 0.6
+assert.equal(flowFull.cogs, 40);                 // 100 − 60
+assert.equal(flowFull.opProfit, 25);
+assert.equal(flowFull.opex, 35);                 // grossProfit 60 − op 25
+assert.equal(flowFull.netIncome, 18);
+assert.equal(flowFull.taxOther, 7);              // op 25 − net 18 (正=税+其他净流出)
+assert.deepEqual(flowFull.has, { gross: true, opex: true, taxOther: true, segments: true });
+// segments come from revenueSorted (desc), carry is_ai, [] never null
+assert.deepEqual(flowFull.segments.map(s => s.name), ["AI 平台", "其他"]);
+assert.equal(flowFull.segments[0].is_ai, true);
+assert.equal(flowFull.segments[1].is_ai, false);
+
+// ---- synthetic: gross_margin missing (Micron FY2023 / SoftBank shape) ----
+// gross/cogs/opex 不可画, 但 segments→revenue 和 revenue→…→net 简化流仍在
+const ifNoGross = {
+  fy: "FY2", status: "actual", revenue: 100, gross_margin: null, op_income: 25, net_income: 18,
+  segments: [{ name: "S", kind: "platform", revenue: 100, is_ai: false }],
+};
+const flowNoGross = Selectors.incomeFlow(ifNoGross);
+assert.equal(flowNoGross.grossProfit, null);
+assert.equal(flowNoGross.cogs, null);
+assert.equal(flowNoGross.opex, null);            // 缺 grossProfit → opex 不可算
+assert.equal(flowNoGross.has.gross, false);
+assert.equal(flowNoGross.has.opex, false);
+assert.equal(flowNoGross.revenue, 100);          // segments 与 revenue 仍在
+assert.equal(flowNoGross.netIncome, 18);
+assert.equal(flowNoGross.opProfit, 25);
+assert.equal(flowNoGross.taxOther, 7);           // op/net 齐 → taxOther 仍可算
+assert.equal(flowNoGross.has.taxOther, true);
+assert.equal(flowNoGross.has.segments, true);
+
+// ---- synthetic: op_income missing (SoftBank shape) → opex/opProfit/taxOther 段不可画 ----
+const ifNoOp = {
+  fy: "FY3", status: "actual", revenue: 100, gross_margin: 0.6, op_income: null, net_income: 30,
+  segments: [{ name: "S", kind: "division", revenue: 80, is_ai: false }],
+};
+const flowNoOp = Selectors.incomeFlow(ifNoOp);
+assert.equal(flowNoOp.opProfit, null);
+assert.equal(flowNoOp.opex, null);               // 缺 op → opex 不可算
+assert.equal(flowNoOp.taxOther, null);           // 缺 op → taxOther 不可算
+assert.equal(flowNoOp.has.opex, false);
+assert.equal(flowNoOp.has.taxOther, false);
+assert.equal(flowNoOp.grossProfit, 60);          // gross 仍可画
+assert.equal(flowNoOp.cogs, 40);
+assert.equal(flowNoOp.has.gross, true);
+assert.equal(flowNoOp.netIncome, 30);            // revenue/net 仍在
+assert.equal(flowNoOp.revenue, 100);
+
+// ---- synthetic: taxOther 负值 (net > op, 非经营收益流入, 如实带符号不取绝对值) ----
+const ifNetGtOp = {
+  fy: "FY4", status: "actual", revenue: 100, gross_margin: 0.6, op_income: 20, net_income: 26,
+  segments: [],
+};
+const flowNetGtOp = Selectors.incomeFlow(ifNetGtOp);
+assert.equal(flowNetGtOp.taxOther, -6);          // op 20 − net 26 = −6 (非经营净收益, 负号保留)
+assert.equal(flowNetGtOp.has.taxOther, true);
+assert.equal(flowNetGtOp.has.segments, false);   // 无分部 → segments 空, has.segments false
+assert.deepEqual(flowNetGtOp.segments, []);
+
+// ---- synthetic: revenue null (rare) → 整体不可用 ----
+const flowNoRev = Selectors.incomeFlow({ fy: "FY5", status: "actual", revenue: null, gross_margin: 0.6, op_income: 20, net_income: 10 });
+assert.equal(flowNoRev.revenue, null);
+assert.deepEqual(flowNoRev.has, { gross: false, opex: false, taxOther: false, segments: false });
+assert.equal(flowNoRev.grossProfit, null);
+assert.equal(flowNoRev.netIncome, null);
+assert.deepEqual(flowNoRev.segments, []);
+// null year → 同样降级
+assert.equal(Selectors.incomeFlow(null).revenue, null);
+assert.equal(Selectors.incomeFlow(undefined).has.gross, false);
+
+// ---- real data: NVDA latest actual — 全节点自洽 (grossProfit≈revenue*gross_margin) ----
+const nvdaFlowY = Selectors.latestActual(Store.byId("nvda"));
+const nvdaFlow = Selectors.incomeFlow(nvdaFlowY);
+assert.deepEqual(nvdaFlow.has, { gross: true, opex: true, taxOther: true, segments: true });
+assert.equal(nvdaFlow.revenue, nvdaFlowY.revenue);
+assert.ok(Math.abs(nvdaFlow.grossProfit - nvdaFlowY.revenue * nvdaFlowY.gross_margin) < 1e-9);
+assert.ok(Math.abs((nvdaFlow.grossProfit + nvdaFlow.cogs) - nvdaFlow.revenue) < 1e-9); // cogs+gross=rev
+assert.equal(nvdaFlow.opProfit, nvdaFlowY.op_income);
+assert.ok(Math.abs(nvdaFlow.opex - (nvdaFlow.grossProfit - nvdaFlow.opProfit)) < 1e-9);
+assert.equal(nvdaFlow.netIncome, nvdaFlowY.net_income);
+// taxOther = op − net, 带符号 (NVDA FY2026: op 130.39 > net 120.1 → 正, 税+其他净流出)
+assert.ok(Math.abs(nvdaFlow.taxOther - (nvdaFlow.opProfit - nvdaFlow.netIncome)) < 1e-9);
+assert.ok(nvdaFlow.taxOther > 0, "NVDA FY2026 op>net → taxOther 正 " + nvdaFlow.taxOther);
+// 最大分部为 AI 数据中心
+assert.equal(nvdaFlow.segments[0].is_ai, true);
+
+// ---- real data: SoftBank latest actual — op_income 全 null → has.opex=false, revenue/net 仍在 ----
+const sbFlowY = Selectors.latestActual(Store.byId("softbank"));
+const sbFlow = Selectors.incomeFlow(sbFlowY);
+assert.equal(sbFlow.has.opex, false);
+assert.equal(sbFlow.opProfit, null);
+assert.equal(sbFlow.opex, null);
+assert.equal(sbFlow.taxOther, null);             // op null → taxOther 不可算
+assert.equal(sbFlow.revenue, sbFlowY.revenue);   // revenue 仍在
+assert.equal(sbFlow.netIncome, sbFlowY.net_income);
+
+// ---- real data: Micron FY2023 — gross_margin null → has.gross=false ----
+const micFy23 = Selectors.yearByFy(Store.byId("micron"), "FY2023");
+const micFlow = Selectors.incomeFlow(micFy23);
+assert.equal(micFlow.has.gross, false);
+assert.equal(micFlow.grossProfit, null);
+assert.equal(micFlow.cogs, null);
+assert.equal(micFlow.has.opex, false);           // 缺 grossProfit → opex 也不可画
+assert.equal(micFlow.opProfit, micFy23.op_income); // op_income 有值 (−5.745)
+assert.equal(micFlow.revenue, micFy23.revenue);  // revenue 仍在
+assert.equal(micFlow.netIncome, micFy23.net_income);
+
 // ---- valuation: PE / PS / FCF yield (derived from quote vs latest actual; never stored) ----
 const vCompany = {
   id: "v-co", status: "populated",
