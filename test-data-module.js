@@ -201,6 +201,137 @@ assert.equal(Selectors.fcfYield(lagCash), 0.1);                     // 回退 FY
 assert.equal(Selectors.homeMetric(lagCash, "fcfYield"), 0.1);
 
 // =====================================================================
+// EV / EV-Sales / niYoY (PEG 近似的 G) — 派生，算不存，null-safe
+// =====================================================================
+function syn0(id, years) { return { id, name: id.toUpperCase(), status: "populated", years }; }
+
+// 合成：净负债正 → EV>市值；净现金（负 net_debt）→ EV<市值
+const evDebt = { id: "evd", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.netDebt(evDebt), 50);
+assert.equal(Selectors.ev(evDebt), 250);            // 200 + 50（净负债 → EV>市值）
+assert.equal(Selectors.evSales(evDebt), 2.5);       // 250 / 100
+
+const evCash = { id: "evc", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: -60, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.ev(evCash), 140);            // 200 + (−60)（净现金 → EV<市值）
+assert.equal(Selectors.evSales(evCash), 1.4);       // 140 / 100
+
+// 缺 net_debt（区分"缺失"与"0"）→ ev/evSales null（不可假设 EV=市值）
+const evNoDebt = { id: "evn", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.netDebt(evNoDebt), null);
+assert.equal(Selectors.ev(evNoDebt), null);
+assert.equal(Selectors.evSales(evNoDebt), null);
+
+// net_debt 显式为 0（零净负债，已知）→ EV=市值（与"缺失"不同）
+const evZero = { id: "evz", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 0, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.ev(evZero), 200);            // 已知零净负债 → EV=市值
+assert.equal(Selectors.evSales(evZero), 2);
+
+// 缺 market_cap → ev null（即便有 net_debt）
+const evNoMc = { id: "evm", status: "populated",
+  quote: { as_of: "2026-06-26", net_debt: 50, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.ev(evNoMc), null);
+assert.equal(Selectors.evSales(evNoMc), null);
+
+// 零分母 revenue → evSales null
+const evNoRev = { id: "evr", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 0, net_income: 0 }] };
+assert.equal(Selectors.ev(evNoRev), 250);
+assert.equal(Selectors.evSales(evNoRev), null);     // revenue 0 → 零分母
+
+// 仅预测年（无实际年）→ evSales null
+const evFcOnly = { id: "evf", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
+  years: [{ fy: "FY2027E", status: "forecast", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.evSales(evFcOnly), null);
+
+// caveat ev_sales="na" → evSales null（即便分母齐备），但 ev 原子值仍可算
+const evNa = { id: "evna", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
+  valuation_caveat: { ev_sales: "na" },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.evSales(evNa), null);
+assert.equal(Selectors.ev(evNa), 250);
+assert.equal(Selectors.valuationCaveat(evNa, "ev_sales"), "na");
+
+// caveat ev_sales="distorted" → 仍出值（供视图警示）
+const evDist = { id: "evdi", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 100, sources: [] },
+  valuation_caveat: { ev_sales: "distorted" },
+  years: [{ fy: "FY1", status: "actual", revenue: 50, net_income: 10 }] };
+assert.equal(Selectors.evSales(evDist), 6);         // (200+100)/50，distorted 仍算
+assert.equal(Selectors.valuationCaveat(evDist, "ev_sales"), "distorted");
+
+// homeMetric evSales 登记表 key
+assert.equal(Selectors.homeMetric(evDebt, "evSales"), 2.5);
+assert.equal(Selectors.homeMetric(evNoDebt, "evSales"), null);
+assert.equal(Selectors.homeMetric(evNa, "evSales"), null);
+
+// ---- niYoY（PEG 近似的 G）：仅上一年 net_income>0 才算 ----
+const niPos = syn0("ni1", [
+  { fy: "FY1", status: "actual", revenue: 100, net_income: 20 },
+  { fy: "FY2", status: "actual", revenue: 120, net_income: 30 },
+]);
+assert.equal(Selectors.niYoY(niPos), 0.5);          // (30−20)/20
+
+// 上一年净利 ≤0（周期反转）→ null（基期无意义，不可比）
+const niTurn = syn0("ni2", [
+  { fy: "FY1", status: "actual", revenue: 100, net_income: -5 },
+  { fy: "FY2", status: "actual", revenue: 120, net_income: 30 },
+]);
+assert.equal(Selectors.niYoY(niTurn), null);
+const niZeroBase = syn0("ni2b", [
+  { fy: "FY1", status: "actual", revenue: 100, net_income: 0 },
+  { fy: "FY2", status: "actual", revenue: 120, net_income: 30 },
+]);
+assert.equal(Selectors.niYoY(niZeroBase), null);    // 基期 0 → 不可比
+
+// <2 个实际年 → null
+const niOne = syn0("ni3", [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }]);
+assert.equal(Selectors.niYoY(niOne), null);
+
+// 缺 net_income（当前或基期）→ null
+const niMissing = syn0("ni4", [
+  { fy: "FY1", status: "actual", revenue: 100, net_income: 20 },
+  { fy: "FY2", status: "actual", revenue: 120, net_income: null },
+]);
+assert.equal(Selectors.niYoY(niMissing), null);
+
+// 预测年不参与基期判定：以实际年为准
+const niWithForecast = syn0("ni5", [
+  { fy: "FY1", status: "actual", revenue: 100, net_income: 20 },
+  { fy: "FY2", status: "actual", revenue: 120, net_income: 24 },
+  { fy: "FY3E", status: "forecast", revenue: 200, net_income: 50 },
+]);
+assert.equal(Math.round(Selectors.niYoY(niWithForecast) * 1000) / 1000, 0.2); // (24−20)/20
+
+// ---- 真实数据：ev 方向自检 ----
+// NVDA 净现金（net_debt −54.09）→ EV < 市值
+assert.equal(Math.round(Selectors.ev(nvdaReal) * 100) / 100, 4605.91); // 4660 − 54.09
+assert.ok(Selectors.ev(nvdaReal) < Selectors.marketCap(nvdaReal), "NVDA 净现金 → EV<市值");
+// evSales 与 ps 差异可解释：净现金 → EV/Sales < PS
+assert.ok(Selectors.evSales(nvdaReal) < Selectors.ps(nvdaReal), "NVDA 净现金 → EV/Sales < PS");
+
+// Broadcom 净负债（+49.6）→ EV > 市值，EV/Sales > PS
+assert.equal(Math.round(Selectors.ev(broadcom) * 10) / 10, 1785.6); // 1736 + 49.6
+assert.ok(Selectors.ev(broadcom) > Selectors.marketCap(broadcom), "AVGO 净负债 → EV>市值");
+assert.ok(Selectors.evSales(broadcom) > Selectors.ps(broadcom), "AVGO 净负债 → EV/Sales > PS");
+
+// SoftBank：ev_sales caveat = distorted，evSales 仍出值（高杠杆 → EV>>市值）
+assert.equal(Selectors.valuationCaveat(softbank, "ev_sales"), "distorted");
+assert.ok(Selectors.evSales(softbank) > 0, "SoftBank EV/Sales distorted 仍出值");
+assert.ok(Selectors.ev(softbank) > Selectors.marketCap(softbank), "SoftBank 高杠杆 → EV>市值");
+
+// =====================================================================
 // profit-pool migration (value-chain stacked, sample-complete years only)
 // =====================================================================
 

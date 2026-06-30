@@ -110,7 +110,33 @@ const Selectors = {
      valuation_caveat三态: 'na' → 整项留空(null); 'distorted' → 照常返回数值(供视图警示);
      'ok'/缺省 → 正常。所有倍数 null-safe，分母统一用 latestActual。 */
   marketCap(c)      { return c.quote?.market_cap ?? null; },
+  netDebt(c)        { return c.quote?.net_debt ?? null; },
   valuationCaveat(c, key) { return c.valuation_caveat?.[key] ?? "ok"; },
+
+  /* EV = market_cap + net_debt. net_debt 缺失/null → null（区分"缺失"与"0"，
+     不可假设 EV=市值：净负债=0 与"未知"是两回事）。net_debt 负数=净现金 → EV<市值。 */
+  ev(c) {
+    const mc = this.marketCap(c), nd = this.netDebt(c);
+    return (mc != null && nd != null) ? mc + nd : null;
+  },
+  /* EV/Sales：caveat 'na' → null；否则 ev 与最新实际年 revenue 都有 → ev/revenue。
+     'distorted'（如软银投资控股）仍出值，供视图警示。分母统一用 latestActual。 */
+  evSales(c) {
+    if (this.valuationCaveat(c, "ev_sales") === "na") return null;
+    const e = this.ev(c), y = this.latestActual(c);
+    return (e != null && y && y.revenue) ? e / y.revenue : null;
+  },
+  /* 净利润同比（PEG 近似的 G）：公司级最新实际年 vs 上一实际年 net_income。
+     仅当上一年 net_income > 0 才算（上一年 ≤0 = 周期反转，基期无意义 → null，
+     视图据此标"不可比"）；<2 个实际年或缺 net_income → null。算不存。 */
+  niYoY(c) {
+    const a = this.actualYears(c);
+    if (a.length < 2) return null;
+    const prev = a[a.length - 2].net_income, cur = a[a.length - 1].net_income;
+    if (prev == null || cur == null) return null;
+    if (prev <= 0) return null;   // 上一年 ≤0：基期无意义，不可比
+    return (cur - prev) / prev;
+  },
 
   pe(c) {
     if (this.valuationCaveat(c, "pe") === "na") return null;
@@ -142,6 +168,7 @@ const Selectors = {
     }
     if (key === "pe")       return this.pe(c);
     if (key === "ps")       return this.ps(c);
+    if (key === "evSales")  return this.evSales(c);
     if (key === "fcfYield") return this.fcfYield(c);
     const y = this.latestActual(c);
     if (!y) return null;
