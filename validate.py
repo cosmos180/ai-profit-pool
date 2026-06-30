@@ -14,9 +14,11 @@ Derived metrics are never stored, so they are never validated here — only raw 
 Exit code is non-zero if any ERROR is found (so it can gate a pipeline).
 """
 import json, re, sys
+from datetime import date
 from urllib.parse import urlparse
 
 TOL = 0.05  # USD bn tolerance for reconciliation
+TODAY = date(2026, 6, 30)  # 项目"今天"，用于快照新鲜度判断
 
 def load(path):
     with open(path, encoding="utf-8") as f:
@@ -52,6 +54,56 @@ def check(data):
 
         if not c.get("years"):
             warns.append(f"WARN  {cid}: populated 但没有任何财年")
+
+        # ---- 市场快照（quote）：只校验原始事实，倍数由派生层算 ----
+        q = c.get("quote")
+        if q is not None:
+            mc = q.get("market_cap")
+            if mc is None or mc <= 0:
+                errors.append(f"ERROR {cid}/quote: market_cap 必须 > 0（当前 {mc}）")
+            price = q.get("price")
+            if price is not None and price <= 0:
+                errors.append(f"ERROR {cid}/quote: price 若存在需 > 0（当前 {price}）")
+            qsrc = q.get("sources") or []
+            if not qsrc:
+                errors.append(f"ERROR {cid}/quote: 缺少 sources")
+            for s in qsrc:
+                url = s.get("url") or ""
+                parsed = urlparse(url)
+                if parsed.scheme not in ("http", "https") or not parsed.netloc:
+                    errors.append(f"ERROR {cid}/quote: source URL 非 http(s) 绝对链接: {url or '空'}")
+                if not s.get("url") or not s.get("data_status"):
+                    errors.append(f"ERROR {cid}/quote: source 缺少 url 或 data_status")
+            # as_of 新鲜度
+            as_of_raw = q.get("as_of")
+            as_of = None
+            try:
+                as_of = date.fromisoformat(as_of_raw) if as_of_raw else None
+            except ValueError:
+                errors.append(f"ERROR {cid}/quote: as_of 非 ISO 日期: {as_of_raw}")
+            if as_of:
+                if as_of > TODAY:
+                    warns.append(f"WARN  {cid}/quote: as_of {as_of} 晚于今天（{TODAY}）")
+                elif (TODAY - as_of).days > 90:
+                    warns.append(f"WARN  {cid}/quote: as_of {as_of} 早于今天 90 天以上，快照可能过期")
+            # INFO：展示可派生的倍数（便于核对，派生不存）
+            ya = [y for y in c.get("years", []) if y.get("status") == "actual"]
+            ly = ya[-1] if ya else None
+            cav = c.get("valuation_caveat") or {}
+            if mc and ly:
+                rev, ni = ly.get("revenue"), ly.get("net_income")
+                cfo, capex = ly.get("cfo"), ly.get("capex")
+                parts = []
+                if cav.get("pe") != "na" and ni:
+                    parts.append(f"PE {round(mc / ni, 1)}" + ("(失真)" if cav.get("pe") == "distorted" else ""))
+                if cav.get("ps") != "na" and rev:
+                    parts.append(f"PS {round(mc / rev, 1)}" + ("(失真)" if cav.get("ps") == "distorted" else ""))
+                if cav.get("fcf_yield") != "na" and cfo is not None and capex is not None and mc:
+                    parts.append(f"FCF yield {round((cfo - capex) / mc * 100, 1)}%" + ("(失真)" if cav.get("fcf_yield") == "distorted" else ""))
+                if parts:
+                    oks.append(f"INFO  {cid}/quote: 市值 {mc} USD bn @ {as_of_raw} → 可派生 {' · '.join(parts)}（基于 {ly.get('fy')}）")
+                else:
+                    oks.append(f"INFO  {cid}/quote: 市值 {mc} USD bn @ {as_of_raw}（按 caveat 无可展示倍数）")
 
         fy_seen, fy_nums = set(), []
         any_segment_profit = False

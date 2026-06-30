@@ -36,7 +36,33 @@
         "lead": {"type": "string"},
         "fy_note": {"type": "string"},
         "planned_source": {"type": "string"},
+        "quote": {"$ref": "#/definitions/quote"},
+        "valuation_caveat": {"$ref": "#/definitions/valuation_caveat"},
         "years": {"type": "array", "items": {"$ref": "#/definitions/year"}}
+      }
+    },
+    "quote": {
+      "type": "object",
+      "description": "Single-slice market snapshot (not a time series). Raw market facts only; PE/PS/FCF yield are derived in Selectors, never stored.",
+      "required": ["as_of", "market_cap", "sources"],
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {"type": "string", "format": "date", "description": "Snapshot date, ISO 8601 (YYYY-MM-DD)."},
+        "market_cap": {"type": "number", "description": "Market capitalization in USD bn — same unit/口径 as years[].revenue / net_income. The only cross-currency-safe value; use this for all valuation multiples."},
+        "price": {"type": ["number", "null"], "description": "Local-currency share price, for display/对账 reference only. Never multiply across currencies."},
+        "price_currency": {"type": "string", "description": "ISO 4217 currency of `price` (e.g. JPY, USD). Display only."},
+        "sources": {"type": "array", "items": {"$ref": "#/definitions/source"}}
+      }
+    },
+    "valuation_caveat": {
+      "type": "object",
+      "description": "Honest distortion flags driving derived-layer downgrade (e.g. investment-holding companies like SoftBank whose net margin / PE are skewed by investment gains).",
+      "additionalProperties": false,
+      "properties": {
+        "pe": {"enum": ["ok", "distorted", "na"]},
+        "ps": {"enum": ["ok", "distorted", "na"]},
+        "fcf_yield": {"enum": ["ok", "distorted", "na"]},
+        "note": {"type": "string"}
       }
     },
     "year": {
