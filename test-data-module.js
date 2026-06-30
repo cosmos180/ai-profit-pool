@@ -578,17 +578,23 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
 // real data: head-company TTM self-roll sanity (draft scope)
 // =====================================================================
 const realTtm = Selectors.profitPoolTTM(Store.populated());
-// recorded heads: nvda, tsmc, samsung, skhynix, asml (5); broadcom/micron/softbank no quarters → null
-assert.equal(realTtm.n, 5);
-assert.equal(Selectors.ttmNetIncome(Store.byId("broadcom")), null); // no quarters → honest null
+// recorded heads: nvda, tsmc, samsung, skhynix, asml, broadcom, micron (7);
+// softbank still null (consensus 不录 → no quarters → honest null)
+assert.equal(realTtm.n, 7);
 assert.equal(Selectors.ttmNetIncome(Store.byId("softbank")), null);
-assert.equal(Selectors.ttmNetIncome(Store.byId("micron")), null);
 // NVDA TTM = FY2026 120.1 + (Q1FY27 58.3 − Q1FY26 18.8) = 159.6
 assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("nvda")) * 10) / 10, 159.6);
 // TSMC TTM = FY2025 54.116 + (1Q26 18.12 − 1Q25 11.0) = 61.236
 assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("tsmc")) * 100) / 100, 61.24);
-// asOf spread small (Apr-26 vs Mar-31) and within a quarter
-assert.ok(realTtm.asOfSpreadDays >= 0 && realTtm.asOfSpreadDays <= 31, "spread " + realTtm.asOfSpreadDays);
+// Broadcom TTM = FY2025 23.126 + (Q1FY26 7.349 − Q1FY25 5.503) + (Q2FY26 9.310 − Q2FY25 4.965) = 29.317
+assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("broadcom")) * 1000) / 1000, 29.317);
+assert.equal(Selectors.ttmAsOf(Store.byId("broadcom")), "2026-05-03");
+// Micron TTM = FY2025 8.539 + (FQ1 5.24−1.87) + (FQ2 13.79−1.58) + (FQ3 28.24−1.89) = 50.469
+//   真实 AI/HBM 超级周期：存储环节 TTM 暴涨，非异常值
+assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("micron")) * 1000) / 1000, 50.469);
+assert.equal(Selectors.ttmAsOf(Store.byId("micron")), "2026-05-28");
+// asOf spread now wider: Micron 季末 2026-05-28 vs 最早 2026-03-31 = 58 天（上限 62）
+assert.ok(realTtm.asOfSpreadDays >= 0 && realTtm.asOfSpreadDays <= 62, "spread " + realTtm.asOfSpreadDays);
 // all recorded heads positive in current up-cycle
 for (const s of realTtm.stages)
   for (const m of s.companies) assert.ok(m.ttm > 0, m.id + " ttm " + m.ttm);
