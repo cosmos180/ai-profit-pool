@@ -54,6 +54,8 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-family:var(--sans);font-size:12.5px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:.12s}
 .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .chip:hover:not([aria-pressed="true"]){border-color:var(--ink-soft);color:var(--ink)}
+.metric-hint{font-size:12px;color:#6b4e16;background:linear-gradient(0deg,var(--est-soft),var(--card));border:1px solid #E4CFA4;border-left:3px solid var(--est);border-radius:9px;padding:9px 13px;margin:-2px 0 13px;line-height:1.5}
+.metric-hint b{color:#5d4410}
 .dir{display:flex;flex-direction:column;gap:11px}
 .crow{display:grid;grid-template-columns:46px 1.5fr 1.3fr 1fr;gap:14px;align-items:center;padding:15px 17px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;border:1px solid var(--line);background:var(--card);border-radius:14px;text-align:left;font-family:inherit;width:100%}
 .crow:hover{transform:translateY(-2px);box-shadow:0 10px 30px -18px rgba(24,33,29,.4);border-color:var(--ink-soft)}
@@ -91,6 +93,16 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .kpi .k-val{font-family:var(--mono);font-size:26px;font-weight:600;margin-top:7px;letter-spacing:-.01em}
 .kpi .k-sub{font-size:11.5px;color:var(--ink-faint);margin-top:3px;font-family:var(--mono)}
 .kpi.accent .k-val{color:var(--ok)}.kpi.est .k-val{color:var(--est)}
+.kpi.distort{border-color:#E4CFA4}.kpi.distort .k-val{color:var(--est)}
+.kpi.empty .k-val{color:var(--ink-faint)}
+.kpi .k-flag{font-family:var(--mono);font-size:9.5px;padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em;margin-left:auto}
+.kpi .k-flag.distort{background:var(--est-soft);color:#8a5a0f}
+.kpi .k-flag.na{background:var(--card-2);color:var(--ink-faint);border:1px solid var(--line)}
+.kpi .k-note{font-size:11px;color:#6b4e16;margin-top:7px;line-height:1.45;padding-top:7px;border-top:1px dashed #E4CFA4}
+.kpi .k-note.muted{color:var(--ink-faint);border-top-color:var(--line-soft)}
+.val-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;font-size:12.5px;color:var(--ink-soft);margin:-2px 0 13px;line-height:1.55}
+.val-head .asof{font-family:var(--mono);color:var(--ink);font-weight:600}
+.val-head .mismatch{color:var(--ink-faint)}
 .swatch{width:9px;height:9px;border-radius:2px;display:inline-block}
 .chart-card{padding:20px 20px 14px}
 .chart-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);margin-top:10px}
@@ -179,7 +191,12 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
       <button class="chip" data-m="netM" aria-pressed="false">净利率</button>
       <button class="chip" data-m="fcfMargin" aria-pressed="false">FCF 利润率</button>
       <button class="chip" data-m="capexInt" aria-pressed="false">capex 强度</button>
+      <span class="ml" style="margin-left:6px">估值</span>
+      <button class="chip" data-m="pe" aria-pressed="false">PE</button>
+      <button class="chip" data-m="ps" aria-pressed="false">PS</button>
+      <button class="chip" data-m="fcfYield" aria-pressed="false">FCF yield</button>
     </div>
+    <div class="metric-hint" id="metricHint"></div>
     <div class="dir" id="popDir"></div>
     <div class="section-h">预留槽位 · 待补录 <span class="count" id="pendCount"></span></div>
     <div class="dir" id="pendDir"></div>
@@ -204,6 +221,8 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
     </div>
     <div class="section-h" id="cCashH">质量与现金 · 最新实际</div>
     <div id="cCash"></div>
+    <div class="section-h" id="cValH">估值快照</div>
+    <div id="cVal"></div>
     <div class="section-h">按财年下钻 · 点击进入业务板块明细</div>
     <div class="years" id="cYears"></div>
     <div class="note-block" id="cNote"></div>
@@ -240,11 +259,14 @@ const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const Fmt={
   bn:(v,d=1)=> v==null?"—":"$"+v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d})+"B",
   pct:(v,d=1)=> v==null?"—":(v*100).toFixed(d)+"%",
+  mult:(v)=> v==null?"—":v.toFixed(1)+"×",
   yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
   segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
 };
-const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度"};
-const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v)};
+const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度",pe:"PE",ps:"PS",fcfYield:"FCF yield"};
+const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v),pe:v=>Fmt.mult(v),ps:v=>Fmt.mult(v),fcfYield:v=>Fmt.pct(v)};
+// 越低越便宜的估值指标：列表降序排列，需提示"排第一≠最便宜"
+const HOME_METRIC_LOWER_CHEAPER={pe:true,ps:true};
 const Safe={
   text(v){return v==null?"":String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));},
   attr(v){return Safe.text(v);},
@@ -274,16 +296,37 @@ function renderCrumbs(){
 function goHome(){state.companyId=null;state.fy=null;show("home");renderHome();}
 function renderHome(){
   const pop=Store.populated(),pend=Store.pending(),total=Store.companies().length;
-  const totalRev=pop.reduce((s,c)=>{const y=Selectors.latestActual(c);return s+(y?y.revenue:0);},0);
+  // "利润池" = sum of latest-actual net income. Profit (unlike revenue) doesn't double-count
+  // across a value chain, so summing it is meaningful: the economic profit these players capture.
+  const niList=pop.map(c=>({c,ni:Selectors.homeMetric(c,"netIncome")})).filter(x=>x.ni!=null).sort((a,b)=>b.ni-a.ni);
+  const pool=niList.reduce((s,x)=>s+x.ni,0);
+  const leader=niList[0],leaderShare=(leader&&pool)?leader.ni/pool:null;
+  // pool momentum: aggregate latest-actual vs prior-actual net income across companies that have both
+  const grow=pop.map(c=>{const a=Selectors.actualYears(c);if(a.length<2)return null;
+    const cur=a[a.length-1].net_income,prev=a[a.length-2].net_income;
+    return (cur!=null&&prev!=null)?{cur,prev}:null;}).filter(Boolean);
+  const curSum=grow.reduce((s,x)=>s+x.cur,0),prevSum=grow.reduce((s,x)=>s+x.prev,0);
+  const poolYoY=prevSum>0?(curSum-prevSum)/prevSum:null;
+  const shortName=c=>c.name.split(" ")[0];
   $("#cover").innerHTML=`
-    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>已补录</div>
-      <div class="v num">${pop.length} / ${total}</div><div class="s">家公司</div></div>
-    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--past)"></span>已补录合计营收</div>
-      <div class="v num">${Fmt.bn(totalRev,0)}</div><div class="s">最新实际财年</div></div>
-    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--est)"></span>预留槽位</div>
-      <div class="v num">${pend.length}</div><div class="s">待补录</div></div>`;
+    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>AI 利润池</div>
+      <div class="v num">${Fmt.bn(pool,0)}</div><div class="s">${pop.length} 家最新实际财年合计净利润</div></div>
+    <div class="card cv"><div class="l"><span class="swatch" style="background:var(--est)"></span>利润最集中</div>
+      <div class="v num">${leaderShare!=null?Fmt.pct(leaderShare,0):"—"}</div><div class="s">${leader?Safe.text(shortName(leader.c))+" 占利润池比重":"—"}</div></div>
+    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--past)"></span>利润池同比</div>
+      <div class="v num">${poolYoY!=null?Fmt.yoy(poolYoY):"—"}</div><div class="s">合计净利润较上一财年</div></div>`;
   $("#popCount").textContent=`${pop.length} 家`; $("#pendCount").textContent=`${pend.length} 家`;
   const key=state.homeMetric;
+  const hint=$("#metricHint");
+  if(HOME_METRIC_LOWER_CHEAPER[key]){
+    hint.style.display="";
+    hint.innerHTML=`<b>${Safe.text(HOME_METRIC_LABEL[key])} 越低越便宜。</b>列表仍按数值降序（大在上），所以<b>排在最上的是估值最贵的，不是最便宜的</b>。倍数分母用各公司最新实际财年业绩，市值截至快照日，详见公司页“估值快照”。`;
+  }else if(key==="fcfYield"){
+    hint.style.display="";
+    hint.innerHTML=`<b>FCF yield 越高越便宜</b>（自由现金流 / 市值），与 PE/PS 方向相反。投资控股类公司（如软银）此项无经营含义，已诚实留空。`;
+  }else{
+    hint.style.display="none";hint.innerHTML="";
+  }
   const ranked=pop.slice().sort((a,b)=>(Selectors.homeMetric(b,key)??-Infinity)-(Selectors.homeMetric(a,key)??-Infinity));
   const maxV=Math.max(...ranked.map(c=>Selectors.homeMetric(c,key)??0),0.0001);
   $("#popDir").innerHTML=ranked.map(c=>{
@@ -336,6 +379,7 @@ function renderCompany(id){
   $("#cTrendH").textContent=c.years.length?`营收与净利润 · ${c.years[0].fy} → ${c.years[c.years.length-1].fy}`:"营收与净利润";
   renderTrend(c);
   renderCash(c);
+  renderValuation(c);
   $("#cYears").innerHTML=c.years.map(y=>{
     const fcc=y.status==="forecast",ry=Selectors.revYoY(c,y.fy);
     return `<button class="ycard ${fcc?'is-fc':''}" data-fy="${Safe.attr(y.fy)}">
@@ -372,6 +416,59 @@ function renderCash(c){
   ];
   box.className="kpis";
   box.innerHTML=cards.map(k=>`<div class="card kpi ${Safe.cls(k.cls)}"><div class="k-lbl"><span class="swatch" style="background:${Safe.attr(k.sw)}"></span>${Safe.text(k.lbl)}</div><div class="k-val">${Safe.text(k.val)}</div><div class="k-sub">${Safe.text(k.sub)}</div></div>`).join("");
+}
+function renderValuation(c){
+  const h=$("#cValH"),box=$("#cVal");
+  const q=c.quote;
+  // 无市场快照 → 整区诚实留空并说明
+  if(!q){
+    h.textContent="估值快照";box.className="";
+    box.innerHTML=`<div class="note-block" style="margin-top:0"><b>未录入市场快照。</b>PE / PS / FCF yield 需要 <code style="font-family:var(--mono)">quote.market_cap</code>（市值）与最新实际财年业绩。诚实做法是留空，补录后此处自动出现三项倍数与来源。</div>`;
+    return;
+  }
+  const la=Selectors.latestActual(c);
+  h.textContent="估值快照";
+  const note=c.valuation_caveat?.note||"";
+  const defs=[
+    {key:"pe",lbl:"PE 市盈率",val:Selectors.pe(c),fmt:Fmt.mult,denom:"市值 / 净利润",sw:"var(--ok)"},
+    {key:"ps",lbl:"PS 市销率",val:Selectors.ps(c),fmt:Fmt.mult,denom:"市值 / 营收",sw:"var(--ok)"},
+    {key:"fcf_yield",lbl:"FCF yield",val:Selectors.fcfYield(c),fmt:Fmt.pct,denom:"自由现金流 / 市值",sw:"var(--ok)"},
+  ];
+  const cards=defs.map(d=>{
+    const caveat=Selectors.valuationCaveat(c,d.key);
+    if(caveat==="na"){
+      // selector 已返回 null → 诚实留空，复用 gap/note 范式解释
+      return `<div class="card kpi empty">
+        <div class="k-lbl"><span class="swatch" style="background:var(--past)"></span>${Safe.text(d.lbl)}<span class="k-flag na">不适用</span></div>
+        <div class="k-val num">—</div>
+        <div class="k-note">该指标对此公司无经营含义，诚实留空。${note?Safe.text(note):""}</div></div>`;
+    }
+    if(caveat==="distorted"){
+      // selector 仍返回数值 → 显示但加醒目失真标记 + 展示 note
+      return `<div class="card kpi distort">
+        <div class="k-lbl"><span class="swatch" style="background:var(--est)"></span>${Safe.text(d.lbl)}<span class="k-flag distort">口径失真</span></div>
+        <div class="k-val num">${d.fmt(d.val)}</div>
+        <div class="k-sub">${Safe.text(d.denom)}</div>
+        <div class="k-note">${note?Safe.text(note):"该倍数受口径影响，仅供参考。"}</div></div>`;
+    }
+    return `<div class="card kpi accent">
+      <div class="k-lbl"><span class="swatch" style="background:${d.sw}"></span>${Safe.text(d.lbl)}</div>
+      <div class="k-val num">${d.fmt(d.val)}</div>
+      <div class="k-sub">${Safe.text(d.denom)}</div></div>`;
+  }).join("");
+  // quote 来源（复用来源展示范式，标注 derived 为汇率换算）
+  const srcRows=(q.sources||[]).map(s=>{
+    const st=s.data_status||"",derived=st==="derived";
+    return `<div class="srcrow"><span class="sl">${Safe.text(s.label)}<span class="tagx" style="margin-left:8px">${Safe.text(st)}${derived?" · 汇率换算":""}</span></span><a href="${Safe.url(s.url)}" target="_blank" rel="noopener">来源 ↗</a></div>`;
+  }).join("");
+  box.innerHTML=`
+    <div class="val-head">
+      <span>市场快照 · <span class="asof">${Safe.text(q.as_of||"—")}</span></span>
+      <span class="mismatch">口径错位：<b>价格截至快照日</b>，倍数分母用<b>最新实际财年</b>${la?` ${Safe.text(la.fy)} 业绩`:"业绩"}（两者时点不同，属正常）</span>
+    </div>
+    <div class="kpis">${cards}</div>
+    <div class="section-h" style="margin-top:20px">市场快照来源</div>
+    <div class="card srcs">${srcRows||'<div class="srcrow"><span class="sl">未列出来源</span></div>'}</div>`;
 }
 function renderTrend(c){
   const svg=$("#trend"),data=c.years||[];

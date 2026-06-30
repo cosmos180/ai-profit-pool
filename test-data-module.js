@@ -113,4 +113,88 @@ assert.equal(Selectors.capexIntensity(halfCash), 0.3); // capex intensity needs 
 assert.equal(Selectors.homeMetric({ years: [cashYear] }, "fcfMargin"), 0.2);
 assert.equal(Selectors.homeMetric({ years: [cashYear] }, "capexInt"), 0.3);
 
+// ---- valuation: PE / PS / FCF yield (derived from quote vs latest actual; never stored) ----
+const vCompany = {
+  id: "v-co", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+  years: [
+    { fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }, // fcf = 20
+  ],
+};
+assert.equal(Selectors.marketCap(vCompany), 200);
+assert.equal(Selectors.pe(vCompany), 10);          // 200 / 20
+assert.equal(Selectors.ps(vCompany), 2);           // 200 / 100
+assert.equal(Selectors.fcfYield(vCompany), 0.1);   // fcf 20 / mcap 200
+assert.equal(Selectors.valuationCaveat(vCompany, "pe"), "ok");  // 缺省 → ok
+assert.equal(Selectors.homeMetric(vCompany, "pe"), 10);
+assert.equal(Selectors.homeMetric(vCompany, "ps"), 2);
+assert.equal(Selectors.homeMetric(vCompany, "fcfYield"), 0.1);
+
+// null 降级：缺 quote → 所有倍数 null
+const noQuote = { id: "nq", status: "populated", years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }] };
+assert.equal(Selectors.marketCap(noQuote), null);
+assert.equal(Selectors.pe(noQuote), null);
+assert.equal(Selectors.ps(noQuote), null);
+assert.equal(Selectors.fcfYield(noQuote), null);
+assert.equal(Selectors.homeMetric(noQuote, "pe"), null);
+
+// null 降级：有 quote 但缺分母 → 该倍数 null（FCF yield 缺 cfo/capex）
+const noDenom = { id: "nd", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 0, net_income: 0 }] };
+assert.equal(Selectors.pe(noDenom), null);         // net_income 0 → 零分母
+assert.equal(Selectors.ps(noDenom), null);         // revenue 0 → 零分母
+assert.equal(Selectors.fcfYield(noDenom), null);   // 缺 cfo/capex → fcf null
+
+// null 降级：无实际年（仅预测）→ null
+const fcOnly = { id: "fc", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+  years: [{ fy: "FY2027E", status: "forecast", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.pe(fcOnly), null);
+assert.equal(Selectors.ps(fcOnly), null);
+assert.equal(Selectors.fcfYield(fcOnly), null);
+
+// caveat="na" → 整项留空(null)，即便分母齐备
+const naCaveat = { id: "na", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+  valuation_caveat: { pe: "na", fcf_yield: "na", ps: "ok" },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }] };
+assert.equal(Selectors.pe(naCaveat), null);        // na → null
+assert.equal(Selectors.fcfYield(naCaveat), null);  // na → null
+assert.equal(Selectors.ps(naCaveat), 2);           // ps ok → 正常返回
+assert.equal(Selectors.valuationCaveat(naCaveat, "pe"), "na");
+assert.equal(Selectors.valuationCaveat(naCaveat, "fcf_yield"), "na");
+assert.equal(Selectors.homeMetric(naCaveat, "pe"), null);
+assert.equal(Selectors.homeMetric(naCaveat, "fcfYield"), null);
+
+// caveat="distorted" → 仍返回数值（供视图警示），并能查到三态
+const distorted = { id: "ds", status: "populated", quote: { as_of: "2026-06-26", market_cap: 300, sources: [] },
+  valuation_caveat: { ps: "distorted" },
+  years: [{ fy: "FY1", status: "actual", revenue: 50, net_income: 30 }] };
+assert.equal(Selectors.ps(distorted), 6);          // distorted 仍算 300/50
+assert.equal(Selectors.valuationCaveat(distorted, "ps"), "distorted");
+
+// 真实数据：SoftBank caveat 落地（pe/fcf_yield=na 留空，ps=distorted 仍出值）
+const sbReal = Store.byId("softbank");
+assert.equal(Selectors.valuationCaveat(sbReal, "pe"), "na");
+assert.equal(Selectors.valuationCaveat(sbReal, "ps"), "distorted");
+assert.equal(Selectors.valuationCaveat(sbReal, "fcf_yield"), "na");
+assert.equal(Selectors.pe(sbReal), null);
+assert.equal(Selectors.fcfYield(sbReal), null);
+assert.ok(Selectors.ps(sbReal) > 0);               // PS 照常出值（失真，视图警示）
+
+// 真实数据：NVDA 有市值、无 caveat → PE/PS 正常；FCF yield 缺 cfo/capex → null
+const nvdaReal = Store.byId("nvda");
+assert.ok(Selectors.pe(nvdaReal) > 0);
+assert.ok(Selectors.ps(nvdaReal) > 0);
+// FCF yield 用最近有现金数据的年（FY2026 未录 cfo/capex，回退到 FY2025：fcf 60.85 / mcap 4660）
+assert.equal(Math.round(Selectors.fcfYield(nvdaReal) * 10000) / 10000, 0.0131);
+
+// FCF yield 现金口径：latestActual 缺现金时回退到 latestCashYear（早一年）
+const lagCash = { id: "lag", status: "populated", quote: { as_of: "2026-06-26", market_cap: 100, sources: [] },
+  years: [
+    { fy: "FY1", status: "actual", revenue: 50, net_income: 10, capex: 4, cfo: 14 },  // fcf = 10
+    { fy: "FY2", status: "actual", revenue: 60, net_income: 12 },                      // 最新年无现金输入
+  ] };
+assert.equal(Selectors.fcf(Selectors.latestActual(lagCash)), null); // 最新年算不出 FCF
+assert.equal(Selectors.fcfYield(lagCash), 0.1);                     // 回退 FY1：fcf 10 / mcap 100
+assert.equal(Selectors.homeMetric(lagCash, "fcfYield"), 0.1);
+
 console.log("data-module tests passed");

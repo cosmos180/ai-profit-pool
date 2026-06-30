@@ -86,6 +86,32 @@ const Selectors = {
   profitSorted(y)     { return this.revenueSegs(y).filter(s => s.op_income != null)
                                     .sort((a, b) => b.op_income - a.op_income); },
 
+  /* ---- valuation (single-slice market snapshot vs latest actual year) ----
+     quote.market_cap is the ONLY cross-currency-safe value (already USD bn, same 口径
+     as revenue/net_income) — use it directly, never multiply by FX.
+     valuation_caveat三态: 'na' → 整项留空(null); 'distorted' → 照常返回数值(供视图警示);
+     'ok'/缺省 → 正常。所有倍数 null-safe，分母统一用 latestActual。 */
+  marketCap(c)      { return c.quote?.market_cap ?? null; },
+  valuationCaveat(c, key) { return c.valuation_caveat?.[key] ?? "ok"; },
+
+  pe(c) {
+    if (this.valuationCaveat(c, "pe") === "na") return null;
+    const mc = this.marketCap(c), y = this.latestActual(c);
+    return (mc != null && y && y.net_income) ? mc / y.net_income : null;
+  },
+  ps(c) {
+    if (this.valuationCaveat(c, "ps") === "na") return null;
+    const mc = this.marketCap(c), y = this.latestActual(c);
+    return (mc != null && y && y.revenue) ? mc / y.revenue : null;
+  },
+  fcfYield(c) {
+    if (this.valuationCaveat(c, "fcf_yield") === "na") return null;
+    // FCF from the latest year that actually carries cash inputs (capex/cfo lag the headline year),
+    // mirroring how the company-page cash block and fcfMargin/capexInt home metrics pick their year.
+    const mc = this.marketCap(c), f = this.fcf(this.latestCashYear(c));
+    return (mc != null && f != null && mc) ? f / mc : null;
+  },
+
   /* ---- directory metric accessors (cross-company) ---- */
   /* latest actual year that carries cash inputs (capex/cfo may lag the headline year) */
   latestCashYear(c) { return this.actualYears(c).reverse().find(y => y.capex != null || y.cfo != null) || null; },
@@ -96,6 +122,9 @@ const Selectors = {
       if (!cy) return null;
       return key === "fcfMargin" ? this.fcfMargin(cy) : this.capexIntensity(cy);
     }
+    if (key === "pe")       return this.pe(c);
+    if (key === "ps")       return this.ps(c);
+    if (key === "fcfYield") return this.fcfYield(c);
     const y = this.latestActual(c);
     if (!y) return null;
     if (key === "revenue")   return y.revenue;
