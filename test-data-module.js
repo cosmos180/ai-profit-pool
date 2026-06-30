@@ -456,4 +456,151 @@ assert.ok(near(nb.invest, 0.101), "invest share " + nb.invest);
 for (const p of realMig)
   for (const s of p.stages) assert.ok(s.value > 0, p.label + "/" + s.stage + " should be positive");
 
+// =====================================================================
+// TTM self-roll (算不存, date-aligned via quarters[].period_end only, null-safe)
+// =====================================================================
+
+// helper: company with quarters
+function synQ(id, years, quarters) { return { id, name: id.toUpperCase(), status: "populated", years, quarters }; }
+const Q = (pe, ni) => ({ period_end: pe, label: pe, net_income: ni, sources: [] });
+const FY = (fy, ni) => ({ fy, period_end: "free-text " + fy, status: "actual", revenue: 100, net_income: ni });
+
+// ---- single add-on quarter: TTM = FY + (latest Q − year-ago Q) ----
+// FY ni 100; latest Q (2026-03-31)=30, year-ago (2025-03-31)=10 → TTM = 100 + 30 − 10 = 120
+const ttm1 = synQ("nvda",
+  [FY("FY2025", 100)],
+  [Q("2025-03-31", 10), Q("2026-03-31", 30)]);
+assert.equal(Selectors.ttmNetIncome(ttm1), 120);
+assert.equal(Selectors.ttmAsOf(ttm1), "2026-03-31");
+
+// ---- multi add-on (e.g. Micron, 3 post-FY quarters): each rolled vs its year-ago twin ----
+// FY ni 100; add-ons Q2,Q3,Q4 of 2026 vs 2025 twins:
+//  +(12−4) +(15−5) +(20−6) = 8+10+14 = 32 → TTM = 132
+const ttmMulti = synQ("micron",
+  [FY("FY2025", 100)],
+  [
+    Q("2025-06-30", 4), Q("2025-09-30", 5), Q("2025-12-31", 6),
+    Q("2026-06-30", 12), Q("2026-09-30", 15), Q("2026-12-31", 20),
+  ]);
+assert.equal(Selectors.ttmNetIncome(ttmMulti), 132);
+assert.equal(Selectors.ttmAsOf(ttmMulti), "2026-12-31");
+
+// ---- ±45d tolerance: NVDA-style Apr-27 (2025) vs Apr-26 (2026) still pairs ----
+const ttmTol = synQ("nvda",
+  [FY("FY2026", 120.1)],
+  [Q("2025-04-27", 18.8), Q("2026-04-26", 58.3)]);
+assert.equal(Math.round(Selectors.ttmNetIncome(ttmTol) * 10) / 10, 159.6); // 120.1 + 58.3 − 18.8
+
+// ---- 凑不齐 → null (honest gap), each failure mode ----
+// (a) no quarters
+assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)], [])), null);
+assert.equal(Selectors.ttmNetIncome({ id: "x", status: "populated", years: [FY("FY2025", 100)] }), null);
+// (b) no year-ago match for the latest quarter (only one quarter) → no add-on pair → null
+assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)], [Q("2026-03-31", 30)])), null);
+// (c) add-on quarter net_income null → null
+assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)],
+  [Q("2025-03-31", 10), Q("2026-03-31", null)])), null);
+// (d) year-ago quarter net_income null → null
+assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)],
+  [Q("2025-03-31", null), Q("2026-03-31", 30)])), null);
+// (e) latest complete FY net_income null → null
+assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", null)],
+  [Q("2025-03-31", 10), Q("2026-03-31", 30)])), null);
+// (f) no actual FY at all → null
+assert.equal(Selectors.ttmNetIncome(synQ("x",
+  [{ fy: "FY2027E", status: "forecast", revenue: 100, net_income: 50 }],
+  [Q("2025-03-31", 10), Q("2026-03-31", 30)])), null);
+// (g) year-ago candidate exists but OUTSIDE ±45d tolerance (e.g. 300d gap) → no pair → null
+assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)],
+  [Q("2025-06-04", 10), Q("2026-03-31", 30)])), null); // ~300d apart, not ~365d
+// null company
+assert.equal(Selectors.ttmNetIncome(null), null);
+
+// ---- negative add-on (downcycle): TTM rolls negatives without crashing ----
+// FY ni 5; latest Q = −3, year-ago Q = 8 → TTM = 5 + (−3 − 8) = −6
+const ttmNeg = synQ("skhynix", [FY("FY2025", 5)], [Q("2025-03-31", 8), Q("2026-03-31", -3)]);
+assert.equal(Selectors.ttmNetIncome(ttmNeg), -6);
+
+// =====================================================================
+// profitPoolTTM: per-company null-safe, n count, asOfSpreadDays, stage reuse
+// =====================================================================
+
+// design=nvda, foundry=tsmc, memory=samsung+skhynix(+micron null), equipment=asml, invest=softbank(null)
+const ttmCos = [
+  synQ("nvda",     [FY("FY2026", 120.1)], [Q("2025-04-27", 18.8), Q("2026-04-26", 58.3)]), // TTM 159.6, asOf 2026-04-26
+  synQ("tsmc",     [FY("FY2025", 50)],    [Q("2025-03-31", 10),   Q("2026-03-31", 18)]),   // TTM 58, asOf 2026-03-31
+  synQ("samsung",  [FY("FY2025", 31)],    [Q("2025-03-31", 6),    Q("2026-03-31", 33)]),   // TTM 58
+  synQ("skhynix",  [FY("FY2025", 30)],    [Q("2025-03-31", 6),    Q("2026-03-31", 28)]),   // TTM 52
+  synQ("micron",   [FY("FY2025", 8)],     []),                                              // null → skipped
+  synQ("asml",     [FY("FY2025", 10)],    [Q("2025-03-31", 2),    Q("2026-03-31", 3)]),     // TTM 11
+  synQ("softbank", [FY("FY2025", 31)],    []),                                              // null → skipped
+];
+const ttmPool = Selectors.profitPoolTTM(ttmCos);
+assert.equal(ttmPool.label, "TTM(截至各家最近季报)");
+assert.equal(ttmPool.n, 5);                              // micron & softbank null → excluded
+// total = 159.6 + 58 + 58 + 52 + 11 = 338.6 (micron/softbank not imputed)
+assert.equal(Math.round(ttmPool.total * 10) / 10, 338.6);
+// asOfSpreadDays = 2026-04-26 − 2026-03-31 = 26 days
+assert.equal(ttmPool.asOfSpreadDays, 26);
+// stages ordered per STAGE_ORDER (same atom as annual migration)
+assert.deepEqual(ttmPool.stages.map(s => s.stage), STAGE_ORDER);
+const tb = Object.fromEntries(ttmPool.stages.map(s => [s.stage, s]));
+assert.equal(tb.design.value, 159.6);
+assert.equal(tb.foundry.value, 58);
+assert.equal(Math.round(tb.memory.value), 110);          // 58 + 52
+assert.equal(tb.equipment.value, 11);
+assert.equal(tb.invest.value, 0);                        // softbank null → invest empty (not imputed)
+assert.equal(tb.invest.companies.length, 0);
+// shares sum to 1 (positive total)
+assert.ok(Math.abs(ttmPool.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
+// per-company traceability carries ttm + asOf
+assert.deepEqual(tb.design.companies, [{ id: "nvda", name: "NVDA", ttm: 159.6, asOf: "2026-04-26" }]);
+assert.deepEqual(tb.memory.companies.map(c => c.id), ["samsung", "skhynix"]);
+
+// ---- empty / all-null pools ----
+const ttmEmpty = Selectors.profitPoolTTM([]);
+assert.equal(ttmEmpty.n, 0);
+assert.equal(ttmEmpty.total, 0);
+assert.equal(ttmEmpty.asOfSpreadDays, null);             // no contributors → null spread
+const ttmAllNull = Selectors.profitPoolTTM([synQ("micron", [FY("FY2025", 8)], [])]);
+assert.equal(ttmAllNull.n, 0);
+assert.equal(ttmAllNull.asOfSpreadDays, null);
+
+// ---- aggregation atom reuse consistency: same rows → same stage folding as annual ----
+// Build rows identical口径 and confirm _aggregateStages matches a hand fold.
+const aggRows = [{ id: "nvda", name: "N", ni: 10 }, { id: "tsmc", name: "T", ni: 20 }, { id: "asml", name: "A", ni: 5 }];
+const agg = Selectors._aggregateStages(aggRows, 35);
+const ab = Object.fromEntries(agg.map(s => [s.stage, s.value]));
+assert.equal(ab.design, 10); assert.equal(ab.foundry, 20); assert.equal(ab.equipment, 5);
+assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
+
+// =====================================================================
+// real data: head-company TTM self-roll sanity (draft scope)
+// =====================================================================
+const realTtm = Selectors.profitPoolTTM(Store.populated());
+// recorded heads: nvda, tsmc, samsung, skhynix, asml, broadcom, micron (7);
+// softbank still null (consensus 不录 → no quarters → honest null)
+assert.equal(realTtm.n, 7);
+assert.equal(Selectors.ttmNetIncome(Store.byId("softbank")), null);
+// NVDA TTM = FY2026 120.1 + (Q1FY27 58.3 − Q1FY26 18.8) = 159.6
+assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("nvda")) * 10) / 10, 159.6);
+// TSMC TTM = FY2025 54.116 + (1Q26 18.12 − 1Q25 11.0) = 61.236
+assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("tsmc")) * 100) / 100, 61.24);
+// Broadcom TTM = FY2025 23.126 + (Q1FY26 7.349 − Q1FY25 5.503) + (Q2FY26 9.310 − Q2FY25 4.965) = 29.317
+assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("broadcom")) * 1000) / 1000, 29.317);
+assert.equal(Selectors.ttmAsOf(Store.byId("broadcom")), "2026-05-03");
+// Micron TTM = FY2025 8.539 + (FQ1 5.24−1.87) + (FQ2 13.79−1.58) + (FQ3 28.24−1.89) = 50.469
+//   真实 AI/HBM 超级周期：存储环节 TTM 暴涨，非异常值
+assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("micron")) * 1000) / 1000, 50.469);
+assert.equal(Selectors.ttmAsOf(Store.byId("micron")), "2026-05-28");
+// asOf spread now wider: Micron 季末 2026-05-28 vs 最早 2026-03-31 = 58 天（上限 62）
+assert.ok(realTtm.asOfSpreadDays >= 0 && realTtm.asOfSpreadDays <= 62, "spread " + realTtm.asOfSpreadDays);
+// all recorded heads positive in current up-cycle
+for (const s of realTtm.stages)
+  for (const m of s.companies) assert.ok(m.ttm > 0, m.id + " ttm " + m.ttm);
+// invest empty (softbank no quarters) → 0 share in TTM cross-section (coverage caveat, not imputed)
+const rb = Object.fromEntries(realTtm.stages.map(s => [s.stage, s]));
+assert.equal(rb.invest.companies.length, 0);
+assert.equal(rb.invest.value, 0);
+
 console.log("data-module tests passed");
