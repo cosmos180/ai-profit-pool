@@ -503,7 +503,7 @@ assert.equal(STAGE_COLOR.design, "var(--stg-design)");   // color now flows from
 assert.equal(STAGE_COLOR.app, "var(--stg-app)");
 // 新增 cloud 环节：纯数据扩展，label/color 由 meta.stages 派生（color 用直接 hex，无需改模板）
 assert.equal(STAGE_LABEL.cloud, "云");
-assert.equal(STAGE_COLOR.cloud, "#3E7CB1");
+assert.equal(STAGE_COLOR.cloud, "#6E8F2A");
 
 // stageOf: chain_stage 优先，缺则回退 STAGE_OF_FALLBACK[id]
 assert.equal(stageOf({ id: "nvda" }), "design");                          // fallback by id
