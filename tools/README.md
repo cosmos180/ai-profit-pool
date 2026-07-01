@@ -40,7 +40,31 @@ python3 tools/fetch_fmp.py MSFT --out /tmp/msft.json
 - **非美元公司**(台积电/三星/腾讯/海力士等本币报表):数值是**本币 bn 不是 USD bn**,对象会带 `_fx_todo` 标记——**提交前必须换算成 USD bn** 并在 source 注明汇率。
 - FMP 免费版仅覆盖美股+有限历史;非美股/完整报表需付费套餐。
 
+## merge.py — 合并进 companies.json + 校验 + 构建(一条龙)
+
+`fetch_fmp.py` 只吐对象、**不写盘**(与 app 解耦)。`merge.py` 是下游收尾:按 id 合并进
+`companies.json`,强制过 `validate.py`,**只有 0 ERROR 才写盘并 `build.py`**;任一步失败自动
+回滚,保证仓库里的 `companies.json` 永远是校验通过的状态。
+
+```bash
+# 取数 → 合并 → 校验 → 构建,一条命令
+python3 tools/fetch_fmp.py NVDA MSFT ORCL AMD | python3 tools/merge.py -
+
+python3 tools/merge.py /tmp/new.json            # 从文件合并
+python3 tools/merge.py /tmp/new.json --dry-run  # 只看会改动谁,不写盘
+python3 tools/merge.py /tmp/new.json --no-build # 合并+校验,暂不重建 app.html
+```
+
+- 合并规则:同 id → 覆盖并提示;新 id → 追加。
+- **覆盖保护**:重新取数覆盖已有公司时,若新对象缺判断项(`chain_stage`、`seg_profit`、
+  `segments[].is_ai`、`valuation_caveat`、中文 `name`/`logo` 等),会自动**保留旧对象里手工补的值**
+  —— 一次取数不会把你之前补录的判断项冲掉。
+- 合并后若某公司仍缺 `chain_stage` 或 `is_ai` 分部,会提示它暂不参与利润池迁移/AI 加权池
+  (其余页面正常显示,honest 降级)。
+
 ### 用法建议
-1. 跑脚本 → 得到对象;2. 删掉 `_notes`/`_fx_todo`,补齐判断项、做 USD 换算与数量级核验;
-3. 追加进 `companies.json` 的 `companies[]`;4. `python3 validate.py companies.json schema.json` → 0 ERROR;
-5. `python3 build.py`。全程不改任何代码。
+1. 跑 `fetch_fmp.py` → 得到对象;2.(可选,建议)补齐判断项、做 USD 换算与数量级核验;
+3. `merge.py` 一条龙合并+校验+构建;4. 打开 `app.html`。全程不改任何代码。
+
+> 若手工合并:把对象追加进 `companies.json` 的 `companies[]` →
+> `python3 validate.py companies.json schema.json`(0 ERROR)→ `python3 build.py`。
