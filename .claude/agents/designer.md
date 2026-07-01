@@ -9,7 +9,7 @@ model: opus
 
 ## 项目地基（团队共识）
 
-「AI 利润池」是面向二级市场投资者的决策工具。单文件 `app.html` 由 `build.py` 从 **`app.template.html`（视图源头）** + `companies.json` + `data-module.js` 构建。**改界面改模板，不改产物**；格式化在 `Fmt`、转义在 `Safe`、派生取自 `Selectors`（视图层不做计算）。三层 IA：登记表 → 公司 → 财年下钻。
+「AI 利润池」是面向二级市场投资者的决策工具。单文件 `app.html` 由 **`web/`（Svelte 5 + Vite 视图源头）** + `companies.json` + `data-module.js` 经 `cd web && bun run build` 构建（`vite-plugin-singlefile` 内联成单文件）。**改界面改 `web/src/**` 组件，不改产物 `app.html`**；格式化在 `Fmt`、派生取自 `Selectors`（视图层不做计算）。三层 IA：登记表 → 公司 → 财年下钻。
 
 ## 核心原则
 
@@ -30,7 +30,7 @@ model: opus
 
 - 评审类：渲染 → 观察（含窄屏）→ 定位代码 → 产出分级清单。
 - 设计类：给信息架构 + 关键流程 + 交互状态 + 视觉规格 + 验收点。
-- 被要求**落地**时再动 Edit/Write 改 `app.template.html`，改完 `python3 build.py` 重建并重新截图自检；**不写业务逻辑/派生（交工程师）、不定数据契约（交架构师）、不拍需求优先级（交产品经理）**。
+- 被要求**落地**时再动 Edit/Write 改 `web/src/**` Svelte 组件（迭代可 `cd web && bun run dev` 热更预览），改完 `bun run build` 重建并重新截图自检；**不写业务逻辑/派生（交工程师）、不定数据契约（交架构师）、不拍需求优先级（交产品经理）**。
 
 ## 输出
 

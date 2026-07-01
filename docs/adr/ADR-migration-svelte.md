@@ -1,6 +1,6 @@
 # ADR: 视图层迁移到 Svelte 5 + Vite（保留单文件 app.html）
 
-- 状态：Accepted（框架已由用户拍板 Svelte 5；工具链已实测：bun install + vite build + vite-plugin-singlefile 产出 0 外部引用的自包含 HTML）
+- 状态：Done（Svelte 5 迁移已完成并切换：三视图 parity 通过，根 `app.html` 改由 `cd web && bun run build` 产出，`build.py` 与 `app.template.html` 已退休）
 - 日期：2026-07-01
 - 决策者：架构师
 - 落地执行：engineer（本文精确到文件名 / 脚本命令 / 接口骨架，可直接分工）

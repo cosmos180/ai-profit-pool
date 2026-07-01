@@ -7,7 +7,7 @@
     "validate": "python3 ../validate.py ../companies.json ../schema.json",
     "test:data": "bun ../test-data-module.js",
     "prebuild": "bun run validate && bun run test:data",
-    "build": "vite build && cp dist/index.html dist/app.html",
+    "build": "vite build && cp dist/index.html ../app.html",
     "dev": "vite",
     "preview": "vite preview"
   },

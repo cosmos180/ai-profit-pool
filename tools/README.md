@@ -1,6 +1,6 @@
 # tools/ — 数据采集(与 app 解耦)
 
-这里放**独立的取数辅助脚本**。它们不属于 app 运行时(不被 `build.py` 打包、不被视图依赖),
+这里放**独立的取数辅助脚本**。它们不属于 app 运行时(不被前端构建打包、不被视图依赖),
 只负责把外部数据源变成 `companies.json` 需要的形状。产物照常过 `validate.py` 才算数。
 
 数据流:`tools/*`（取数）─▶ 人工核验/补判断项 ─▶ `companies.json` ─[validate.py]─▶ app
@@ -43,8 +43,8 @@ python3 tools/fetch_fmp.py MSFT --out /tmp/msft.json
 ## merge.py — 合并进 companies.json + 校验 + 构建(一条龙)
 
 `fetch_fmp.py` 只吐对象、**不写盘**(与 app 解耦)。`merge.py` 是下游收尾:按 id 合并进
-`companies.json`,强制过 `validate.py`,**只有 0 ERROR 才写盘并 `build.py`**;任一步失败自动
-回滚,保证仓库里的 `companies.json` 永远是校验通过的状态。
+`companies.json`,强制过 `validate.py`,**只有 0 ERROR 才写盘并 `cd web && bun run build`**;任一步
+失败自动回滚,保证仓库里的 `companies.json` 永远是校验通过的状态。
 
 ```bash
 # 取数 → 合并 → 校验 → 构建,一条命令
@@ -67,4 +67,4 @@ python3 tools/merge.py /tmp/new.json --no-build # 合并+校验,暂不重建 app
 3. `merge.py` 一条龙合并+校验+构建;4. 打开 `app.html`。全程不改任何代码。
 
 > 若手工合并:把对象追加进 `companies.json` 的 `companies[]` →
-> `python3 validate.py companies.json schema.json`(0 ERROR)→ `python3 build.py`。
+> `python3 validate.py companies.json schema.json`(0 ERROR)→ `cd web && bun run build`。

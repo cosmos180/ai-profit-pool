@@ -3,7 +3,7 @@
 merge.py — 把取数工具的产物合并进 companies.json,并跑通校验/构建(与 app 解耦的收尾步骤)。
 
 它是 fetch_fmp.py 的下游:接收「一个或多个 companies.json 形状的公司对象」,按 id
-合并进 companies.json,然后强制过 validate.py;只有 0 ERROR 才写盘并 build.py。
+合并进 companies.json,然后强制过 validate.py;只有 0 ERROR 才写盘并构建(cd web && bun run build)。
 任何一步失败都会回滚 companies.json,保证仓库里的数据永远是校验通过的状态。
 
     # 直接接管道:取数 → 合并 → 校验 → 构建,一条龙
@@ -57,7 +57,7 @@ def main():
     ap = argparse.ArgumentParser(description="merge fetched company object(s) into companies.json")
     ap.add_argument("inputs", nargs="+", metavar="FILE", help="取数产物;用 - 读 stdin")
     ap.add_argument("--dry-run", action="store_true", help="只报告会改动谁,不写盘")
-    ap.add_argument("--no-build", action="store_true", help="合并+校验后不运行 build.py")
+    ap.add_argument("--no-build", action="store_true", help="合并+校验后不构建 app.html")
     a = ap.parse_args()
 
     db = json.loads(DB.read_text(encoding="utf-8"))
@@ -103,12 +103,18 @@ def main():
     if updated: print(f"   覆盖: {', '.join(updated)}")
 
     if a.no_build:
-        print("   (--no-build) 记得随后跑 python3 build.py 重建 app.html。")
+        print("   (--no-build) 记得随后跑 `cd web && bun run build` 重建 app.html。")
         return
-    b = subprocess.run([sys.executable, str(ROOT / "build.py")])
+    # 视图层已迁到 Svelte+Vite:构建 = web/ 里的 bun run build(会再跑一次校验闸门,冗余但无害)。
+    try:
+        b = subprocess.run(["bun", "run", "build"], cwd=str(ROOT / "web"))
+    except FileNotFoundError:
+        print("   ⚠ 未找到 bun —— companies.json 已更新且校验通过。"
+              "装好依赖后手动跑 `cd web && bun install && bun run build` 重建 app.html。")
+        return
     if b.returncode != 0:
-        sys.exit("build.py 失败 —— companies.json 已更新且校验通过,手动排查构建。")
-    print("   app.html 已重建 → 打开即可看到新数据。")
+        sys.exit("web 构建失败 —— companies.json 已更新且校验通过,手动排查 `cd web && bun run build`。")
+    print("   app.html 已重建(cd web && bun run build)→ 打开即可看到新数据。")
 
     # 温馨提示:未补判断项的公司会honest降级(不进 AI 利润池/迁移图)。
     missing = [cid for cid in (added + updated)
