@@ -110,7 +110,10 @@
     <div class="section-h" style="margin-top:18px">公司层面 · {y.fy}</div>
     <div class="card csum">
       <div class="c"><div class="cl">营收</div><div class="cv num">{Fmt.bn(y.revenue, 1)}</div></div>
-      <div class="c"><div class="cl">毛利率</div><div class="cv num">{Fmt.pct(y.gross_margin)}</div></div>
+      <div class="c">
+        <div class="cl">毛利率{#if y.gross_margin == null}<span class="cl-flag" title="该公司未在此财年披露公司层面毛利率——诚实留空，而非缺数据">未披露</span>{/if}</div>
+        <div class="cv num">{Fmt.pct(y.gross_margin)}</div>
+      </div>
       <div class="c"><div class="cl">经营利润率</div><div class="cv num">{Fmt.pct(Selectors.opMargin(y))}</div></div>
       <div class="c"><div class="cl">净利润</div><div class="cv num green">{Fmt.bn(y.net_income, 1)}</div></div>
       <div class="c"><div class="cl">净利率</div><div class="cv num green">{Fmt.pct(Selectors.netMargin(y))}</div></div>
@@ -134,7 +137,7 @@
             </div>
             <div class="ptrack"><div class="pfill" style="width:{p.barW}%"></div></div>
             <div class="pyoy">
-              {#if p.yoy == null}<span class="na">同比 —（无上一年样本）</span>{:else}<span class={p.yoy >= 0 ? 'up' : 'dn'}>同比 {Fmt.yoy(p.yoy)}</span>{/if}
+              {#if p.yoy == null}<span class="na" title="这是本公司已录入的最早财年，没有上一年同分部数据作基期，故无法算同比——属数据边界，不是缺失">同比 n/a · 最早财年无基期</span>{:else}<span class={p.yoy >= 0 ? 'up' : 'dn'}>同比 {Fmt.yoy(p.yoy)}</span>{/if}
             </div>
           </div>
         {/each}

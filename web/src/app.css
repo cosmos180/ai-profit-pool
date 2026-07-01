@@ -42,7 +42,16 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .cover .cv{padding:15px 18px;flex:1;min-width:150px}
 .cover .cv .l{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
 .cover .cv .v{font-family:var(--mono);font-size:25px;font-weight:600;margin-top:6px;letter-spacing:-.01em}
+.cover .cv .plain{font-size:12px;color:var(--ink-soft);margin-top:5px;line-height:1.45}
 .cover .cv .s{font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
+/* ---- hero 口径说明（折叠，长口径不占首屏第一印象）---- */
+.cover-note{margin-top:12px;background:var(--card-2);border:1px solid var(--line);border-radius:10px;padding:0 15px}
+.cover-note summary{list-style:none;cursor:pointer;font-size:12.5px;color:var(--ink-soft);padding:11px 0;display:flex;align-items:center;gap:8px}
+.cover-note summary::-webkit-details-marker{display:none}
+.cover-note summary b{color:var(--ink)}
+.cover-note .cn-hint{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-faint);white-space:nowrap}
+.cover-note[open] .cn-hint{opacity:.6}
+.cover-note p{margin:0;padding:0 0 13px;font-size:12.5px;color:var(--ink-soft);line-height:1.6}.cover-note p b{color:var(--ink)}
 .cover .cv.accent .v{color:var(--ok)}
 .cover .cv .l .caliper{margin-left:auto;font-size:9.5px;font-weight:600;letter-spacing:.02em;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);border-radius:999px;padding:1px 7px;white-space:nowrap}
 .metricbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
@@ -148,6 +157,7 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .csum{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));overflow:hidden}
 .csum .c{padding:15px 17px;border-right:1px solid var(--line-soft)}.csum .c:last-child{border-right:0}
 .csum .cl{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+.csum .cl .cl-flag{margin-left:6px;font-size:9.5px;font-family:var(--mono);color:var(--ink-faint);background:var(--card-2);border:1px solid var(--line);border-radius:5px;padding:1px 5px;cursor:help;letter-spacing:.02em}
 .csum .cv{font-family:var(--mono);font-size:20px;font-weight:600;margin-top:5px}.csum .cv.green{color:var(--ok)}
 .plat{padding:6px 18px 16px}
 .platrow{padding:13px 0;border-bottom:1px solid var(--line-soft)}.platrow:last-child{border-bottom:0}
@@ -178,6 +188,13 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .srcrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
 .srcrow:last-child{border-bottom:0}.srcrow .sl{color:var(--ink-soft)}.srcrow a{word-break:break-all;font-size:12px}
 .note-block{font-size:12.5px;color:var(--ink-soft);background:var(--card-2);border-radius:10px;padding:12px 15px;line-height:1.6;margin-top:13px}.note-block b{color:var(--ink)}
+/* ---- 估值卡组共享口径说明（折叠，收敛原本复制 5 份的 caveat）---- */
+.caveat-note{margin-top:12px;background:var(--card-2);border:1px solid var(--line);border-left:3px solid var(--est);border-radius:9px;padding:0 14px}
+.caveat-note summary{list-style:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#6b4e16;padding:11px 0;display:flex;align-items:center;gap:8px}
+.caveat-note summary::-webkit-details-marker{display:none}
+.caveat-note .cn-hint{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink-faint);white-space:nowrap}
+.caveat-note[open] .cn-hint{opacity:.6}
+.caveat-note p{margin:0;padding:0 0 13px;font-size:12px;color:var(--ink-soft);line-height:1.65}
 /* ---- profit-pool migration (100% stacked columns) ---- */
 .mig-card{padding:20px 22px 16px}
 .mig-lead{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 4px;max-width:72ch}.mig-lead b{color:var(--ink)}

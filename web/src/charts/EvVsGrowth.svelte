@@ -5,7 +5,9 @@
   import { Selectors } from '../lib/data.js'
   import { Fmt } from '../lib/fmt.js'
 
-  let { company } = $props()
+  // caveatShown：上方估值卡组是否已展示共享口径说明（软银）。为真则本块不再复制完整 note，
+  // 只保留本块特有的一句降级理由（诚实标注不丢，全文见上方「口径说明」）。
+  let { company, caveatShown = false } = $props()
 
   const note = $derived(company?.valuation_caveat?.note || '')
   const peNa = $derived(Selectors.valuationCaveat(company, 'pe') === 'na')
@@ -26,7 +28,7 @@
 {#if peNa}
   <div class="evg evg-na">
     <div class="evg-h">估值 vs 增长 <span class="evg-flag na">不适用</span></div>
-    <p class="evg-note">该公司净利润含投资公允价值损益（非经营），PE 已留空、净利同比无经营含义，<b>"贵得有没有道理"无法用 PE/增长判断</b>，诚实降级。{note}</p>
+    <p class="evg-note">该公司净利润含投资公允价值损益（非经营），PE 已留空、净利同比无经营含义，<b>"贵得有没有道理"无法用 PE/增长判断</b>，诚实降级。{#if !caveatShown}{note}{/if}</p>
   </div>
 {:else}
   <div class="evg">

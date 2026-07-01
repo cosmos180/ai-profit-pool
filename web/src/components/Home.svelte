@@ -79,23 +79,27 @@
   <div class="card cv accent">
     <div class="l"><span class="swatch" style="background:var(--ok)"></span>AI 利润池<span class="caliper">AI 归因加权</span></div>
     <div class="v num">{Fmt.bn(lead.pool, 0)}</div>
+    <div class="plain">{lead.n} 家公司的净利润，按各自 AI 占比加权后相加</div>
     <div class="s">已按 AI 归因加权 · 覆盖 {lead.n}/{lead.N} 家</div>
   </div>
   <div class="card cv">
     <div class="l"><span class="swatch" style="background:var(--est)"></span>利润最集中</div>
     <div class="v num">{lead.share != null ? Fmt.pct(lead.share, 0) : '—'}</div>
+    <div class="plain">{lead.leader ? `${shortName(lead.leader)} 一家占了全部 AI 利润的这么多` : '—'}</div>
     <div class="s">{lead.leader ? shortName(lead.leader) + ' 占 AI 加权池比重' : '—'}</div>
   </div>
   <div class="card cv accent">
     <div class="l"><span class="swatch" style="background:var(--past)"></span>利润池同比</div>
     <div class="v num">{poolYoY.value != null ? Fmt.yoy(poolYoY.value) : '—'}</div>
+    <div class="plain">{poolYoY.value != null ? '整个 AI 利润池较上一财年的增速' : '—'}</div>
     <div class="s">{poolYoY.migLast && poolYoY.migPrev ? `AI 加权池 ${poolYoY.migPrev.label}→${poolYoY.migLast.label}` : 'AI 加权池较上一财年'}</div>
   </div>
 </div>
 
-<div class="note-block">
-  <b>口径：AI 归因加权（C）。</b>利润池与下方迁移图均为「每家最新实际财年净利润 × 该公司 AI 占比」之和（{Fmt.bn(lead.pool, 0)}），而非全额净利润求和；缺 AI 占比的公司已诚实剔除，故覆盖 <b>{lead.n}/{lead.N}</b> 家。{#if basisAllProxy}当前 {lead.basisCount.proxy} 家的 AI 占比<b>全部为 <code>is_ai</code> 营收代理估算</b>（basis=proxy），<b>并非公司披露的 AI 利润占比</b>——把营收代理当作利润占比是一种近似，口径在此明示，请据此理解所有 AI 加权数值。{:else}AI 占比来源构成：<b>{lead.basisCount.sourced}</b> 家有据可依（sourced）、<b>{lead.basisCount.proxy}</b> 家为 <code>is_ai</code> 营收代理估算（proxy，非披露的 AI 利润占比，属近似）。{/if}
-</div>
+<details class="cover-note">
+  <summary><b>口径说明</b>：这三个数怎么算出来的<span class="cn-hint">展开 ⌄</span></summary>
+  <p><b>AI 归因加权（C）。</b>利润池与下方迁移图均为「每家最新实际财年净利润 × 该公司 AI 占比」之和（{Fmt.bn(lead.pool, 0)}），而非全额净利润求和；缺 AI 占比的公司已诚实剔除，故覆盖 <b>{lead.n}/{lead.N}</b> 家。{#if basisAllProxy}当前 {lead.basisCount.proxy} 家的 AI 占比<b>全部为 <code>is_ai</code> 营收代理估算</b>（basis=proxy），<b>并非公司披露的 AI 利润占比</b>——把营收代理当作利润占比是一种近似，口径在此明示，请据此理解所有 AI 加权数值。{:else}AI 占比来源构成：<b>{lead.basisCount.sourced}</b> 家有据可依（sourced）、<b>{lead.basisCount.proxy}</b> 家为 <code>is_ai</code> 营收代理估算（proxy，非披露的 AI 利润占比，属近似）。{/if}</p>
+</details>
 
 <div class="section-h">利润池如何迁移</div>
 <Migration />

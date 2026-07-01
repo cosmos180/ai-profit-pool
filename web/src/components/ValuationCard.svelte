@@ -22,6 +22,15 @@
     return '净负债 $0.0B · EV≈市值'
   })
 
+  // 每个指标失真/不适用时的「一句最关键因由」（纯呈现文案，非计算）。
+  // 完整口径说明不在卡内复制，收敛为卡组下方一条共享注释（诚实标注不丢，只是不物理复制）。
+  const SHORT_REASON = {
+    pe: '净利润含投资公允价值损益，非经营盈利',
+    fcf_yield: '投资控股，FCF 不反映经营现金创造',
+    ps: '营收主要来自电信子公司，非 AI 价值载体',
+    ev_sales: '合并净负债含电信子公司债务 → EV 失真',
+  }
+
   // relKey = stageValuationRel 的指标键(与 defs.key 的数据键名不同：ev_sales→evSales 等)。
   const defs = $derived([
     { key: 'pe', relKey: 'pe', lbl: 'PE 市盈率', val: Selectors.pe(company), fmt: Fmt.mult, denom: '市值 / 净利润', sw: 'var(--ok)' },
@@ -45,8 +54,10 @@
   }
 
   const cards = $derived(
-    defs.map(d => ({ ...d, caveat: Selectors.valuationCaveat(company, d.key), rel: relOf(d) }))
+    defs.map(d => ({ ...d, caveat: Selectors.valuationCaveat(company, d.key), rel: relOf(d), reason: SHORT_REASON[d.key] || '' }))
   )
+  // 是否存在任一失真/不适用的指标 → 才展示卡组下方那条共享口径说明（完整 note）。
+  const hasCaveat = $derived(!!note && cards.some(d => d.caveat === 'na' || d.caveat === 'distorted'))
 
   // quote 来源行（复用来源展示范式，derived=汇率换算）。
   const srcRows = $derived((q?.sources || []).map(s => ({
@@ -71,7 +82,7 @@
         <div class="card kpi empty">
           <div class="k-lbl"><span class="swatch" style="background:var(--past)"></span>{d.lbl}<span class="k-flag na">不适用</span></div>
           <div class="k-val num">—</div>
-          <div class="k-note">该指标对此公司无经营含义，诚实留空。{note}</div>
+          <div class="k-note muted">{d.reason || '该指标对此公司无经营含义，诚实留空。'}</div>
         </div>
       {:else if d.caveat === 'distorted'}
         <div class="card kpi distort">
@@ -79,7 +90,7 @@
           <div class="k-val num">{d.fmt(d.val)}</div>
           <div class="k-sub">{d.denom}</div>
           {#if d.sub2}<div class="k-sub">{d.sub2}</div>{/if}
-          <div class="k-note">{note || '该倍数受口径影响，仅供参考。'}</div>
+          <div class="k-note">{d.reason || '该倍数受口径影响，仅供参考。'}</div>
         </div>
       {:else}
         <div class="card kpi accent">
@@ -93,7 +104,14 @@
     {/each}
   </div>
 
-  <EvVsGrowth {company} />
+  {#if hasCaveat}
+    <details class="caveat-note">
+      <summary>为何部分估值指标留空或降级？<span class="cn-hint">口径说明 ⌄</span></summary>
+      <p>{note}</p>
+    </details>
+  {/if}
+
+  <EvVsGrowth {company} caveatShown={hasCaveat} />
 
   <div class="section-h" style="margin-top:20px">市场快照来源</div>
   <div class="card srcs">
