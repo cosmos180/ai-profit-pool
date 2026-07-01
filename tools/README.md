@@ -15,6 +15,9 @@ python3 tools/fetch_fmp.py NVDA --id nvda --name "NVIDIA 英伟达" --years 4 --
 python3 tools/fetch_fmp.py MSFT --out /tmp/msft.json
 ```
 
+默认走 FMP 当前的 **stable API**(`/stable/income-statement?symbol=…`)。新 key 一般只开放 stable;
+若你的套餐仍是旧接口、stable 返回 403,加 `--legacy` 走 `/api/v3`。
+
 ### 自动填(来自 FMP,单位换成 USD bn,`data_status: "derived"`)
 | schema 字段 | FMP 来源 |
 |---|---|
