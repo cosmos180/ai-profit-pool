@@ -11,12 +11,14 @@
 
 ```bash
 export FMP_API_KEY=你的key
-python3 tools/fetch_fmp.py NVDA --id nvda --name "NVIDIA 英伟达" --years 4 --quarters
+python3 tools/fetch_fmp.py NVDA               # 最简:id=nvda、name=FMP 公司名,自动
+python3 tools/fetch_fmp.py NVDA MSFT ORCL AMD # 批量 → 输出 JSON 数组
 python3 tools/fetch_fmp.py MSFT --out /tmp/msft.json
 ```
 
-默认走 FMP 当前的 **stable API**(`/stable/income-statement?symbol=…`)。新 key 一般只开放 stable;
-若你的套餐仍是旧接口、stable 返回 403,加 `--legacy` 走 `/api/v3`。
+- `id` 默认=ticker 小写,`name` 默认=FMP 公司名(中文名等追加进 companies.json 后自己改)。
+- 默认走 FMP 当前的 **stable API**;若套餐仍是旧接口、stable 返回 403,加 `--legacy` 走 `/api/v3`。
+- `--quarters`(季度/TTM)需更高档套餐;免费/基础档会返 402,自动跳过。
 
 ### 自动填(来自 FMP,单位换成 USD bn,`data_status: "derived"`)
 | schema 字段 | FMP 来源 |

@@ -7,8 +7,9 @@ turns FMP's structured financials into a company object matching schema.json, so
 you can paste the result into companies.json[companies] and run validate.py.
 
     export FMP_API_KEY=xxxx
-    python3 tools/fetch_fmp.py NVDA --id nvda --name "NVIDIA 英伟达" --years 4 --quarters
-    python3 tools/fetch_fmp.py MSFT > /tmp/msft.json
+    python3 tools/fetch_fmp.py NVDA                 # id=nvda, name=FMP's, auto
+    python3 tools/fetch_fmp.py NVDA MSFT ORCL AMD   # batch → JSON array
+    python3 tools/fetch_fmp.py MSFT --out /tmp/msft.json
 
 API: defaults to FMP's current "stable" API (…/stable/income-statement?symbol=SYM).
 Newer keys only work on stable; older keys may need the legacy v3 API — pass
@@ -185,12 +186,14 @@ def build(ticker, key, n_years, want_quarters, mode):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="FMP → companies.json company object (decoupled collector).")
-    ap.add_argument("ticker")
-    ap.add_argument("--id", help="lowercase id to set (default: leave null for you to fill)")
-    ap.add_argument("--name", help="override display name")
+    ap = argparse.ArgumentParser(
+        description="FMP → companies.json company object(s). id defaults to ticker.lower(), "
+                    "name to FMP's company name — so the minimal call is just the ticker(s).")
+    ap.add_argument("tickers", nargs="+", metavar="TICKER", help="one or more, e.g. NVDA MSFT ORCL")
+    ap.add_argument("--id", help="override id (only when a single ticker is given; else auto = ticker.lower())")
+    ap.add_argument("--name", help="override name (single ticker; else auto = FMP company name)")
     ap.add_argument("--years", type=int, default=4)
-    ap.add_argument("--quarters", action="store_true", help="also pull latest quarters (for TTM)")
+    ap.add_argument("--quarters", action="store_true", help="also pull latest quarters (for TTM; needs a higher FMP tier)")
     ap.add_argument("--legacy", action="store_true", help="use the legacy /api/v3 API instead of /stable")
     ap.add_argument("--key", default=os.environ.get("FMP_API_KEY"))
     ap.add_argument("--out", help="write to file instead of stdout")
@@ -199,23 +202,32 @@ def main():
         sys.exit("Set FMP_API_KEY env var or pass --key")
 
     mode = "v3" if a.legacy else "stable"
-    print(f"Fetching {a.ticker.upper()} from FMP ({mode} API)…", file=sys.stderr)
-    obj = build(a.ticker, a.key, a.years, a.quarters, mode)
-    if not obj:
-        sys.exit(1)
-    if a.id:   obj["id"] = a.id
-    if a.name: obj["name"] = a.name
+    single = len(a.tickers) == 1
+    results = []
+    for tk in a.tickers:
+        print(f"Fetching {tk.upper()} from FMP ({mode} API)…", file=sys.stderr)
+        obj = build(tk, a.key, a.years, a.quarters, mode)
+        if not obj:
+            print(f"  ! skipped {tk.upper()}", file=sys.stderr)
+            continue
+        obj["id"] = (a.id if (a.id and single) else tk.lower())   # auto id from ticker
+        if a.name and single:
+            obj["name"] = a.name                                   # else keep FMP company name
+        filled = sum(1 for y in obj["years"] for k in ("revenue", "net_income", "op_income", "capex", "cfo")
+                     if y.get(k) is not None)
+        print(f"  {obj['id']}: {len(obj['years'])} years, {filled} core numbers, currency={obj['currency']}"
+              + ("  ⚠ non-USD, see _fx_todo" if obj.get("_fx_todo") else ""), file=sys.stderr)
+        results.append(obj)
 
-    out = json.dumps(obj, ensure_ascii=False, indent=2)
+    if not results:
+        sys.exit(1)
+    payload = results[0] if (single and results) else results      # single→object, many→array
+    out = json.dumps(payload, ensure_ascii=False, indent=2)
     if a.out:
         open(a.out, "w", encoding="utf-8").write(out + "\n")
-        print(f"wrote {a.out}", file=sys.stderr)
+        print(f"wrote {a.out} ({len(results)} companies)", file=sys.stderr)
     else:
         print(out)
-    filled = sum(1 for y in obj["years"] for k in ("revenue", "net_income", "op_income", "capex", "cfo")
-                 if y.get(k) is not None)
-    print(f"done: {len(obj['years'])} years, {filled} core numbers filled, currency={obj['currency']}"
-          + ("  ⚠ non-USD, see _fx_todo" if obj.get("_fx_todo") else ""), file=sys.stderr)
 
 
 if __name__ == "__main__":
