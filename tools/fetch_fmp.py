@@ -146,14 +146,15 @@ def build(ticker, key, n_years, want_quarters, mode):
                     src(f"FMP balance sheet ({sym})", disp_url(mode, "balance-sheet-statement", sym))],
     }
 
+    # NOTE: chain_stage / ai_exposure are intentionally OMITTED (not null) — the schema
+    # types them as string/enum with no null, so emitting null would fail validate.py.
+    # Add them by hand after merging. seg_profit defaults to the safe "no".
     company = {
         "id": None, "name": prof.get("companyName") or sym,
         "ticker": f"{prof.get('exchangeShortName','')} · {sym}".strip(" ·"),
         "region": prof.get("country") or None,
         "sector": prof.get("sector") or None,
         "currency": ccy,
-        "chain_stage": None,      # TODO: value-chain stage (meta.stages key)
-        "ai_exposure": None,      # TODO: pure|primary|partial|peripheral
         "seg_profit": "no",       # TODO: yes|partial|no per disclosure
         "status": "populated",
         "quote": quote_obj,
@@ -175,14 +176,13 @@ def build(ticker, key, n_years, want_quarters, mode):
         if qs:
             company["quarters"] = qs
 
-    company["_notes"] = [
-        "AUTO-FILLED FROM FMP (data_status=derived). Verify vs primary filings; upgrade to 'official'.",
-        "FILL BY HAND: chain_stage, ai_exposure, seg_profit, segments[]+is_ai, valuation_caveat, id.",
-    ]
+    # Guidance goes to stderr — the JSON stays clean & directly mergeable into companies.json.
+    print(f"  · {sym}: fill by hand → chain_stage, ai_exposure, seg_profit, segments[]+is_ai, "
+          f"valuation_caveat. All values data_status=derived; verify vs filings.", file=sys.stderr)
     if ccy != "USD":
-        company["_fx_todo"] = (f"Values are in {ccy} bn, NOT USD bn. Convert every number to USD bn "
-                               f"before committing; note the FX rate in sources.")
-    return company
+        print(f"  ⚠ {sym}: values are in {ccy} bn, NOT USD bn — convert to USD bn before committing.",
+              file=sys.stderr)
+    return company, (ccy != "USD")
 
 
 def main():
@@ -206,17 +206,18 @@ def main():
     results = []
     for tk in a.tickers:
         print(f"Fetching {tk.upper()} from FMP ({mode} API)…", file=sys.stderr)
-        obj = build(tk, a.key, a.years, a.quarters, mode)
-        if not obj:
+        res = build(tk, a.key, a.years, a.quarters, mode)
+        if not res:
             print(f"  ! skipped {tk.upper()}", file=sys.stderr)
             continue
+        obj, is_fx = res
         obj["id"] = (a.id if (a.id and single) else tk.lower())   # auto id from ticker
         if a.name and single:
             obj["name"] = a.name                                   # else keep FMP company name
         filled = sum(1 for y in obj["years"] for k in ("revenue", "net_income", "op_income", "capex", "cfo")
                      if y.get(k) is not None)
         print(f"  {obj['id']}: {len(obj['years'])} years, {filled} core numbers, currency={obj['currency']}"
-              + ("  ⚠ non-USD, see _fx_todo" if obj.get("_fx_todo") else ""), file=sys.stderr)
+              + ("  ⚠ non-USD" if is_fx else ""), file=sys.stderr)
         results.append(obj)
 
     if not results:
