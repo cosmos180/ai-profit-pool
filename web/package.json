@@ -5,8 +5,9 @@
   "description": "Svelte 5 + Vite view layer. Builds to a single self-contained app.html (vite-plugin-singlefile), preserving the project's zero-server portability. Data pipeline (companies.json / schema.json / validate.py) is unchanged and orthogonal.",
   "scripts": {
     "validate": "python3 ../validate.py ../companies.json ../schema.json",
-    "prebuild": "npm run validate",
-    "build": "vite build",
+    "test:data": "node ../test-data-module.js",
+    "prebuild": "npm run validate && npm run test:data",
+    "build": "vite build && cp dist/index.html dist/app.html",
     "dev": "vite",
     "preview": "vite preview"
   },

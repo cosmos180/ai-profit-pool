@@ -512,6 +512,33 @@ const Selectors = {
     return positions.reverse(); // chronological: old → new
   },
 
+  /* ---- Home hero 组合派生:龙头占比 / 利润池同比 ----
+     两者是对 profitPoolAI / profitPoolMigration 已算好输出的再组合。归并到此唯一派生
+     边界(不在视图组件里算——不变量5:视图无计算)。均 null-safe:分母缺失/≤0 → null
+     (诚实留空,绝不伪造 0)。口径与 hero 池、迁移图三者完全一致。 */
+
+  /* 龙头(AI 加权后净利最高的公司)及其占 AI 加权池比重;pool = profitPoolAI.total。
+     返回 {leader, share, pool, n, N, basisCount};无贡献者 → leader=null、share=null。 */
+  profitPoolLeader(companies) {
+    const ai = this.profitPoolAI(companies);
+    const cos = ai.byStage.flatMap(s => s.companies).slice().sort((a, b) => b.ni - a.ni);
+    const leader = cos.length ? cos[0] : null;
+    const share = (leader && ai.total > 0) ? leader.ni / ai.total : null;
+    return { leader, share, pool: ai.total, n: ai.n, N: ai.N, basisCount: ai.basisCount };
+  },
+
+  /* 利润池同比:迁移图最新位置 total 相对上一位置 total(与池子、迁移图三者同口径)。
+     返回 {value, migLast, migPrev};不足两位置或上一位置 total≤0 → value=null(基期无意义)。 */
+  profitPoolYoY(companies) {
+    const mig = this.profitPoolMigration(companies);
+    const migLast = mig.length ? mig[mig.length - 1] : null;
+    const migPrev = mig.length > 1 ? mig[mig.length - 2] : null;
+    const value = (migLast && migPrev && migPrev.total > 0)
+      ? (migLast.total - migPrev.total) / migPrev.total
+      : null;
+    return { value, migLast, migPrev };
+  },
+
   /* extract a 4-digit year from a year record — prefer machine-readable period_end_iso
      (ADR-2), fall back to a regex over the free-text period_end. null-safe. */
   _yearOf(y) {

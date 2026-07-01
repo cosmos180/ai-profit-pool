@@ -705,6 +705,52 @@ assert.ok(Math.abs(realNew.total - aiPool.total) < 1e-9, "migration newest == AI
 assert.equal(aiPool.n, 13); assert.equal(aiPool.N, 13);
 assert.deepEqual(aiPool.basisCount, { sourced: 0, proxy: 13 }); // current data: all proxy
 
+// =====================================================================
+// profitPoolLeader / profitPoolYoY (Home hero 组合派生,下沉自旧 renderHome 内联算术)
+// =====================================================================
+{
+  // leader: 用上面的合成池(nvda 90 / tsmc 30 / x-src 20;total 140)——龙头 nvda 占 90/140。
+  const cos = [
+    syn("nvda",     [Ap("FY1", "2025-01-01", 100, 90, 10)]),   // proxy .9 → 90
+    syn("tsmc",     [Ap("FY1", "2025-01-01", 50,  30, 20)]),   // proxy .6 → 30
+    { id: "x-src", name: "SRC", chain_stage: "app", ai_profit_share: 0.5,
+      years: [Ap("FY1", "2025-01-01", 40, 40, 0)] },           // sourced .5 → 20
+  ];
+  const ld = Selectors.profitPoolLeader(cos);
+  assert.equal(ld.leader.id, "nvda");
+  assert.equal(ld.pool, 140);
+  assert.ok(Math.abs(ld.share - 90 / 140) < 1e-9);
+  assert.equal(ld.n, 3); assert.equal(ld.N, 3);
+  assert.deepEqual(ld.basisCount, { sourced: 1, proxy: 2 });
+  // 空池 → leader/share null,不崩、不伪造 0
+  const empty = Selectors.profitPoolLeader([]);
+  assert.equal(empty.leader, null); assert.equal(empty.share, null); assert.equal(empty.pool, 0);
+}
+{
+  // yoy: 两位置 total 25→174(用上面的 synCos)→ (174-25.? )... 直接用 synMig 的两位置。
+  const yy = Selectors.profitPoolYoY(synCos);
+  assert.equal(yy.migLast.label, "≈2025"); assert.equal(yy.migPrev.label, "≈2024");
+  assert.ok(Math.abs(yy.value - (yy.migLast.total - yy.migPrev.total) / yy.migPrev.total) < 1e-9);
+  // 上一位置 total ≤0 → 基期无意义 → value null(不可比)。Ap(fy,iso,ni,aiRev,otherRev):
+  // FY24 ni=-10、aiRev=10(aiShare=1.0)→ migPrev.total=-10;FY25 ni=30 → migLast.total=30。
+  const negPrev = [
+    syn("skhynix", [Ap("FY24", "2024-01-01", -10, 10, 0), Ap("FY25", "2025-01-01", 30, 30, 0)]),
+  ];
+  assert.equal(Selectors.profitPoolYoY(negPrev).value, null);
+  // 不足两位置 → null
+  const one = [syn("nvda", [Ap("FY1", "2025-01-01", 100, 90, 10)])];
+  assert.equal(Selectors.profitPoolYoY(one).value, null);
+  assert.deepEqual(Selectors.profitPoolYoY([]), { value: null, migLast: null, migPrev: null });
+}
+// real data: leader == 池龙头,yoy 口径自洽(与迁移图两位置一致)
+{
+  const ld = Selectors.profitPoolLeader(Store.populated());
+  assert.ok(ld.share > 0 && ld.share <= 1, "leader share in (0,1]: " + ld.share);
+  assert.ok(Math.abs(ld.pool - aiPool.total) < 1e-9, "leader pool == AI pool total");
+  const yy = Selectors.profitPoolYoY(Store.populated());
+  assert.ok(Math.abs(yy.value - (realNew.total - realMig[realMig.length - 2].total) / realMig[realMig.length - 2].total) < 1e-9);
+}
+
 // shares sum to 1 at the latest position
 assert.ok(Math.abs(realNew.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
 

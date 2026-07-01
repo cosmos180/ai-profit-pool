@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 利润池 · 公司经营数据</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app"></div>
+  <!-- dataset 节点：构建期由 companies.json 内联（vite.config.js inlineDataset）；
+       Store.load() 读它（ADR 决策 2）。占位符必须完整保留，供插件替换。 -->
+  <script type="application/json" id="dataset"><!--__DATASET_JSON__--></script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
