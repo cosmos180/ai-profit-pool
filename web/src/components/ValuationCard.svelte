@@ -22,15 +22,30 @@
     return '净负债 $0.0B · EV≈市值'
   })
 
+  // relKey = stageValuationRel 的指标键(与 defs.key 的数据键名不同：ev_sales→evSales 等)。
   const defs = $derived([
-    { key: 'pe', lbl: 'PE 市盈率', val: Selectors.pe(company), fmt: Fmt.mult, denom: '市值 / 净利润', sw: 'var(--ok)' },
-    { key: 'ps', lbl: 'PS 市销率', val: Selectors.ps(company), fmt: Fmt.mult, denom: '市值 / 营收', sw: 'var(--ok)' },
-    { key: 'ev_sales', lbl: 'EV/Sales', val: Selectors.evSales(company), fmt: Fmt.mult, denom: '(市值+净负债) / 营收', sub2: evSub2, sw: 'var(--ok)' },
-    { key: 'fcf_yield', lbl: 'FCF yield', val: Selectors.fcfYield(company), fmt: Fmt.pct, denom: '自由现金流 / 市值', sw: 'var(--ok)' },
+    { key: 'pe', relKey: 'pe', lbl: 'PE 市盈率', val: Selectors.pe(company), fmt: Fmt.mult, denom: '市值 / 净利润', sw: 'var(--ok)' },
+    { key: 'ps', relKey: 'ps', lbl: 'PS 市销率', val: Selectors.ps(company), fmt: Fmt.mult, denom: '市值 / 营收', sw: 'var(--ok)' },
+    { key: 'ev_sales', relKey: 'evSales', lbl: 'EV/Sales', val: Selectors.evSales(company), fmt: Fmt.mult, denom: '(市值+净负债) / 营收', sub2: evSub2, sw: 'var(--ok)' },
+    { key: 'fcf_yield', relKey: 'fcfYield', lbl: 'FCF yield', val: Selectors.fcfYield(company), fmt: Fmt.pct, denom: '自由现金流 / 市值', sw: 'var(--ok)' },
   ])
 
+  // B1 同环节相对估值：每个指标从 Selector 取 {cohortN, median, relative, lowerCheaper, insufficient}，
+  // 组件只做文案分流（无财务算术）。方向语义：lowerCheaper 决定「数值 low/high」对应「更便宜/更贵」。
+  const relOf = d => {
+    const r = Selectors.stageValuationRel(company, d.relKey)
+    if (r.insufficient || r.relative == null) {
+      return r.cohortN >= 1 ? '同环节样本不足' : ''
+    }
+    // relative ∈ low/mid/high 指数值高低；配合方向出「更便宜/更贵/接近中位」
+    let tone = '接近中位'
+    if (r.relative === 'low')  tone = r.lowerCheaper ? '偏低（更便宜）' : '偏低（更贵）'
+    if (r.relative === 'high') tone = r.lowerCheaper ? '偏高（更贵）'   : '偏高（更便宜）'
+    return `同环节 ${r.cohortN} 家 · 中位 ${d.fmt(r.median)} · ${tone}`
+  }
+
   const cards = $derived(
-    defs.map(d => ({ ...d, caveat: Selectors.valuationCaveat(company, d.key) }))
+    defs.map(d => ({ ...d, caveat: Selectors.valuationCaveat(company, d.key), rel: relOf(d) }))
   )
 
   // quote 来源行（复用来源展示范式，derived=汇率换算）。
@@ -72,6 +87,7 @@
           <div class="k-val num">{d.fmt(d.val)}</div>
           <div class="k-sub">{d.denom}</div>
           {#if d.sub2}<div class="k-sub">{d.sub2}</div>{/if}
+          {#if d.rel}<div class="k-rel">{d.rel}</div>{/if}
         </div>
       {/if}
     {/each}

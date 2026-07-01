@@ -990,4 +990,148 @@ const rb = Object.fromEntries(realTtm.stages.map(s => [s.stage, s]));
 assert.equal(rb.invest.companies.length, 0);
 assert.equal(rb.invest.value, 0);
 
+// =====================================================================
+// B1: stageValuationRel — same-stage relative valuation (comps)
+//   cohort = 同 stageOf 的 populated 公司里该指标可比者(排除 na/distorted/null);
+//   relative ∈ low/mid/high 指数值相对中位数(±15% 带);cohortN<3 → insufficient;
+//   本公司自身 na/distorted/null → 无相对位置(insufficient, value=null)。
+//   注入合成 Store._data 后跑,末尾恢复真实数据。
+// =====================================================================
+{
+  const realData = data;   // 保存真实数据引用,末尾恢复
+  const y1 = (rev, ni) => ({ fy: "FY1", status: "actual", revenue: rev, net_income: ni });
+  // 便捷构造:同 chain_stage、有市值 → pe/ps 可算;可选 caveat
+  const vc = (id, stage, mcap, rev, ni, caveat) => ({
+    id, name: id.toUpperCase(), status: "populated", chain_stage: stage,
+    quote: { as_of: "2026-06-26", market_cap: mcap, sources: [] },
+    valuation_caveat: caveat || undefined,
+    years: [y1(rev, ni)],
+  });
+
+  // memory 环节 5 家 PS: 值 = mcap/rev → 1,2,3,4,5 → median 3
+  const memCohort = [
+    vc("m1", "memory", 100, 100, 10),  // ps 1
+    vc("m2", "memory", 200, 100, 10),  // ps 2
+    vc("m3", "memory", 300, 100, 10),  // ps 3 (median)
+    vc("m4", "memory", 400, 100, 10),  // ps 4
+    vc("m5", "memory", 500, 100, 10),  // ps 5
+  ];
+  Store._data = { meta: realData.meta, companies: memCohort };
+  _refreshStages(realData.meta);
+
+  // m1 ps=1 < 3×0.85=2.55 → low(数值低);lowerCheaper=true → 视图判"更便宜"
+  const r1 = Selectors.stageValuationRel(Store.byId("m1"), "ps");
+  assert.equal(r1.cohortN, 5);
+  assert.equal(r1.median, 3);
+  assert.equal(r1.value, 1);
+  assert.equal(r1.relative, "low");
+  assert.equal(r1.lowerCheaper, true);
+  assert.equal(r1.insufficient, false);
+  // m3 ps=3 == median → mid(居中)
+  assert.equal(Selectors.stageValuationRel(Store.byId("m3"), "ps").relative, "mid");
+  // m5 ps=5 > 3×1.15=3.45 → high(数值高 → 更贵)
+  assert.equal(Selectors.stageValuationRel(Store.byId("m5"), "ps").relative, "high");
+  // 带内:ps=3.4 (< 3.45) → mid;ps=2.6 (> 2.55) → mid(±15% 带内均居中)
+  Store._data = { meta: realData.meta, companies: [
+    vc("b1", "memory", 260, 100, 10), vc("b2", "memory", 340, 100, 10),
+    vc("b3", "memory", 300, 100, 10), vc("b4", "memory", 300, 100, 10),
+    vc("b5", "memory", 300, 100, 10),
+  ] };
+  assert.equal(Selectors.stageValuationRel(Store.byId("b1"), "ps").relative, "mid"); // 2.6 在带内
+  assert.equal(Selectors.stageValuationRel(Store.byId("b2"), "ps").relative, "mid"); // 3.4 在带内
+
+  // ---- 方向语义:fcfYield 越高越便宜 → lowerCheaper=false ----
+  // fcfYield = fcf/mcap;fcf = cfo−capex。构造 5 家 yield: .01 .02 .03 .04 .05 → median .03
+  const fy = (rev, ni, capex, cfo) => ({ fy: "FY1", status: "actual", revenue: rev, net_income: ni, capex, cfo });
+  const fc = (id, mcap, cfo) => ({ id, name: id.toUpperCase(), status: "populated", chain_stage: "memory",
+    quote: { as_of: "2026-06-26", market_cap: mcap, sources: [] }, years: [fy(100, 10, 0, cfo)] });
+  Store._data = { meta: realData.meta, companies: [
+    fc("f1", 100, 1), fc("f2", 100, 2), fc("f3", 100, 3), fc("f4", 100, 4), fc("f5", 100, 5),
+  ] };
+  const rf = Selectors.stageValuationRel(Store.byId("f1"), "fcfYield");
+  assert.equal(rf.lowerCheaper, false);          // fcfYield 高才便宜
+  assert.equal(Math.round(rf.median * 1000) / 1000, 0.03);
+  assert.equal(rf.value, 0.01);
+  assert.equal(rf.relative, "low");              // 数值低(0.01<0.03×0.85)→ 视图据 lowerCheaper=false 判"更贵"
+  assert.equal(Selectors.stageValuationRel(Store.byId("f5"), "fcfYield").relative, "high"); // 高 → 更便宜
+
+  // ---- 排除 na/distorted:不进 cohort、不算入 median ----
+  // 3 家有效(ps 1,2,3 → median 2)+ 1 家 distorted + 1 家 na → cohortN 应为 3
+  Store._data = { meta: realData.meta, companies: [
+    vc("e1", "memory", 100, 100, 10),                                  // ps 1
+    vc("e2", "memory", 200, 100, 10),                                  // ps 2
+    vc("e3", "memory", 300, 100, 10),                                  // ps 3
+    vc("edist", "memory", 900, 100, 10, { ps: "distorted" }),          // distorted → 排除(即便值 9)
+    vc("ena", "memory", 800, 100, 10, { ps: "na" }),                   // na → 排除(值本就 null)
+  ] };
+  const re = Selectors.stageValuationRel(Store.byId("e1"), "ps");
+  assert.equal(re.cohortN, 3);                    // distorted/na 未计入
+  assert.equal(re.median, 2);                     // median of 1,2,3(不含 9)
+  assert.equal(re.value, 1);
+  assert.equal(re.relative, "low");
+  // 本公司自身 distorted → 无相对位置(insufficient, value=null),但仍报 cohortN/median 供上下文
+  const rdist = Selectors.stageValuationRel(Store.byId("edist"), "ps");
+  assert.equal(rdist.value, null);
+  assert.equal(rdist.relative, null);
+  assert.equal(rdist.insufficient, true);
+  assert.equal(rdist.cohortN, 3);                 // cohort 仍是 3 家有效同伴
+  // 本公司自身 na → 同样无相对位置
+  const rna = Selectors.stageValuationRel(Store.byId("ena"), "ps");
+  assert.equal(rna.value, null);
+  assert.equal(rna.relative, null);
+  assert.equal(rna.insufficient, true);
+
+  // ---- 小样本 insufficient:有效 cohortN<3 → 不给 relative(即便本公司有值)----
+  Store._data = { meta: realData.meta, companies: [
+    vc("s1", "memory", 100, 100, 10),   // ps 1
+    vc("s2", "memory", 200, 100, 10),   // ps 2 —— 仅 2 家有效
+  ] };
+  const rs = Selectors.stageValuationRel(Store.byId("s1"), "ps");
+  assert.equal(rs.cohortN, 2);
+  assert.equal(rs.insufficient, true);
+  assert.equal(rs.relative, null);
+  assert.equal(rs.value, 1);                       // 本公司值仍报(视图可显数,只是不给相对位置)
+
+  // ---- 独家环节:cohortN=1(只有自己)→ insufficient ----
+  Store._data = { meta: realData.meta, companies: [
+    vc("solo", "equipment", 100, 100, 10),
+    vc("other", "memory", 200, 100, 10),
+  ] };
+  const rsolo = Selectors.stageValuationRel(Store.byId("solo"), "ps");
+  assert.equal(rsolo.cohortN, 1);
+  assert.equal(rsolo.insufficient, true);
+  assert.equal(rsolo.relative, null);
+
+  // ---- null 安全:null 公司 / 未知 key / 无 stage ----
+  assert.equal(Selectors.stageValuationRel(null, "ps").insufficient, true);
+  assert.equal(Selectors.stageValuationRel(null, "ps").value, null);
+  const rbad = Selectors.stageValuationRel(Store.byId("solo"), "unknown");
+  assert.equal(rbad.insufficient, true);
+  assert.equal(rbad.value, null);
+  assert.equal(rbad.lowerCheaper, null);          // 未知 key → lowerCheaper null
+  const rnostage = Selectors.stageValuationRel({ id: "no-stage", status: "populated",
+    quote: { market_cap: 100, sources: [] }, years: [y1(100, 10)] }, "ps");
+  assert.equal(rnostage.insufficient, true);      // stageOf null → 无 cohort
+
+  // ---- 恢复真实数据,给后续/复跑一个干净状态 ----
+  Store._data = realData;
+  _refreshStages(realData.meta);
+
+  // ---- 真实数据:存储环节(memory: samsung/skhynix/micron)PS 相对位置自洽 ----
+  const micronRel = Selectors.stageValuationRel(Store.byId("micron"), "ps");
+  assert.ok(micronRel.cohortN >= 3, "memory ps cohort >=3: " + micronRel.cohortN);
+  assert.equal(micronRel.insufficient, false);
+  assert.ok(["low", "mid", "high"].includes(micronRel.relative));
+  assert.equal(micronRel.lowerCheaper, true);
+  assert.ok(micronRel.value != null && micronRel.median != null);
+  // 真实数据:softbank pe=na → 无相对位置;ps=distorted → 无相对位置
+  assert.equal(Selectors.stageValuationRel(Store.byId("softbank"), "pe").value, null);
+  assert.equal(Selectors.stageValuationRel(Store.byId("softbank"), "pe").insufficient, true);
+  assert.equal(Selectors.stageValuationRel(Store.byId("softbank"), "ps").insufficient, true);
+  // 真实数据:tencent pe=distorted → 无相对位置(即便有值)
+  const txPeRel = Selectors.stageValuationRel(Store.byId("tencent"), "pe");
+  assert.equal(txPeRel.value, null);
+  assert.equal(txPeRel.insufficient, true);
+}
+
 console.log("data-module tests passed");

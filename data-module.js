@@ -295,6 +295,96 @@ const Selectors = {
     return (mc != null && f != null && mc) ? f / mc : null;
   },
 
+  /* ---- B1: same-stage relative valuation (comps) ----
+     同价值链环节的相对估值 —— 纯派生, 零新增数据。回答"这个倍数在同环节里是贵是便宜",
+     把跨环节混排的孤立绝对数字带上同环节语境。
+
+     stageValuationRel(c, key), key ∈ {pe, ps, evSales, fcfYield}:
+       cohort = 所有 populated 公司里 stageOf 相同者;对每家取该 key 的值(复用现有倍数 Selector)。
+       排除三类成员(它们本就不参与横比):
+         · 该指标 valuationCaveat 为 'na' 或 'distorted'(如软银 pe/fcf_yield=na、
+           softbank ps/ev_sales=distorted、tencent pe=distorted);
+         · 值为 null 的(缺分母/缺现金/无实际年 → 诚实缺席)。
+       cohortN = 有效成员数。median = cohort 有效值的中位数。
+
+     relative 口径(刻意不掺"便宜/贵"): 'low'|'mid'|'high' 指**数值相对中位数**的高低,
+       ±15% 带 —— value < median×0.85 → 'low';value > median×1.15 → 'high';否则 'mid'。
+       方向语义交给视图:lowerCheaper 标出"低=便宜"(pe/ps/evSales)还是"高=便宜"(fcfYield),
+       视图据 relative + lowerCheaper 生成"更便宜/更贵/居中"文案。这样数值口径单一、不会歧义。
+
+     诚实边界:
+       · insufficient:true 当有效 cohortN < 3(样本不足 → 不给 relative/median,视图显"样本不足");
+       · 本公司自身该指标为 na/distorted 或值为 null → 它没有相对位置,返回 insufficient(value=null)。
+     全 null 安全,绝不伪造。算不存。
+     返回 { key, value, cohortN, median, relative, lowerCheaper, insufficient }。 */
+  VAL_KEY_META: {
+    pe:       { caveat: "pe",        lowerCheaper: true  },
+    ps:       { caveat: "ps",        lowerCheaper: true  },
+    evSales:  { caveat: "ev_sales",  lowerCheaper: true  },
+    fcfYield: { caveat: "fcf_yield", lowerCheaper: false },
+  },
+  VAL_REL_BAND: 0.15,   // ±15% 带宽:偏离中位数超此比例才判 low/high,否则 mid(居中)
+
+  _valMetric(c, key) {
+    // 该 key 对应的倍数值,已内含各自 caveat='na'→null 的处理(见 pe/ps/evSales/fcfYield)
+    if (key === "pe")       return this.pe(c);
+    if (key === "ps")       return this.ps(c);
+    if (key === "evSales")  return this.evSales(c);
+    if (key === "fcfYield") return this.fcfYield(c);
+    return null;
+  },
+  /* 一家公司在某指标上是否可参与同环节横比:caveat 非 na/distorted 且值非 null。 */
+  _valComparable(c, key) {
+    const meta = this.VAL_KEY_META[key];
+    if (!meta) return false;
+    const cav = this.valuationCaveat(c, meta.caveat);
+    if (cav === "na" || cav === "distorted") return false;
+    return this._valMetric(c, key) != null;
+  },
+  _median(nums) {
+    if (!nums.length) return null;
+    const s = nums.slice().sort((a, b) => a - b);
+    const mid = Math.floor(s.length / 2);
+    return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+  },
+
+  stageValuationRel(c, key) {
+    const meta = this.VAL_KEY_META[key];
+    const blank = { key, value: null, cohortN: 0, median: null, relative: null,
+                    lowerCheaper: meta ? meta.lowerCheaper : null, insufficient: true };
+    if (!c || !meta) return blank;
+
+    const stage = stageOf(c);
+    if (!stage) return blank;
+
+    // cohort = 同环节且该指标可比的 populated 公司(含本公司,若本公司可比)
+    const pop = (Store._data && Store.populated()) || [];
+    const cohort = pop.filter(o => stageOf(o) === stage && this._valComparable(o, key));
+    const values = cohort.map(o => this._valMetric(o, key));
+    const cohortN = values.length;
+    const median = this._median(values);
+
+    // 本公司自身不可比(na/distorted/null)→ 没有相对位置
+    const self = this._valComparable(c, key) ? this._valMetric(c, key) : null;
+    if (self == null) {
+      return { key, value: null, cohortN, median, relative: null,
+               lowerCheaper: meta.lowerCheaper, insufficient: true };
+    }
+    // 有效样本过小 → 诚实"样本不足",不给相对位置
+    if (cohortN < 3 || median == null || median === 0) {
+      return { key, value: self, cohortN, median, relative: null,
+               lowerCheaper: meta.lowerCheaper, insufficient: true };
+    }
+
+    const band = this.VAL_REL_BAND;
+    let relative = "mid";
+    if (self < median * (1 - band)) relative = "low";
+    else if (self > median * (1 + band)) relative = "high";
+
+    return { key, value: self, cohortN, median, relative,
+             lowerCheaper: meta.lowerCheaper, insufficient: false };
+  },
+
   /* ---- directory metric accessors (cross-company) ---- */
   /* latest actual year that carries cash inputs (capex/cfo may lag the headline year) */
   latestCashYear(c) { return this.actualYears(c).reverse().find(y => y.capex != null || y.cfo != null) || null; },
