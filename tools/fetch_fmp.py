@@ -31,6 +31,7 @@ Honesty rules it follows:
     convert to USD bn before committing.
 """
 import argparse, json, os, sys, urllib.request, urllib.error, urllib.parse
+from datetime import date
 
 BASE = "https://financialmodelingprep.com"
 
@@ -57,7 +58,8 @@ def _get(path, key, params=None):
         with urllib.request.urlopen(url, timeout=30) as r:
             data = json.loads(r.read())
     except urllib.error.HTTPError as e:
-        hint = " (try --legacy for the v3 API, or check your plan)" if e.code == 403 else ""
+        hint = {403: " (try --legacy for the v3 API, or check your plan)",
+                402: " (this endpoint needs a higher FMP tier — e.g. quarterly statements)"}.get(e.code, "")
         print(f"  ! HTTP {e.code} on {path}{hint}", file=sys.stderr)
         return None
     except Exception as e:
@@ -125,10 +127,18 @@ def build(ticker, key, n_years, want_quarters, mode):
         })
 
     b0 = bal[0] if bal else {}
+    # net_debt in OUR 口径 = 有息债务 − (现金 + 短期投资). FMP's own `netDebt` field only
+    # subtracts cash&equivalents (NOT short-term investments), which badly misreads
+    # companies that park cash in STI (e.g. NVDA → false net debt). Recompute from parts.
+    td, csti = b0.get("totalDebt"), b0.get("cashAndShortTermInvestments")
+    if isinstance(td, (int, float)) and isinstance(csti, (int, float)):
+        net_debt = bn(td - csti)
+    else:
+        net_debt = bn(b0.get("netDebt"))       # fallback (understates net cash)
     quote_obj = {
-        "as_of": quote.get("date") or None,   # may be a timestamp; set your real snapshot date
+        "as_of": date.today().isoformat(),     # FMP quote price is LIVE → snapshot = run date
         "market_cap": bn(quote.get("marketCap")),
-        "net_debt": bn(b0.get("netDebt")),     # FMP: totalDebt − cash&STI; +=net debt, −=net cash
+        "net_debt": net_debt,                  # +=net debt, −=net cash
         "price": quote.get("price"),
         "price_currency": ccy,
         "sources": [src(f"FMP quote ({sym})", disp_url(mode, "quote", sym)),
