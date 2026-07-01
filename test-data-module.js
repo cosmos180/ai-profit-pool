@@ -203,6 +203,43 @@ assert.deepEqual(flowNoRev.segments, []);
 assert.equal(Selectors.incomeFlow(null).revenue, null);
 assert.equal(Selectors.incomeFlow(undefined).has.gross, false);
 
+// ---- A2: incomeFlow segment.share（分母 = y.revenue 合并营收）----
+// ifFull: rev 100, seg 70/30 → share 0.7 / 0.3（Sankey 分部支流占营收标签用）
+assert.equal(flowFull.segments[0].share, 0.7);
+assert.equal(flowFull.segments[1].share, 0.3);
+// 零营收边界不会到这（revenue null → 整图降级、segments []），此处仅验正常口径。
+// division-kind：分部和 > 营收时，incomeFlow.share 分母仍是 y.revenue（可能 >1），刻意不同于 segRevShare。
+const ifDiv = {
+  fy: "FYd", status: "actual", revenue: 100,
+  segments: [{ name: "A", kind: "division", revenue: 80 }, { name: "B", kind: "division", revenue: 40 }],
+};
+const flowDiv = Selectors.incomeFlow(ifDiv);
+assert.equal(flowDiv.segments[0].share, 0.8);   // 80/100（分母=营收）
+assert.equal(flowDiv.segments[1].share, 0.4);   // 40/100 → 合计 1.2（division 含内部交易，符合预期）
+
+// ---- A2: Selectors.segRevShare（分母 = revenueTotal = 分部合计，division 口径）----
+// platform：分部和==营收 → 与占营收一致
+assert.equal(Selectors.segRevShare(ifFull, "AI 平台"), 0.7);   // 70 / (70+30)
+assert.equal(Selectors.segRevShare(ifFull, "其他"), 0.3);
+// division：分母是分部合计(120)，NOT y.revenue(100) —— 与 incomeFlow.share 刻意不同
+assert.equal(Selectors.segRevShare(ifDiv, "A"), 80 / 120);
+assert.equal(Selectors.segRevShare(ifDiv, "B"), 40 / 120);
+// 边界：分部名不存在 → null（不伪造 0）
+assert.equal(Selectors.segRevShare(ifFull, "不存在"), null);
+// 边界：无分部 / 零分母 → null
+assert.equal(Selectors.segRevShare({ revenue: 100, segments: [] }, "X"), null);
+assert.equal(Selectors.segRevShare({ revenue: 100, segments: [{ name: "Z", revenue: 0 }] }, "Z"), null); // total 0 → null
+
+// ---- A2: Selectors.segOpMargin（op_margin 优先，否则 op_income/revenue，null 安全）----
+assert.equal(Selectors.segOpMargin({ op_margin: 0.42, op_income: 10, revenue: 50 }), 0.42); // op_margin 优先（忽略回退）
+assert.equal(Selectors.segOpMargin({ op_income: 20, revenue: 50 }), 0.4);                    // 回退 20/50
+assert.equal(Selectors.segOpMargin({ op_income: -5, revenue: 50 }), -0.1);                   // 负利润率如实（下行周期）
+assert.equal(Selectors.segOpMargin({ op_income: 10, revenue: 0 }), null);                    // 零分母 → null
+assert.equal(Selectors.segOpMargin({ op_income: null, revenue: 50 }), null);                 // 缺利润 → null
+assert.equal(Selectors.segOpMargin({ revenue: 50 }), null);                                  // 无 op_income 字段 → null
+assert.equal(Selectors.segOpMargin(null), null);                                             // null seg → null
+assert.equal(Selectors.segOpMargin({ op_margin: 0 }), 0);                                    // op_margin=0 是有效值，不被误当缺失
+
 // ---- real data: NVDA latest actual — 全节点自洽 (grossProfit≈revenue*gross_margin) ----
 const nvdaFlowY = Selectors.latestActual(Store.byId("nvda"));
 const nvdaFlow = Selectors.incomeFlow(nvdaFlowY);

@@ -34,11 +34,21 @@ function inlineDataset() {
 // 源文件一字不改（CJS/经典脚本路径不受影响），dev 与 build 都拿到真正的具名导出。
 // 尾部 `module.exports` 在 ESM 下因 `typeof module!=="undefined"` 守卫为假而被跳过，安全。
 function esmDataModule() {
-  const EXPORTS = 'Store, Selectors, STAGE_OF_FALLBACK, STAGE_ORDER, STAGE_LABEL, STAGE_COLOR, stageOf, _refreshStages'
   return {
     name: 'esm-data-module',
     transform(code, id) {
       if (id.replace(/\?.*$/, '').endsWith('/data-module.js')) {
+        // A5：从 `module.exports = { ... }` 那一行【正则自动提取】导出名，不再硬编码——
+        // data-module.js 新增导出时 dev 不再静默丢失（旧硬编码 EXPORTS 是债3）。
+        const m = code.match(/\bmodule\.exports\s*=\s*\{([^}]*)\}/)
+        if (!m) {
+          throw new Error('esmDataModule: 未在 data-module.js 找到 `module.exports = { ... }` 导出行，无法自动提取导出名')
+        }
+        const EXPORTS = m[1]
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean)
+          .join(', ')
         // 剥掉 ESM 下的死代码 CJS 尾（`module.exports = …`，被 typeof 守卫恒假），
         // 换成真正的具名导出——顺带消除 Rollup 的 COMMONJS_VARIABLE_IN_ESM 警告。
         const esm = code.replace(/^.*\bmodule\.exports\b.*$/m, '')

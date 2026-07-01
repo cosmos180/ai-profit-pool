@@ -53,7 +53,7 @@
         value: st.value,
         x, yTop, segH, colW,
         showLbl: sh >= 0.06,
-        pctLbl: Fmt.pct(st.share, 0),
+        pctLbl: Fmt.pctCompact(st.share),
         aria: (tt ? 'TTM ' : p.label + ' ') + st.label + ' 占 ' + Fmt.pct(st.share, 1) + '，净利润 ' + Fmt.bn(st.value, 1),
       })
     }
@@ -113,8 +113,8 @@
     <p class="mig-lead"><span class="caliper-inline">AI 归因加权</span>同一批公司的净利润<b>按 AI 占比加权后</b>，再按价值链<b>环节</b>归桶看结构（缺 AI 占比的公司不计入，故每根柱标<b>覆盖 n/N</b>）。前两根是已完成财年（{first.label}→{last.label}，覆盖 {last.n}/{last.N} 家），最右<b>斜纹虚线柱</b>是 <b>TTM 滚动 12 个月</b>（补最新季报、同样 AI 加权、{ttm.n} 家），与左侧年度柱<b>口径一致、高低可比</b>。柱越往上堆，越能看出<b>总量做大</b>的同时<b>结构在迁移</b>——TTM 让<b>存储环节明显鼓起</b>（HBM/AI 超级周期，年度口径看不到、TTM 才抓到）。AI 占比口径见上方说明。</p>
 
     <div class="mig-body">
-      <div class="mig-chart">
-        <svg class="mig-svg" class:dim={active != null} viewBox="0 0 {W} {H}" width={W} height={H}
+      <div class="mig-chart" style="--migW:{W}px">
+        <svg class="mig-svg" class:dim={active != null} viewBox="0 0 {W} {H}"
              role="img" aria-label="AI 利润池利润结构按环节的百分比堆叠迁移图，含最右 TTM 滚动估算柱">
           <defs>
             <pattern id="migHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">

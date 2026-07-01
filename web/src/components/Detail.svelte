@@ -16,7 +16,6 @@
   const firstWord = s => (s || '').split(' ')[0]
 
   // —— actual：营收板块（降序）——
-  const total = $derived(y && !isForecast ? Selectors.revenueTotal(y) : 0)
   const platRows = $derived.by(() => {
     if (!y || isForecast) return []
     const sorted = Selectors.revenueSorted(y)
@@ -26,7 +25,7 @@
       return {
         name: p.name, is_ai: p.is_ai,
         revLabel: Fmt.bn(p.revenue, 2),
-        shareLabel: Fmt.pct(total ? p.revenue / total : 0, 1),  // 布局占比展示，Selector 已给 total
+        shareLabel: Fmt.pct(Selectors.segRevShare(y, p.name), 1),  // 占分部合计比（Selector 派生，null 透传）
         barW: (p.revenue / maxV * 100).toFixed(1),  // 布局宽度百分比（非财务量）
         yoy,
       }
@@ -52,11 +51,10 @@
     const ps = Selectors.profitSorted(y)
     const pmax = ps[0] ? ps[0].op_income : 1
     return ps.map(p => {
-      const m = p.op_margin != null ? p.op_margin : (p.revenue ? p.op_income / p.revenue : null)
       return {
         name: p.name, is_ai: p.is_ai,
         opLabel: Fmt.bn(p.op_income, 2),
-        marginLabel: Fmt.pct(m),
+        marginLabel: Fmt.pct(Selectors.segOpMargin(p)),
         barW: (p.op_income / pmax * 100).toFixed(1),  // 布局宽度（非财务量）
       }
     })

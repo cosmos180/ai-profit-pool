@@ -43,7 +43,9 @@
 
     const topY = padT
 
-    let s = `<svg class="sankey-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" `
+    // A1：不再写死 width/height 属性——viewBox 定内部坐标，外层 CSS（.sankey-svg
+    // width:100% + max-width:--sankeyW）等比缩放，窄屏完整可见无横向滚动、桌面不过拉。
+    let s = `<svg class="sankey-svg" viewBox="0 0 ${W} ${H}" role="img" `
       + `aria-label="${Safe.attr(c.name + ' ' + y.fy + ' 利润表资金流：营收 ' + Fmt.bn(rev) + ' 至净利润 ' + Fmt.bn(f.netIncome) + '，按金额宽度的桑基图')}">`
 
     const band = (x0, yT0, yB0, x1, yT1, yB1, fill, op) => {
@@ -74,7 +76,7 @@
         const dstT = accY, dstB = accY + h; accY += h
         const fill = sg.is_ai ? COL.ai : COL.seg
         s += band(segX + segColW, srcT, srcB, revX, dstT, dstB, fill, sg.is_ai ? 0.5 : 0.4)
-        const shareTxt = Fmt.pct(sg.revenue / rev, 0)
+        const shareTxt = Fmt.pctCompact(sg.share)  // 占营收比（Selector 已给 share，分母=y.revenue）
         s += `<text x="${segX}" y="${srcCy - 2}" font-size="10.5" font-family="var(--mono)" font-weight="600" fill="${sg.is_ai ? 'var(--ai)' : 'var(--ink-soft)'}">${Safe.text(sg.name.split(' ')[0])}${sg.is_ai ? ' ●' : ''}</text>`
         s += `<text x="${segX}" y="${srcCy + 11}" font-size="9.5" font-family="var(--mono)" fill="var(--ink-faint)">${Safe.text(Fmt.bn(sg.revenue, 1))} · ${Safe.text(shareTxt)}</text>`
       })
@@ -182,6 +184,7 @@
       notes,
       showInflowLegend: f.taxOther != null && f.taxOther < 0 && hasOpex,
       fy: y.fy,
+      width: W,   // 内部坐标宽度（px）→ 模板设 --sankeyW 作 max-width，防桌面过度拉伸
     }
   }
 </script>
@@ -198,7 +201,7 @@
   <div class="section-h" style="margin-top:18px">利润表资金流 · {model.fy}</div>
   <div class="card sankey-card">
     <p class="sankey-lead">一张图看这年的钱<b>从哪来、被什么吃掉、最后剩多少</b>：左侧各分部汇成营收，向右每一步分出成本/费用/税（红，向下流出），剩下的利润（绿）继续向右，终点是净利润。<b>流带越宽＝金额越大</b>。</p>
-    <div class="sankey-scroll">{@html model.svg}</div>
+    <div class="sankey-scroll" style="--sankeyW:{model.width}px">{@html model.svg}</div>
     <div class="sankey-legend">
       <div class="i"><span class="sw" style="background:var(--ai);opacity:.6"></span>AI 分部营收</div>
       <div class="i"><span class="sw" style="background:#9AA8A0;opacity:.5"></span>其他分部营收</div>

@@ -114,6 +114,25 @@ const Selectors = {
   revenueSorted(y) { return this.revenueSegs(y).slice().sort((a, b) => b.revenue - a.revenue); },
   revenueTotal(y)  { return this.revenueSegs(y).reduce((s, p) => s + p.revenue, 0); },
 
+  /* 分部营收占「分部合计」比（division 口径：分母 = revenueTotal(y) = 分部 revenue 之和，
+     对 division-kind 含内部交易时仍自洽）。缺 revenue/零分母 → null（不伪造 0）。算不存。
+     注意：这与 incomeFlow 的 segment.share 分母不同——那处分母是 y.revenue（合并营收），
+     此处分母是分部合计，两口径不可混用（见 aiShare 注释同款约束）。*/
+  segRevShare(y, name) {
+    const seg = this.revenueSegs(y).find(s => s.name === name);
+    if (!seg || seg.revenue == null) return null;
+    const total = this.revenueTotal(y);
+    return total ? seg.revenue / total : null;
+  },
+
+  /* 分部经营利润率：seg.op_margin 优先（若已录入），否则 op_income/revenue 回退。
+     任一分母/分子缺失或零分母 → null（界面留空，不伪造）。算不存。*/
+  segOpMargin(seg) {
+    if (!seg) return null;
+    if (seg.op_margin != null) return seg.op_margin;
+    return (seg.op_income != null && seg.revenue) ? seg.op_income / seg.revenue : null;
+  },
+
   /* "platform" segments cleanly partition revenue (NVIDIA → sum == revenue);
      "division" segments include inter-segment sales (Samsung → sum > revenue). */
   segmentKind(y) { return this.revenueSegs(y).some(s => s.kind === "division") ? "division" : "platform"; },
@@ -187,7 +206,12 @@ const Selectors = {
       };
     }
     const revenue = y.revenue;
-    const segments = this.revenueSorted(y).map(s => ({ name: s.name, revenue: s.revenue, is_ai: !!s.is_ai }));
+    // segment.share 分母 = revenue（合并营收 y.revenue），供桑基分部支流标占比。
+    // 注意口径：此处分母是 y.revenue，与 segRevShare(y,name) 的分母（分部合计）不同，勿混用。
+    const segments = this.revenueSorted(y).map(s => ({
+      name: s.name, revenue: s.revenue, is_ai: !!s.is_ai,
+      share: (s.revenue != null && revenue) ? s.revenue / revenue : null,
+    }));
 
     const gm = y.gross_margin;
     const grossProfit = (gm != null) ? revenue * gm : null;
