@@ -1,9 +1,15 @@
 # ADR: 视图层迁移到 Svelte 5 + Vite（保留单文件 app.html）
 
-- 状态：Accepted（框架已由用户拍板 Svelte 5；工具链已实测：npm install + vite build + vite-plugin-singlefile 产出 0 外部引用的自包含 HTML）
+- 状态：Accepted（框架已由用户拍板 Svelte 5；工具链已实测：bun install + vite build + vite-plugin-singlefile 产出 0 外部引用的自包含 HTML）
 - 日期：2026-07-01
 - 决策者：架构师
 - 落地执行：engineer（本文精确到文件名 / 脚本命令 / 接口骨架，可直接分工）
+
+> **补记（2026-07-01）· 包管理器 = bun。** 用户选定 bun（新项目，取其最快安装 + 内置
+> JS/TS 运行器 + 文本 lockfile `bun.lock`）。Vite/Svelte/singlefile 管线不变，bun 仅作包管理
+> 与脚本运行器（`bun install` / `bun run dev|build`）；`test:data` 用 `bun` 跑（CJS 兼容已验），
+> `validate` 仍是 `python3`。实测 `bun run build` 会执行 `prebuild` 生命周期钩子，闸门有效。
+> **本文下述所有 `npm run X` 一律等价读作 `bun run X`。**
 
 ---
 
@@ -120,9 +126,9 @@ export const { Store, Selectors, STAGE_OF_FALLBACK, STAGE_ORDER, STAGE_LABEL, ST
 ```json
 {
   "scripts": {
-    "validate": "python3 ../validate.py",
-    "test:data": "node ../test-data-module.js",
-    "prebuild": "npm run validate && npm run test:data",
+    "validate": "python3 ../validate.py ../companies.json ../schema.json",
+    "test:data": "bun ../test-data-module.js",
+    "prebuild": "bun run validate && bun run test:data",
     "build": "vite build",
     "dev": "vite",
     "preview": "vite preview"
