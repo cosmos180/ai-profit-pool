@@ -1,0 +1,19 @@
+{
+  "name": "ai-profit-pool-web",
+  "private": true,
+  "type": "module",
+  "description": "Svelte 5 + Vite view layer. Builds to a single self-contained app.html (vite-plugin-singlefile), preserving the project's zero-server portability. Data pipeline (companies.json / schema.json / validate.py) is unchanged and orthogonal.",
+  "scripts": {
+    "validate": "python3 ../validate.py ../companies.json ../schema.json",
+    "prebuild": "npm run validate",
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "svelte": "^5.56.4",
+    "vite": "^8.1.2",
+    "vite-plugin-singlefile": "^2.3.3"
+  }
+}

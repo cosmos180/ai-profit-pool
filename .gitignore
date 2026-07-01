@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# web (Svelte+Vite) build artifacts
+node_modules/
+web/node_modules/
+web/dist/
