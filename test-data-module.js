@@ -1,11 +1,12 @@
 const assert = require("node:assert/strict");
 const data = require("./companies.json");
-const { Store, Selectors, STAGE_OF, STAGE_ORDER, STAGE_LABEL } = require("./data-module.js");
+const { Store, Selectors, STAGE_OF_FALLBACK, STAGE_ORDER, STAGE_LABEL, STAGE_COLOR, stageOf, _refreshStages } = require("./data-module.js");
 
 Store._data = data;
+_refreshStages(data.meta);   // derive STAGE_ORDER/LABEL/COLOR from meta.stages (Store.load does this in the browser)
 
-assert.equal(Store.companies().length, 8);
-assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml"]);
+assert.equal(Store.companies().length, 13);
+assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml", "tencent", "google", "microsoft", "amazon", "oracle"]);
 assert.deepEqual(Store.pending().map((c) => c.id), []);
 
 const nvda = Store.byId("nvda");
@@ -228,6 +229,20 @@ assert.equal(sbFlow.taxOther, null);             // op null → taxOther 不可�
 assert.equal(sbFlow.revenue, sbFlowY.revenue);   // revenue 仍在
 assert.equal(sbFlow.netIncome, sbFlowY.net_income);
 
+// ---- real data: Tencent latest actual (app stage) — gross 有、op_income null → has.gross=true / has.opex=false ----
+const txFlowY = Selectors.latestActual(Store.byId("tencent"));
+const txFlow = Selectors.incomeFlow(txFlowY);
+assert.equal(txFlow.has.gross, true);            // gross_margin 已录 → 毛利可画
+assert.ok(txFlow.grossProfit > 0);
+assert.equal(txFlow.has.opex, false);            // op_income 留空 → opex 不可画
+assert.equal(txFlow.opProfit, null);
+assert.equal(txFlow.taxOther, null);             // op null → taxOther 不可算
+assert.equal(txFlow.revenue, txFlowY.revenue);
+assert.equal(txFlow.netIncome, txFlowY.net_income);
+assert.equal(txFlow.has.segments, true);
+assert.equal(txFlow.segments[0].name, "增值服务 VAS（游戏·社交网络）"); // 最大分部 = VAS
+assert.equal(txFlow.segments.find(s => s.name === "网络广告 / 营销服务").is_ai, true); // 广告标 AI
+
 // ---- real data: Micron FY2023 — gross_margin null → has.gross=false ----
 const micFy23 = Selectors.yearByFy(Store.byId("micron"), "FY2023");
 const micFlow = Selectors.incomeFlow(micFy23);
@@ -305,6 +320,16 @@ assert.equal(Selectors.valuationCaveat(sbReal, "fcf_yield"), "na");
 assert.equal(Selectors.pe(sbReal), null);
 assert.equal(Selectors.fcfYield(sbReal), null);
 assert.ok(Selectors.ps(sbReal) > 0);               // PS 照常出值（失真，视图警示）
+
+// 真实数据：Tencent caveat 落地（pe=distorted 仍出值；ps/fcf_yield/ev_sales=ok 正常）
+const txReal = Store.byId("tencent");
+assert.equal(Selectors.valuationCaveat(txReal, "pe"), "distorted"); // 净利含投资公允价值收益 → PE 失真
+assert.equal(Selectors.valuationCaveat(txReal, "ps"), "ok");
+assert.equal(Selectors.valuationCaveat(txReal, "fcf_yield"), "ok");
+assert.ok(Selectors.pe(txReal) > 0);               // distorted 仍出值（视图警示）
+assert.ok(Selectors.ps(txReal) > 0);
+assert.ok(Selectors.fcfYield(txReal) > 0);         // 有真实经营现金流 → FCF yield 有意义
+assert.ok(Selectors.ev(txReal) < Selectors.marketCap(txReal)); // 净现金 → EV<市值
 
 // 真实数据：NVDA 有市值、无 caveat → PE/PS 正常；FCF yield 缺 cfo/capex → null
 const nvdaReal = Store.byId("nvda");
@@ -458,126 +483,247 @@ assert.ok(Selectors.ev(softbank) > Selectors.marketCap(softbank), "SoftBank 高�
 // profit-pool migration (value-chain stacked, sample-complete years only)
 // =====================================================================
 
-// ---- stage map constants ----
-assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest"]);
-assert.equal(STAGE_OF.nvda, "design");
-assert.equal(STAGE_OF.broadcom, "design");
-assert.equal(STAGE_OF.tsmc, "foundry");
-assert.equal(STAGE_OF.samsung, "memory");
-assert.equal(STAGE_OF.skhynix, "memory");
-assert.equal(STAGE_OF.micron, "memory");
-assert.equal(STAGE_OF.asml, "equipment");
-assert.equal(STAGE_OF.softbank, "invest");
+// ---- stage map: derived from meta.stages (ADR-1), fallback map intact ----
+assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest", "app", "cloud"]);
+// STAGE_OF_FALLBACK = the former hard-coded id→stage map (still the兜底)
+assert.equal(STAGE_OF_FALLBACK.nvda, "design");
+assert.equal(STAGE_OF_FALLBACK.broadcom, "design");
+assert.equal(STAGE_OF_FALLBACK.tsmc, "foundry");
+assert.equal(STAGE_OF_FALLBACK.samsung, "memory");
+assert.equal(STAGE_OF_FALLBACK.skhynix, "memory");
+assert.equal(STAGE_OF_FALLBACK.micron, "memory");
+assert.equal(STAGE_OF_FALLBACK.asml, "equipment");
+assert.equal(STAGE_OF_FALLBACK.softbank, "invest");
+assert.equal(STAGE_OF_FALLBACK.tencent, "app");
+// STAGE_LABEL / STAGE_COLOR derived from meta.stages
 assert.equal(STAGE_LABEL.design, "设计");
 assert.equal(STAGE_LABEL.invest, "投资");
+assert.equal(STAGE_LABEL.app, "应用");
+assert.equal(STAGE_COLOR.design, "var(--stg-design)");   // color now flows from data, not the template
+assert.equal(STAGE_COLOR.app, "var(--stg-app)");
+// 新增 cloud 环节：纯数据扩展，label/color 由 meta.stages 派生（color 用直接 hex，无需改模板）
+assert.equal(STAGE_LABEL.cloud, "云");
+assert.equal(STAGE_COLOR.cloud, "#6E8F2A");
 
-// ---- synthetic: full coverage of edge cases (8 companies, one per real id) ----
-// pos 0 (latest) complete for all; pos 1 missing one company → dropped;
-// negative net income present (memory downcycle) to prove no crash.
+// stageOf: chain_stage 优先，缺则回退 STAGE_OF_FALLBACK[id]
+assert.equal(stageOf({ id: "nvda" }), "design");                          // fallback by id
+assert.equal(stageOf({ id: "nvda", chain_stage: "foundry" }), "foundry"); // chain_stage wins
+assert.equal(stageOf({ id: "nvda", chain_stage: null }), "design");       // null chain_stage → fallback
+assert.equal(stageOf({ id: "unknown-id" }), null);                        // neither knows → null
+
+// _refreshStages: meta.stages absent → built-in constants untouched (backward-compat)
+{
+  const savedOrder = STAGE_ORDER.slice();
+  _refreshStages(undefined);                 // no-op
+  assert.deepEqual(STAGE_ORDER, savedOrder);
+  _refreshStages({});                        // no stages key → no-op
+  assert.deepEqual(STAGE_ORDER, savedOrder);
+  // a custom meta.stages with a NEW stage + reordering by `order` is honored
+  _refreshStages({ stages: [
+    { key: "cloud", label: "云", color: "#abc", order: 1 },
+    { key: "design", label: "设计X", color: "#def", order: 0 },
+  ]});
+  assert.deepEqual(STAGE_ORDER, ["design", "cloud"]);
+  assert.equal(STAGE_LABEL.design, "设计X");
+  assert.equal(STAGE_COLOR.cloud, "#abc");
+  _refreshStages(data.meta);                 // restore canonical stages for the rest of the suite
+  assert.deepEqual(STAGE_ORDER, ["design", "foundry", "memory", "equipment", "invest", "app", "cloud"]);
+}
+
+// =====================================================================
+// aiShare (ADR-3 ladder): sourced → is_ai revenue proxy (division-safe) → null
+// =====================================================================
 function syn(id, years) { return { id, name: id.toUpperCase(), status: "populated", years }; }
-const A = (fy, pe, ni) => ({ fy, period_end: pe, status: "actual", revenue: 100, net_income: ni });
+const seg = (name, kind, revenue, is_ai) => ({ name, kind, revenue, is_ai });
+// year with platform segments (sum == revenue)
+const Ap = (fy, iso, ni, aiRev, otherRev) => ({
+  fy, period_end_iso: iso, status: "actual",
+  revenue: aiRev + otherRev, net_income: ni,
+  segments: [seg("AI", "platform", aiRev, true), seg("其他", "platform", otherRev, false)],
+});
 
+// ---- 1) sourced: ai_profit_share wins, basis 'sourced', year-agnostic ----
+{
+  const c = { id: "x", ai_profit_share: 0.7, years: [Ap("FY1", "2025-01-01", 100, 90, 10)] };
+  const r = Selectors.aiShare(c, Selectors.latestActual(c));
+  assert.equal(r.value, 0.7); assert.equal(r.basis, "sourced"); // sourced overrides the proxy (which would be .9)
+}
+// ---- 2) platform proxy: AI revenue / segment sum (== revenue) ----
+{
+  const c = syn("x", [Ap("FY1", "2025-01-01", 100, 70, 30)]);
+  const r = Selectors.aiShare(c);                 // defaults to latestActual
+  assert.equal(r.value, 0.7); assert.equal(r.basis, "proxy");   // 70 / (70+30)
+}
+// ---- 2b) division proxy: denominator MUST be segment SUM, not y.revenue ----
+// Samsung shape: segments include inter-segment sales → sum (250) > revenue (234).
+{
+  const y = { fy: "FY1", period_end_iso: "2025-01-01", status: "actual", revenue: 234,
+    segments: [seg("DS", "division", 90, true), seg("DX", "division", 130, false), seg("SDC", "division", 30, false)] };
+  const c = syn("samsung", [y]);
+  const r = Selectors.aiShare(c, y);
+  assert.equal(Math.round(r.value * 10000) / 10000, Math.round((90 / 250) * 10000) / 10000); // 90/250, NOT 90/234
+  assert.equal(r.basis, "proxy");
+}
+// ---- 3) fallback B: no segments / no is_ai flag → value null (never seed from ai_exposure) ----
+{
+  const noSeg = syn("x", [{ fy: "FY1", status: "actual", revenue: 100, net_income: 50, segments: [] }]);
+  assert.deepEqual(Selectors.aiShare(noSeg), { value: null, basis: "none" });
+  const noFlag = syn("x", [{ fy: "FY1", status: "actual", revenue: 100, net_income: 50,
+    segments: [{ name: "S", kind: "platform", revenue: 100 }] }]); // no is_ai key
+  assert.deepEqual(Selectors.aiShare(noFlag), { value: null, basis: "none" });
+  // ai_exposure='pure' must NOT auto-seed 1.0 (fallback B)
+  const pure = { id: "x", ai_exposure: "pure", years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 50, segments: [] }] };
+  assert.equal(Selectors.aiShare(pure).value, null);
+  // no actual year / null company
+  assert.equal(Selectors.aiShare({ id: "x", years: [] }).value, null);
+  assert.equal(Selectors.aiShare(null).value, null);
+  // zero segment-sum denominator → null (no fabricated share)
+  const zeroDen = syn("x", [{ fy: "FY1", status: "actual", revenue: 0, net_income: 0,
+    segments: [seg("AI", "platform", 0, true)] }]);
+  assert.equal(Selectors.aiShare(zeroDen).value, null);
+}
+
+// =====================================================================
+// profitPoolAI (C-weighted: Σ net_income × aiShare; null dropped, never imputed)
+// =====================================================================
+{
+  const cos = [
+    syn("nvda",     [Ap("FY1", "2025-01-01", 100, 90, 10)]),   // proxy .9 → 90
+    syn("tsmc",     [Ap("FY1", "2025-01-01", 50,  30, 20)]),   // proxy .6 → 30
+    { id: "x-src", name: "SRC", chain_stage: "app", ai_profit_share: 0.5,
+      years: [Ap("FY1", "2025-01-01", 40, 40, 0)] },           // sourced .5 → 20 (overrides proxy 1.0)
+    syn("asml",     [{ fy: "FY1", status: "actual", revenue: 100, net_income: 10, segments: [] }]), // no is_ai → dropped
+    syn("softbank", [{ fy: "FY1", status: "actual", revenue: 100, net_income: 5 }]),                // no segments → dropped
+  ];
+  const pool = Selectors.profitPoolAI(cos);
+  assert.equal(pool.N, 5);                          // 5 have comparable net income
+  assert.equal(pool.n, 3);                          // 3 have a valid aiShare (asml/softbank dropped, not 0)
+  assert.equal(pool.total, 140);                    // 90 + 30 + 20
+  assert.deepEqual(pool.basisCount, { sourced: 1, proxy: 2 });
+  assert.deepEqual(pool.byStage.map(s => s.stage), STAGE_ORDER);
+  const pb = Object.fromEntries(pool.byStage.map(s => [s.stage, s]));
+  assert.equal(pb.design.value, 90);               // nvda (fallback id → design)
+  assert.equal(pb.foundry.value, 30);              // tsmc
+  assert.equal(pb.app.value, 20);                  // x-src via chain_stage='app'
+  assert.equal(pb.equipment.value, 0);             // asml dropped → empty, not imputed
+  assert.equal(pb.equipment.companies.length, 0);
+  // shares sum to 1
+  assert.ok(Math.abs(pool.byStage.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
+  // per-company traceability carries aiShare + basis
+  assert.deepEqual(pb.design.companies, [{ id: "nvda", name: "NVDA", ni: 90, aiShare: 0.9, basis: "proxy" }]);
+  assert.equal(pb.app.companies[0].basis, "sourced");
+  // empty pool
+  const empty = Selectors.profitPoolAI([]);
+  assert.equal(empty.n, 0); assert.equal(empty.N, 0); assert.equal(empty.total, 0);
+}
+
+// =====================================================================
+// profit-pool migration (AI-weighted, per-company coverage, n/N per position)
+// =====================================================================
+
+// ---- synthetic: per-company coverage replaces the old all-complete gate ----
+// pos 0 (latest): all present; pos 1: samsung absent (1-yr) + asml has no is_ai (dropped) →
+// kept anyway, with n<N reflecting partial coverage. Negative AI-weighted NI tolerated.
 const synCos = [
-  // design = 30 + 10 = 40
-  syn("nvda",     [A("FY24", "截至 2024-01", 5), A("FY25", "截至 2025-01", 30)]),
-  syn("broadcom", [A("FY24", "截至 2024-11", 4), A("FY25", "截至 2025-11", 10)]),
-  // foundry = 20
-  syn("tsmc",     [A("FY24", "自然年 2024", 8), A("FY25", "自然年 2025", 20)]),
-  // memory = 15 + (-5) + 10 = 20
-  syn("samsung",  [/* no pos-1 actual */         A("FY25", "自然年 2025", 15)]),
-  syn("skhynix",  [A("FY24", "自然年 2024", 3), A("FY25", "自然年 2025", -5)]), // negative
-  syn("micron",   [A("FY24", "截至 2024-08", 2), A("FY25", "截至 2025-08", 10)]),
-  // equipment = 10
-  syn("asml",     [A("FY24", "自然年 2024", 6), A("FY25", "自然年 2025", 10)]),
-  // invest = 10
-  syn("softbank", [A("FY24", "截至 2025-03", 1), A("FY25", "截至 2026-03", 10)]),
+  syn("nvda",     [Ap("FY24", "2024-01-01", 50, 45, 5), Ap("FY25", "2025-01-01", 100, 90, 10)]), // design .9
+  syn("tsmc",     [Ap("FY24", "2024-01-01", 20, 12, 8), Ap("FY25", "2025-01-01", 50,  30, 20)]), // foundry .6
+  syn("samsung",  [/* no pos-1 */                         Ap("FY25", "2025-01-01", 40,  20, 20)]), // memory .5
+  syn("skhynix",  [Ap("FY24", "2024-01-01", -10, -10, 0),Ap("FY25", "2025-01-01", 30,  30, 0)]),  // memory 1.0 (neg pos1)
+  // asml: pos0 has NO segments (no is_ai flag at all → aiShare null → dropped), pos1 has is_ai
+  syn("asml",     [{ fy: "FY24", period_end_iso: "2024-01-01", status: "actual", revenue: 10, net_income: 6, segments: [] },
+                   Ap("FY25", "2025-01-01", 10, 4, 6)]),                                           // equipment .4
 ];
 const synMig = Selectors.profitPoolMigration(synCos);
-
-// samsung has no pos-1 actual → pos 1 incomplete → only pos 0 survives
-assert.equal(synMig.length, 1);
-const sp0 = synMig[0];
-assert.equal(sp0.n, 8);
-// label = mode of years at pos 0 (all 2025/2026; 2025 dominates) = ≈2025
-assert.equal(sp0.label, "≈2025");
-// total = 30+10+20+15-5+10+10+10 = 100
-assert.equal(sp0.total, 100);
-// stages ordered per STAGE_ORDER
-assert.deepEqual(sp0.stages.map(s => s.stage), STAGE_ORDER);
-const byStage = Object.fromEntries(sp0.stages.map(s => [s.stage, s]));
-assert.equal(byStage.design.value, 40);
-assert.equal(byStage.foundry.value, 20);
-assert.equal(byStage.memory.value, 20);   // 15 + (-5) + 10, negative folded in, no crash
-assert.equal(byStage.equipment.value, 10);
-assert.equal(byStage.invest.value, 10);
-// shares sum to 1 (positive total scenario)
-assert.equal(sp0.stages.reduce((s, x) => s + x.share, 0), 1);
-// company-level traceability (hover), incl. the negative member
-assert.deepEqual(byStage.design.companies.map(c => c.id), ["nvda", "broadcom"]);
-assert.deepEqual(byStage.memory.companies.map(c => ({ id: c.id, ni: c.ni })),
-  [{ id: "samsung", ni: 15 }, { id: "skhynix", ni: -5 }, { id: "micron", ni: 10 }]);
-
-// ---- synthetic: a company with net_income null at a position → position dropped ----
-const synNull = [
-  syn("nvda",     [A("FY25", "截至 2025-01", 30)]),
-  syn("broadcom", [A("FY25", "截至 2025-11", 10)]),
-  syn("tsmc",     [A("FY25", "自然年 2025", 20)]),
-  syn("samsung",  [{ fy: "FY25", period_end: "自然年 2025", status: "actual", revenue: 100, net_income: null }]),
-  syn("skhynix",  [A("FY25", "自然年 2025", 5)]),
-  syn("micron",   [A("FY25", "截至 2025-08", 5)]),
-  syn("asml",     [A("FY25", "自然年 2025", 10)]),
-  syn("softbank", [A("FY25", "截至 2026-03", 10)]),
-];
-assert.equal(Selectors.profitPoolMigration(synNull).length, 0); // null NI → not complete
-assert.deepEqual(Selectors.profitPoolMigration([]), []);        // empty → empty
-
-// ---- synthetic: chronological ordering (old → new) ----
-const synTwo = [
-  syn("nvda",     [A("FY24", "截至 2024-01", 1), A("FY25", "截至 2025-01", 2)]),
-  syn("broadcom", [A("FY24", "截至 2024-11", 1), A("FY25", "截至 2025-11", 2)]),
-  syn("tsmc",     [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
-  syn("samsung",  [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
-  syn("skhynix",  [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
-  syn("micron",   [A("FY24", "截至 2024-08", 1), A("FY25", "截至 2025-08", 2)]),
-  syn("asml",     [A("FY24", "自然年 2024", 1), A("FY25", "自然年 2025", 2)]),
-  syn("softbank", [A("FY24", "截至 2025-03", 1), A("FY25", "截至 2026-03", 2)]),
-];
-const twoMig = Selectors.profitPoolMigration(synTwo);
-assert.equal(twoMig.length, 2);
-assert.equal(twoMig[0].label, "≈2024"); // older first
-assert.equal(twoMig[1].label, "≈2025"); // newer last
-assert.equal(twoMig[0].total, 8);
-assert.equal(twoMig[1].total, 16);
-
-// ---- real data: two complete positions, newest = ≈2025 ----
-const realMig = Selectors.profitPoolMigration(Store.populated());
-assert.equal(realMig.length, 2);                 // pos 0 & 1 complete; pos 2 drops (samsung 2-yr only)
-const newest = realMig[realMig.length - 1];
-assert.equal(newest.n, 8);
+assert.equal(synMig.length, 2);                    // both positions kept (no gate)
+const newest = synMig[synMig.length - 1];          // pos 0 = ≈2025
+const oldest = synMig[0];                           // pos 1 = ≈2024
 assert.equal(newest.label, "≈2025");
-
-// newest total == home-page "profit pool" 口径: sum of each company's latest-actual net_income
-const homePool = Store.populated().reduce((s, c) => s + Selectors.latestActual(c).net_income, 0);
-assert.ok(Math.abs(newest.total - homePool) < 1e-9);
-
-// shares sum to 1
+assert.equal(oldest.label, "≈2024");
+// newest: all 5 have comparable year & valid aiShare → n=N=5
+assert.equal(newest.N, 5); assert.equal(newest.n, 5);
+// total = 90 + 30 + 20 + 30 + 4 = 174 (AI-weighted)
+assert.equal(newest.total, 174);
+const nb = Object.fromEntries(newest.stages.map(s => [s.stage, s]));
+assert.equal(nb.design.value, 90);
+assert.equal(nb.foundry.value, 30);
+assert.equal(nb.memory.value, 50);                 // samsung 20 + skhynix 30
+assert.equal(nb.equipment.value, 4);
 assert.ok(Math.abs(newest.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
+// oldest (pos 1): samsung absent (only 1 yr) → not in coverage. nvda/tsmc/skhynix/asml HAVE
+// a year here → N=4; asml lacks is_ai → no aiShare → dropped from contributors → n=3.
+// present contributors: nvda(45), tsmc(12), skhynix(-10, negative folded in).
+assert.equal(oldest.N, 4); assert.equal(oldest.n, 3);
+assert.equal(oldest.total, 47);                    // 45 + 12 + (-10)
+const ob = Object.fromEntries(oldest.stages.map(s => [s.stage, s]));
+assert.equal(ob.memory.value, -10);                // skhynix only, negative, no crash
+assert.equal(ob.equipment.value, 0);              // asml dropped → empty
+assert.equal(ob.equipment.companies.length, 0);
 
-// stage shares reflect the canonical data (current companies.json: NVDA FY2026 NI 120.1).
-// NOTE: these are the TRUE shares under the data; they differ materially from the
-// brief's pre-data estimate (design~37/memory~27/foundry~21/invest~12/equip~4).
-// See report — flagged as a data/expectation mismatch, asserting reality not the estimate.
-const nb = Object.fromEntries(newest.stages.map(s => [s.stage, s.share]));
+// ---- synthetic: a position where ALL drop (no is_ai anywhere) → position omitted ----
+const synAllDrop = [
+  syn("nvda", [{ fy: "FY25", period_end_iso: "2025-01-01", status: "actual", revenue: 100, net_income: 50, segments: [] }]),
+  syn("tsmc", [{ fy: "FY25", period_end_iso: "2025-01-01", status: "actual", revenue: 100, net_income: 50 }]),
+];
+assert.deepEqual(Selectors.profitPoolMigration(synAllDrop), []); // no valid aiShare → nothing to show
+assert.deepEqual(Selectors.profitPoolMigration([]), []);
+
+// ---- synthetic: chain_stage overrides fallback id-map in the migration ----
+{
+  const c = [{ id: "nvda", name: "NVDA", chain_stage: "app", status: "populated",
+    years: [Ap("FY25", "2025-01-01", 100, 100, 0)] }]; // nvda re-tagged app via chain_stage
+  const m = Selectors.profitPoolMigration(c);
+  const mb = Object.fromEntries(m[0].stages.map(s => [s.stage, s.value]));
+  assert.equal(mb.app, 100);                        // landed in app, not design
+  assert.equal(mb.design, 0);
+}
+
+// ---- synthetic: year alignment prefers period_end_iso, falls back to period_end regex ----
+{
+  // period_end_iso says 2025; the free-text period_end says 2099 (would mislead the regex)
+  const c = [syn("nvda", [{ fy: "FY25", period_end_iso: "2025-06-30", period_end: "截至 2099",
+    status: "actual", revenue: 100, net_income: 50, segments: [seg("AI", "platform", 100, true)] }])];
+  assert.equal(Selectors.profitPoolMigration(c)[0].label, "≈2025"); // iso wins over free-text
+  // no iso → fall back to free-text regex
+  const c2 = [syn("nvda", [{ fy: "FY25", period_end: "自然年 2024",
+    status: "actual", revenue: 100, net_income: 50, segments: [seg("AI", "platform", 100, true)] }])];
+  assert.equal(Selectors.profitPoolMigration(c2)[0].label, "≈2024");
+}
+
+// ---- real data: AI-weighted migration, per-company coverage, n/N ----
+const realMig = Selectors.profitPoolMigration(Store.populated());
+assert.equal(realMig.length, 3);                 // gate removed → ≈2023 / ≈2024 / ≈2025
+const realNew = realMig[realMig.length - 1];
+assert.equal(realNew.label, "≈2025");
+assert.equal(realNew.n, 13); assert.equal(realNew.N, 13); // all 13 contribute at latest position
+// ≈2023 position: samsung 2-yr only + oracle 最早 FY2024（无 2023）→ 两家不在该年覆盖 → N=12
+assert.equal(realMig[0].label, "≈2023");
+assert.equal(realMig[0].N, 12); assert.equal(realMig[0].n, 12);
+
+// hero/migration consistency: newest migration total == profitPoolAI total (same C口径)
+const aiPool = Selectors.profitPoolAI(Store.populated());
+assert.ok(Math.abs(realNew.total - aiPool.total) < 1e-9, "migration newest == AI pool total");
+assert.equal(aiPool.n, 13); assert.equal(aiPool.N, 13);
+assert.deepEqual(aiPool.basisCount, { sourced: 0, proxy: 13 }); // current data: all proxy
+
+// shares sum to 1 at the latest position
+assert.ok(Math.abs(realNew.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
+
+// TRUE AI-weighted shares under current data (C口径). 加 4 家 hyperscaler(google/microsoft/
+// amazon/oracle, chain_stage='cloud')后新增 cloud 环节：尽管四家净利合计巨大,但其 AI 占比
+// (云分部营收/总营收,约 15–38%/oracle 77%)远低于上游纯 AI 厂 → C 加权后 cloud 仅 ~27.6%,
+// 被显著折算,正是"整公司≠全 AI"的验证。
+const rnb = Object.fromEntries(realNew.stages.map(s => [s.stage, s.share]));
 const near = (a, b) => Math.abs(a - b) <= 0.005; // ±0.5pp
-assert.ok(near(nb.design, 0.463), "design share " + nb.design);
-assert.ok(near(nb.foundry, 0.175), "foundry share " + nb.foundry);
-assert.ok(near(nb.memory, 0.226), "memory share " + nb.memory);
-assert.ok(near(nb.equipment, 0.035), "equipment share " + nb.equipment);
-assert.ok(near(nb.invest, 0.101), "invest share " + nb.invest);
+assert.ok(near(rnb.design, 0.416), "design share " + rnb.design);
+assert.ok(near(rnb.foundry, 0.110), "foundry share " + rnb.foundry);
+assert.ok(near(rnb.memory, 0.153), "memory share " + rnb.memory);
+assert.ok(near(rnb.equipment, 0.013), "equipment share " + rnb.equipment);
+assert.ok(near(rnb.invest, 0.009), "invest share " + rnb.invest);
+assert.ok(near(rnb.app, 0.024), "app share " + rnb.app);
+assert.ok(near(rnb.cloud, 0.276), "cloud share " + rnb.cloud);   // 新环节: 4 家 hyperscaler 折算后占比
 
-// all stages positive in the latest two real positions (no downcycle in-sample)
-for (const p of realMig)
-  for (const s of p.stages) assert.ok(s.value > 0, p.label + "/" + s.stage + " should be positive");
+// ≈2023 has a memory downcycle → negative stage value tolerated (no crash, view renders neg)
+assert.ok(realMig[0].stages.find(s => s.stage === "memory").value < 0, "2023 memory AI-weighted negative");
 
 // =====================================================================
 // TTM self-roll (算不存, date-aligned via quarters[].period_end only, null-safe)
@@ -645,47 +791,66 @@ const ttmNeg = synQ("skhynix", [FY("FY2025", 5)], [Q("2025-03-31", 8), Q("2026-0
 assert.equal(Selectors.ttmNetIncome(ttmNeg), -6);
 
 // =====================================================================
-// profitPoolTTM: per-company null-safe, n count, asOfSpreadDays, stage reuse
+// profitPoolTTM: AI-weighted, per-company null-safe, n count, asOfSpreadDays, stage reuse
+//   ni = ttmNetIncome × aiShare.value, 与 profitPoolAI/profitPoolMigration 同口径 (ADR-3)。
+//   aiShare 来自公司级 ai_profit_share(synAI 注入)；缺则 DROP(不计 0)。
 // =====================================================================
+
+// synthetic helper that pins a company-level ai_profit_share (sourced basis) so
+// aiShare(c).value is deterministic — mirrors the real proxy path which all TTM heads have.
+const synAI = (id, share, years, quarters) => ({ ...synQ(id, years, quarters), ai_profit_share: share });
 
 // design=nvda, foundry=tsmc, memory=samsung+skhynix(+micron null), equipment=asml, invest=softbank(null)
 const ttmCos = [
-  synQ("nvda",     [FY("FY2026", 120.1)], [Q("2025-04-27", 18.8), Q("2026-04-26", 58.3)]), // TTM 159.6, asOf 2026-04-26
-  synQ("tsmc",     [FY("FY2025", 50)],    [Q("2025-03-31", 10),   Q("2026-03-31", 18)]),   // TTM 58, asOf 2026-03-31
-  synQ("samsung",  [FY("FY2025", 31)],    [Q("2025-03-31", 6),    Q("2026-03-31", 33)]),   // TTM 58
-  synQ("skhynix",  [FY("FY2025", 30)],    [Q("2025-03-31", 6),    Q("2026-03-31", 28)]),   // TTM 52
-  synQ("micron",   [FY("FY2025", 8)],     []),                                              // null → skipped
-  synQ("asml",     [FY("FY2025", 10)],    [Q("2025-03-31", 2),    Q("2026-03-31", 3)]),     // TTM 11
-  synQ("softbank", [FY("FY2025", 31)],    []),                                              // null → skipped
+  synAI("nvda",     1.0, [FY("FY2026", 120.1)], [Q("2025-04-27", 18.8), Q("2026-04-26", 58.3)]), // TTM 159.6 ×1.0 = 159.6, asOf 2026-04-26
+  synAI("tsmc",     0.5, [FY("FY2025", 50)],    [Q("2025-03-31", 10),   Q("2026-03-31", 18)]),   // TTM 58 ×0.5 = 29, asOf 2026-03-31
+  synAI("samsung",  0.5, [FY("FY2025", 31)],    [Q("2025-03-31", 6),    Q("2026-03-31", 33)]),   // TTM 58 ×0.5 = 29
+  synAI("skhynix",  1.0, [FY("FY2025", 30)],    [Q("2025-03-31", 6),    Q("2026-03-31", 28)]),   // TTM 52 ×1.0 = 52
+  synAI("micron",   0.5, [FY("FY2025", 8)],     []),                                              // ttm null → skipped (aiShare irrelevant)
+  synAI("asml",     0.4, [FY("FY2025", 10)],    [Q("2025-03-31", 2),    Q("2026-03-31", 3)]),     // TTM 11 ×0.4 = 4.4
+  synAI("softbank", 0.1, [FY("FY2025", 31)],    []),                                              // ttm null → skipped
 ];
 const ttmPool = Selectors.profitPoolTTM(ttmCos);
-assert.equal(ttmPool.label, "TTM(截至各家最近季报)");
-assert.equal(ttmPool.n, 5);                              // micron & softbank null → excluded
-// total = 159.6 + 58 + 58 + 52 + 11 = 338.6 (micron/softbank not imputed)
-assert.equal(Math.round(ttmPool.total * 10) / 10, 338.6);
-// asOfSpreadDays = 2026-04-26 − 2026-03-31 = 26 days
+assert.equal(ttmPool.label, "TTM(AI 加权,截至各家最近季报)");
+assert.equal(ttmPool.n, 5);                              // micron & softbank ttm null → excluded
+// total = 159.6 + 29 + 29 + 52 + 4.4 = 274.0 (AI-weighted; micron/softbank not imputed)
+assert.equal(Math.round(ttmPool.total * 10) / 10, 274.0);
+// asOfSpreadDays = 2026-04-26 − 2026-03-31 = 26 days (unaffected by weighting)
 assert.equal(ttmPool.asOfSpreadDays, 26);
 // stages ordered per STAGE_ORDER (same atom as annual migration)
 assert.deepEqual(ttmPool.stages.map(s => s.stage), STAGE_ORDER);
 const tb = Object.fromEntries(ttmPool.stages.map(s => [s.stage, s]));
-assert.equal(tb.design.value, 159.6);
-assert.equal(tb.foundry.value, 58);
-assert.equal(Math.round(tb.memory.value), 110);          // 58 + 52
-assert.equal(tb.equipment.value, 11);
-assert.equal(tb.invest.value, 0);                        // softbank null → invest empty (not imputed)
+assert.equal(Math.round(tb.design.value * 10) / 10, 159.6);   // nvda 159.6 ×1.0
+assert.equal(tb.foundry.value, 29);                           // tsmc 58 ×0.5
+assert.equal(Math.round(tb.memory.value * 10) / 10, 81);      // samsung 29 + skhynix 52
+assert.ok(Math.abs(tb.equipment.value - 4.4) < 1e-9);        // asml 11 ×0.4
+assert.equal(tb.invest.value, 0);                            // softbank null → invest empty (not imputed)
 assert.equal(tb.invest.companies.length, 0);
 // shares sum to 1 (positive total)
 assert.ok(Math.abs(ttmPool.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
-// per-company traceability carries ttm + asOf
-assert.deepEqual(tb.design.companies, [{ id: "nvda", name: "NVDA", ttm: 159.6, asOf: "2026-04-26" }]);
+// per-company traceability carries weighted ttm + asOf + aiShare
+assert.deepEqual(tb.design.companies, [{ id: "nvda", name: "NVDA", ttm: 159.6, asOf: "2026-04-26", aiShare: 1.0 }]);
 assert.deepEqual(tb.memory.companies.map(c => c.id), ["samsung", "skhynix"]);
+assert.deepEqual(tb.memory.companies.map(c => c.aiShare), [0.5, 1.0]);
+
+// ---- AI-weighting drops a company whose aiShare is null (has TTM but no share) ----
+// synQ (no ai_profit_share, no is_ai segments) → aiShare.value null → DROP, never counted as 0.
+const ttmShareNull = Selectors.profitPoolTTM([
+  synAI("nvda", 1.0, [FY("FY2026", 100)], [Q("2025-04-27", 10), Q("2026-04-26", 30)]), // ttm 120, share 1 → 120
+  synQ("tsmc",       [FY("FY2025", 50)],  [Q("2025-03-31", 10), Q("2026-03-31", 18)]), // ttm 58, share null → DROP
+]);
+assert.equal(ttmShareNull.n, 1);                         // tsmc dropped for null aiShare (not 0-counted)
+assert.equal(ttmShareNull.total, 120);                   // only nvda contributes
+const tsb = Object.fromEntries(ttmShareNull.stages.map(s => [s.stage, s]));
+assert.equal(tsb.foundry.value, 0);                      // tsmc absent, not imputed
+assert.equal(tsb.foundry.companies.length, 0);
 
 // ---- empty / all-null pools ----
 const ttmEmpty = Selectors.profitPoolTTM([]);
 assert.equal(ttmEmpty.n, 0);
 assert.equal(ttmEmpty.total, 0);
 assert.equal(ttmEmpty.asOfSpreadDays, null);             // no contributors → null spread
-const ttmAllNull = Selectors.profitPoolTTM([synQ("micron", [FY("FY2025", 8)], [])]);
+const ttmAllNull = Selectors.profitPoolTTM([synAI("micron", 0.5, [FY("FY2025", 8)], [])]);
 assert.equal(ttmAllNull.n, 0);
 assert.equal(ttmAllNull.asOfSpreadDays, null);
 
@@ -703,6 +868,7 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
 const realTtm = Selectors.profitPoolTTM(Store.populated());
 // recorded heads: nvda, tsmc, samsung, skhynix, asml, broadcom, micron (7);
 // softbank still null (consensus 不录 → no quarters → honest null)
+// 全 7 家都有 is_ai 代理 → aiShare 非 null,AI 加权不会额外剔除任何一家,n 仍 7。
 assert.equal(realTtm.n, 7);
 assert.equal(Selectors.ttmNetIncome(Store.byId("softbank")), null);
 // NVDA TTM = FY2026 120.1 + (Q1FY27 58.3 − Q1FY26 18.8) = 159.6
@@ -718,7 +884,22 @@ assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("micron")) * 1000) / 1
 assert.equal(Selectors.ttmAsOf(Store.byId("micron")), "2026-05-28");
 // asOf spread now wider: Micron 季末 2026-05-28 vs 最早 2026-03-31 = 58 天（上限 62）
 assert.ok(realTtm.asOfSpreadDays >= 0 && realTtm.asOfSpreadDays <= 62, "spread " + realTtm.asOfSpreadDays);
-// all recorded heads positive in current up-cycle
+// ---- AI-weighted total/stages (vs former full-amount $423.5B) ----
+// 各家 weighted = ttm × aiShare(latestActual is_ai proxy):
+//   nvda 159.6×0.8972=143.19 + broadcom 29.317×0.5769=16.91 → design 160.11
+//   tsmc 61.236×0.59=36.13 → foundry; samsung 58.561×0.3577 + micron 50.469×0.3618
+//   + skhynix 52.887×1.0 = 92.10 → memory; asml 11.408×0.3552=4.05 → equipment
+// total ≈ 292.38 (全额口径曾为 423.48 → 加权后显著收口,与三根年度柱可比)
+assert.ok(Math.abs(realTtm.total - 292.383) < 0.5, "ttm AI total " + realTtm.total);
+assert.ok(realTtm.total < 423, "AI-weighted TTM must be below full-amount $423B: " + realTtm.total);
+const rwb = Object.fromEntries(realTtm.stages.map(s => [s.stage, s]));
+assert.ok(Math.abs(rwb.design.value    - 160.11) < 0.5, "design "    + rwb.design.value);
+assert.ok(Math.abs(rwb.foundry.value   -  36.13) < 0.5, "foundry "   + rwb.foundry.value);
+assert.ok(Math.abs(rwb.memory.value    -  92.10) < 0.5, "memory "    + rwb.memory.value);
+assert.ok(Math.abs(rwb.equipment.value -   4.05) < 0.5, "equipment " + rwb.equipment.value);
+// per-company traceability now carries the AI share used
+assert.ok(rwb.design.companies.every(m => m.aiShare != null && m.aiShare > 0));
+// all recorded heads positive in current up-cycle (weighted)
 for (const s of realTtm.stages)
   for (const m of s.companies) assert.ok(m.ttm > 0, m.id + " ttm " + m.ttm);
 // invest empty (softbank no quarters) → 0 share in TTM cross-section (coverage caveat, not imputed)

@@ -16,7 +16,7 @@
   --past:#AEBBB3; --est:#BC7A12; --est-soft:#F0E0C2;
   --bad:#A6321F; --bad-soft:#EED4CD; --muted:#7C8A84;
   --ai:#1F6FB2; --ai-soft:#D6E6F2;
-  --stg-design:#0E7C6B; --stg-foundry:#1F6FB2; --stg-memory:#BC7A12; --stg-equipment:#9AA8A0; --stg-invest:#6B5B95;
+  --stg-design:#0E7C6B; --stg-foundry:#1F6FB2; --stg-memory:#BC7A12; --stg-equipment:#9AA8A0; --stg-invest:#6B5B95; --stg-app:#C44569; /* app(应用)=玫红/品红，暖色区隔上游硬件，色环上避开青绿/蓝/琥珀/灰/紫与砖红(--bad) */
   --shadow:0 1px 2px rgba(24,33,29,.05),0 8px 24px -16px rgba(24,33,29,.25);
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   --sans:"IBM Plex Sans","IBM Plex Sans SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
@@ -50,6 +50,7 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .cover .cv .v{font-family:var(--mono);font-size:25px;font-weight:600;margin-top:6px;letter-spacing:-.01em}
 .cover .cv .s{font-size:11px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
 .cover .cv.accent .v{color:var(--ok)}
+.cover .cv .l .caliper{margin-left:auto;font-size:9.5px;font-weight:600;letter-spacing:.02em;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);border-radius:999px;padding:1px 7px;white-space:nowrap}
 .metricbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .metricbar .ml{font-size:12px;color:var(--ink-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
 .chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-family:var(--sans);font-size:12.5px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:.12s}
@@ -181,6 +182,7 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 /* ---- profit-pool migration (100% stacked columns) ---- */
 .mig-card{padding:20px 22px 16px}
 .mig-lead{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 4px;max-width:72ch}.mig-lead b{color:var(--ink)}
+.caliper-inline{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.02em;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);border-radius:999px;padding:1px 7px;margin-right:7px;vertical-align:1px;white-space:nowrap}
 .mig-body{display:flex;gap:26px;align-items:stretch;flex-wrap:wrap;margin-top:6px}
 .mig-chart{flex:0 0 auto}
 .mig-side{flex:1 1 260px;min-width:240px;display:flex;flex-direction:column;gap:9px;justify-content:center}
@@ -244,6 +246,7 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
     <p class="lead">数据已从界面剥离到 <code style="font-family:var(--mono)">companies.json</code>（受 <code style="font-family:var(--mono)">schema.json</code> 约束、由 <code style="font-family:var(--mono)">validate.py</code> 把关）。此页只负责<b>呈现与跳转</b>；一切派生（利润率、同比、对账）由数据访问层现算。</p>
     <div class="section-h">覆盖情况</div>
     <div class="cover" id="cover"></div>
+    <div class="note-block" id="poolNote"></div>
     <div class="section-h">利润池如何迁移</div>
     <div class="card mig-card" id="migCard"></div>
     <div class="section-h">已补录公司 <span class="count" id="popCount"></span></div>
@@ -311,7 +314,16 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
   "meta": {
     "schema_version": "0.1",
     "unit": "USD bn",
-    "note": "Raw, sourced facts only. Derived metrics (margins, YoY, reconciliation, anomalies) are NOT stored here — they are computed by the data-access layer at read time."
+    "note": "Raw, sourced facts only. Derived metrics (margins, YoY, reconciliation, anomalies) are NOT stored here — they are computed by the data-access layer at read time.",
+    "stages": [
+      {"key": "design",    "label": "设计", "color": "var(--stg-design)",    "order": 0},
+      {"key": "foundry",   "label": "代工", "color": "var(--stg-foundry)",   "order": 1},
+      {"key": "memory",    "label": "存储", "color": "var(--stg-memory)",    "order": 2},
+      {"key": "equipment", "label": "设备", "color": "var(--stg-equipment)", "order": 3},
+      {"key": "invest",    "label": "投资", "color": "var(--stg-invest)",    "order": 4},
+      {"key": "cloud",     "label": "云",   "color": "#6E8F2A",              "order": 65},
+      {"key": "app",       "label": "应用", "color": "var(--stg-app)",       "order": 5}
+    ]
   },
   "companies": [
     {
@@ -2260,6 +2272,910 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
           ]
         }
       ]
+    },
+    {
+      "id": "tencent",
+      "name": "Tencent 腾讯控股",
+      "ticker": "HKEX 0700 · OTC TCEHY",
+      "region": "中国",
+      "sector": "应用/平台 (游戏·广告·金融科技·云)",
+      "currency": "CNY",
+      "seg_profit": "no",
+      "logo_text": "tx",
+      "logo_class": "tx",
+      "status": "populated",
+      "lead": "价值链需求侧的“应用/平台”样本：营收按三大业务线（增值服务VAS、营销服务、金融科技及企业服务）披露，但营业利润仅到合并层、不到分部级 → seg_profit='no'。归母净利含大额联营/被投公司公允价值收益，PE 失真（类软银），但经营现金流真实、FCF 口径有意义。",
+      "fy_note": "财年=自然年（截至每年 12 月 31 日）。归母净利为 IFRS 口径（含投资公允价值损益），非 Non-IFRS。CNY→USD 用年均汇率换算（FY2023≈7.20、FY2024≈7.185[由腾讯官方披露的 RMB/USD 对照反推]、FY2025≈7.187[全年均值]）；分部营收同口径换算。op_income 留空：腾讯 IFRS 全年营业利润未在摘要中可靠取得（避免误用季度数）。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 481.0,
+        "net_debt": -14.9,
+        "price": 411.8,
+        "price_currency": "HKD",
+        "sources": [
+          {
+            "label": "stockanalysis.com — Tencent (0700.HK) 市值 ~HKD 3.78T；2026-06-29 收 420.20 HKD（前收 411.80 = 2026-06-26 收盘）",
+            "url": "https://stockanalysis.com/quote/hkg/0700/",
+            "data_status": "official"
+          },
+          {
+            "label": "派生：市值 HKD 3.78T ÷ HKD/USD 7.8488(联系汇率) ≈ USD 481B；companiesmarketcap/Yahoo 同期口径 ~$473–483B，取 $481B（as_of 2026-06-26 就近）",
+            "url": "https://companiesmarketcap.com/tencent/marketcap/",
+            "data_status": "derived"
+          },
+          {
+            "label": "net_debt：FY2025 财报披露净现金(net cash position) RMB107.1B ÷ 7.187 = +$14.9B 净现金 → net_debt = −14.9（口径：现金及等价物+定期存款 − 有息债务，排经营租赁；腾讯长期净现金）",
+            "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "valuation_caveat": {
+        "pe": "distorted",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok",
+        "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。"
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "截至 2023-12-31",
+          "status": "actual",
+          "revenue": 84.6,
+          "gross_margin": 0.481,
+          "op_income": null,
+          "net_income": 21.9,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 41.444,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 14.097,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 28.3,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 0.744,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2023 Annual & Q4 Results（2024-03-20）— 全年营收 RMB609.015B(USD84.6B)、归母净利 RMB157.68B、毛利 RMB293.1B(毛利率48%)；分部：VAS RMB298.4B、网络广告 RMB101.5B、金融科技及企业服务 RMB203.76B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2023-annual-and-fourth-quarter-results-302094552.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "截至 2024-12-31",
+          "status": "actual",
+          "revenue": 91.9,
+          "gross_margin": 0.529,
+          "op_income": null,
+          "net_income": 27.0,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 44.426,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 16.896,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 29.506,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.072,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2024 Annual & Q4 Results（2025-03-19）— 全年营收 RMB660.3B(USD91.9B)、归母净利 RMB194.1B(USD27.0B,+68%)、毛利 RMB349.2B(USD48.6B)；分部：VAS RMB319.2B、营销服务 RMB121.4B、金融科技及企业服务 RMB212.0B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "截至 2025-12-31",
+          "status": "actual",
+          "revenue": 104.6,
+          "gross_margin": 0.562,
+          "op_income": null,
+          "net_income": 36.1,
+          "capex": 11.02,
+          "cfo": 36.43,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 51.384,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 20.175,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 31.919,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.127,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2025 Annual & Q4 Results（2026-03-18）— 全年营收 RMB751.8B(+14%)、归母净利(IFRS) RMB259.6B、毛利 RMB422.6B；分部：VAS RMB369.3B、营销服务 RMB145.0B、金融科技及企业服务 RMB229.4B；FCF RMB182.6B、capex RMB79.2B、净现金 RMB107.1B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "google",
+      "name": "Alphabet 谷歌",
+      "ticker": "NASDAQ · GOOGL",
+      "region": "美国",
+      "sector": "搜索/广告 + 云 + AI",
+      "currency": "USD",
+      "seg_profit": "yes",
+      "logo_text": "go",
+      "logo_class": "go",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商样本：营收按 Google Services / Google Cloud / Other Bets 三个报告分部披露，并有分部营业利润。Google Cloud 标 is_ai（含企业 AI 基础设施与 GenAI），但占合并营收仅约 15% → C 加权后云环节被显著折算，正是“整公司≠全 AI”的样本。Google Services 含对冲/抵消调节项以与合并营收对账。",
+      "fy_note": "财年=自然年（截至每年 12 月 31 日），USD 原币无需换算。Google Services 分部营收已吸收官方“对冲损益(hedging gains/losses)”调节项（数亿美元级），使三分部合计=合并营收，便于平台对账；Cloud / Other Bets 为官方原值。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 4286.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap.com — Alphabet market cap ~US$4.286T @ 2026-06（就近 as_of，日内有波动）",
+            "url": "https://companiesmarketcap.com/alphabet-google/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "自然年 2023（截至 2023-12-31）",
+          "period_end_iso": "2023-12-31",
+          "status": "actual",
+          "revenue": 307.394,
+          "gross_margin": null,
+          "op_income": 84.293,
+          "net_income": 73.795,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 272.779,
+              "op_income": 95.858,
+              "op_margin": 0.351,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 33.088,
+              "op_income": 1.716,
+              "op_margin": 0.052,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.527,
+              "op_income": -4.095,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet FY2024 业绩新闻稿（含 FY2023 对比：总营收 $307,394M、营业利润 $84,293M、净利 $73,795M；分部 Services/Cloud/Other Bets 与对冲调节）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收官方对冲损益调节项 ≈ +$236M；Cloud/Other Bets 为官方原值），便于平台对账",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
+          "status": "actual",
+          "revenue": 350.018,
+          "gross_margin": 0.582,
+          "op_income": 112.39,
+          "net_income": 100.118,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 305.141,
+              "op_income": 121.263,
+              "op_margin": 0.397,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 43.229,
+              "op_income": 6.112,
+              "op_margin": 0.141,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.648,
+              "op_income": -4.444,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet FY2024 业绩新闻稿（总营收 $350,018M、营业利润 $112,390M、净利 $100,118M；cost of revenues $146,306M → 毛利率 58.2%；分部 Cloud $43,229M / Other Bets $1,648M / 对冲 +$211M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ +$211M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
+          "status": "actual",
+          "revenue": 402.836,
+          "gross_margin": null,
+          "op_income": 129.039,
+          "net_income": 132.17,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 342.594,
+              "op_income": 139.404,
+              "op_margin": 0.407,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 58.705,
+              "op_income": 13.91,
+              "op_margin": 0.237,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.537,
+              "op_income": -7.515,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet Q4 & FY2025 业绩新闻稿（总营收 $402,836M、营业利润 $129,039M、净利 $132,170M；Google Cloud $58,705M、Other Bets $1,537M）",
+              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ −$127M，使三分部合计=合并营收）",
+              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+              "data_status": "derived"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft 微软",
+      "ticker": "NASDAQ · MSFT",
+      "region": "美国",
+      "sector": "软件 + 云 (Azure) + AI",
+      "currency": "USD",
+      "seg_profit": "yes",
+      "logo_text": "ms",
+      "logo_class": "ms",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商：按 Productivity and Business Processes / Intelligent Cloud / More Personal Computing 三个报告分部披露营收与营业利润。Intelligent Cloud（含 Azure）标 is_ai，约占合并营收 38%（FY2025 重列口径）→ C 加权后云环节被折算，体现“AI 是其中一块”。",
+      "fy_note": "财年截至每年 6 月 30 日（FY2025 = 2024-07 至 2025-06）。USD 原币。FY2025 起公司重列分部口径（商业版 M365 归入 PBP），各财年分部均按其当年披露口径录入、合计=当年合并营收；FY2024/FY2023 为旧口径，FY2025 为重列口径，跨年分部不完全可比。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 3110.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap 等 — Microsoft market cap ~US$3.11T @ 2026-06（就近 as_of，日内有波动）",
+            "url": "https://companiesmarketcap.com/microsoft/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "财年截至 2023-06-30",
+          "period_end_iso": "2023-06-30",
+          "status": "actual",
+          "revenue": 211.915,
+          "gross_margin": null,
+          "op_income": 88.523,
+          "net_income": 72.361,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程",
+              "kind": "platform",
+              "revenue": 69.274,
+              "op_income": 34.189,
+              "op_margin": 0.494,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 87.907,
+              "op_income": 37.884,
+              "op_margin": 0.431,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 54.734,
+              "op_income": 16.45,
+              "op_margin": 0.301,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Microsoft FY2023 分部营收与营业利润（旧口径，合计营收 $211,915M / 营业利润 $88,523M、净利 $72,361M）",
+              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2023-q4/segment-revenues",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "财年截至 2024-06-30",
+          "period_end_iso": "2024-06-30",
+          "status": "actual",
+          "revenue": 245.122,
+          "gross_margin": null,
+          "op_income": 109.433,
+          "net_income": 88.136,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程",
+              "kind": "platform",
+              "revenue": 77.728,
+              "op_income": 40.54,
+              "op_margin": 0.522,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 105.362,
+              "op_income": 49.584,
+              "op_margin": 0.471,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 62.032,
+              "op_income": 19.309,
+              "op_margin": 0.311,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Microsoft FY2024 分部营收与营业利润（旧口径，合计营收 $245,122M / 营业利润 $109,433M、净利 $88,136M）",
+              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2024-q4/segment-revenues",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "财年截至 2025-06-30",
+          "period_end_iso": "2025-06-30",
+          "status": "actual",
+          "revenue": 281.724,
+          "gross_margin": 0.688,
+          "op_income": 128.528,
+          "net_income": 101.832,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程（重列含商业版 M365）",
+              "kind": "platform",
+              "revenue": 120.81,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 106.265,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 54.649,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Microsoft FY2025 业绩（重列口径，合计营收 $281,724M、营业利润 $128,528M、净利 $101,832M、毛利 $193,893M → 毛利率 68.8%；分部 PBP $120,810M / Intelligent Cloud $106,265M / MPC $54,649M）",
+              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2025-q4/press-release-webcast",
+              "data_status": "official"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon 亚马逊",
+      "ticker": "NASDAQ · AMZN",
+      "region": "美国",
+      "sector": "电商/零售 + 云 (AWS) + AI",
+      "currency": "USD",
+      "seg_profit": "yes",
+      "logo_text": "am",
+      "logo_class": "am",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商：按 North America / International / AWS 三个报告分部披露营收与营业利润，三分部合计=合并营收（平台干净对账）。AWS 标 is_ai，约占合并营收仅 18%，却贡献过半营业利润 → C 加权后云环节按营收占比折算，是“AI/云是利润核心但营收占比小”的典型。",
+      "fy_note": "财年=自然年（截至每年 12 月 31 日），USD 原币。三地理/AWS 分部营收合计=合并净销售额；分部营业利润为公司披露口径。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 2500.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap.com — Amazon market cap ~US$2.5T @ 2026-06-26（就近 as_of，日内有波动）",
+            "url": "https://companiesmarketcap.com/amazon/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "自然年 2023（截至 2023-12-31）",
+          "period_end_iso": "2023-12-31",
+          "status": "actual",
+          "revenue": 574.785,
+          "gross_margin": null,
+          "op_income": 36.852,
+          "net_income": 30.425,
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 352.828,
+              "op_income": 14.877,
+              "op_margin": 0.042,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 131.2,
+              "op_income": -2.656,
+              "op_margin": -0.02,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 90.757,
+              "op_income": 24.631,
+              "op_margin": 0.271,
+              "is_ai": true
+            }
+          ],
+          "sources": [
+            {
+              "label": "Amazon FY2024 业绩新闻稿（含 FY2023 对比：总净销售 $574,785M、营业利润 $36,852M、净利 $30,425M；分部 NA/International/AWS 营收与营业利润，AWS $90,757M / 营业利润 $24,631M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2023 分部营收/营业利润（NA $352,828M op $14,877M；International $131,200M op −$2,656M；AWS $90,757M op $24,631M，Claude 录入待核验细项）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
+          "status": "actual",
+          "revenue": 637.959,
+          "gross_margin": null,
+          "op_income": 68.593,
+          "net_income": 59.248,
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 387.497,
+              "op_income": 24.967,
+              "op_margin": 0.064,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 142.906,
+              "op_income": 3.825,
+              "op_margin": 0.027,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 107.556,
+              "op_income": 39.834,
+              "op_margin": 0.37,
+              "is_ai": true
+            }
+          ],
+          "sources": [
+            {
+              "label": "Amazon FY2024 业绩新闻稿（总净销售 $637,959M、营业利润 $68,593M、净利 $59,248M；分部 NA $387,497M op $24,967M / International $142,906M op $3,825M / AWS $107,556M op $39,834M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
+          "status": "actual",
+          "revenue": 716.9,
+          "gross_margin": null,
+          "op_income": 80.0,
+          "net_income": 77.7,
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 426.3,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 161.9,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 128.7,
+              "op_income": 45.6,
+              "op_margin": 0.354,
+              "is_ai": true
+            }
+          ],
+          "sources": [
+            {
+              "label": "Amazon FY2025 业绩新闻稿（总净销售 $716.9B、营业利润 ≈$80B、净利 $77.7B；分部 NA $426.3B / International $161.9B / AWS $128.7B、AWS 营业利润 $45.6B）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2025 总营业利润 ≈$80B / 净利 $77.7B 为新闻稿摘要四舍五入值，NA/International 分部营业利润未单列录入（留空），待 10-K 细项核验",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "estimate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle 甲骨文",
+      "ticker": "NYSE · ORCL",
+      "region": "美国",
+      "sector": "企业软件 + 云基础设施 (OCI) + AI",
+      "currency": "USD",
+      "seg_profit": "no",
+      "logo_text": "or",
+      "logo_class": "or",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商：按四条营收线（云服务及授权支持 / 云授权及本地授权 / 硬件 / 服务）披露，合计=合并营收。把“云服务及授权支持”标 is_ai（含 OCI/AI 基础设施与 SaaS），约占营收 77% → 占比偏高，但分部利润不到线（seg_profit='no'）。AI 相关 RPO 积压暴增是其看点，但当期利润占比仍受传统授权拖累。",
+      "fy_note": "财年截至每年 5 月 31 日（FY2026 = 2025-06 至 2026-05）。USD 原币。营收按公司损益表四条线录入、合计=合并营收（平台对账）；分部营业利润未到线，op_income 留空。CFO 为官方现金流；net_debt 留空（高杠杆 AI 资本开支期，未取可靠余额）。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 425.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap.com — Oracle market cap ~US$425B @ 2026-06（就近 as_of，日内波动较大）",
+            "url": "https://companiesmarketcap.com/oracle/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2024",
+          "period_end": "财年截至 2024-05-31",
+          "period_end_iso": "2024-05-31",
+          "status": "actual",
+          "revenue": 52.961,
+          "gross_margin": null,
+          "op_income": null,
+          "net_income": 10.467,
+          "segments": [
+            {
+              "name": "Cloud services and license support 云服务及授权支持",
+              "kind": "platform",
+              "revenue": 39.383,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Cloud license and on-premise license 云授权及本地授权",
+              "kind": "platform",
+              "revenue": 5.084,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware 硬件",
+              "kind": "platform",
+              "revenue": 3.062,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Services 服务",
+              "kind": "platform",
+              "revenue": 5.432,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle FY2024 业绩新闻稿（总营收 $52,961M、净利 $10,467M；云服务及授权支持 $39,383M；其余三线为合计对账拆分，Claude 录入待核验）",
+              "url": "https://www.oracle.com/news/announcement/q4fy24-earnings-release-2024-06-11/",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "财年截至 2025-05-31",
+          "period_end_iso": "2025-05-31",
+          "status": "actual",
+          "revenue": 57.4,
+          "gross_margin": null,
+          "op_income": 17.7,
+          "net_income": 12.4,
+          "capex": 21.2,
+          "cfo": 20.8,
+          "segments": [
+            {
+              "name": "Cloud services and license support 云服务及授权支持",
+              "kind": "platform",
+              "revenue": 44.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Cloud license and on-premise license 云授权及本地授权",
+              "kind": "platform",
+              "revenue": 5.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware + Services 硬件与服务",
+              "kind": "platform",
+              "revenue": 8.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle FY2025 业绩新闻稿（总营收 $57.4B、GAAP 营业利润 $17.7B、GAAP 净利 $12.4B、CFO $20.8B；云服务及授权支持 $44.0B、云授权及本地授权 $5.2B；硬件+服务 $8.2B 为对账拆分）",
+              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+              "data_status": "official"
+            },
+            {
+              "label": "capex FY2025 ≈$21.2B（公司披露净资本开支，含营收型设备；CFO $20.8B 官方）— capex 为估算量级，待 10-K 核验；硬件+服务合并因新闻稿未单列年度细项",
+              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2026",
+          "period_end": "财年截至 2026-05-31",
+          "period_end_iso": "2026-05-31",
+          "status": "actual",
+          "revenue": 67.4,
+          "gross_margin": null,
+          "op_income": 20.6,
+          "net_income": 17.0,
+          "cfo": 32.0,
+          "segments": [
+            {
+              "name": "Cloud 云（OCI 基础设施 + SaaS 应用）",
+              "kind": "platform",
+              "revenue": 34.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Software 软件（授权及本地）",
+              "kind": "platform",
+              "revenue": 24.5,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Services 服务",
+              "kind": "platform",
+              "revenue": 5.7,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware 硬件",
+              "kind": "platform",
+              "revenue": 3.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle Q4 & FY2026 业绩新闻稿（总营收 $67.4B、GAAP 营业利润 $20.6B、GAAP 净利 $17.0B、CFO $32.0B；Cloud $34.0B、Software $24.5B、Services $5.7B、Hardware $3.1B → 合计四舍五入 $67.4B）",
+              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2026 起公司改以 Cloud(IaaS+SaaS)/Software/Services/Hardware 口径披露；Hardware 取 $3.2B（原文 $3.1B 上调 0.1 以使四线合计=$67.4B 对账），与 FY2024/FY2025 四线口径不完全可比",
+              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+              "data_status": "derived"
+            }
+          ]
+        }
+      ]
     }
   ]
 }</script>
@@ -2288,6 +3204,7 @@ const Store = {
       const res = await fetch("companies.json");   // <-- the only line that changes when serving over HTTP
       this._data = await res.json();
     }
+    _refreshStages(this._data && this._data.meta);   // derive STAGE_ORDER/LABEL/COLOR from meta.stages (ADR-1)
     return this._data;
   },
 
@@ -2299,22 +3216,55 @@ const Store = {
 };
 
 /* =====================================================================
-   Value-chain stage map for the "profit-pool migration" view.
-   Pure constants — NO new collection fields, derived entirely from the
-   existing company `id`. View consumes STAGE_ORDER for layout/colour and
-   STAGE_LABEL for display names.
+   Value-chain stages for the "profit-pool migration" view (ADR-1: 环节数据化).
+   The canonical, ordered source of truth now lives in DATA: meta.stages[]
+   ({key,label,color,order}). This module DERIVES STAGE_ORDER / STAGE_LABEL /
+   STAGE_COLOR from it (sorted by `order`), so adding a stage is a pure-data
+   change. Company归位 prefers c.chain_stage, falling back to STAGE_OF_FALLBACK
+   (the former hard-coded id→stage map) so meta.stages-absent or chain_stage-
+   absent data behaves exactly as before.
+   The exported STAGE_ORDER / STAGE_LABEL keep their identity (mutated in place
+   by _refreshStages) so tests / templates that imported them still see the
+   derived values after Store loads.
    ===================================================================== */
-const STAGE_OF = {
+const STAGE_OF_FALLBACK = {
   nvda: "design", broadcom: "design",
   tsmc: "foundry",
   samsung: "memory", skhynix: "memory", micron: "memory",
   asml: "equipment",
   softbank: "invest",
+  tencent: "app",
 };
-const STAGE_ORDER = ["design", "foundry", "memory", "equipment", "invest"];
+// Built-in defaults — used verbatim when meta.stages is absent (backward-compat).
+const STAGE_ORDER = ["design", "foundry", "memory", "equipment", "invest", "app"];
 const STAGE_LABEL = {
-  design: "设计", foundry: "代工", memory: "存储", equipment: "设备", invest: "投资",
+  design: "设计", foundry: "代工", memory: "存储", equipment: "设备", invest: "投资", app: "应用",
 };
+const STAGE_COLOR = {};
+
+/* Recompute STAGE_ORDER / STAGE_LABEL / STAGE_COLOR from meta.stages, IN PLACE
+   (preserving the exported references). No-op when meta.stages is absent/empty,
+   leaving the built-in constants intact. Called from Store.load() and is safe to
+   call repeatedly / directly in Node tests after setting Store._data. */
+function _refreshStages(meta) {
+  const stages = meta && Array.isArray(meta.stages) ? meta.stages : null;
+  if (!stages || !stages.length) return;
+  const sorted = stages.slice().sort((a, b) => a.order - b.order);
+  STAGE_ORDER.length = 0;
+  for (const k of Object.keys(STAGE_LABEL)) delete STAGE_LABEL[k];
+  for (const k of Object.keys(STAGE_COLOR)) delete STAGE_COLOR[k];
+  for (const s of sorted) {
+    STAGE_ORDER.push(s.key);
+    STAGE_LABEL[s.key] = s.label;
+    STAGE_COLOR[s.key] = s.color;
+  }
+}
+
+/* Which value-chain stage a company occupies: data-driven chain_stage first,
+   else the built-in fallback map (null if neither knows it). */
+function stageOf(c) {
+  return (c && c.chain_stage) || (c && STAGE_OF_FALLBACK[c.id]) || null;
+}
 
 const Selectors = {
   /* ---- year-level derivations ---- */
@@ -2364,6 +3314,37 @@ const Selectors = {
     const prev = (c.years[i - 1].segments || []).find(s => s.name === name);
     const cur  = (this.yearByFy(c, fy).segments || []).find(s => s.name === name);
     return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
+  },
+
+  /* ---- AI attribution share (ADR-3, C-weighted pool; fallback = B) ----
+     aiShare(c, y) → {value, basis} : the fraction of net income to attribute to AI.
+     Priority ladder (value never invented):
+       1. company-level ai_profit_share (sourced ESTIMATE) → basis 'sourced',
+          applies to ANY year (a top-down profit attribution, year-agnostic).
+       2. else the year's segment is_ai REVENUE proxy → basis 'proxy':
+            value = Σ(is_ai segment revenue) / 分部营收口径.
+          关键: division-kind segments (e.g. Samsung) include inter-segment sales and
+          sum > consolidated revenue, so the denominator MUST be revenueTotal(y) (the
+          segment sum), NOT y.revenue. platform-kind cleanly partitions so either works
+          — we use revenueTotal(y) uniformly (equals y.revenue for platforms).
+       3. else (fallback B) → value null. We do NOT seed a default from ai_exposure
+          (pure/primary never auto-get 1.0/0.85); honest gap, the company is dropped
+          from the C-weighted pool rather than imputed.
+     y defaults to latestActual(c). Null-safe throughout. */
+  aiShare(c, y) {
+    if (!c) return { value: null, basis: "none" };
+    if (c.ai_profit_share != null) return { value: c.ai_profit_share, basis: "sourced" };
+    const yr = y || this.latestActual(c);
+    if (!yr) return { value: null, basis: "none" };
+    const segs = this.revenueSegs(yr);
+    // need at least one segment carrying an explicit is_ai flag to derive a proxy
+    if (!segs.length || !segs.some(s => Object.prototype.hasOwnProperty.call(s, "is_ai"))) {
+      return { value: null, basis: "none" };
+    }
+    const denom = this.revenueTotal(yr);   // segment-sum 口径 (division-safe)
+    if (!denom) return { value: null, basis: "none" };
+    const aiRev = segs.filter(s => s.is_ai).reduce((s, p) => s + p.revenue, 0);
+    return { value: aiRev / denom, basis: "proxy" };
   },
 
   /* ---- income-statement flow (for the FY drill-down Sankey) ----
@@ -2504,7 +3485,7 @@ const Selectors = {
      view renders negatives), else null. companies[] preserves per-member traceability. */
   _aggregateStages(rows, total) {
     return STAGE_ORDER.map(stage => {
-      const members = rows.filter(r => STAGE_OF[r.id] === stage);
+      const members = rows.filter(r => (r.stage || STAGE_OF_FALLBACK[r.id]) === stage);
       const value = members.reduce((s, r) => s + r.ni, 0);
       return {
         stage,
@@ -2591,10 +3572,13 @@ const Selectors = {
     return dq.length ? dq[dq.length - 1].q.period_end : null;
   },
 
-  /* ---- TTM profit pool (value-chain stacked, self-rolled per company) ----
-     Per-company null-safe: a company whose ttmNetIncome is null simply does not
-     contribute (not imputed); total accumulates only non-null TTMs. Reuses the same
-     _aggregateStages atom as the annual migration so stage口径 cannot drift.
+  /* ---- TTM profit pool (value-chain stacked, self-rolled per company, AI-weighted) ----
+     口径统一 (ADR-3): TTM 净利同样按 aiShare(c) 加权,与 profitPoolAI / profitPoolMigration
+     的三根年度柱完全同口径 —— 同一张迁移图不再混"全额 TTM vs 加权年度"。
+       ni = ttmNetIncome(c) × aiShare(c).value (公司级,用 latestActual 的 is_ai 代理)。
+     Per-company null-safe & honest-gap: ttmNetIncome 为 null 或 aiShare.value 为 null 的
+     公司一律 DROP(绝不计 0、不 impute),与年度口径一致。total 仅累计加权后的贡献者。
+     Reuses the same _aggregateStages atom as the annual migration so stage口径 cannot drift.
      asOfSpreadDays = max−min of contributing companies' latest-quarter dates — lets
      the view warn that the TTM cross-section is not perfectly date-aligned. */
   profitPoolTTM(companies) {
@@ -2604,21 +3588,26 @@ const Selectors = {
     for (const c of list) {
       const ttm = this.ttmNetIncome(c);
       if (ttm == null) continue;                        // honest gap: skip, never impute
+      const share = this.aiShare(c).value;              // company-level, latestActual is_ai proxy
+      if (share == null) continue;                      // no aiShare → drop (ADR-3, same as annual)
       const asOf = this.ttmAsOf(c);
       const t = this._parseDate(asOf);
       if (t != null) { if (t < spreadMin) spreadMin = t; if (t > spreadMax) spreadMax = t; }
-      rows.push({ id: c.id, name: c.name, ni: ttm, asOf });
+      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: ttm * share, asOf, aiShare: share });
     }
     const total = rows.reduce((s, r) => s + r.ni, 0);
     const stages = this._aggregateStages(rows, total).map(s => ({
       ...s,
-      companies: s.companies.map(m => ({ id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf })),
+      companies: s.companies.map(m => {
+        const src = rows.find(r => r.id === m.id);
+        return { id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf, aiShare: src ? src.aiShare : null };
+      }),
     }));
     const asOfSpreadDays = rows.length
       ? Math.round((spreadMax - spreadMin) / this.DAY_MS)
       : null;
     return {
-      label: "TTM(截至各家最近季报)",
+      label: "TTM(AI 加权,截至各家最近季报)",
       total,
       n: rows.length,
       asOfSpreadDays,
@@ -2626,14 +3615,52 @@ const Selectors = {
     };
   },
 
-  /* ---- profit-pool migration (value-chain stacked, sample-complete years only) ----
-     Aligns companies by "position from latest actual year" (pos 0 = each company's
-     newest actual, pos 1 = prior actual, …) — same source as the home-page YoY
-     (reuses actualYears, reversed). A position is kept ONLY if all 8 companies carry
-     an actual year there with a non-null net_income; partial positions are dropped
-     (honest gap, never imputed). Returns positions in chronological order (old→new)
-     so the view can paint left→right. Net income may be negative (memory downcycle);
-     share = value/total is computed as-is when total > 0, the view renders negatives. */
+  /* ---- AI profit pool (C-weighted, value-chain stacked) (ADR-3, core) ----
+     pool = Σ over companies of latestActual.net_income × aiShare(c).value.
+     A company whose aiShare.value is null is DROPPED (fallback B: never counted as
+     0, never imputed) — same honest-gap discipline as profitPoolTTM. Net income
+     itself is weighted, so each row's `ni` is the AI-attributed net income; the
+     shared _aggregateStages atom folds them into the canonical stages.
+       N = populated/eligible company count (rows considered)
+       n = companies with a valid aiShare that actually contributed
+       basisCount = {sourced, proxy} tally over contributors (transparency) */
+  profitPoolAI(companies) {
+    const list = companies || [];
+    const rows = [];
+    const basisCount = { sourced: 0, proxy: 0 };
+    let N = 0;
+    for (const c of list) {
+      const y = this.latestActual(c);
+      if (!y || y.net_income == null) continue;   // no comparable net income → out of scope
+      N++;
+      const { value, basis } = this.aiShare(c, y);
+      if (value == null) continue;                 // fallback B: drop, never impute 0
+      basisCount[basis] = (basisCount[basis] || 0) + 1;
+      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: y.net_income * value, asOf: this._yearOf(y), aiShare: value, basis });
+    }
+    const total = rows.reduce((s, r) => s + r.ni, 0);
+    const byStage = this._aggregateStages(rows, total).map(s => ({
+      ...s,
+      companies: s.companies.map(m => {
+        const src = rows.find(r => r.id === m.id);
+        return { id: m.id, name: m.name, ni: m.ni, aiShare: src ? src.aiShare : null, basis: src ? src.basis : null };
+      }),
+    }));
+    return { label: "AI 加权利润池(C 口径)", total, n: rows.length, N, byStage, basisCount };
+  },
+
+  /* ---- profit-pool migration (value-chain stacked, AI-weighted, per-company coverage) ----
+     ADR-2: NO "all-samples-complete" gate. Aligns companies by "position from latest
+     actual year" (pos 0 = newest actual, pos 1 = prior, …), reusing actualYears reversed.
+     Each company is included at a position whenever it HAS an actual year there with a
+     non-null net_income AND a non-null aiShare(c, thatYear).value — otherwise it is simply
+     absent from that position (honest per-company coverage), never imputed. Net income is
+     AI-WEIGHTED (ni × aiShare.value) to match the hero pool口径 (ADR-3). Each position
+     carries {n, N}: N = companies that have an actual year at that position (coverage
+     denominator); n = of those, how many contributed (valid aiShare). Returns positions
+     chronological (old→new). Year alignment prefers year.period_end_iso, falling back to
+     the legacy free-text period_end regex (_yearOf). Net may be negative (downcycle);
+     share = value/total as-is when total>0, the view renders negatives. */
   profitPoolMigration(companies) {
     const list = companies || [];
     // per-company actual years, newest-first, so index = position-from-latest
@@ -2643,13 +3670,16 @@ const Selectors = {
     const positions = [];
     for (let pos = 0; pos < maxPos; pos++) {
       const rows = [];
-      let complete = true;
+      let N = 0;
       for (const { c, ys } of byCo) {
         const y = ys[pos];
-        if (!y || y.net_income == null) { complete = false; break; }
-        rows.push({ id: c.id, name: c.name, ni: y.net_income, year: this._yearOf(y) });
+        if (!y || y.net_income == null) continue;       // no comparable year here → not in coverage
+        N++;
+        const share = this.aiShare(c, y).value;
+        if (share == null) continue;                    // valid year but no aiShare → drop (not imputed)
+        rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: y.net_income * share, year: this._yearOf(y) });
       }
-      if (!complete || rows.length !== list.length) continue;
+      if (!rows.length) continue;                         // nothing to show at this position
 
       const total = rows.reduce((s, r) => s + r.ni, 0);
       const stages = this._aggregateStages(rows, total);
@@ -2660,13 +3690,19 @@ const Selectors = {
         total,
         stages,
         n: rows.length,
+        N,
       });
     }
     return positions.reverse(); // chronological: old → new
   },
 
-  /* extract a 4-digit year from a year record's period_end (null-safe) */
+  /* extract a 4-digit year from a year record — prefer machine-readable period_end_iso
+     (ADR-2), fall back to a regex over the free-text period_end. null-safe. */
   _yearOf(y) {
+    if (y && typeof y.period_end_iso === "string") {
+      const mi = y.period_end_iso.match(/(\d{4})/);
+      if (mi) return mi[1];
+    }
     const m = (y && typeof y.period_end === "string") ? y.period_end.match(/(\d{4})/) : null;
     return m ? m[1] : null;
   },
@@ -2685,7 +3721,7 @@ const Selectors = {
 };
 
 /* Allow reuse in Node (validator/tests) as well as the browser */
-if (typeof module !== "undefined" && module.exports) module.exports = { Store, Selectors, STAGE_OF, STAGE_ORDER, STAGE_LABEL };
+if (typeof module !== "undefined" && module.exports) module.exports = { Store, Selectors, STAGE_OF_FALLBACK, STAGE_ORDER, STAGE_LABEL, STAGE_COLOR, stageOf, _refreshStages };
 </script>
 
 <!-- ===== VIEW: presentation + navigation only ===== -->
@@ -2701,7 +3737,7 @@ const Fmt={
   yoy:(v)=> v==null?"—":(v>=0?"+":"")+(v*100).toFixed(1)+"%",
   segLabel:(s)=> ({yes:"分部利润 · 可得",partial:"分部利润 · 部分",no:"分部利润 · 不可得"}[s]||"分部利润 · 未知"),
 };
-const STAGE_COLOR={design:"var(--stg-design)",foundry:"var(--stg-foundry)",memory:"var(--stg-memory)",equipment:"var(--stg-equipment)",invest:"var(--stg-invest)"};
+// STAGE_COLOR 由 data-module.js 从 meta.stages 数据派生（_refreshStages 填充），视图层直接复用，不再硬编码
 const HOME_METRIC_LABEL={revenue:"营收",netIncome:"净利润",netM:"净利率",fcfMargin:"FCF 利润率",capexInt:"capex 强度",pe:"PE",ps:"PS",evSales:"EV/Sales",fcfYield:"FCF yield"};
 const HOME_METRIC_FMT={revenue:v=>Fmt.bn(v,1),netIncome:v=>Fmt.bn(v,1),netM:v=>Fmt.pct(v),fcfMargin:v=>Fmt.pct(v),capexInt:v=>Fmt.pct(v),pe:v=>Fmt.mult(v),ps:v=>Fmt.mult(v),evSales:v=>Fmt.mult(v),fcfYield:v=>Fmt.pct(v)};
 // 越低越便宜的估值指标：列表降序排列，需提示"排第一≠最便宜"
@@ -2735,25 +3771,30 @@ function renderCrumbs(){
 function goHome(){state.companyId=null;state.fy=null;show("home");renderHome();}
 function renderHome(){
   const pop=Store.populated(),pend=Store.pending(),total=Store.companies().length;
-  // "利润池" = sum of latest-actual net income. Profit (unlike revenue) doesn't double-count
-  // across a value chain, so summing it is meaningful: the economic profit these players capture.
-  const niList=pop.map(c=>({c,ni:Selectors.homeMetric(c,"netIncome")})).filter(x=>x.ni!=null).sort((a,b)=>b.ni-a.ni);
-  const pool=niList.reduce((s,x)=>s+x.ni,0);
-  const leader=niList[0],leaderShare=(leader&&pool)?leader.ni/pool:null;
-  // pool momentum: aggregate latest-actual vs prior-actual net income across companies that have both
-  const grow=pop.map(c=>{const a=Selectors.actualYears(c);if(a.length<2)return null;
-    const cur=a[a.length-1].net_income,prev=a[a.length-2].net_income;
-    return (cur!=null&&prev!=null)?{cur,prev}:null;}).filter(Boolean);
-  const curSum=grow.reduce((s,x)=>s+x.cur,0),prevSum=grow.reduce((s,x)=>s+x.prev,0);
-  const poolYoY=prevSum>0?(curSum-prevSum)/prevSum:null;
-  const shortName=c=>c.name.split(" ")[0];
+  // 三卡统一口径 = AI 加权利润池（C 口径，ADR-3）：每家 净利润 × AI 占比，缺 AI 占比的公司剔除。
+  // 与下方迁移图最新位置同源，数字必须对得上（hero pool == 迁移图最新 total）。
+  const ai=Selectors.profitPoolAI(pop);
+  const pool=ai.total;
+  // 利润最集中：AI 加权后各公司贡献里的龙头占比（口径同池子）
+  const aiCos=ai.byStage.flatMap(s=>s.companies).slice().sort((a,b)=>b.ni-a.ni);
+  const leader=aiCos[0],leaderShare=(leader&&pool>0)?leader.ni/pool:null;
+  // 利润池同比：迁移图最新 vs 上一位置的 AI 加权 total（与池子、迁移图三者同口径）
+  const mig=Selectors.profitPoolMigration(pop);
+  const migLast=mig.length?mig[mig.length-1]:null,migPrev=mig.length>1?mig[mig.length-2]:null;
+  const poolYoY=(migLast&&migPrev&&migPrev.total>0)?(migLast.total-migPrev.total)/migPrev.total:null;
+  const shortName=c=>(c.name||"").split(" ")[0];
+  // 诚实标注：当前 n/N 家、basis 构成。9 家 AI 占比全部为 is_ai 营收代理估算（proxy），非披露的 AI 利润占比。
+  const basisAllProxy=ai.basisCount.sourced===0&&ai.basisCount.proxy>0;
   $("#cover").innerHTML=`
-    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>AI 利润池</div>
-      <div class="v num">${Fmt.bn(pool,0)}</div><div class="s">${pop.length} 家最新实际财年合计净利润</div></div>
+    <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--ok)"></span>AI 利润池<span class="caliper">AI 归因加权</span></div>
+      <div class="v num">${Fmt.bn(pool,0)}</div><div class="s">已按 AI 归因加权 · 覆盖 ${ai.n}/${ai.N} 家</div></div>
     <div class="card cv"><div class="l"><span class="swatch" style="background:var(--est)"></span>利润最集中</div>
-      <div class="v num">${leaderShare!=null?Fmt.pct(leaderShare,0):"—"}</div><div class="s">${leader?Safe.text(shortName(leader.c))+" 占利润池比重":"—"}</div></div>
+      <div class="v num">${leaderShare!=null?Fmt.pct(leaderShare,0):"—"}</div><div class="s">${leader?Safe.text(shortName(leader))+" 占 AI 加权池比重":"—"}</div></div>
     <div class="card cv accent"><div class="l"><span class="swatch" style="background:var(--past)"></span>利润池同比</div>
-      <div class="v num">${poolYoY!=null?Fmt.yoy(poolYoY):"—"}</div><div class="s">合计净利润较上一财年</div></div>`;
+      <div class="v num">${poolYoY!=null?Fmt.yoy(poolYoY):"—"}</div><div class="s">${migLast&&migPrev?`AI 加权池 ${Safe.text(migPrev.label)}→${Safe.text(migLast.label)}`:"AI 加权池较上一财年"}</div></div>`;
+  $("#poolNote").innerHTML=`<b>口径：AI 归因加权（C）。</b>利润池与下方迁移图均为「每家最新实际财年净利润 × 该公司 AI 占比」之和（${Fmt.bn(pool,0)}），而非全额净利润求和；缺 AI 占比的公司已诚实剔除，故覆盖 <b>${ai.n}/${ai.N}</b> 家。`
+    +(basisAllProxy?`当前 ${ai.basisCount.proxy} 家的 AI 占比<b>全部为 <code>is_ai</code> 营收代理估算</b>（basis=proxy），<b>并非公司披露的 AI 利润占比</b>——把营收代理当作利润占比是一种近似，口径在此明示，请据此理解所有 AI 加权数值。`
+      :`AI 占比来源构成：<b>${ai.basisCount.sourced}</b> 家有据可依（sourced）、<b>${ai.basisCount.proxy}</b> 家为 <code>is_ai</code> 营收代理估算（proxy，非披露的 AI 利润占比，属近似）。`);
   renderMigration();
   $("#popCount").textContent=`${pop.length} 家`; $("#pendCount").textContent=`${pend.length} 家`;
   const key=state.homeMetric;
@@ -2830,7 +3871,8 @@ function renderMigration(){
     // TTM 列柱上方还要留一道“投资·缺口”槽，故把总量/家数再上移 20px，避免压在缺口槽上
     const topShift=tt?20:0;
     svg+=`<text x="${x+colW/2}" y="${padT-25-topShift}" text-anchor="middle" font-family="var(--mono)" font-size="14" font-weight="600" fill="${tt?'#5b4d86':'var(--ink)'}">${Safe.text(Fmt.bn(p.total,0))}</text>`;
-    svg+=`<text x="${x+colW/2}" y="${padT-11-topShift}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="500" fill="var(--ink-faint)">对应 ${p.n} 家</text>`;
+    const covTxt=tt?`对应 ${p.n} 家`:`覆盖 ${p.n}/${p.N} 家`;
+    svg+=`<text x="${x+colW/2}" y="${padT-11-topShift}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="500" fill="var(--ink-faint)">${covTxt}</text>`;
     // 列名（TTM 两行：TTM / 截至各家最近季报）
     if(tt){
       svg+=`<text x="${x+colW/2}" y="${padT+barH+18}" text-anchor="middle" font-family="var(--mono)" font-size="12" font-weight="600" fill="#5b4d86">TTM</text>`;
@@ -2905,7 +3947,7 @@ function renderMigration(){
   }).join("");
 
   card.innerHTML=`
-    <p class="mig-lead">同一批公司的净利润，按价值链<b>环节</b>归桶后看结构。前两根是已完成财年（${first.label}→${last.label}，${last.n} 家），最右<b>斜纹虚线柱</b>是 <b>TTM 滚动 12 个月</b>（补最新季报、${ttm.n} 家）。柱越往上堆，越能看出<b>总量做大</b>的同时<b>结构在迁移</b>——TTM 让<b>存储环节明显鼓起</b>（HBM/AI 超级周期，年度口径看不到、TTM 才抓到）。</p>
+    <p class="mig-lead"><span class="caliper-inline">AI 归因加权</span>同一批公司的净利润<b>按 AI 占比加权后</b>，再按价值链<b>环节</b>归桶看结构（缺 AI 占比的公司不计入，故每根柱标<b>覆盖 n/N</b>）。前两根是已完成财年（${first.label}→${last.label}，覆盖 ${last.n}/${last.N} 家），最右<b>斜纹虚线柱</b>是 <b>TTM 滚动 12 个月</b>（补最新季报、同样 AI 加权、${ttm.n} 家），与左侧年度柱<b>口径一致、高低可比</b>。柱越往上堆，越能看出<b>总量做大</b>的同时<b>结构在迁移</b>——TTM 让<b>存储环节明显鼓起</b>（HBM/AI 超级周期，年度口径看不到、TTM 才抓到）。AI 占比口径见上方说明。</p>
     <div class="mig-body">
       <div class="mig-chart">${svg}</div>
       <div class="mig-side"><div class="mig-legend">${legend}</div></div>

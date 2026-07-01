@@ -10,7 +10,12 @@
       "properties": {
         "schema_version": {"type": "string"},
         "unit": {"type": "string"},
-        "note": {"type": "string"}
+        "note": {"type": "string"},
+        "stages": {
+          "type": "array",
+          "description": "Canonical, ORDERED value-chain stages — the single source of truth for the profit-pool migration view. Replaces three scattered hard-codings (data-module.js STAGE_ORDER/STAGE_LABEL + the template's STAGE_COLOR CSS vars). A company points here via company.chain_stage. Optional for backward-compat: when absent, the view falls back to its built-in constants. Adding a new stage (e.g. cloud / 需求侧) is then a pure-data change — append an item here and tag companies with chain_stage; no code edit. Array order defines left→right paint order; the separate `order` field is an explicit tiebreaker so reordering never depends on array position alone.",
+          "items": {"$ref": "#/definitions/stage"}
+        }
       }
     },
     "companies": {
@@ -36,6 +41,11 @@
         "lead": {"type": "string"},
         "fy_note": {"type": "string"},
         "planned_source": {"type": "string"},
+        "chain_stage": {"type": "string", "description": "Key into meta.stages[].key — which value-chain stage this company occupies in the profit-pool migration. Optional + fallback: when absent (or meta.stages absent), the view/Selector falls back to its built-in STAGE_OF map keyed by company id. Replacing STAGE_OF with this field is the migration target, but both coexist (chain_stage || STAGE_OF[id]) so existing data needs no edit."},
+        "ai_exposure": {"enum": ["pure", "primary", "partial", "peripheral"], "description": "Coarse AI-attribution bucket for the company as a whole, used only as the LAST-RESORT fallback in AI-share derivation (see ADR-3 priority ladder). pure = ~all profit is AI-driven; primary = AI is the dominant driver; partial = meaningful-but-minority AI; peripheral = incidental AI exposure. Recommended-required for populated companies, but kept optional here for a non-breaking rollout (migrate first, then tighten). NOT a number — the actual weighting share comes from ai_profit_share / is_ai proxy; this only seeds a conservative default and never overrides a sourced number."},
+        "ai_profit_share": {"type": ["number", "null"], "minimum": 0, "maximum": 1, "description": "Hand-entered share of the company's NET INCOME attributable to AI, ∈[0,1]. Optional. This is the TOP priority input to the C-weighted pool (pool = Σ net_income × aiShare). It is a sourced ESTIMATE, not a raw fact reconcilable to a filing — so when present it MUST be accompanied by ai_share_source (provenance per project invariant). null/absent ⇒ Selector falls back to the is_ai revenue proxy, then to ai_exposure (see ADR-3). Never derived-and-stored; if you can derive it from segments, leave this null and let the Selector compute the proxy at read time."},
+        "ai_revenue_share": {"type": ["number", "null"], "minimum": 0, "maximum": 1, "description": "Hand-entered share of the company's REVENUE attributable to AI, ∈[0,1]. Optional, display/context only — NOT used as the C-weighting key (the pool weights profit, not revenue). When present MUST carry ai_share_source. Distinct from the is_ai segment proxy the Selector can compute itself; provide this only when you have a cleaner top-down number than segment summation (e.g. a company-stated AI revenue figure)."},
+        "ai_share_source": {"type": "array", "description": "Provenance for ai_profit_share / ai_revenue_share — mandatory whenever either is non-null (enforced in validate.py, not by schema, to stay non-breaking). Each entry carries url + data_status exactly like every other source; AI-attribution numbers are typically data_status 'estimate' or 'derived'. Omit when both shares are null.", "items": {"$ref": "#/definitions/source"}},
         "quote": {"$ref": "#/definitions/quote"},
         "valuation_caveat": {"$ref": "#/definitions/valuation_caveat"},
         "years": {"type": "array", "items": {"$ref": "#/definitions/year"}},
@@ -73,7 +83,8 @@
       "required": ["fy", "status"],
       "properties": {
         "fy": {"type": "string"},
-        "period_end": {"type": "string"},
+        "period_end": {"type": "string", "description": "Free-text, human-facing period label (e.g. '截至 2024-01-28' / '自然年 2024'). Display only — NEVER parsed for date math. Retained for backward-compat and rich display."},
+        "period_end_iso": {"type": "string", "format": "date", "description": "Machine-readable fiscal-year-end date, ISO 8601 (YYYY-MM-DD). Optional. Upgrades the profit-pool migration's year alignment from regex-scraping the free-text period_end (data-module.js _yearOf) to a reliable key — the Selector should prefer period_end_iso when present and only fall back to the regex over period_end. Mirrors quarters[].period_end's machine-date contract; does not replace the free-text period_end (which stays for display)."},
         "status": {"enum": ["actual", "forecast"]},
         "revenue": {"type": "number"},
         "gross_margin": {"type": ["number", "null"]},
@@ -119,6 +130,18 @@
         "op_income": {"type": ["number", "null"]},
         "op_margin": {"type": ["number", "null"]},
         "is_ai": {"type": "boolean"}
+      }
+    },
+    "stage": {
+      "type": "object",
+      "description": "One value-chain stage in the canonical ordered list (meta.stages). Carries everything the three former hard-codings held: key (the join key from company.chain_stage), label (display), color (the CSS color the template previously held in a STAGE_COLOR var), and order (explicit integer ordering). Adding a stage = appending one of these + tagging companies; no code change.",
+      "required": ["key", "label", "color", "order"],
+      "additionalProperties": false,
+      "properties": {
+        "key": {"type": "string", "pattern": "^[a-z0-9_-]+$", "description": "Stable join key referenced by company.chain_stage (e.g. design/foundry/memory/equipment/invest/app, and future cloud/demand)."},
+        "label": {"type": "string", "description": "Human display name (e.g. 设计/代工/存储)."},
+        "color": {"type": "string", "description": "Display color for this stage (the value the template's STAGE_COLOR CSS var carried, e.g. '#7dd3fc' or a CSS color token). Pure presentation, but lives with the stage so a new stage needs no template edit."},
+        "order": {"type": "integer", "minimum": 0, "description": "Explicit left→right paint order. Authoritative tiebreaker so ordering never depends on array position alone."}
       }
     },
     "anchor": {

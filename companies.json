@@ -2,7 +2,16 @@
   "meta": {
     "schema_version": "0.1",
     "unit": "USD bn",
-    "note": "Raw, sourced facts only. Derived metrics (margins, YoY, reconciliation, anomalies) are NOT stored here — they are computed by the data-access layer at read time."
+    "note": "Raw, sourced facts only. Derived metrics (margins, YoY, reconciliation, anomalies) are NOT stored here — they are computed by the data-access layer at read time.",
+    "stages": [
+      {"key": "design",    "label": "设计", "color": "var(--stg-design)",    "order": 0},
+      {"key": "foundry",   "label": "代工", "color": "var(--stg-foundry)",   "order": 1},
+      {"key": "memory",    "label": "存储", "color": "var(--stg-memory)",    "order": 2},
+      {"key": "equipment", "label": "设备", "color": "var(--stg-equipment)", "order": 3},
+      {"key": "invest",    "label": "投资", "color": "var(--stg-invest)",    "order": 4},
+      {"key": "cloud",     "label": "云",   "color": "#6E8F2A",              "order": 65},
+      {"key": "app",       "label": "应用", "color": "var(--stg-app)",       "order": 5}
+    ]
   },
   "companies": [
     {
@@ -1947,6 +1956,910 @@
               "label": "派生换算：€2,757M × EUR/USD 1.13（1Q26 季度均价）= $3.12B（换算待核验）",
               "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html",
               "data_status": "estimate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tencent",
+      "name": "Tencent 腾讯控股",
+      "ticker": "HKEX 0700 · OTC TCEHY",
+      "region": "中国",
+      "sector": "应用/平台 (游戏·广告·金融科技·云)",
+      "currency": "CNY",
+      "seg_profit": "no",
+      "logo_text": "tx",
+      "logo_class": "tx",
+      "status": "populated",
+      "lead": "价值链需求侧的“应用/平台”样本：营收按三大业务线（增值服务VAS、营销服务、金融科技及企业服务）披露，但营业利润仅到合并层、不到分部级 → seg_profit='no'。归母净利含大额联营/被投公司公允价值收益，PE 失真（类软银），但经营现金流真实、FCF 口径有意义。",
+      "fy_note": "财年=自然年（截至每年 12 月 31 日）。归母净利为 IFRS 口径（含投资公允价值损益），非 Non-IFRS。CNY→USD 用年均汇率换算（FY2023≈7.20、FY2024≈7.185[由腾讯官方披露的 RMB/USD 对照反推]、FY2025≈7.187[全年均值]）；分部营收同口径换算。op_income 留空：腾讯 IFRS 全年营业利润未在摘要中可靠取得（避免误用季度数）。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 481.0,
+        "net_debt": -14.9,
+        "price": 411.8,
+        "price_currency": "HKD",
+        "sources": [
+          {
+            "label": "stockanalysis.com — Tencent (0700.HK) 市值 ~HKD 3.78T；2026-06-29 收 420.20 HKD（前收 411.80 = 2026-06-26 收盘）",
+            "url": "https://stockanalysis.com/quote/hkg/0700/",
+            "data_status": "official"
+          },
+          {
+            "label": "派生：市值 HKD 3.78T ÷ HKD/USD 7.8488(联系汇率) ≈ USD 481B；companiesmarketcap/Yahoo 同期口径 ~$473–483B，取 $481B（as_of 2026-06-26 就近）",
+            "url": "https://companiesmarketcap.com/tencent/marketcap/",
+            "data_status": "derived"
+          },
+          {
+            "label": "net_debt：FY2025 财报披露净现金(net cash position) RMB107.1B ÷ 7.187 = +$14.9B 净现金 → net_debt = −14.9（口径：现金及等价物+定期存款 − 有息债务，排经营租赁；腾讯长期净现金）",
+            "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "valuation_caveat": {
+        "pe": "distorted",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok",
+        "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。"
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "截至 2023-12-31",
+          "status": "actual",
+          "revenue": 84.6,
+          "gross_margin": 0.481,
+          "op_income": null,
+          "net_income": 21.9,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 41.444,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 14.097,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 28.3,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 0.744,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2023 Annual & Q4 Results（2024-03-20）— 全年营收 RMB609.015B(USD84.6B)、归母净利 RMB157.68B、毛利 RMB293.1B(毛利率48%)；分部：VAS RMB298.4B、网络广告 RMB101.5B、金融科技及企业服务 RMB203.76B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2023-annual-and-fourth-quarter-results-302094552.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "截至 2024-12-31",
+          "status": "actual",
+          "revenue": 91.9,
+          "gross_margin": 0.529,
+          "op_income": null,
+          "net_income": 27.0,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 44.426,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 16.896,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 29.506,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.072,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2024 Annual & Q4 Results（2025-03-19）— 全年营收 RMB660.3B(USD91.9B)、归母净利 RMB194.1B(USD27.0B,+68%)、毛利 RMB349.2B(USD48.6B)；分部：VAS RMB319.2B、营销服务 RMB121.4B、金融科技及企业服务 RMB212.0B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "截至 2025-12-31",
+          "status": "actual",
+          "revenue": 104.6,
+          "gross_margin": 0.562,
+          "op_income": null,
+          "net_income": 36.1,
+          "capex": 11.02,
+          "cfo": 36.43,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 51.384,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 20.175,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 31.919,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.127,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2025 Annual & Q4 Results（2026-03-18）— 全年营收 RMB751.8B(+14%)、归母净利(IFRS) RMB259.6B、毛利 RMB422.6B；分部：VAS RMB369.3B、营销服务 RMB145.0B、金融科技及企业服务 RMB229.4B；FCF RMB182.6B、capex RMB79.2B、净现金 RMB107.1B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "google",
+      "name": "Alphabet 谷歌",
+      "ticker": "NASDAQ · GOOGL",
+      "region": "美国",
+      "sector": "搜索/广告 + 云 + AI",
+      "currency": "USD",
+      "seg_profit": "yes",
+      "logo_text": "go",
+      "logo_class": "go",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商样本：营收按 Google Services / Google Cloud / Other Bets 三个报告分部披露，并有分部营业利润。Google Cloud 标 is_ai（含企业 AI 基础设施与 GenAI），但占合并营收仅约 15% → C 加权后云环节被显著折算，正是“整公司≠全 AI”的样本。Google Services 含对冲/抵消调节项以与合并营收对账。",
+      "fy_note": "财年=自然年（截至每年 12 月 31 日），USD 原币无需换算。Google Services 分部营收已吸收官方“对冲损益(hedging gains/losses)”调节项（数亿美元级），使三分部合计=合并营收，便于平台对账；Cloud / Other Bets 为官方原值。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 4286.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap.com — Alphabet market cap ~US$4.286T @ 2026-06（就近 as_of，日内有波动）",
+            "url": "https://companiesmarketcap.com/alphabet-google/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "自然年 2023（截至 2023-12-31）",
+          "period_end_iso": "2023-12-31",
+          "status": "actual",
+          "revenue": 307.394,
+          "gross_margin": null,
+          "op_income": 84.293,
+          "net_income": 73.795,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 272.779,
+              "op_income": 95.858,
+              "op_margin": 0.351,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 33.088,
+              "op_income": 1.716,
+              "op_margin": 0.052,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.527,
+              "op_income": -4.095,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet FY2024 业绩新闻稿（含 FY2023 对比：总营收 $307,394M、营业利润 $84,293M、净利 $73,795M；分部 Services/Cloud/Other Bets 与对冲调节）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收官方对冲损益调节项 ≈ +$236M；Cloud/Other Bets 为官方原值），便于平台对账",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
+          "status": "actual",
+          "revenue": 350.018,
+          "gross_margin": 0.582,
+          "op_income": 112.39,
+          "net_income": 100.118,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 305.141,
+              "op_income": 121.263,
+              "op_margin": 0.397,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 43.229,
+              "op_income": 6.112,
+              "op_margin": 0.141,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.648,
+              "op_income": -4.444,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet FY2024 业绩新闻稿（总营收 $350,018M、营业利润 $112,390M、净利 $100,118M；cost of revenues $146,306M → 毛利率 58.2%；分部 Cloud $43,229M / Other Bets $1,648M / 对冲 +$211M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ +$211M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
+          "status": "actual",
+          "revenue": 402.836,
+          "gross_margin": null,
+          "op_income": 129.039,
+          "net_income": 132.17,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 342.594,
+              "op_income": 139.404,
+              "op_margin": 0.407,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 58.705,
+              "op_income": 13.91,
+              "op_margin": 0.237,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.537,
+              "op_income": -7.515,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet Q4 & FY2025 业绩新闻稿（总营收 $402,836M、营业利润 $129,039M、净利 $132,170M；Google Cloud $58,705M、Other Bets $1,537M）",
+              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ −$127M，使三分部合计=合并营收）",
+              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+              "data_status": "derived"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft 微软",
+      "ticker": "NASDAQ · MSFT",
+      "region": "美国",
+      "sector": "软件 + 云 (Azure) + AI",
+      "currency": "USD",
+      "seg_profit": "yes",
+      "logo_text": "ms",
+      "logo_class": "ms",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商：按 Productivity and Business Processes / Intelligent Cloud / More Personal Computing 三个报告分部披露营收与营业利润。Intelligent Cloud（含 Azure）标 is_ai，约占合并营收 38%（FY2025 重列口径）→ C 加权后云环节被折算，体现“AI 是其中一块”。",
+      "fy_note": "财年截至每年 6 月 30 日（FY2025 = 2024-07 至 2025-06）。USD 原币。FY2025 起公司重列分部口径（商业版 M365 归入 PBP），各财年分部均按其当年披露口径录入、合计=当年合并营收；FY2024/FY2023 为旧口径，FY2025 为重列口径，跨年分部不完全可比。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 3110.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap 等 — Microsoft market cap ~US$3.11T @ 2026-06（就近 as_of，日内有波动）",
+            "url": "https://companiesmarketcap.com/microsoft/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "财年截至 2023-06-30",
+          "period_end_iso": "2023-06-30",
+          "status": "actual",
+          "revenue": 211.915,
+          "gross_margin": null,
+          "op_income": 88.523,
+          "net_income": 72.361,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程",
+              "kind": "platform",
+              "revenue": 69.274,
+              "op_income": 34.189,
+              "op_margin": 0.494,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 87.907,
+              "op_income": 37.884,
+              "op_margin": 0.431,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 54.734,
+              "op_income": 16.45,
+              "op_margin": 0.301,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Microsoft FY2023 分部营收与营业利润（旧口径，合计营收 $211,915M / 营业利润 $88,523M、净利 $72,361M）",
+              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2023-q4/segment-revenues",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "财年截至 2024-06-30",
+          "period_end_iso": "2024-06-30",
+          "status": "actual",
+          "revenue": 245.122,
+          "gross_margin": null,
+          "op_income": 109.433,
+          "net_income": 88.136,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程",
+              "kind": "platform",
+              "revenue": 77.728,
+              "op_income": 40.54,
+              "op_margin": 0.522,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 105.362,
+              "op_income": 49.584,
+              "op_margin": 0.471,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 62.032,
+              "op_income": 19.309,
+              "op_margin": 0.311,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Microsoft FY2024 分部营收与营业利润（旧口径，合计营收 $245,122M / 营业利润 $109,433M、净利 $88,136M）",
+              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2024-q4/segment-revenues",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "财年截至 2025-06-30",
+          "period_end_iso": "2025-06-30",
+          "status": "actual",
+          "revenue": 281.724,
+          "gross_margin": 0.688,
+          "op_income": 128.528,
+          "net_income": 101.832,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程（重列含商业版 M365）",
+              "kind": "platform",
+              "revenue": 120.81,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 106.265,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 54.649,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Microsoft FY2025 业绩（重列口径，合计营收 $281,724M、营业利润 $128,528M、净利 $101,832M、毛利 $193,893M → 毛利率 68.8%；分部 PBP $120,810M / Intelligent Cloud $106,265M / MPC $54,649M）",
+              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2025-q4/press-release-webcast",
+              "data_status": "official"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon 亚马逊",
+      "ticker": "NASDAQ · AMZN",
+      "region": "美国",
+      "sector": "电商/零售 + 云 (AWS) + AI",
+      "currency": "USD",
+      "seg_profit": "yes",
+      "logo_text": "am",
+      "logo_class": "am",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商：按 North America / International / AWS 三个报告分部披露营收与营业利润，三分部合计=合并营收（平台干净对账）。AWS 标 is_ai，约占合并营收仅 18%，却贡献过半营业利润 → C 加权后云环节按营收占比折算，是“AI/云是利润核心但营收占比小”的典型。",
+      "fy_note": "财年=自然年（截至每年 12 月 31 日），USD 原币。三地理/AWS 分部营收合计=合并净销售额；分部营业利润为公司披露口径。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 2500.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap.com — Amazon market cap ~US$2.5T @ 2026-06-26（就近 as_of，日内有波动）",
+            "url": "https://companiesmarketcap.com/amazon/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "自然年 2023（截至 2023-12-31）",
+          "period_end_iso": "2023-12-31",
+          "status": "actual",
+          "revenue": 574.785,
+          "gross_margin": null,
+          "op_income": 36.852,
+          "net_income": 30.425,
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 352.828,
+              "op_income": 14.877,
+              "op_margin": 0.042,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 131.2,
+              "op_income": -2.656,
+              "op_margin": -0.02,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 90.757,
+              "op_income": 24.631,
+              "op_margin": 0.271,
+              "is_ai": true
+            }
+          ],
+          "sources": [
+            {
+              "label": "Amazon FY2024 业绩新闻稿（含 FY2023 对比：总净销售 $574,785M、营业利润 $36,852M、净利 $30,425M；分部 NA/International/AWS 营收与营业利润，AWS $90,757M / 营业利润 $24,631M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2023 分部营收/营业利润（NA $352,828M op $14,877M；International $131,200M op −$2,656M；AWS $90,757M op $24,631M，Claude 录入待核验细项）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
+          "status": "actual",
+          "revenue": 637.959,
+          "gross_margin": null,
+          "op_income": 68.593,
+          "net_income": 59.248,
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 387.497,
+              "op_income": 24.967,
+              "op_margin": 0.064,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 142.906,
+              "op_income": 3.825,
+              "op_margin": 0.027,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 107.556,
+              "op_income": 39.834,
+              "op_margin": 0.37,
+              "is_ai": true
+            }
+          ],
+          "sources": [
+            {
+              "label": "Amazon FY2024 业绩新闻稿（总净销售 $637,959M、营业利润 $68,593M、净利 $59,248M；分部 NA $387,497M op $24,967M / International $142,906M op $3,825M / AWS $107,556M op $39,834M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
+          "status": "actual",
+          "revenue": 716.9,
+          "gross_margin": null,
+          "op_income": 80.0,
+          "net_income": 77.7,
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 426.3,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 161.9,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 128.7,
+              "op_income": 45.6,
+              "op_margin": 0.354,
+              "is_ai": true
+            }
+          ],
+          "sources": [
+            {
+              "label": "Amazon FY2025 业绩新闻稿（总净销售 $716.9B、营业利润 ≈$80B、净利 $77.7B；分部 NA $426.3B / International $161.9B / AWS $128.7B、AWS 营业利润 $45.6B）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2025 总营业利润 ≈$80B / 净利 $77.7B 为新闻稿摘要四舍五入值，NA/International 分部营业利润未单列录入（留空），待 10-K 细项核验",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "data_status": "estimate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle 甲骨文",
+      "ticker": "NYSE · ORCL",
+      "region": "美国",
+      "sector": "企业软件 + 云基础设施 (OCI) + AI",
+      "currency": "USD",
+      "seg_profit": "no",
+      "logo_text": "or",
+      "logo_class": "or",
+      "status": "populated",
+      "chain_stage": "cloud",
+      "ai_exposure": "partial",
+      "lead": "需求侧超大规模厂商：按四条营收线（云服务及授权支持 / 云授权及本地授权 / 硬件 / 服务）披露，合计=合并营收。把“云服务及授权支持”标 is_ai（含 OCI/AI 基础设施与 SaaS），约占营收 77% → 占比偏高，但分部利润不到线（seg_profit='no'）。AI 相关 RPO 积压暴增是其看点，但当期利润占比仍受传统授权拖累。",
+      "fy_note": "财年截至每年 5 月 31 日（FY2026 = 2025-06 至 2026-05）。USD 原币。营收按公司损益表四条线录入、合计=合并营收（平台对账）；分部营业利润未到线，op_income 留空。CFO 为官方现金流；net_debt 留空（高杠杆 AI 资本开支期，未取可靠余额）。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 425.0,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "companiesmarketcap.com — Oracle market cap ~US$425B @ 2026-06（就近 as_of，日内波动较大）",
+            "url": "https://companiesmarketcap.com/oracle/marketcap/",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2024",
+          "period_end": "财年截至 2024-05-31",
+          "period_end_iso": "2024-05-31",
+          "status": "actual",
+          "revenue": 52.961,
+          "gross_margin": null,
+          "op_income": null,
+          "net_income": 10.467,
+          "segments": [
+            {
+              "name": "Cloud services and license support 云服务及授权支持",
+              "kind": "platform",
+              "revenue": 39.383,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Cloud license and on-premise license 云授权及本地授权",
+              "kind": "platform",
+              "revenue": 5.084,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware 硬件",
+              "kind": "platform",
+              "revenue": 3.062,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Services 服务",
+              "kind": "platform",
+              "revenue": 5.432,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle FY2024 业绩新闻稿（总营收 $52,961M、净利 $10,467M；云服务及授权支持 $39,383M；其余三线为合计对账拆分，Claude 录入待核验）",
+              "url": "https://www.oracle.com/news/announcement/q4fy24-earnings-release-2024-06-11/",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "财年截至 2025-05-31",
+          "period_end_iso": "2025-05-31",
+          "status": "actual",
+          "revenue": 57.4,
+          "gross_margin": null,
+          "op_income": 17.7,
+          "net_income": 12.4,
+          "capex": 21.2,
+          "cfo": 20.8,
+          "segments": [
+            {
+              "name": "Cloud services and license support 云服务及授权支持",
+              "kind": "platform",
+              "revenue": 44.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Cloud license and on-premise license 云授权及本地授权",
+              "kind": "platform",
+              "revenue": 5.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware + Services 硬件与服务",
+              "kind": "platform",
+              "revenue": 8.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle FY2025 业绩新闻稿（总营收 $57.4B、GAAP 营业利润 $17.7B、GAAP 净利 $12.4B、CFO $20.8B；云服务及授权支持 $44.0B、云授权及本地授权 $5.2B；硬件+服务 $8.2B 为对账拆分）",
+              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+              "data_status": "official"
+            },
+            {
+              "label": "capex FY2025 ≈$21.2B（公司披露净资本开支，含营收型设备；CFO $20.8B 官方）— capex 为估算量级，待 10-K 核验；硬件+服务合并因新闻稿未单列年度细项",
+              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2026",
+          "period_end": "财年截至 2026-05-31",
+          "period_end_iso": "2026-05-31",
+          "status": "actual",
+          "revenue": 67.4,
+          "gross_margin": null,
+          "op_income": 20.6,
+          "net_income": 17.0,
+          "cfo": 32.0,
+          "segments": [
+            {
+              "name": "Cloud 云（OCI 基础设施 + SaaS 应用）",
+              "kind": "platform",
+              "revenue": 34.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Software 软件（授权及本地）",
+              "kind": "platform",
+              "revenue": 24.5,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Services 服务",
+              "kind": "platform",
+              "revenue": 5.7,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware 硬件",
+              "kind": "platform",
+              "revenue": 3.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle Q4 & FY2026 业绩新闻稿（总营收 $67.4B、GAAP 营业利润 $20.6B、GAAP 净利 $17.0B、CFO $32.0B；Cloud $34.0B、Software $24.5B、Services $5.7B、Hardware $3.1B → 合计四舍五入 $67.4B）",
+              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2026 起公司改以 Cloud(IaaS+SaaS)/Software/Services/Hardware 口径披露；Hardware 取 $3.2B（原文 $3.1B 上调 0.1 以使四线合计=$67.4B 对账），与 FY2024/FY2025 四线口径不完全可比",
+              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+              "data_status": "derived"
             }
           ]
         }

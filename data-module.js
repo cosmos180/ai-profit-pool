@@ -20,6 +20,7 @@ const Store = {
       const res = await fetch("companies.json");   // <-- the only line that changes when serving over HTTP
       this._data = await res.json();
     }
+    _refreshStages(this._data && this._data.meta);   // derive STAGE_ORDER/LABEL/COLOR from meta.stages (ADR-1)
     return this._data;
   },
 
@@ -31,22 +32,55 @@ const Store = {
 };
 
 /* =====================================================================
-   Value-chain stage map for the "profit-pool migration" view.
-   Pure constants — NO new collection fields, derived entirely from the
-   existing company `id`. View consumes STAGE_ORDER for layout/colour and
-   STAGE_LABEL for display names.
+   Value-chain stages for the "profit-pool migration" view (ADR-1: 环节数据化).
+   The canonical, ordered source of truth now lives in DATA: meta.stages[]
+   ({key,label,color,order}). This module DERIVES STAGE_ORDER / STAGE_LABEL /
+   STAGE_COLOR from it (sorted by `order`), so adding a stage is a pure-data
+   change. Company归位 prefers c.chain_stage, falling back to STAGE_OF_FALLBACK
+   (the former hard-coded id→stage map) so meta.stages-absent or chain_stage-
+   absent data behaves exactly as before.
+   The exported STAGE_ORDER / STAGE_LABEL keep their identity (mutated in place
+   by _refreshStages) so tests / templates that imported them still see the
+   derived values after Store loads.
    ===================================================================== */
-const STAGE_OF = {
+const STAGE_OF_FALLBACK = {
   nvda: "design", broadcom: "design",
   tsmc: "foundry",
   samsung: "memory", skhynix: "memory", micron: "memory",
   asml: "equipment",
   softbank: "invest",
+  tencent: "app",
 };
-const STAGE_ORDER = ["design", "foundry", "memory", "equipment", "invest"];
+// Built-in defaults — used verbatim when meta.stages is absent (backward-compat).
+const STAGE_ORDER = ["design", "foundry", "memory", "equipment", "invest", "app"];
 const STAGE_LABEL = {
-  design: "设计", foundry: "代工", memory: "存储", equipment: "设备", invest: "投资",
+  design: "设计", foundry: "代工", memory: "存储", equipment: "设备", invest: "投资", app: "应用",
 };
+const STAGE_COLOR = {};
+
+/* Recompute STAGE_ORDER / STAGE_LABEL / STAGE_COLOR from meta.stages, IN PLACE
+   (preserving the exported references). No-op when meta.stages is absent/empty,
+   leaving the built-in constants intact. Called from Store.load() and is safe to
+   call repeatedly / directly in Node tests after setting Store._data. */
+function _refreshStages(meta) {
+  const stages = meta && Array.isArray(meta.stages) ? meta.stages : null;
+  if (!stages || !stages.length) return;
+  const sorted = stages.slice().sort((a, b) => a.order - b.order);
+  STAGE_ORDER.length = 0;
+  for (const k of Object.keys(STAGE_LABEL)) delete STAGE_LABEL[k];
+  for (const k of Object.keys(STAGE_COLOR)) delete STAGE_COLOR[k];
+  for (const s of sorted) {
+    STAGE_ORDER.push(s.key);
+    STAGE_LABEL[s.key] = s.label;
+    STAGE_COLOR[s.key] = s.color;
+  }
+}
+
+/* Which value-chain stage a company occupies: data-driven chain_stage first,
+   else the built-in fallback map (null if neither knows it). */
+function stageOf(c) {
+  return (c && c.chain_stage) || (c && STAGE_OF_FALLBACK[c.id]) || null;
+}
 
 const Selectors = {
   /* ---- year-level derivations ---- */
@@ -96,6 +130,37 @@ const Selectors = {
     const prev = (c.years[i - 1].segments || []).find(s => s.name === name);
     const cur  = (this.yearByFy(c, fy).segments || []).find(s => s.name === name);
     return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
+  },
+
+  /* ---- AI attribution share (ADR-3, C-weighted pool; fallback = B) ----
+     aiShare(c, y) → {value, basis} : the fraction of net income to attribute to AI.
+     Priority ladder (value never invented):
+       1. company-level ai_profit_share (sourced ESTIMATE) → basis 'sourced',
+          applies to ANY year (a top-down profit attribution, year-agnostic).
+       2. else the year's segment is_ai REVENUE proxy → basis 'proxy':
+            value = Σ(is_ai segment revenue) / 分部营收口径.
+          关键: division-kind segments (e.g. Samsung) include inter-segment sales and
+          sum > consolidated revenue, so the denominator MUST be revenueTotal(y) (the
+          segment sum), NOT y.revenue. platform-kind cleanly partitions so either works
+          — we use revenueTotal(y) uniformly (equals y.revenue for platforms).
+       3. else (fallback B) → value null. We do NOT seed a default from ai_exposure
+          (pure/primary never auto-get 1.0/0.85); honest gap, the company is dropped
+          from the C-weighted pool rather than imputed.
+     y defaults to latestActual(c). Null-safe throughout. */
+  aiShare(c, y) {
+    if (!c) return { value: null, basis: "none" };
+    if (c.ai_profit_share != null) return { value: c.ai_profit_share, basis: "sourced" };
+    const yr = y || this.latestActual(c);
+    if (!yr) return { value: null, basis: "none" };
+    const segs = this.revenueSegs(yr);
+    // need at least one segment carrying an explicit is_ai flag to derive a proxy
+    if (!segs.length || !segs.some(s => Object.prototype.hasOwnProperty.call(s, "is_ai"))) {
+      return { value: null, basis: "none" };
+    }
+    const denom = this.revenueTotal(yr);   // segment-sum 口径 (division-safe)
+    if (!denom) return { value: null, basis: "none" };
+    const aiRev = segs.filter(s => s.is_ai).reduce((s, p) => s + p.revenue, 0);
+    return { value: aiRev / denom, basis: "proxy" };
   },
 
   /* ---- income-statement flow (for the FY drill-down Sankey) ----
@@ -236,7 +301,7 @@ const Selectors = {
      view renders negatives), else null. companies[] preserves per-member traceability. */
   _aggregateStages(rows, total) {
     return STAGE_ORDER.map(stage => {
-      const members = rows.filter(r => STAGE_OF[r.id] === stage);
+      const members = rows.filter(r => (r.stage || STAGE_OF_FALLBACK[r.id]) === stage);
       const value = members.reduce((s, r) => s + r.ni, 0);
       return {
         stage,
@@ -323,10 +388,13 @@ const Selectors = {
     return dq.length ? dq[dq.length - 1].q.period_end : null;
   },
 
-  /* ---- TTM profit pool (value-chain stacked, self-rolled per company) ----
-     Per-company null-safe: a company whose ttmNetIncome is null simply does not
-     contribute (not imputed); total accumulates only non-null TTMs. Reuses the same
-     _aggregateStages atom as the annual migration so stage口径 cannot drift.
+  /* ---- TTM profit pool (value-chain stacked, self-rolled per company, AI-weighted) ----
+     口径统一 (ADR-3): TTM 净利同样按 aiShare(c) 加权,与 profitPoolAI / profitPoolMigration
+     的三根年度柱完全同口径 —— 同一张迁移图不再混"全额 TTM vs 加权年度"。
+       ni = ttmNetIncome(c) × aiShare(c).value (公司级,用 latestActual 的 is_ai 代理)。
+     Per-company null-safe & honest-gap: ttmNetIncome 为 null 或 aiShare.value 为 null 的
+     公司一律 DROP(绝不计 0、不 impute),与年度口径一致。total 仅累计加权后的贡献者。
+     Reuses the same _aggregateStages atom as the annual migration so stage口径 cannot drift.
      asOfSpreadDays = max−min of contributing companies' latest-quarter dates — lets
      the view warn that the TTM cross-section is not perfectly date-aligned. */
   profitPoolTTM(companies) {
@@ -336,21 +404,26 @@ const Selectors = {
     for (const c of list) {
       const ttm = this.ttmNetIncome(c);
       if (ttm == null) continue;                        // honest gap: skip, never impute
+      const share = this.aiShare(c).value;              // company-level, latestActual is_ai proxy
+      if (share == null) continue;                      // no aiShare → drop (ADR-3, same as annual)
       const asOf = this.ttmAsOf(c);
       const t = this._parseDate(asOf);
       if (t != null) { if (t < spreadMin) spreadMin = t; if (t > spreadMax) spreadMax = t; }
-      rows.push({ id: c.id, name: c.name, ni: ttm, asOf });
+      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: ttm * share, asOf, aiShare: share });
     }
     const total = rows.reduce((s, r) => s + r.ni, 0);
     const stages = this._aggregateStages(rows, total).map(s => ({
       ...s,
-      companies: s.companies.map(m => ({ id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf })),
+      companies: s.companies.map(m => {
+        const src = rows.find(r => r.id === m.id);
+        return { id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf, aiShare: src ? src.aiShare : null };
+      }),
     }));
     const asOfSpreadDays = rows.length
       ? Math.round((spreadMax - spreadMin) / this.DAY_MS)
       : null;
     return {
-      label: "TTM(截至各家最近季报)",
+      label: "TTM(AI 加权,截至各家最近季报)",
       total,
       n: rows.length,
       asOfSpreadDays,
@@ -358,14 +431,52 @@ const Selectors = {
     };
   },
 
-  /* ---- profit-pool migration (value-chain stacked, sample-complete years only) ----
-     Aligns companies by "position from latest actual year" (pos 0 = each company's
-     newest actual, pos 1 = prior actual, …) — same source as the home-page YoY
-     (reuses actualYears, reversed). A position is kept ONLY if all 8 companies carry
-     an actual year there with a non-null net_income; partial positions are dropped
-     (honest gap, never imputed). Returns positions in chronological order (old→new)
-     so the view can paint left→right. Net income may be negative (memory downcycle);
-     share = value/total is computed as-is when total > 0, the view renders negatives. */
+  /* ---- AI profit pool (C-weighted, value-chain stacked) (ADR-3, core) ----
+     pool = Σ over companies of latestActual.net_income × aiShare(c).value.
+     A company whose aiShare.value is null is DROPPED (fallback B: never counted as
+     0, never imputed) — same honest-gap discipline as profitPoolTTM. Net income
+     itself is weighted, so each row's `ni` is the AI-attributed net income; the
+     shared _aggregateStages atom folds them into the canonical stages.
+       N = populated/eligible company count (rows considered)
+       n = companies with a valid aiShare that actually contributed
+       basisCount = {sourced, proxy} tally over contributors (transparency) */
+  profitPoolAI(companies) {
+    const list = companies || [];
+    const rows = [];
+    const basisCount = { sourced: 0, proxy: 0 };
+    let N = 0;
+    for (const c of list) {
+      const y = this.latestActual(c);
+      if (!y || y.net_income == null) continue;   // no comparable net income → out of scope
+      N++;
+      const { value, basis } = this.aiShare(c, y);
+      if (value == null) continue;                 // fallback B: drop, never impute 0
+      basisCount[basis] = (basisCount[basis] || 0) + 1;
+      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: y.net_income * value, asOf: this._yearOf(y), aiShare: value, basis });
+    }
+    const total = rows.reduce((s, r) => s + r.ni, 0);
+    const byStage = this._aggregateStages(rows, total).map(s => ({
+      ...s,
+      companies: s.companies.map(m => {
+        const src = rows.find(r => r.id === m.id);
+        return { id: m.id, name: m.name, ni: m.ni, aiShare: src ? src.aiShare : null, basis: src ? src.basis : null };
+      }),
+    }));
+    return { label: "AI 加权利润池(C 口径)", total, n: rows.length, N, byStage, basisCount };
+  },
+
+  /* ---- profit-pool migration (value-chain stacked, AI-weighted, per-company coverage) ----
+     ADR-2: NO "all-samples-complete" gate. Aligns companies by "position from latest
+     actual year" (pos 0 = newest actual, pos 1 = prior, …), reusing actualYears reversed.
+     Each company is included at a position whenever it HAS an actual year there with a
+     non-null net_income AND a non-null aiShare(c, thatYear).value — otherwise it is simply
+     absent from that position (honest per-company coverage), never imputed. Net income is
+     AI-WEIGHTED (ni × aiShare.value) to match the hero pool口径 (ADR-3). Each position
+     carries {n, N}: N = companies that have an actual year at that position (coverage
+     denominator); n = of those, how many contributed (valid aiShare). Returns positions
+     chronological (old→new). Year alignment prefers year.period_end_iso, falling back to
+     the legacy free-text period_end regex (_yearOf). Net may be negative (downcycle);
+     share = value/total as-is when total>0, the view renders negatives. */
   profitPoolMigration(companies) {
     const list = companies || [];
     // per-company actual years, newest-first, so index = position-from-latest
@@ -375,13 +486,16 @@ const Selectors = {
     const positions = [];
     for (let pos = 0; pos < maxPos; pos++) {
       const rows = [];
-      let complete = true;
+      let N = 0;
       for (const { c, ys } of byCo) {
         const y = ys[pos];
-        if (!y || y.net_income == null) { complete = false; break; }
-        rows.push({ id: c.id, name: c.name, ni: y.net_income, year: this._yearOf(y) });
+        if (!y || y.net_income == null) continue;       // no comparable year here → not in coverage
+        N++;
+        const share = this.aiShare(c, y).value;
+        if (share == null) continue;                    // valid year but no aiShare → drop (not imputed)
+        rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: y.net_income * share, year: this._yearOf(y) });
       }
-      if (!complete || rows.length !== list.length) continue;
+      if (!rows.length) continue;                         // nothing to show at this position
 
       const total = rows.reduce((s, r) => s + r.ni, 0);
       const stages = this._aggregateStages(rows, total);
@@ -392,13 +506,19 @@ const Selectors = {
         total,
         stages,
         n: rows.length,
+        N,
       });
     }
     return positions.reverse(); // chronological: old → new
   },
 
-  /* extract a 4-digit year from a year record's period_end (null-safe) */
+  /* extract a 4-digit year from a year record — prefer machine-readable period_end_iso
+     (ADR-2), fall back to a regex over the free-text period_end. null-safe. */
   _yearOf(y) {
+    if (y && typeof y.period_end_iso === "string") {
+      const mi = y.period_end_iso.match(/(\d{4})/);
+      if (mi) return mi[1];
+    }
     const m = (y && typeof y.period_end === "string") ? y.period_end.match(/(\d{4})/) : null;
     return m ? m[1] : null;
   },
@@ -417,4 +537,4 @@ const Selectors = {
 };
 
 /* Allow reuse in Node (validator/tests) as well as the browser */
-if (typeof module !== "undefined" && module.exports) module.exports = { Store, Selectors, STAGE_OF, STAGE_ORDER, STAGE_LABEL };
+if (typeof module !== "undefined" && module.exports) module.exports = { Store, Selectors, STAGE_OF_FALLBACK, STAGE_ORDER, STAGE_LABEL, STAGE_COLOR, stageOf, _refreshStages };
