@@ -242,6 +242,26 @@ def check(data):
                 for a in y.get("anchors", []):
                     if not a.get("data_status"):
                         warns.append(f"WARN  {tag}: 预测锚点 '{a.get('label')}' 缺少 data_status（可靠度不明）")
+                # 数值型一致预期 EPS（前瞻 PE 派生用）：非 null 时必须带 consensus provenance
+                cev = y.get("consensus_eps_value")
+                if cev is not None:
+                    if not isinstance(cev, (int, float)):
+                        errors.append(f"ERROR {tag}: consensus_eps_value 若存在需为数值（当前 {cev!r}）")
+                    cev_src = y.get("consensus_eps_source") or []
+                    if not cev_src:
+                        errors.append(f"ERROR {tag}: consensus_eps_value 非 null 但缺少 consensus_eps_source（provenance 必填）")
+                    for s in cev_src:
+                        url = s.get("url") or ""
+                        parsed = urlparse(url)
+                        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+                            errors.append(f"ERROR {tag}: consensus_eps_source URL 非 http(s) 绝对链接: {url or '空'}")
+                        if s.get("data_status") != "consensus":
+                            errors.append(f"ERROR {tag}: consensus_eps_source 每条 data_status 须为 'consensus'（当前 {s.get('data_status')!r}）")
+                    # 币种建议 = 该公司 quote.price_currency（不一致仅 WARN，不跨币）
+                    cev_cur = y.get("consensus_eps_currency")
+                    price_cur = (c.get("quote") or {}).get("price_currency")
+                    if cev_cur and price_cur and cev_cur != price_cur:
+                        warns.append(f"WARN  {tag}: consensus_eps_currency({cev_cur}) ≠ quote.price_currency({price_cur})，前瞻 PE 将因跨币留空")
                 oks.append(f"INFO  {tag}: 预测年，已与实际分流标注")
 
         nums = [n for _, n in fy_nums]

@@ -368,6 +368,59 @@ assert.ok(Selectors.ps(txReal) > 0);
 assert.ok(Selectors.fcfYield(txReal) > 0);         // 有真实经营现金流 → FCF yield 有意义
 assert.ok(Selectors.ev(txReal) < Selectors.marketCap(txReal)); // 净现金 → EV<市值
 
+// ---- forward PE (NTM · consensus): price ÷ consensus_eps_value, 同币才算, 算不存 ----
+// 合成：price 175 / consensus EPS 5 → 前瞻 PE 35（同币 USD）
+const fwd = {
+  id: "fwd", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, price: 175, price_currency: "USD", sources: [] },
+  years: [
+    { fy: "FY1", status: "actual", revenue: 100, net_income: 20 },
+    { fy: "FY2027E", status: "forecast", revenue: 130, net_income: 30,
+      consensus_eps_value: 5, consensus_eps_currency: "USD",
+      consensus_eps_source: [{ label: "consensus", url: "https://x/y", data_status: "consensus" }] },
+  ],
+};
+assert.equal(Selectors.forwardPE(fwd), 35);          // 175 / 5
+
+// 缺 price → null
+const fwdNoPrice = { ...fwd, quote: { as_of: "2026-06-26", market_cap: 200, price_currency: "USD", sources: [] } };
+assert.equal(Selectors.forwardPE(fwdNoPrice), null);
+
+// 缺 consensus_eps_value → null（现状：无数据即诚实留空）
+const fwdNoEps = { id: "ne", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, price: 175, price_currency: "USD", sources: [] },
+  years: [{ fy: "FY2027E", status: "forecast", revenue: 130, net_income: 30 }] };
+assert.equal(Selectors.forwardPE(fwdNoEps), null);
+
+// 缺 forecast 年（仅实际年）→ null
+const fwdNoFc = { id: "nf", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, price: 175, price_currency: "USD", sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+assert.equal(Selectors.forwardPE(fwdNoFc), null);
+
+// EPS = 0 → 零分母 → null
+const fwdZeroEps = { ...fwd, years: [
+  { fy: "FY2027E", status: "forecast", revenue: 130, net_income: 30, consensus_eps_value: 0, consensus_eps_currency: "USD" },
+] };
+assert.equal(Selectors.forwardPE(fwdZeroEps), null);
+
+// 币种不一致（price USD, eps EUR）→ 不跨币相乘 → null
+const fwdXCur = { ...fwd, years: [
+  { fy: "FY2027E", status: "forecast", revenue: 130, net_income: 30,
+    consensus_eps_value: 5, consensus_eps_currency: "EUR",
+    consensus_eps_source: [{ label: "c", url: "https://x/y", data_status: "consensus" }] },
+] };
+assert.equal(Selectors.forwardPE(fwdXCur), null);
+
+// pe caveat = na → 前瞻 PE 也 na(null)
+const fwdNaCaveat = { ...fwd, valuation_caveat: { pe: "na" } };
+assert.equal(Selectors.forwardPE(fwdNaCaveat), null);
+
+// 现状真实数据：companies.json 尚无 consensus_eps_value → 全公司前瞻 PE 诚实留空(null)
+for (const c of Store.populated()) {
+  assert.equal(Selectors.forwardPE(c), null, `${c.id} 现无一致预期 EPS → forwardPE 应为 null`);
+}
+
 // 真实数据：NVDA 有市值、无 caveat → PE/PS 正常；FCF yield 缺 cfo/capex → null
 const nvdaReal = Store.byId("nvda");
 assert.ok(Selectors.pe(nvdaReal) > 0);

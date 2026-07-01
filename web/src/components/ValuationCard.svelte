@@ -56,6 +56,11 @@
   const cards = $derived(
     defs.map(d => ({ ...d, caveat: Selectors.valuationCaveat(company, d.key), rel: relOf(d), reason: SHORT_REASON[d.key] || '' }))
   )
+
+  // 前瞻 PE(NTM · consensus)：独立于 trailing PE 呈现，视觉严格区分（蓝色 --ai 系）。
+  // 口径 = price ÷ 一致预期 EPS（同币），来源 data_status=consensus；null → 诚实留空「待补」。
+  const fwdPE = $derived(Selectors.forwardPE(company))
+  const fwdYear = $derived(Selectors.forecastYear(company))
   // 是否存在任一失真/不适用的指标 → 才展示卡组下方那条共享口径说明（完整 note）。
   const hasCaveat = $derived(!!note && cards.some(d => d.caveat === 'na' || d.caveat === 'distorted'))
 
@@ -104,6 +109,23 @@
     {/each}
   </div>
 
+  <div class="fwd-pe card" class:empty={fwdPE == null}>
+    <div class="fwd-lbl">
+      <span class="swatch" style="background:var(--ai)"></span>前瞻 PE
+      <span class="fwd-tag">NTM · 一致预期</span>
+    </div>
+    <div class="fwd-body">
+      <div class="fwd-val num">{Fmt.mult(fwdPE)}</div>
+      <div class="fwd-sub">
+        {#if fwdPE != null}
+          价格 / 一致预期 EPS{fwdYear ? `（${fwdYear.fy}）` : ''} · 来源 <b>consensus</b>，非官方 trailing
+        {:else}
+          待补一致预期 EPS（<code style="font-family:var(--mono)">consensus_eps_value</code>）—— 数据到位后自动点亮，与上方 trailing PE 分列
+        {/if}
+      </div>
+    </div>
+  </div>
+
   {#if hasCaveat}
     <details class="caveat-note">
       <summary>为何部分估值指标留空或降级？<span class="cn-hint">口径说明 ⌄</span></summary>
@@ -124,3 +146,63 @@
     {/if}
   </div>
 {/if}
+
+<style>
+  /* 前瞻 PE：蓝色 --ai 系，与 trailing PE(绿 --ok) 视觉严格区分；不与官方 trailing 混淆。
+     复用全局 .card / .num；此处只加区隔性配色与横向排布，不新造花哨样式。 */
+  .fwd-pe {
+    margin-top: 14px;
+    padding: 14px 17px;
+    border-left: 4px solid var(--ai);
+    background: linear-gradient(0deg, var(--ai-soft), var(--card));
+  }
+  .fwd-pe.empty {
+    background: var(--card-2);
+    border-left-color: var(--line);
+  }
+  .fwd-lbl {
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .fwd-tag {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    background: var(--ai-soft);
+    color: var(--ai);
+    margin-left: 6px;
+  }
+  .fwd-pe.empty .fwd-tag {
+    background: var(--card);
+    color: var(--ink-faint);
+    border: 1px solid var(--line);
+  }
+  .fwd-body {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 7px;
+    flex-wrap: wrap;
+  }
+  .fwd-val {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    color: var(--ai);
+  }
+  .fwd-pe.empty .fwd-val {
+    color: var(--ink-faint);
+  }
+  .fwd-sub {
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    line-height: 1.45;
+    flex: 1 1 200px;
+  }
+</style>

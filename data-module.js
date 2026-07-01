@@ -295,6 +295,24 @@ const Selectors = {
     return (mc != null && f != null && mc) ? f / mc : null;
   },
 
+  /* 前瞻 PE (NTM · consensus)：price ÷ consensus_eps_value，两者同币才算（不跨币相乘）。
+     price 取 quote.price（本币原值），consensus_eps_value 取 forecast 年的数值型一致预期 EPS，
+     币种须 = quote.price_currency。与 trailing pe() 复用同一 caveat：pe='na' → 前瞻 PE 也 na(null)。
+     全 null-safe：缺 price / 缺 forecast 年 / 缺 consensus_eps_value / 币种不一致 → null。算不存。 */
+  forwardPE(c) {
+    if (this.valuationCaveat(c, "pe") === "na") return null;
+    const price = c.quote?.price;
+    const priceCur = c.quote?.price_currency;
+    const fy = this.forecastYear(c);
+    if (price == null || fy == null) return null;
+    const eps = fy.consensus_eps_value;
+    if (eps == null || eps === 0) return null;
+    // 同币才算（前瞻 PE = price/eps 需口径一致，跨币不相乘 → null）
+    const epsCur = fy.consensus_eps_currency;
+    if (priceCur && epsCur && priceCur !== epsCur) return null;
+    return price / eps;
+  },
+
   /* ---- B1: same-stage relative valuation (comps) ----
      同价值链环节的相对估值 —— 纯派生, 零新增数据。回答"这个倍数在同环节里是贵是便宜",
      把跨环节混排的孤立绝对数字带上同环节语境。
