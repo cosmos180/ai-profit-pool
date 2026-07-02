@@ -1009,8 +1009,9 @@ assert.equal(realTtm.n, 7);
 assert.equal(Selectors.ttmNetIncome(Store.byId("softbank")), null);
 // NVDA TTM = FY2026 120.1 + (Q1FY27 58.3 − Q1FY26 18.8) = 159.6
 assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("nvda")) * 10) / 10, 159.6);
-// TSMC TTM = FY2025 54.116 + (1Q26 18.12 − 1Q25 11.0) = 61.236
-assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("tsmc")) * 100) / 100, 61.24);
+// TSMC TTM = FY2025 55.21 + (1Q26 18.12 − 1Q25 11.0) = 62.33
+//   (FY2025 净利 54.116→55.21:2025 年报官方美元直披 US$55.21B,2026-07 财报提取)
+assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("tsmc")) * 100) / 100, 62.33);
 // Broadcom TTM = FY2025 23.126 + (Q1FY26 7.349 − Q1FY25 5.503) + (Q2FY26 9.310 − Q2FY25 4.965) = 29.317
 assert.equal(Math.round(Selectors.ttmNetIncome(Store.byId("broadcom")) * 1000) / 1000, 29.317);
 assert.equal(Selectors.ttmAsOf(Store.byId("broadcom")), "2026-05-03");

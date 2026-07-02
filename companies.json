@@ -4,13 +4,48 @@
     "unit": "USD bn",
     "note": "Raw, sourced facts only. Derived metrics (margins, YoY, reconciliation, anomalies) are NOT stored here — they are computed by the data-access layer at read time.",
     "stages": [
-      {"key": "design",    "label": "设计", "color": "var(--stg-design)",    "order": 0},
-      {"key": "foundry",   "label": "代工", "color": "var(--stg-foundry)",   "order": 1},
-      {"key": "memory",    "label": "存储", "color": "var(--stg-memory)",    "order": 2},
-      {"key": "equipment", "label": "设备", "color": "var(--stg-equipment)", "order": 3},
-      {"key": "invest",    "label": "投资", "color": "var(--stg-invest)",    "order": 4},
-      {"key": "cloud",     "label": "云",   "color": "#6E8F2A",              "order": 65},
-      {"key": "app",       "label": "应用", "color": "var(--stg-app)",       "order": 5}
+      {
+        "key": "design",
+        "label": "设计",
+        "color": "var(--stg-design)",
+        "order": 0
+      },
+      {
+        "key": "foundry",
+        "label": "代工",
+        "color": "var(--stg-foundry)",
+        "order": 1
+      },
+      {
+        "key": "memory",
+        "label": "存储",
+        "color": "var(--stg-memory)",
+        "order": 2
+      },
+      {
+        "key": "equipment",
+        "label": "设备",
+        "color": "var(--stg-equipment)",
+        "order": 3
+      },
+      {
+        "key": "invest",
+        "label": "投资",
+        "color": "var(--stg-invest)",
+        "order": 4
+      },
+      {
+        "key": "cloud",
+        "label": "云",
+        "color": "#6E8F2A",
+        "order": 65
+      },
+      {
+        "key": "app",
+        "label": "应用",
+        "color": "var(--stg-app)",
+        "order": 5
+      }
     ]
   },
   "companies": [
@@ -1542,7 +1577,8 @@
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm",
               "data_status": "estimate"
             }
-          ]
+          ],
+          "period_end_iso": "2023-12-31"
         },
         {
           "fy": "FY2024",
@@ -1615,23 +1651,24 @@
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
               "data_status": "estimate"
             }
-          ]
+          ],
+          "period_end_iso": "2024-12-31"
         },
         {
           "fy": "FY2025",
           "period_end": "自然年 2025（截至 2025-12-31）",
           "status": "actual",
-          "revenue": 121.423,
+          "revenue": 122.42,
           "gross_margin": 0.599,
-          "op_income": 61.718,
-          "net_income": 54.116,
-          "capex": 40.9,
-          "cfo": 73.3,
+          "op_income": 62.224,
+          "net_income": 55.21,
+          "capex": 40.388,
+          "cfo": 73.116,
           "segments": [
             {
               "name": "HPC 高性能计算",
               "kind": "platform",
-              "revenue": 71.64,
+              "revenue": 71.004,
               "op_income": null,
               "op_margin": null,
               "is_ai": true
@@ -1639,7 +1676,7 @@
             {
               "name": "Smartphone 智能手机",
               "kind": "platform",
-              "revenue": 33.999,
+              "revenue": 35.502,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -1647,7 +1684,7 @@
             {
               "name": "IoT 物联网",
               "kind": "platform",
-              "revenue": 6.071,
+              "revenue": 6.121,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -1655,7 +1692,7 @@
             {
               "name": "Automotive 车用电子",
               "kind": "platform",
-              "revenue": 6.071,
+              "revenue": 6.121,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -1663,7 +1700,7 @@
             {
               "name": "DCE 数字消费电子",
               "kind": "platform",
-              "revenue": 1.214,
+              "revenue": 1.224,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -1671,7 +1708,7 @@
             {
               "name": "Other 其他",
               "kind": "platform",
-              "revenue": 2.428,
+              "revenue": 2.448,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -1679,16 +1716,27 @@
           ],
           "sources": [
             {
-              "label": "TSMC FY2025 Form 20-F（SEC Filing）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm",
+              "label": "台积电 2025(民国114年)年报 · 合并损益表(6.1.2)+ 致股东报告书官方美元披露:营收 US$122.42B、税后净利 US$55.21B、毛利率 59.9%",
+              "url": "https://investor.tsmc.com/chinese/annual-reports",
               "data_status": "official"
             },
             {
-              "label": "capex（TSMC 自报美元 US$40.9B）/ CFO（NT$≈2.3T ÷ 31.37 = $73.3B；FCF 交叉校验 ≈ NT$1T ≈ $32B，换算待核验）",
-              "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617926000008/a4q25e_withguidancexfinal.htm",
-              "data_status": "estimate"
+              "label": "CFO:6.1.3 合并现金流 TWD 2,274.98bn ÷ 公司隐含平均汇率 31.115(=年报TWD营收/官方USD营收)",
+              "url": "https://investor.tsmc.com/chinese/annual-reports",
+              "data_status": "derived"
+            },
+            {
+              "label": "capex:6.1.4 生產、研發及廠務設備實際資金運用 TWD 1,256.66bn ÷ 31.115",
+              "url": "https://investor.tsmc.com/chinese/annual-reports",
+              "data_status": "derived"
+            },
+            {
+              "label": "分部:年报「依產品平台區分」HPC 58%/智能手机 29%/IoT 5%/车用 5%/DCE 1%/其他 2% × 官方美元营收",
+              "url": "https://investor.tsmc.com/chinese/annual-reports",
+              "data_status": "official"
             }
-          ]
+          ],
+          "period_end_iso": "2025-12-31"
         }
       ],
       "quarters": [
