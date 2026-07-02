@@ -9,10 +9,10 @@ model: opus
 
 ## 项目地基（团队共识）
 
-「AI 利润池」是一个面向二级市场投资者的决策工具：单文件 `app.html`，由 `build.py` 把数据与数据访问层注入 `app.template.html` 生成。
+「AI 利润池」是一个面向二级市场投资者的决策工具：单文件 `app.html`，由 `web/`（Svelte 5 + Vite，`vite-plugin-singlefile`）构建而成——JS/CSS/数据全内联，双击可离线打开。视图迁移见 `docs/adr/ADR-migration-svelte.md`。
 
 ```
-companies.json（原始事实，唯一真相源）─[schema.json 约束 · validate.py 把关]─▶ data-module.js（Store 加载 + Selectors 派生）─[build.py 注入]─▶ app.html（只呈现+跳转）
+companies.json（原始事实，唯一真相源）─[schema.json 约束 · validate.py 把关]─▶ data-module.js（Store 加载 + Selectors 派生）─▶ web/（Svelte 组件，业务只从 lib/data.js 取）─[vite build]─▶ app.html（只呈现+跳转）
 ```
 
 **必须守护的不变量（任何设计都不能破坏）：**
@@ -20,7 +20,7 @@ companies.json（原始事实，唯一真相源）─[schema.json 约束 · vali
 2. **provenance 强制**：每个实际年、每条来源带 `url` + `data_status`（official/guidance/consensus/estimate/derived）。不编造，**留空也比填错好**。
 3. **对账**：platform 分部合计 = 营收（强制）；division 分部含内部交易（不强制）。
 4. **披露能力自适应**：下钻按 `hasSegmentProfit` / `seg_profit` 三态分流（真实利润表 / 待补录 / 结构性缺口）。
-5. **视图无计算**：`app.template.html` 只做呈现与跳转，格式化在 `Fmt`、转义在 `Safe`。
+5. **视图无计算**：`web/` 的 Svelte 组件只做呈现与跳转，业务只从 `web/src/lib/data.js` 取 `Selectors`（禁直连 `data-module.js`/`companies.json`、禁组件内财务算术），格式化在 `Fmt`、派生用 `$derived`。
 
 ## 你的职责
 
