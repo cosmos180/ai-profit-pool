@@ -6,6 +6,11 @@
 >
 > 分工约定:「🧑 用户」= 需要用户动手(拉数/丢财报/跑 skill);「🤖 团队」= agent 直接做。
 > 数据入库一律走:产出规格 JSON → `python3 tools/merge.py` → validate 0 ERROR → build(失败自动回滚)。
+>
+> **三条采集通道**(互补,规格见 docs/):
+> ① **Dayu MCP**(SEC EDGAR,用户本地)→ 9 家 SEC filer 的基本面+分部+季度,`DATA-SPEC-dayu.md`;
+> ② **Tiger**(行情/预期 EPS/汇率)→ D3/D6,`DATA-SPEC-tiger.md`;
+> ③ **丢 PDF 人工提取**(非 SEC 4 家:samsung/skhynix/tencent/softbank)→ 台积电模式。
 
 ---
 
