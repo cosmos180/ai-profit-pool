@@ -1,0 +1,1714 @@
+{
+  "companyCount": 14,
+  "populatedIds": [
+    "nvda",
+    "samsung",
+    "broadcom",
+    "softbank",
+    "micron",
+    "skhynix",
+    "tsmc",
+    "asml",
+    "tencent",
+    "google",
+    "microsoft",
+    "amazon",
+    "oracle",
+    "arm"
+  ],
+  "pendingIds": [],
+  "stages": {
+    "order": [
+      "design",
+      "foundry",
+      "memory",
+      "equipment",
+      "invest",
+      "app",
+      "cloud"
+    ],
+    "label": {
+      "design": "设计",
+      "foundry": "代工",
+      "memory": "存储",
+      "equipment": "设备",
+      "invest": "投资",
+      "app": "应用",
+      "cloud": "云"
+    },
+    "color": {
+      "design": "var(--stg-design)",
+      "foundry": "var(--stg-foundry)",
+      "memory": "var(--stg-memory)",
+      "equipment": "var(--stg-equipment)",
+      "invest": "var(--stg-invest)",
+      "app": "var(--stg-app)",
+      "cloud": "#6E8F2A"
+    }
+  },
+  "perCompany": {
+    "nvda": {
+      "latestActualFy": "FY2026",
+      "forecastFy": "FY2027E",
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "Data Center 数据中心",
+      "netMargin": 0.556173,
+      "opMargin": 0.603825,
+      "revYoY": 0.654713,
+      "niYoY": 0.647914,
+      "homeRevenue": 215.94,
+      "homeNetIncome": 120.1,
+      "marketCap": 4660,
+      "netDebt": -54.09,
+      "ev": 4605.91,
+      "evSales": 21.329582,
+      "pe": 38.800999,
+      "ps": 21.580069,
+      "fcfYield": 0.02073,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": 159.6,
+      "ttmAsOf": "2026-04-26",
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.897194,
+        "basis": "proxy"
+      }
+    },
+    "samsung": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "division",
+      "reconcileOk": false,
+      "reconcilePartition": false,
+      "hasSegmentProfit": true,
+      "topProfitSegment": "DS 半导体（存储/代工/LSI）",
+      "topRevSegment": "DX 终端体验（手机/家电/网络）",
+      "netMargin": 0.132678,
+      "opMargin": 0.130696,
+      "revYoY": 0.063742,
+      "niYoY": 0.263126,
+      "homeRevenue": 234.636,
+      "homeNetIncome": 31.131,
+      "marketCap": 1340,
+      "netDebt": -64.39,
+      "ev": 1275.61,
+      "evSales": 5.436549,
+      "pe": 43.043911,
+      "ps": 5.710974,
+      "fcfYield": 0.017119,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": 58.561,
+      "ttmAsOf": "2026-03-31",
+      "incomeFlowHas": {
+        "gross": false,
+        "opex": false,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.357711,
+        "basis": "proxy"
+      }
+    },
+    "broadcom": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": true,
+      "topProfitSegment": "Semiconductor solutions 半导体解决方案",
+      "topRevSegment": "Semiconductor solutions 半导体解决方案",
+      "netMargin": 0.361983,
+      "opMargin": 0.398892,
+      "revYoY": 0.238744,
+      "niYoY": 2.922986,
+      "homeRevenue": 63.887,
+      "homeNetIncome": 23.126,
+      "marketCap": 1736,
+      "netDebt": 49.6,
+      "ev": 1785.6,
+      "evSales": 27.949348,
+      "pe": 75.067024,
+      "ps": 27.172977,
+      "fcfYield": 0.015503,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": 29.317,
+      "ttmAsOf": "2026-05-03",
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.576925,
+        "basis": "proxy"
+      }
+    },
+    "softbank": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "SoftBank segment 软银电信与互联网",
+      "netMargin": 0.641437,
+      "opMargin": null,
+      "revYoY": 0.006832,
+      "niYoY": 3.056002,
+      "homeRevenue": 48.778,
+      "homeNetIncome": 31.288,
+      "marketCap": 206,
+      "netDebt": 125.47,
+      "ev": 331.47,
+      "evSales": 6.795482,
+      "pe": null,
+      "ps": 4.223215,
+      "fcfYield": null,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "na",
+        "ps": "distorted",
+        "fcf_yield": "na",
+        "ev_sales": "distorted"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": false,
+        "opex": false,
+        "taxOther": false,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.082107,
+        "basis": "proxy"
+      }
+    },
+    "micron": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": true,
+      "topProfitSegment": "CMBU 云存储",
+      "topRevSegment": "CMBU 云存储",
+      "netMargin": 0.22845,
+      "opMargin": 0.261384,
+      "revYoY": 0.488511,
+      "niYoY": 9.975578,
+      "homeRevenue": 37.378,
+      "homeNetIncome": 8.539,
+      "marketCap": 1270,
+      "netDebt": 5.05,
+      "ev": 1275.05,
+      "evSales": 34.112312,
+      "pe": 148.729359,
+      "ps": 33.977206,
+      "fcfYield": 0.002937,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": 50.469,
+      "ttmAsOf": "2026-05-28",
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.361817,
+        "basis": "proxy"
+      }
+    },
+    "skhynix": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "Memory 存储器",
+      "netMargin": 0.442088,
+      "opMargin": 0.485921,
+      "revYoY": 0.408157,
+      "niYoY": 1.081519,
+      "homeRevenue": 68.328,
+      "homeNetIncome": 30.207,
+      "marketCap": 1236,
+      "netDebt": -8.27,
+      "ev": 1227.73,
+      "evSales": 17.968183,
+      "pe": 40.917668,
+      "ps": 18.089217,
+      "fcfYield": 0.014515,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": 52.887,
+      "ttmAsOf": "2026-03-31",
+      "incomeFlowHas": {
+        "gross": false,
+        "opex": false,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 1,
+        "basis": "proxy"
+      }
+    },
+    "tsmc": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "HPC 高性能计算",
+      "netMargin": 0.450988,
+      "opMargin": 0.508283,
+      "revYoY": 0.386913,
+      "niYoY": 0.562827,
+      "homeRevenue": 122.42,
+      "homeNetIncome": 55.21,
+      "marketCap": 2360,
+      "netDebt": -69.26,
+      "ev": 2290.74,
+      "evSales": 18.712139,
+      "pe": 42.745879,
+      "ps": 19.277896,
+      "fcfYield": 0.013868,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": 62.33,
+      "ttmAsOf": "2026-03-31",
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.580003,
+        "basis": "proxy"
+      }
+    },
+    "asml": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "DUV 成熟光刻系统",
+      "netMargin": 0.294151,
+      "opMargin": 0.345949,
+      "revYoY": 0.206662,
+      "niYoY": 0.324954,
+      "homeRevenue": 36.913,
+      "homeNetIncome": 10.858,
+      "marketCap": 711,
+      "netDebt": -11.33,
+      "ev": 699.67,
+      "evSales": 18.954569,
+      "pe": 65.481672,
+      "ps": 19.261507,
+      "fcfYield": 0.015591,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": 11.408,
+      "ttmAsOf": "2026-03-31",
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.355187,
+        "basis": "proxy"
+      }
+    },
+    "tencent": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "增值服务 VAS（游戏·社交网络）",
+      "netMargin": 0.345124,
+      "opMargin": null,
+      "revYoY": 0.138194,
+      "niYoY": 0.337037,
+      "homeRevenue": 104.6,
+      "homeNetIncome": 36.1,
+      "marketCap": 481,
+      "netDebt": -14.9,
+      "ev": 466.1,
+      "evSales": 4.456023,
+      "pe": 13.3241,
+      "ps": 4.59847,
+      "fcfYield": 0.052827,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "distorted",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": false,
+        "taxOther": false,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.192868,
+        "basis": "proxy"
+      }
+    },
+    "google": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": true,
+      "topProfitSegment": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+      "topRevSegment": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+      "netMargin": 0.328099,
+      "opMargin": 0.320326,
+      "revYoY": 0.150901,
+      "niYoY": 0.320142,
+      "homeRevenue": 402.836,
+      "homeNetIncome": 132.17,
+      "marketCap": 4286,
+      "netDebt": null,
+      "ev": null,
+      "evSales": null,
+      "pe": 32.427934,
+      "ps": 10.639565,
+      "fcfYield": null,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": false,
+        "opex": false,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.145729,
+        "basis": "proxy"
+      }
+    },
+    "microsoft": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "Productivity and Business Processes 生产力与业务流程（重列含商业版 M365）",
+      "netMargin": 0.36146,
+      "opMargin": 0.45622,
+      "revYoY": 0.149322,
+      "niYoY": 0.155396,
+      "homeRevenue": 281.724,
+      "homeNetIncome": 101.832,
+      "marketCap": 3110,
+      "netDebt": null,
+      "ev": null,
+      "evSales": null,
+      "pe": 30.540498,
+      "ps": 11.039173,
+      "fcfYield": null,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.377195,
+        "basis": "proxy"
+      }
+    },
+    "amazon": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": true,
+      "topProfitSegment": "AWS 亚马逊云",
+      "topRevSegment": "North America 北美",
+      "netMargin": 0.108383,
+      "opMargin": 0.111592,
+      "revYoY": 0.12374,
+      "niYoY": 0.311437,
+      "homeRevenue": 716.9,
+      "homeNetIncome": 77.7,
+      "marketCap": 2500,
+      "netDebt": null,
+      "ev": null,
+      "evSales": null,
+      "pe": 32.175032,
+      "ps": 3.487237,
+      "fcfYield": null,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": false,
+        "opex": false,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.179523,
+        "basis": "proxy"
+      }
+    },
+    "oracle": {
+      "latestActualFy": "FY2026",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "Cloud 云（OCI 基础设施 + SaaS 应用）",
+      "netMargin": 0.252226,
+      "opMargin": 0.305638,
+      "revYoY": 0.174216,
+      "niYoY": 0.370968,
+      "homeRevenue": 67.4,
+      "homeNetIncome": 17,
+      "marketCap": 425,
+      "netDebt": null,
+      "ev": null,
+      "evSales": null,
+      "pe": 25,
+      "ps": 6.305638,
+      "fcfYield": null,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": false,
+        "opex": false,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.504451,
+        "basis": "proxy"
+      }
+    },
+    "arm": {
+      "latestActualFy": "FY2026",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "Royalty revenue 版税收入",
+      "netMargin": 0.18374,
+      "opMargin": 0.182927,
+      "revYoY": 0.227851,
+      "niYoY": 0.141414,
+      "homeRevenue": 4.92,
+      "homeNetIncome": 0.904,
+      "marketCap": 355.67,
+      "netDebt": null,
+      "ev": null,
+      "evSales": null,
+      "pe": 393.440265,
+      "ps": 72.29065,
+      "fcfYield": 0.002753,
+      "forwardPE": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": null,
+        "basis": "none"
+      }
+    }
+  },
+  "aiPool": {
+    "total": 291.133686,
+    "n": 13,
+    "N": 14,
+    "basisCount": {
+      "sourced": 0,
+      "proxy": 13
+    },
+    "byStage": {
+      "design": {
+        "value": 121.094924,
+        "share": 0.415943,
+        "companies": [
+          {
+            "id": "nvda",
+            "name": "NVIDIA 英伟达",
+            "ni": 107.752959,
+            "aiShare": 0.897194,
+            "basis": "proxy"
+          },
+          {
+            "id": "broadcom",
+            "name": "Broadcom 博通",
+            "ni": 13.341965,
+            "aiShare": 0.576925,
+            "basis": "proxy"
+          }
+        ]
+      },
+      "foundry": {
+        "value": 32.02198,
+        "share": 0.109991,
+        "companies": [
+          {
+            "id": "tsmc",
+            "name": "TSMC 台积电",
+            "ni": 32.02198,
+            "aiShare": 0.580003,
+            "basis": "proxy"
+          }
+        ]
+      },
+      "memory": {
+        "value": 44.43246,
+        "share": 0.152619,
+        "companies": [
+          {
+            "id": "samsung",
+            "name": "Samsung 三星电子",
+            "ni": 11.135904,
+            "aiShare": 0.357711,
+            "basis": "proxy"
+          },
+          {
+            "id": "micron",
+            "name": "Micron 美光",
+            "ni": 3.089556,
+            "aiShare": 0.361817,
+            "basis": "proxy"
+          },
+          {
+            "id": "skhynix",
+            "name": "SK hynix",
+            "ni": 30.207,
+            "aiShare": 1,
+            "basis": "proxy"
+          }
+        ]
+      },
+      "equipment": {
+        "value": 3.856615,
+        "share": 0.013247,
+        "companies": [
+          {
+            "id": "asml",
+            "name": "ASML",
+            "ni": 3.856615,
+            "aiShare": 0.355187,
+            "basis": "proxy"
+          }
+        ]
+      },
+      "invest": {
+        "value": 2.568954,
+        "share": 0.008824,
+        "companies": [
+          {
+            "id": "softbank",
+            "name": "SoftBank Group 软银集团",
+            "ni": 2.568954,
+            "aiShare": 0.082107,
+            "basis": "proxy"
+          }
+        ]
+      },
+      "app": {
+        "value": 6.96255,
+        "share": 0.023915,
+        "companies": [
+          {
+            "id": "tencent",
+            "name": "Tencent 腾讯控股",
+            "ni": 6.96255,
+            "aiShare": 0.192868,
+            "basis": "proxy"
+          }
+        ]
+      },
+      "cloud": {
+        "value": 80.196203,
+        "share": 0.275462,
+        "companies": [
+          {
+            "id": "google",
+            "name": "Alphabet 谷歌",
+            "ni": 19.261039,
+            "aiShare": 0.145729,
+            "basis": "proxy"
+          },
+          {
+            "id": "microsoft",
+            "name": "Microsoft 微软",
+            "ni": 38.410563,
+            "aiShare": 0.377195,
+            "basis": "proxy"
+          },
+          {
+            "id": "amazon",
+            "name": "Amazon 亚马逊",
+            "ni": 13.948933,
+            "aiShare": 0.179523,
+            "basis": "proxy"
+          },
+          {
+            "id": "oracle",
+            "name": "Oracle 甲骨文",
+            "ni": 8.575668,
+            "aiShare": 0.504451,
+            "basis": "proxy"
+          }
+        ]
+      }
+    }
+  },
+  "migration": [
+    {
+      "label": "≈2023",
+      "total": 95.458961,
+      "n": 12,
+      "N": 13,
+      "stages": {
+        "design": {
+          "value": 34.293537,
+          "share": 0.359249,
+          "companies": [
+            {
+              "id": "nvda",
+              "name": "NVIDIA 英伟达",
+              "ni": 23.213972
+            },
+            {
+              "id": "broadcom",
+              "name": "Broadcom 博通",
+              "ni": 11.079565
+            }
+          ]
+        },
+        "foundry": {
+          "value": 11.960655,
+          "share": 0.125296,
+          "companies": [
+            {
+              "id": "tsmc",
+              "name": "TSMC 台积电",
+              "ni": 11.960655
+            }
+          ]
+        },
+        "memory": {
+          "value": -7.695663,
+          "share": -0.080617,
+          "companies": [
+            {
+              "id": "micron",
+              "name": "Micron 美光",
+              "ni": -0.702663
+            },
+            {
+              "id": "skhynix",
+              "name": "SK hynix",
+              "ni": -6.993
+            }
+          ]
+        },
+        "equipment": {
+          "value": 2.806086,
+          "share": 0.029396,
+          "companies": [
+            {
+              "id": "asml",
+              "name": "ASML",
+              "ni": 2.806086
+            }
+          ]
+        },
+        "invest": {
+          "value": -0.103302,
+          "share": -0.001082,
+          "companies": [
+            {
+              "id": "softbank",
+              "name": "SoftBank Group 软银集团",
+              "ni": -0.103302
+            }
+          ]
+        },
+        "app": {
+          "value": 3.649871,
+          "share": 0.038235,
+          "companies": [
+            {
+              "id": "tencent",
+              "name": "Tencent 腾讯控股",
+              "ni": 3.649871
+            }
+          ]
+        },
+        "cloud": {
+          "value": 50.547777,
+          "share": 0.529524,
+          "companies": [
+            {
+              "id": "google",
+              "name": "Alphabet 谷歌",
+              "ni": 7.94332
+            },
+            {
+              "id": "microsoft",
+              "name": "Microsoft 微软",
+              "ni": 30.016933
+            },
+            {
+              "id": "amazon",
+              "name": "Amazon 亚马逊",
+              "ni": 4.804025
+            },
+            {
+              "id": "oracle",
+              "name": "Oracle 甲骨文",
+              "ni": 7.783498
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "≈2024",
+      "total": 186.475335,
+      "n": 13,
+      "N": 14,
+      "stages": {
+        "design": {
+          "value": 67.76989,
+          "share": 0.363425,
+          "companies": [
+            {
+              "id": "nvda",
+              "name": "NVIDIA 英伟达",
+              "ni": 64.329864
+            },
+            {
+              "id": "broadcom",
+              "name": "Broadcom 博通",
+              "ni": 3.440026
+            }
+          ]
+        },
+        "foundry": {
+          "value": 18.016898,
+          "share": 0.096618,
+          "companies": [
+            {
+              "id": "tsmc",
+              "name": "TSMC 台积电",
+              "ni": 18.016898
+            }
+          ]
+        },
+        "memory": {
+          "value": 22.939949,
+          "share": 0.123019,
+          "companies": [
+            {
+              "id": "samsung",
+              "name": "Samsung 三星电子",
+              "ni": 8.310464
+            },
+            {
+              "id": "micron",
+              "name": "Micron 美光",
+              "ni": 0.117485
+            },
+            {
+              "id": "skhynix",
+              "name": "SK hynix",
+              "ni": 14.512
+            }
+          ]
+        },
+        "equipment": {
+          "value": 2.412878,
+          "share": 0.012939,
+          "companies": [
+            {
+              "id": "asml",
+              "name": "ASML",
+              "ni": 2.412878
+            }
+          ]
+        },
+        "invest": {
+          "value": 0.628622,
+          "share": 0.003371,
+          "companies": [
+            {
+              "id": "softbank",
+              "name": "SoftBank Group 软银集团",
+              "ni": 0.628622
+            }
+          ]
+        },
+        "app": {
+          "value": 4.964004,
+          "share": 0.02662,
+          "companies": [
+            {
+              "id": "tencent",
+              "name": "Tencent 腾讯控股",
+              "ni": 4.964004
+            }
+          ]
+        },
+        "cloud": {
+          "value": 69.743092,
+          "share": 0.374007,
+          "companies": [
+            {
+              "id": "google",
+              "name": "Alphabet 谷歌",
+              "ni": 12.365081
+            },
+            {
+              "id": "microsoft",
+              "name": "Microsoft 微软",
+              "ni": 37.883932
+            },
+            {
+              "id": "amazon",
+              "name": "Amazon 亚马逊",
+              "ni": 9.988852
+            },
+            {
+              "id": "oracle",
+              "name": "Oracle 甲骨文",
+              "ni": 9.505226
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "≈2025",
+      "total": 291.133686,
+      "n": 13,
+      "N": 14,
+      "stages": {
+        "design": {
+          "value": 121.094924,
+          "share": 0.415943,
+          "companies": [
+            {
+              "id": "nvda",
+              "name": "NVIDIA 英伟达",
+              "ni": 107.752959
+            },
+            {
+              "id": "broadcom",
+              "name": "Broadcom 博通",
+              "ni": 13.341965
+            }
+          ]
+        },
+        "foundry": {
+          "value": 32.02198,
+          "share": 0.109991,
+          "companies": [
+            {
+              "id": "tsmc",
+              "name": "TSMC 台积电",
+              "ni": 32.02198
+            }
+          ]
+        },
+        "memory": {
+          "value": 44.43246,
+          "share": 0.152619,
+          "companies": [
+            {
+              "id": "samsung",
+              "name": "Samsung 三星电子",
+              "ni": 11.135904
+            },
+            {
+              "id": "micron",
+              "name": "Micron 美光",
+              "ni": 3.089556
+            },
+            {
+              "id": "skhynix",
+              "name": "SK hynix",
+              "ni": 30.207
+            }
+          ]
+        },
+        "equipment": {
+          "value": 3.856615,
+          "share": 0.013247,
+          "companies": [
+            {
+              "id": "asml",
+              "name": "ASML",
+              "ni": 3.856615
+            }
+          ]
+        },
+        "invest": {
+          "value": 2.568954,
+          "share": 0.008824,
+          "companies": [
+            {
+              "id": "softbank",
+              "name": "SoftBank Group 软银集团",
+              "ni": 2.568954
+            }
+          ]
+        },
+        "app": {
+          "value": 6.96255,
+          "share": 0.023915,
+          "companies": [
+            {
+              "id": "tencent",
+              "name": "Tencent 腾讯控股",
+              "ni": 6.96255
+            }
+          ]
+        },
+        "cloud": {
+          "value": 80.196203,
+          "share": 0.275462,
+          "companies": [
+            {
+              "id": "google",
+              "name": "Alphabet 谷歌",
+              "ni": 19.261039
+            },
+            {
+              "id": "microsoft",
+              "name": "Microsoft 微软",
+              "ni": 38.410563
+            },
+            {
+              "id": "amazon",
+              "name": "Amazon 亚马逊",
+              "ni": 13.948933
+            },
+            {
+              "id": "oracle",
+              "name": "Oracle 甲骨文",
+              "ni": 8.575668
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "leader": {
+    "id": "nvda",
+    "share": 0.370115,
+    "pool": 291.133686,
+    "n": 13,
+    "N": 14,
+    "basisCount": {
+      "sourced": 0,
+      "proxy": 13
+    }
+  },
+  "yoy": {
+    "value": 0.561245,
+    "migLastLabel": "≈2025",
+    "migPrevLabel": "≈2024"
+  },
+  "ttmPool": {
+    "total": 292.404854,
+    "n": 7,
+    "asOfSpreadDays": 58,
+    "stages": {
+      "design": {
+        "value": 160.105816,
+        "share": 0.547548,
+        "companies": [
+          {
+            "id": "nvda",
+            "name": "NVIDIA 英伟达",
+            "ttm": 143.192109,
+            "asOf": "2026-04-26",
+            "aiShare": 0.897194
+          },
+          {
+            "id": "broadcom",
+            "name": "Broadcom 博通",
+            "ttm": 16.913707,
+            "asOf": "2026-05-03",
+            "aiShare": 0.576925
+          }
+        ]
+      },
+      "foundry": {
+        "value": 36.151604,
+        "share": 0.123635,
+        "companies": [
+          {
+            "id": "tsmc",
+            "name": "TSMC 台积电",
+            "ttm": 36.151604,
+            "asOf": "2026-03-31",
+            "aiShare": 0.580003
+          }
+        ]
+      },
+      "memory": {
+        "value": 92.095467,
+        "share": 0.314959,
+        "companies": [
+          {
+            "id": "samsung",
+            "name": "Samsung 三星电子",
+            "ttm": 20.947919,
+            "asOf": "2026-03-31",
+            "aiShare": 0.357711
+          },
+          {
+            "id": "micron",
+            "name": "Micron 美光",
+            "ttm": 18.260548,
+            "asOf": "2026-05-28",
+            "aiShare": 0.361817
+          },
+          {
+            "id": "skhynix",
+            "name": "SK hynix",
+            "ttm": 52.887,
+            "asOf": "2026-03-31",
+            "aiShare": 1
+          }
+        ]
+      },
+      "equipment": {
+        "value": 4.051968,
+        "share": 0.013857,
+        "companies": [
+          {
+            "id": "asml",
+            "name": "ASML",
+            "ttm": 4.051968,
+            "asOf": "2026-03-31",
+            "aiShare": 0.355187
+          }
+        ]
+      },
+      "invest": {
+        "value": 0,
+        "share": 0,
+        "companies": []
+      },
+      "app": {
+        "value": 0,
+        "share": 0,
+        "companies": []
+      },
+      "cloud": {
+        "value": 0,
+        "share": 0,
+        "companies": []
+      }
+    }
+  },
+  "stageValuationRel": {
+    "nvda": {
+      "pe": {
+        "value": 38.800999,
+        "median": 75.067024,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 21.580069,
+        "median": 27.172977,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": 0.02073,
+        "median": 0.015503,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": false,
+        "insufficient": false
+      },
+      "evSales": {
+        "value": 21.329582,
+        "median": 24.639465,
+        "relative": null,
+        "cohortN": 2,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "samsung": {
+      "pe": {
+        "value": 43.043911,
+        "median": 43.043911,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 5.710974,
+        "median": 18.089217,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": 0.017119,
+        "median": 0.014515,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": false,
+        "insufficient": false
+      },
+      "evSales": {
+        "value": 5.436549,
+        "median": 17.968183,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      }
+    },
+    "broadcom": {
+      "pe": {
+        "value": 75.067024,
+        "median": 75.067024,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 27.172977,
+        "median": 27.172977,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": 0.015503,
+        "median": 0.015503,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": false,
+        "insufficient": false
+      },
+      "evSales": {
+        "value": 27.949348,
+        "median": 24.639465,
+        "relative": null,
+        "cohortN": 2,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "softbank": {
+      "pe": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "ps": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "fcfYield": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "micron": {
+      "pe": {
+        "value": 148.729359,
+        "median": 43.043911,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 33.977206,
+        "median": 18.089217,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": 0.002937,
+        "median": 0.014515,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": false,
+        "insufficient": false
+      },
+      "evSales": {
+        "value": 34.112312,
+        "median": 17.968183,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      }
+    },
+    "skhynix": {
+      "pe": {
+        "value": 40.917668,
+        "median": 43.043911,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 18.089217,
+        "median": 18.089217,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": 0.014515,
+        "median": 0.014515,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": false,
+        "insufficient": false
+      },
+      "evSales": {
+        "value": 17.968183,
+        "median": 17.968183,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      }
+    },
+    "tsmc": {
+      "pe": {
+        "value": 42.745879,
+        "median": 42.745879,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "ps": {
+        "value": 19.277896,
+        "median": 19.277896,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "fcfYield": {
+        "value": 0.013868,
+        "median": 0.013868,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": 18.712139,
+        "median": 18.712139,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "asml": {
+      "pe": {
+        "value": 65.481672,
+        "median": 65.481672,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "ps": {
+        "value": 19.261507,
+        "median": 19.261507,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "fcfYield": {
+        "value": 0.015591,
+        "median": 0.015591,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": 18.954569,
+        "median": 18.954569,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "tencent": {
+      "pe": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "ps": {
+        "value": 4.59847,
+        "median": 4.59847,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "fcfYield": {
+        "value": 0.052827,
+        "median": 0.052827,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": 4.456023,
+        "median": 4.456023,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "google": {
+      "pe": {
+        "value": 32.427934,
+        "median": 31.357765,
+        "relative": "mid",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 10.639565,
+        "median": 8.472602,
+        "relative": "high",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "microsoft": {
+      "pe": {
+        "value": 30.540498,
+        "median": 31.357765,
+        "relative": "mid",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 11.039173,
+        "median": 8.472602,
+        "relative": "high",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "amazon": {
+      "pe": {
+        "value": 32.175032,
+        "median": 31.357765,
+        "relative": "mid",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 3.487237,
+        "median": 8.472602,
+        "relative": "low",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "oracle": {
+      "pe": {
+        "value": 25,
+        "median": 31.357765,
+        "relative": "low",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 6.305638,
+        "median": 8.472602,
+        "relative": "low",
+        "cohortN": 4,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "arm": {
+      "pe": {
+        "value": 393.440265,
+        "median": 75.067024,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "ps": {
+        "value": 72.29065,
+        "median": 27.172977,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "fcfYield": {
+        "value": 0.002753,
+        "median": 0.015503,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": false,
+        "insufficient": false
+      },
+      "evSales": {
+        "value": null,
+        "median": 24.639465,
+        "relative": null,
+        "cohortN": 2,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    }
+  }
+}

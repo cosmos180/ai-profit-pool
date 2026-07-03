@@ -18,7 +18,7 @@ from datetime import date
 from urllib.parse import urlparse
 
 TOL = 0.05  # USD bn tolerance for reconciliation
-TODAY = date(2026, 6, 30)  # 项目"今天"，用于快照新鲜度判断
+TODAY = date.today()  # 取真实当日，用于快照新鲜度判断（as_of 晚于今天 / 早于 90 天 → WARN）
 
 def load(path):
     with open(path, encoding="utf-8") as f:

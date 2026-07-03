@@ -4,7 +4,7 @@
 > 目标:skill 按本规格输出 JSON → 经 `tools/merge.py` 合并 → `validate.py` 0 ERROR → `cd web && bun run build` 上屏。
 > skill **只吐原始事实**,不算派生比率,不碰视图,不改代码。
 >
-> 单位一律 **USD bn**。项目"今天" = 2026-06-30(见 validate.py `TODAY`)。
+> 单位一律 **USD bn**。项目"今天" = 取真实当日(见 validate.py `TODAY = date.today()`),用于快照新鲜度判断。
 > 本文是契约,不是实现。schema 增量(第 7 节)是**提案**,落地由架构师/工程师后续执行;
 > 在提案落地前,skill 不得输出提案中的新字段(会被 `additionalProperties:false` 或 enum 卡掉)。
 
