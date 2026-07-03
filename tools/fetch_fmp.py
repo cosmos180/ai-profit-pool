@@ -6,6 +6,11 @@ Standalone helper. It does NOT touch the app (data-module/build/view); it only
 turns FMP's structured financials into a company object matching schema.json, so
 you can paste the result into companies.json[companies] and run validate.py.
 
+    # Recommended: keep secrets out of git.
+    cp .env.example .env.local
+    $EDITOR .env.local
+
+    # Or inject from your shell / CI secret manager.
     export FMP_API_KEY=xxxx
     python3 tools/fetch_fmp.py NVDA                 # id=nvda, name=FMP's, auto
     python3 tools/fetch_fmp.py NVDA MSFT ORCL AMD   # batch → JSON array
@@ -33,8 +38,30 @@ Honesty rules it follows:
 """
 import argparse, json, os, sys, urllib.request, urllib.error, urllib.parse
 from datetime import date
+from pathlib import Path
 
 BASE = "https://financialmodelingprep.com"
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def load_env_file(path):
+    """Load simple KEY=VALUE pairs without overriding real environment vars."""
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip("'\"")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+def load_local_env():
+    for name in (".env.local", ".env"):
+        load_env_file(ROOT / name)
 
 
 def ep(mode, name, sym, params=None):
@@ -59,8 +86,14 @@ def _get(path, key, params=None):
         with urllib.request.urlopen(url, timeout=30) as r:
             data = json.loads(r.read())
     except urllib.error.HTTPError as e:
-        hint = {403: " (try --legacy for the v3 API, or check your plan)",
-                402: " (this endpoint needs a higher FMP tier — e.g. quarterly statements)"}.get(e.code, "")
+        if e.code == 402:
+            hint = " (endpoint not included in this FMP plan/key; try --legacy only if your key is legacy-enabled)"
+        elif e.code == 403 and path.startswith("/stable/"):
+            hint = " (try --legacy for the v3 API, or check your plan/key)"
+        elif e.code == 403:
+            hint = " (check your FMP plan/key permissions for the v3 API)"
+        else:
+            hint = ""
         print(f"  ! HTTP {e.code} on {path}{hint}", file=sys.stderr)
         return None
     except Exception as e:
@@ -186,6 +219,8 @@ def build(ticker, key, n_years, want_quarters, mode):
 
 
 def main():
+    load_local_env()
+
     ap = argparse.ArgumentParser(
         description="FMP → companies.json company object(s). id defaults to ticker.lower(), "
                     "name to FMP's company name — so the minimal call is just the ticker(s).")
@@ -195,11 +230,12 @@ def main():
     ap.add_argument("--years", type=int, default=4)
     ap.add_argument("--quarters", action="store_true", help="also pull latest quarters (for TTM; needs a higher FMP tier)")
     ap.add_argument("--legacy", action="store_true", help="use the legacy /api/v3 API instead of /stable")
-    ap.add_argument("--key", default=os.environ.get("FMP_API_KEY"))
+    ap.add_argument("--key", default=os.environ.get("FMP_API_KEY"),
+                    help="temporary override; prefer FMP_API_KEY or .env.local")
     ap.add_argument("--out", help="write to file instead of stdout")
     a = ap.parse_args()
     if not a.key:
-        sys.exit("Set FMP_API_KEY env var or pass --key")
+        sys.exit("Set FMP_API_KEY in the environment, .env.local, or pass --key")
 
     mode = "v3" if a.legacy else "stable"
     single = len(a.tickers) == 1

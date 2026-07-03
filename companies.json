@@ -2912,6 +2912,141 @@
           ]
         }
       ]
+    },
+    {
+      "id": "arm",
+      "name": "Arm Holdings 安谋",
+      "ticker": "NASDAQ · ARM",
+      "region": "英国",
+      "sector": "芯片 IP / CPU 架构授权",
+      "currency": "USD",
+      "seg_profit": "no",
+      "logo_text": "ar",
+      "logo_class": "arm",
+      "status": "populated",
+      "chain_stage": "design",
+      "ai_exposure": "primary",
+      "lead": "AI 计算上游的芯片 IP 授权公司，收入主要来自 License and other revenue 与 Royalty revenue。Arm 只披露一个报告分部；License/Royalty 不是 AI/非 AI 拆分，因此暂不写 is_ai 或 ai_profit_share，避免把全部利润硬归因到 AI。",
+      "fy_note": "财年截至每年 3 月 31 日，例如 FY2026 = 2025-04-01 至 2026-03-31。USD 原币。公司披露单一报告分部，分部利润不到 License/Royalty 线；segments 仅按收入类型拆分，非 AI 归因口径。",
+      "quote": {
+        "as_of": "2026-06-26",
+        "market_cap": 355.67,
+        "net_debt": null,
+        "sources": [
+          {
+            "label": "public.com — Arm Holdings market cap ≈ $355.67B @ 2026-06-26（日内波动，取近似值）",
+            "url": "https://public.com/stocks/arm/market-cap",
+            "data_status": "estimate"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2024",
+          "period_end": "财年截至 2024-03-31",
+          "period_end_iso": "2024-03-31",
+          "status": "actual",
+          "revenue": 3.233,
+          "gross_margin": 0.952,
+          "op_income": 0.111,
+          "net_income": 0.306,
+          "capex": 0.092,
+          "cfo": 1.09,
+          "segments": [
+            {
+              "name": "License and other revenue 授权及其他收入",
+              "kind": "platform",
+              "revenue": 1.431,
+              "op_income": null,
+              "op_margin": null
+            },
+            {
+              "name": "Royalty revenue 版税收入",
+              "kind": "platform",
+              "revenue": 1.802,
+              "op_income": null,
+              "op_margin": null
+            }
+          ],
+          "sources": [
+            {
+              "label": "Arm FY2026 Form 20-F filed 2026-05-26（comparative statements: FY2024 revenue $3,233M, gross profit $3,079M, operating income $111M, net income $306M; License $1,431M / Royalty $1,802M; CFO $1,090M, capex $92M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "财年截至 2025-03-31",
+          "period_end_iso": "2025-03-31",
+          "status": "actual",
+          "revenue": 4.007,
+          "gross_margin": 0.97,
+          "op_income": 0.831,
+          "net_income": 0.792,
+          "capex": 0.219,
+          "cfo": 0.397,
+          "segments": [
+            {
+              "name": "License and other revenue 授权及其他收入",
+              "kind": "platform",
+              "revenue": 1.839,
+              "op_income": null,
+              "op_margin": null
+            },
+            {
+              "name": "Royalty revenue 版税收入",
+              "kind": "platform",
+              "revenue": 2.168,
+              "op_income": null,
+              "op_margin": null
+            }
+          ],
+          "sources": [
+            {
+              "label": "Arm FY2026 Form 20-F filed 2026-05-26（comparative statements: FY2025 revenue $4,007M, gross profit $3,886M, operating income $831M, net income $792M; License $1,839M / Royalty $2,168M; CFO $397M, capex $219M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2026",
+          "period_end": "财年截至 2026-03-31",
+          "period_end_iso": "2026-03-31",
+          "status": "actual",
+          "revenue": 4.92,
+          "gross_margin": 0.975,
+          "op_income": 0.9,
+          "net_income": 0.904,
+          "capex": 0.545,
+          "cfo": 1.524,
+          "segments": [
+            {
+              "name": "License and other revenue 授权及其他收入",
+              "kind": "platform",
+              "revenue": 2.307,
+              "op_income": null,
+              "op_margin": null
+            },
+            {
+              "name": "Royalty revenue 版税收入",
+              "kind": "platform",
+              "revenue": 2.613,
+              "op_income": null,
+              "op_margin": null
+            }
+          ],
+          "sources": [
+            {
+              "label": "Arm FY2026 Form 20-F filed 2026-05-26（FY2026 revenue $4,920M, gross profit $4,799M, operating income $900M, net income $904M; License $2,307M / Royalty $2,613M; CFO $1,524M, capex $545M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "official"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

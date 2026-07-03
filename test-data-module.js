@@ -5,8 +5,8 @@ const { Store, Selectors, STAGE_OF_FALLBACK, STAGE_ORDER, STAGE_LABEL, STAGE_COL
 Store._data = data;
 _refreshStages(data.meta);   // derive STAGE_ORDER/LABEL/COLOR from meta.stages (Store.load does this in the browser)
 
-assert.equal(Store.companies().length, 13);
-assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml", "tencent", "google", "microsoft", "amazon", "oracle"]);
+assert.equal(Store.companies().length, 14);
+assert.deepEqual(Store.populated().map((c) => c.id), ["nvda", "samsung", "broadcom", "softbank", "micron", "skhynix", "tsmc", "asml", "tencent", "google", "microsoft", "amazon", "oracle", "arm"]);
 assert.deepEqual(Store.pending().map((c) => c.id), []);
 
 const nvda = Store.byId("nvda");
@@ -784,15 +784,15 @@ const realMig = Selectors.profitPoolMigration(Store.populated());
 assert.equal(realMig.length, 3);                 // gate removed → ≈2023 / ≈2024 / ≈2025
 const realNew = realMig[realMig.length - 1];
 assert.equal(realNew.label, "≈2025");
-assert.equal(realNew.n, 13); assert.equal(realNew.N, 13); // all 13 contribute at latest position
-// ≈2023 position: samsung 2-yr only + oracle 最早 FY2024（无 2023）→ 两家不在该年覆盖 → N=12
+assert.equal(realNew.n, 13); assert.equal(realNew.N, 14); // ARM has coverage, but no defensible AI profit attribution yet
+// ≈2023 position: samsung 2-yr only + oracle 最早 FY2024（无 2023）→ 两家不在该年覆盖；ARM FY2024 enters this aligned bucket
 assert.equal(realMig[0].label, "≈2023");
-assert.equal(realMig[0].N, 12); assert.equal(realMig[0].n, 12);
+assert.equal(realMig[0].N, 13); assert.equal(realMig[0].n, 12);
 
 // hero/migration consistency: newest migration total == profitPoolAI total (same C口径)
 const aiPool = Selectors.profitPoolAI(Store.populated());
 assert.ok(Math.abs(realNew.total - aiPool.total) < 1e-9, "migration newest == AI pool total");
-assert.equal(aiPool.n, 13); assert.equal(aiPool.N, 13);
+assert.equal(aiPool.n, 13); assert.equal(aiPool.N, 14);
 assert.deepEqual(aiPool.basisCount, { sourced: 0, proxy: 13 }); // current data: all proxy
 
 // =====================================================================

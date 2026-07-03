@@ -7,17 +7,33 @@
 
 ## fetch_fmp.py — Financial Modeling Prep → 公司对象
 
-零依赖(仅标准库)。输入 ticker + FMP key,输出一个 `companies.json[companies]` 形状的对象。
+零依赖(仅标准库)。输入 ticker,从环境变量或本地 env 文件读取 FMP key,输出一个
+`companies.json[companies]` 形状的对象。
+
+推荐本地配置:复制 `.env.example` 为 `.env.local`,填入真实 key。`.env.local` 已被
+gitignore 忽略,不要提交真实密钥。CI/生产环境应使用 GitHub Actions Secrets / CI Variables
+等 Secret Manager 注入 `FMP_API_KEY`。
 
 ```bash
-export FMP_API_KEY=你的key
+cp .env.example .env.local
+$EDITOR .env.local
 python3 tools/fetch_fmp.py NVDA               # 最简:id=nvda、name=FMP 公司名,自动
 python3 tools/fetch_fmp.py NVDA MSFT ORCL AMD # 批量 → 输出 JSON 数组
 python3 tools/fetch_fmp.py MSFT --out /tmp/msft.json
 ```
 
+也可以直接使用 shell 环境变量:
+
+```bash
+export FMP_API_KEY=你的key
+python3 tools/fetch_fmp.py NVDA
+```
+
+`--key` 仅建议临时调试使用,不推荐长期使用,因为它可能进入 shell history 或进程列表。
+
 - `id` 默认=ticker 小写,`name` 默认=FMP 公司名(中文名等追加进 companies.json 后自己改)。
 - 默认走 FMP 当前的 **stable API**;若套餐仍是旧接口、stable 返回 403,加 `--legacy` 走 `/api/v3`。
+  若 stable 返回 402、legacy 返回 403,说明当前 FMP key/套餐无权访问这些接口或该 ticker 数据。
 - `--quarters`(季度/TTM)需更高档套餐;免费/基础档会返 402,自动跳过。
 
 ### 自动填(来自 FMP,单位换成 USD bn,`data_status: "derived"`)

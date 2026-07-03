@@ -38,13 +38,14 @@ def load_objs(paths):
     objs = []
     for p in paths:
         raw = sys.stdin.read() if p == "-" else Path(p).read_text(encoding="utf-8")
+        label = "stdin" if p == "-" else p
         if not raw.strip():
-            # 上游取数失败时管道会喂进空输入(如 fetch_fmp 全 402)——给人话而非 JSON traceback
-            sys.exit("merge: 输入为空(上游取数失败?)。companies.json 未改动。")
+            # 上游取数失败时管道会喂进空输入(如 fetch_fmp 全 402)——给人话而非 JSON traceback。
+            sys.exit(f"{label} 没有 JSON 输入；上游取数可能失败或没有返回公司对象。companies.json 未改动。")
         try:
             data = json.loads(raw)
         except json.JSONDecodeError as e:
-            sys.exit(f"merge: 输入不是合法 JSON({e})。companies.json 未改动。")
+            sys.exit(f"{label} 不是合法 JSON：{e.msg} (line {e.lineno}, column {e.colno})。companies.json 未改动。")
         objs.extend(data if isinstance(data, list) else [data])
     return objs
 
