@@ -114,6 +114,25 @@ const Selectors = {
   revenueSorted(y) { return this.revenueSegs(y).slice().sort((a, b) => b.revenue - a.revenue); },
   revenueTotal(y)  { return this.revenueSegs(y).reduce((s, p) => s + p.revenue, 0); },
 
+  /* 分部营收占「分部合计」比（division 口径：分母 = revenueTotal(y) = 分部 revenue 之和，
+     对 division-kind 含内部交易时仍自洽）。缺 revenue/零分母 → null（不伪造 0）。算不存。
+     注意：这与 incomeFlow 的 segment.share 分母不同——那处分母是 y.revenue（合并营收），
+     此处分母是分部合计，两口径不可混用（见 aiShare 注释同款约束）。*/
+  segRevShare(y, name) {
+    const seg = this.revenueSegs(y).find(s => s.name === name);
+    if (!seg || seg.revenue == null) return null;
+    const total = this.revenueTotal(y);
+    return total ? seg.revenue / total : null;
+  },
+
+  /* 分部经营利润率：seg.op_margin 优先（若已录入），否则 op_income/revenue 回退。
+     任一分母/分子缺失或零分母 → null（界面留空，不伪造）。算不存。*/
+  segOpMargin(seg) {
+    if (!seg) return null;
+    if (seg.op_margin != null) return seg.op_margin;
+    return (seg.op_income != null && seg.revenue) ? seg.op_income / seg.revenue : null;
+  },
+
   /* "platform" segments cleanly partition revenue (NVIDIA → sum == revenue);
      "division" segments include inter-segment sales (Samsung → sum > revenue). */
   segmentKind(y) { return this.revenueSegs(y).some(s => s.kind === "division") ? "division" : "platform"; },
@@ -187,7 +206,12 @@ const Selectors = {
       };
     }
     const revenue = y.revenue;
-    const segments = this.revenueSorted(y).map(s => ({ name: s.name, revenue: s.revenue, is_ai: !!s.is_ai }));
+    // segment.share 分母 = revenue（合并营收 y.revenue），供桑基分部支流标占比。
+    // 注意口径：此处分母是 y.revenue，与 segRevShare(y,name) 的分母（分部合计）不同，勿混用。
+    const segments = this.revenueSorted(y).map(s => ({
+      name: s.name, revenue: s.revenue, is_ai: !!s.is_ai,
+      share: (s.revenue != null && revenue) ? s.revenue / revenue : null,
+    }));
 
     const gm = y.gross_margin;
     const grossProfit = (gm != null) ? revenue * gm : null;
@@ -269,6 +293,114 @@ const Selectors = {
     // mirroring how the company-page cash block and fcfMargin/capexInt home metrics pick their year.
     const mc = this.marketCap(c), f = this.fcf(this.latestCashYear(c));
     return (mc != null && f != null && mc) ? f / mc : null;
+  },
+
+  /* 前瞻 PE (NTM · consensus)：price ÷ consensus_eps_value，两者同币才算（不跨币相乘）。
+     price 取 quote.price（本币原值），consensus_eps_value 取 forecast 年的数值型一致预期 EPS，
+     币种须 = quote.price_currency。与 trailing pe() 复用同一 caveat：pe='na' → 前瞻 PE 也 na(null)。
+     全 null-safe：缺 price / 缺 forecast 年 / 缺 consensus_eps_value / 币种不一致 → null。算不存。 */
+  forwardPE(c) {
+    if (this.valuationCaveat(c, "pe") === "na") return null;
+    const price = c.quote?.price;
+    const priceCur = c.quote?.price_currency;
+    const fy = this.forecastYear(c);
+    if (price == null || fy == null) return null;
+    const eps = fy.consensus_eps_value;
+    if (eps == null || eps === 0) return null;
+    // 同币才算（前瞻 PE = price/eps 需口径一致，跨币不相乘 → null）
+    const epsCur = fy.consensus_eps_currency;
+    if (priceCur && epsCur && priceCur !== epsCur) return null;
+    return price / eps;
+  },
+
+  /* ---- B1: same-stage relative valuation (comps) ----
+     同价值链环节的相对估值 —— 纯派生, 零新增数据。回答"这个倍数在同环节里是贵是便宜",
+     把跨环节混排的孤立绝对数字带上同环节语境。
+
+     stageValuationRel(c, key), key ∈ {pe, ps, evSales, fcfYield}:
+       cohort = 所有 populated 公司里 stageOf 相同者;对每家取该 key 的值(复用现有倍数 Selector)。
+       排除三类成员(它们本就不参与横比):
+         · 该指标 valuationCaveat 为 'na' 或 'distorted'(如软银 pe/fcf_yield=na、
+           softbank ps/ev_sales=distorted、tencent pe=distorted);
+         · 值为 null 的(缺分母/缺现金/无实际年 → 诚实缺席)。
+       cohortN = 有效成员数。median = cohort 有效值的中位数。
+
+     relative 口径(刻意不掺"便宜/贵"): 'low'|'mid'|'high' 指**数值相对中位数**的高低,
+       ±15% 带 —— value < median×0.85 → 'low';value > median×1.15 → 'high';否则 'mid'。
+       方向语义交给视图:lowerCheaper 标出"低=便宜"(pe/ps/evSales)还是"高=便宜"(fcfYield),
+       视图据 relative + lowerCheaper 生成"更便宜/更贵/居中"文案。这样数值口径单一、不会歧义。
+
+     诚实边界:
+       · insufficient:true 当有效 cohortN < 3(样本不足 → 不给 relative/median,视图显"样本不足");
+       · 本公司自身该指标为 na/distorted 或值为 null → 它没有相对位置,返回 insufficient(value=null)。
+     全 null 安全,绝不伪造。算不存。
+     返回 { key, value, cohortN, median, relative, lowerCheaper, insufficient }。 */
+  VAL_KEY_META: {
+    pe:       { caveat: "pe",        lowerCheaper: true  },
+    ps:       { caveat: "ps",        lowerCheaper: true  },
+    evSales:  { caveat: "ev_sales",  lowerCheaper: true  },
+    fcfYield: { caveat: "fcf_yield", lowerCheaper: false },
+  },
+  VAL_REL_BAND: 0.15,   // ±15% 带宽:偏离中位数超此比例才判 low/high,否则 mid(居中)
+
+  _valMetric(c, key) {
+    // 该 key 对应的倍数值,已内含各自 caveat='na'→null 的处理(见 pe/ps/evSales/fcfYield)
+    if (key === "pe")       return this.pe(c);
+    if (key === "ps")       return this.ps(c);
+    if (key === "evSales")  return this.evSales(c);
+    if (key === "fcfYield") return this.fcfYield(c);
+    return null;
+  },
+  /* 一家公司在某指标上是否可参与同环节横比:caveat 非 na/distorted 且值非 null。 */
+  _valComparable(c, key) {
+    const meta = this.VAL_KEY_META[key];
+    if (!meta) return false;
+    const cav = this.valuationCaveat(c, meta.caveat);
+    if (cav === "na" || cav === "distorted") return false;
+    return this._valMetric(c, key) != null;
+  },
+  _median(nums) {
+    if (!nums.length) return null;
+    const s = nums.slice().sort((a, b) => a - b);
+    const mid = Math.floor(s.length / 2);
+    return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+  },
+
+  stageValuationRel(c, key) {
+    const meta = this.VAL_KEY_META[key];
+    const blank = { key, value: null, cohortN: 0, median: null, relative: null,
+                    lowerCheaper: meta ? meta.lowerCheaper : null, insufficient: true };
+    if (!c || !meta) return blank;
+
+    const stage = stageOf(c);
+    if (!stage) return blank;
+
+    // cohort = 同环节且该指标可比的 populated 公司(含本公司,若本公司可比)
+    const pop = (Store._data && Store.populated()) || [];
+    const cohort = pop.filter(o => stageOf(o) === stage && this._valComparable(o, key));
+    const values = cohort.map(o => this._valMetric(o, key));
+    const cohortN = values.length;
+    const median = this._median(values);
+
+    // 本公司自身不可比(na/distorted/null)→ 没有相对位置
+    const self = this._valComparable(c, key) ? this._valMetric(c, key) : null;
+    if (self == null) {
+      return { key, value: null, cohortN, median, relative: null,
+               lowerCheaper: meta.lowerCheaper, insufficient: true };
+    }
+    // 有效样本过小 → 诚实"样本不足",不给相对位置
+    if (cohortN < 3 || median == null || median === 0) {
+      return { key, value: self, cohortN, median, relative: null,
+               lowerCheaper: meta.lowerCheaper, insufficient: true };
+    }
+
+    const band = this.VAL_REL_BAND;
+    let relative = "mid";
+    if (self < median * (1 - band)) relative = "low";
+    else if (self > median * (1 + band)) relative = "high";
+
+    return { key, value: self, cohortN, median, relative,
+             lowerCheaper: meta.lowerCheaper, insufficient: false };
   },
 
   /* ---- directory metric accessors (cross-company) ---- */
@@ -510,6 +642,33 @@ const Selectors = {
       });
     }
     return positions.reverse(); // chronological: old → new
+  },
+
+  /* ---- Home hero 组合派生:龙头占比 / 利润池同比 ----
+     两者是对 profitPoolAI / profitPoolMigration 已算好输出的再组合。归并到此唯一派生
+     边界(不在视图组件里算——不变量5:视图无计算)。均 null-safe:分母缺失/≤0 → null
+     (诚实留空,绝不伪造 0)。口径与 hero 池、迁移图三者完全一致。 */
+
+  /* 龙头(AI 加权后净利最高的公司)及其占 AI 加权池比重;pool = profitPoolAI.total。
+     返回 {leader, share, pool, n, N, basisCount};无贡献者 → leader=null、share=null。 */
+  profitPoolLeader(companies) {
+    const ai = this.profitPoolAI(companies);
+    const cos = ai.byStage.flatMap(s => s.companies).slice().sort((a, b) => b.ni - a.ni);
+    const leader = cos.length ? cos[0] : null;
+    const share = (leader && ai.total > 0) ? leader.ni / ai.total : null;
+    return { leader, share, pool: ai.total, n: ai.n, N: ai.N, basisCount: ai.basisCount };
+  },
+
+  /* 利润池同比:迁移图最新位置 total 相对上一位置 total(与池子、迁移图三者同口径)。
+     返回 {value, migLast, migPrev};不足两位置或上一位置 total≤0 → value=null(基期无意义)。 */
+  profitPoolYoY(companies) {
+    const mig = this.profitPoolMigration(companies);
+    const migLast = mig.length ? mig[mig.length - 1] : null;
+    const migPrev = mig.length > 1 ? mig[mig.length - 2] : null;
+    const value = (migLast && migPrev && migPrev.total > 0)
+      ? (migLast.total - migPrev.total) / migPrev.total
+      : null;
+    return { value, migLast, migPrev };
   },
 
   /* extract a 4-digit year from a year record — prefer machine-readable period_end_iso

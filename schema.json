@@ -97,6 +97,9 @@
         "framework_change": {"type": "string"},
         "consensus_rev": {"type": "string"},
         "consensus_eps": {"type": "string"},
+        "consensus_eps_value": {"type": ["number", "null"], "description": "Numeric consensus/forward EPS (per share, in consensus_eps_currency). Powers forward-PE derivation. Coexists with (does NOT replace) the free-text consensus_eps; only meaningful on status:'forecast' years. null = not fetched. Additive + optional — legacy data passes unchanged."},
+        "consensus_eps_currency": {"type": "string", "description": "ISO 4217 currency of consensus_eps_value (normally = quote.price_currency). Forward PE = price ÷ consensus_eps_value requires same currency; validate.py warns on mismatch with price_currency."},
+        "consensus_eps_source": {"type": "array", "items": {"$ref": "#/definitions/source"}, "description": "Provenance for consensus_eps_value; each entry's data_status must be 'consensus' (enforced in validate.py, not schema, to stay non-breaking). Mandatory whenever consensus_eps_value is non-null."},
         "anchors": {"type": "array", "items": {"$ref": "#/definitions/anchor"}},
         "sources": {"type": "array", "items": {"$ref": "#/definitions/source"}}
       },

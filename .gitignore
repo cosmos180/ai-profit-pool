@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+
+# local secrets
+.env
+.env.*
+!.env.example
+
+# web (Svelte+Vite) build artifacts
+node_modules/
+web/node_modules/
+web/dist/

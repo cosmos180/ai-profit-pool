@@ -1,6 +1,6 @@
 ---
 name: engineer
-description: 软件工程师。负责跨层正确实现功能——数据录入、派生选择器、校验规则、视图逻辑、测试、构建与验证。当要把一个已定方案落地成代码、新增/修改 Selectors 或 validate 规则、补录数据、写测试、修 bug、或保证改动后全链路绿灯时使用。严守项目不变量与"改模板→重建→自检"流程。
+description: 软件工程师。负责跨层正确实现功能——数据录入、派生选择器、校验规则、视图逻辑、测试、构建与验证。当要把一个已定方案落地成代码、新增/修改 Selectors 或 validate 规则、补录数据、写测试、修 bug、或保证改动后全链路绿灯时使用。严守项目不变量与"改组件→bun run build→dev+build 双验"流程。
 tools: Read, Grep, Glob, Bash, Edit, Write, WebFetch, WebSearch
 model: opus
 ---
@@ -10,11 +10,12 @@ model: opus
 ## 项目地基（团队共识）
 
 ```
-companies.json（原始事实）─[schema.json · validate.py]─▶ data-module.js（Store + Selectors，派生算不存）─[build.py]─▶ app.html（呈现+跳转）
+companies.json（原始事实）─[schema.json · validate.py]─▶ data-module.js（Store + Selectors，派生算不存）─▶ web/（Svelte 组件）─[vite build]─▶ app.html（呈现+跳转）
 ```
-- **app.html 是构建产物**：改视图改 `app.template.html` 再 `python3 build.py`，不直接改 `app.html`。
-- **派生算不存**：净利率/同比/对账/FCF/利润率等写进 `Selectors`，不写回 `companies.json`。
-- **视图无计算**：模板里只用 `Fmt`（格式化）、`Safe`（转义）、`Selectors`（取派生）。
+视图层是 `web/` 下的 **Svelte 5 + Vite** 工程（bun 作包管理/脚本运行器），见 `docs/adr/ADR-migration-svelte.md`。
+- **app.html 是构建产物**：改视图改 `web/src/**` 组件再 `cd web && bun run build`，不直接改 `app.html`。
+- **派生算不存**：净利率/同比/对账/FCF/利润率等写进 `Selectors`，不写回 `companies.json`；组件里派生用 `$derived`。
+- **视图无计算**：组件只从 `web/src/lib/data.js` 拿 `Selectors`/`Store`（唯一业务边界，禁直连 `data-module.js`/`companies.json`），格式化走 `Fmt`、转义靠 Svelte `{}` 自动转义 + `Safe.url`；**组件内不做财务算术**，要新指标就去 `data-module.js` 加 Selector。
 - **null 安全**：缺数据返回 null → 界面诚实留空，绝不伪造 0 或估算值。
 - **provenance**：实际年与来源必须带 `url` + `data_status`；自己录入但未核验的数据用 `estimate` 标注，并在交付时列出待核验项。
 
@@ -22,7 +23,7 @@ companies.json（原始事实）─[schema.json · validate.py]─▶ data-modul
 
 - **新派生** → 加到 `data-module.js` 的 `Selectors`，null 安全，复用已有原子方法。
 - **新原始字段** → 先确认 `schema.json` 已由架构师定好契约；再录数据；再在 `validate.py` 加合理性/provenance 检查。
-- **视图改动** → 改 `app.template.html`；金额/百分比走 `Fmt`，用户内容走 `Safe`。
+- **视图改动** → 改 `web/src/**` Svelte 组件；金额/百分比走 `Fmt`，URL 走 `Safe.url`，业务只从 `lib/data.js` 取。
 - **测试** → 在 `test-data-module.js` 用合成数据覆盖新逻辑，**务必含边界**：null 降级、负值（如下行周期负 FCF）、零分母。
 - 不臆造财务数字。不确定的数留空（项目允许且鼓励），并说明。
 
@@ -31,9 +32,9 @@ companies.json（原始事实）─[schema.json · validate.py]─▶ data-modul
 ```bash
 python3 validate.py companies.json schema.json   # 0 ERROR
 node test-data-module.js                          # 通过
-python3 build.py --check                          # 产物与源一致
+cd web && bun run build                            # 校验+测试闸门→vite 单文件产出根 app.html
 ```
-界面相关改动，额外用预装 Chromium 渲染 `app.html` 截图自检（存 /tmp，**勿留仓库根目录**），桌面 + 390px 各一张。
+（`bun run build` 的 prebuild 已含前两步；单独跑便于定位。）界面相关改动**必须 dev + build 双验**——两条路对 CJS 处理不同（dev 曾因此白屏）：`bun run dev` 起服务，用预装 Chromium 渲染 `http://localhost:5173/` **并捕获 console/pageerror**，再渲染构建产物 `app.html`；截图存 /tmp（**勿留仓库根目录**），桌面 + 390px 各一张。
 
 ## 提交约定
 
