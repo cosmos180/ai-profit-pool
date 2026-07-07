@@ -1344,11 +1344,16 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const iqShift = Selectors.impliedQ4(shiftCo, "FY2025");
   assert.equal(iqShift.calendar_quarter, "Q3");       // period_end 2025-08-31 → 日历 Q3, 非 Q4
   const cyShiftImp = Selectors.calendarYear(shiftCo, 2025);
-  assert.equal(cyShiftImp.complete, false);           // implied 财季 Q4 ≠ calendar Q4 → 不补 → 仍缺
+  // hotfix: implied fiscal-Q4 落 calendar Q3 → 补 Q3 槽 (非硬编码 Q4); 但 CY2025 无 calendar Q4 来源
+  // → 仍诚实 incomplete (implied 落在自己该落的 slot, 不冒充缺失的 Q4)。
+  assert.equal(cyShiftImp.complete, false);
+  assert.deepEqual(cyShiftImp.missing, ["Q4"]);       // 缺的是真正无来源的 Q4, 而非被误报
+  assert.equal(cyShiftImp.coverage.Q3, "implied_q4"); // implied 落 calendar Q3 槽
 
-  // ---- 云队列财年错位守卫 (MSFT 6月末 / Oracle 5月末 型): implied 财季 Q4 落 calendar Q2。
-  //      TTM 用 implied Q4 点亮 (末四季连号含 implied); 但 calendarYear(2025) 只补 calendar Q4 槽,
-  //      故 CY 仍缺 Q2 → 诚实 incomplete (FY 不冒充 CY)。锁定四家真实形状里最细的那个边界。 ----
+  // ---- 云队列财年错位 (MSFT 6月末 / Oracle 5月末 型): implied 财季 Q4 落 calendar Q2。
+  //      hotfix 2026-07-07: calendarYear 现按 implied fiscal-Q4 落入的 calendar slot 补 (非硬编码 Q4),
+  //      故财年错位公司的 CY 也能诚实补齐 → complete=true, Q2 槽 basis=implied_q4。TTM 亦用 implied
+  //      点亮 (末四季连号含 implied)。锁定四家真实形状里最细的那个边界。 ----
   const cloudQ = (pe, cy, cq, fy, fq, ni) => P({ period_id: `c-${pe}`, period_end: pe,
     calendar_year: cy, calendar_quarter: cq, fiscal_year: fy, fiscal_quarter: fq,
     revenue: 10, net_income: ni, sources: [{ label: "10-Q", url: "https://x/q", data_status: "official" }] });
@@ -1372,8 +1377,97 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(ttmCloud.usedImpliedQ4, true);
   assert.equal(ttmCloud.value, 30);                   // 8 + 6 + 7 + 9
   const cyCloud = Selectors.calendarYear(cloudShift, 2025);
-  assert.equal(cyCloud.complete, false);              // 有 calendar Q1/Q3/Q4, 缺 Q2 (implied 落 Q2, 只补 Q4 槽)
-  assert.deepEqual(cyCloud.missing, ["Q2"]);          // FY 不冒充 CY: 诚实缺 Q2
+  assert.equal(cyCloud.complete, true);               // implied fiscal-Q4 落 calendar Q2 → 补 Q2 槽 → 完整
+  assert.deepEqual(cyCloud.missing, []);
+  assert.equal(cyCloud.coverage.Q2, "implied_q4");    // Q2 由 implied fiscal-Q4 补, 非硬编码 Q4
+  assert.equal(cyCloud.coverage.Q1, "actual");        // 真实 actual 季不被 implied 覆盖 (actual > implied)
+  assert.equal(cyCloud.basis, "implied_q4");
+  assert.equal(cyCloud.net_income, 26);               // actual Q1 5 + implied Q2 8 + actual Q3 6 + actual Q4 7
+  assert.equal(cyCloud.strict, false);                // 合成 actual 季无 period_start → 覆盖不可验证 → proxy (自然年近似)
+
+  // =====================================================================
+  // hotfix 2026-07-07 回归: implied fiscal-Q4 按 calendar slot 插 (非硬编码 Q4)
+  // =====================================================================
+  // (A) 6月末财年 (MSFT型), 四季全带 period_start → implied 落 calendar Q2, CY 补齐且 strict=true。
+  const juneFYQ = (pid, pe, ps, cy, cq, fy, fq, ni) => P({ period_id: pid, period_end: pe, period_start: ps,
+    calendar_year: cy, calendar_quarter: cq, fiscal_year: fy, fiscal_quarter: fq, revenue: 10, net_income: ni,
+    sources: [{ label: "10-Q", url: "https://x/q", data_status: "official" }] });
+  const juneCo = { id: "junefy", status: "populated", periods: [
+    P({ period_id: "j-fy25", kind: "annual", calendar_quarter: null, period_start: "2024-07-01", period_end: "2025-06-30",
+      calendar_year: 2025, fiscal_year: "FY2025", revenue: 100, net_income: 20,
+      sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] }),
+    juneFYQ("j-q1", "2024-09-30", "2024-07-01", 2024, "Q3", "FY2025", "Q1", 3),  // fiscal Q1 → 日历 Q3'24
+    juneFYQ("j-q2", "2024-12-31", "2024-10-01", 2024, "Q4", "FY2025", "Q2", 4),  // fiscal Q2 → 日历 Q4'24
+    juneFYQ("j-q3", "2025-03-31", "2025-01-01", 2025, "Q1", "FY2025", "Q3", 5),  // fiscal Q3 → 日历 Q1'25
+    // implied FY2025 Q4: [2025-04-01, 2025-06-30] → 日历 Q2, ni = 20−(3+4+5) = 8
+    juneFYQ("j-q5", "2025-09-30", "2025-07-01", 2025, "Q3", "FY2026", "Q1", 6),  // 日历 Q3'25
+    juneFYQ("j-q6", "2025-12-31", "2025-10-01", 2025, "Q4", "FY2026", "Q2", 7),  // 日历 Q4'25
+  ]};
+  const cyJune = Selectors.calendarYear(juneCo, 2025);
+  assert.equal(cyJune.complete, true);                // implied 落 calendar Q2 → 补齐
+  assert.deepEqual(cyJune.missing, []);
+  assert.equal(cyJune.coverage.Q2, "implied_q4");     // Q2 由 implied fiscal-Q4 补 (6月末财年)
+  assert.equal(cyJune.strict, true);                  // 四季 [start,end] 恰对齐日历季 → 拼满自然年 → strict
+  assert.equal(cyJune.coverage_start, "2025-01-01");
+  assert.equal(cyJune.coverage_end, "2025-12-31");
+  assert.equal(cyJune.net_income, 26);                // actual Q1 5 + implied Q2 8 + actual Q3 6 + actual Q4 7
+
+  // (B) 月度错位财年 (Oracle型, 2/5/8/11 月末) → complete 但 strict=false (自然年近似)。
+  const oraQ = (pid, pe, ps, cy, cq, fy, fq, ni) => P({ period_id: pid, period_end: pe, period_start: ps,
+    calendar_year: cy, calendar_quarter: cq, fiscal_year: fy, fiscal_quarter: fq, revenue: 10, net_income: ni,
+    sources: [{ label: "10-Q", url: "https://x/q", data_status: "official" }] });
+  const oraCo = { id: "orafy", status: "populated", periods: [
+    P({ period_id: "o-fy25", kind: "annual", calendar_quarter: null, period_start: "2024-06-01", period_end: "2025-05-31",
+      calendar_year: 2025, fiscal_year: "FY2025", revenue: 100, net_income: 20,
+      sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] }),
+    oraQ("o-q1", "2024-08-31", "2024-06-01", 2024, "Q3", "FY2025", "Q1", 3),     // 日历 Q3'24
+    oraQ("o-q2", "2024-11-30", "2024-09-01", 2024, "Q4", "FY2025", "Q2", 4),     // 日历 Q4'24
+    oraQ("o-q3", "2025-02-28", "2024-12-01", 2025, "Q1", "FY2025", "Q3", 5),     // 日历 Q1'25
+    // implied FY2025 Q4: [2025-03-01, 2025-05-31] → 日历 Q2, ni = 20−(3+4+5) = 8
+    oraQ("o-q5", "2025-08-31", "2025-06-01", 2025, "Q3", "FY2026", "Q1", 6),     // 日历 Q3'25
+    oraQ("o-q6", "2025-11-30", "2025-09-01", 2025, "Q4", "FY2026", "Q2", 7),     // 日历 Q4'25
+  ]};
+  const cyOra = Selectors.calendarYear(oraCo, 2025);
+  assert.equal(cyOra.complete, true);                 // 四季齐 (含 implied Q2) → 完整
+  assert.deepEqual(cyOra.missing, []);
+  assert.equal(cyOra.coverage.Q2, "implied_q4");
+  assert.equal(cyOra.strict, false);                  // 端点 (12/1 起, 11/30 止) 偏离自然年首尾 → 近似
+  assert.equal(cyOra.coverage_start, "2024-12-01");
+  assert.equal(cyOra.coverage_end, "2025-11-30");
+  assert.equal(cyOra.net_income, 26);                 // 5 + 8 + 6 + 7
+
+  // (C) 真实 actual 占 calendar 槽 → implied 不覆盖 (actual > implied)。
+  //     自然年公司 annual+Q1-3 可派生 implied Q4, 但已有真实 actual Q4 占槽 → 保留 actual。
+  const occCo = { id: "occ", status: "populated", periods: [
+    P({ period_id: "occ-an", kind: "annual", calendar_quarter: null, period_start: "2025-01-01", period_end: "2025-12-31",
+      calendar_year: 2025, fiscal_year: "FY2025", revenue: 100, net_income: 20,
+      sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] }),
+    P({ period_id: "occ-q1", period_end: "2025-03-31", period_start: "2025-01-01", calendar_year: 2025, calendar_quarter: "Q1", fiscal_year: "FY2025", fiscal_quarter: "Q1", net_income: 2 }),
+    P({ period_id: "occ-q2", period_end: "2025-06-30", period_start: "2025-04-01", calendar_year: 2025, calendar_quarter: "Q2", fiscal_year: "FY2025", fiscal_quarter: "Q2", net_income: 4 }),
+    P({ period_id: "occ-q3", period_end: "2025-09-30", period_start: "2025-07-01", calendar_year: 2025, calendar_quarter: "Q3", fiscal_year: "FY2025", fiscal_quarter: "Q3", net_income: 6 }),
+    // 真实 actual Q4 (ni=99, 有意异于 implied 20−12=8) 占 calendar Q4 槽
+    P({ period_id: "occ-q4", period_end: "2025-12-31", period_start: "2025-10-01", calendar_year: 2025, calendar_quarter: "Q4", fiscal_year: "FY2025", fiscal_quarter: "Q4", net_income: 99 }),
+  ]};
+  const cyOcc = Selectors.calendarYear(occCo, 2025);
+  assert.equal(cyOcc.complete, true);
+  assert.equal(cyOcc.coverage.Q4, "actual");          // actual 占槽 → 不被 implied 覆盖
+  assert.equal(cyOcc.basis, "periods");               // 无 implied 参与 → basis 仍 periods
+  assert.equal(cyOcc.net_income, 111);                // 2+4+6+99 (用真实 Q4=99, 非 implied 8)
+
+  // (D) implied 不跨 targetYear 乱插: implied fiscal-Q4 落 2026, 查 CY2025 不受影响。
+  const nextCo = { id: "next", status: "populated", periods: [
+    P({ period_id: "n-fy26", kind: "annual", calendar_quarter: null, period_start: "2025-07-01", period_end: "2026-06-30",
+      calendar_year: 2026, fiscal_year: "FY2026", revenue: 100, net_income: 20,
+      sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] }),
+    juneFYQ("n-q1", "2025-09-30", "2025-07-01", 2025, "Q3", "FY2026", "Q1", 3),  // 日历 Q3'25
+    juneFYQ("n-q2", "2025-12-31", "2025-10-01", 2025, "Q4", "FY2026", "Q2", 4),  // 日历 Q4'25
+    juneFYQ("n-q3", "2026-03-31", "2026-01-01", 2026, "Q1", "FY2026", "Q3", 5),  // 日历 Q1'26
+    // implied FY2026 Q4 → 日历 Q2 2026 (calendar_year 2026), 不应插入 CY2025
+  ]};
+  const cyNext = Selectors.calendarYear(nextCo, 2025);
+  assert.equal(cyNext.complete, false);               // CY2025 仅有 calendar Q3/Q4 → 缺 Q1/Q2
+  assert.deepEqual(cyNext.missing, ["Q1", "Q2"]);     // implied (2026) 不越界补进 CY2025
+  assert.ok(!Object.values(cyNext.coverage).includes("implied_q4"));
 
   // =====================================================================
   // 集成②: 严格 CY —— 自然年四季 (显式 period_start) → strict=true

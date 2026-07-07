@@ -773,17 +773,22 @@ const Selectors = {
     const byQ = {}, basisByQ = {};
     for (const p of qs) { byQ[p.calendar_quarter] = p; basisByQ[p.calendar_quarter] = "actual"; } // sorted asc → latest wins on dup
 
-    // implied Q4 补全 (仅自然年口径): 缺 calendar Q4 而 Q1-Q3 齐 → 用 annual−(fiscalQ1-3) 补。
-    // 只对自然年公司成立: 其 fiscal Q4 恰是 calendar Q4 (impliedQ4.calendar_quarter==="Q4" 且落本年)。
-    // 财年错位公司 (Micron 等) 的 implied 财季 Q4 不落 calendar Q4 → 条件不满足 → 不补 (仍 incomplete)。
-    if (!byQ.Q4 && byQ.Q1 && byQ.Q2 && byQ.Q3) {
-      const annual = this.periods(c).find(p => p.kind === "annual" && p.status === "actual"
-        && (p.calendar_year != null ? p.calendar_year : this._calYearOf(p.period_end)) === year);
-      if (annual && annual.fiscal_year) {
-        const iq4 = this.impliedQ4(c, annual.fiscal_year);
-        if (iq4 && iq4.calendar_year === year && iq4.calendar_quarter === "Q4") {
-          byQ.Q4 = iq4; basisByQ.Q4 = "implied_q4";
-        }
+    // implied Q4 补全 (按 calendar slot, 用户拍板 hotfix 2026-07-07): 每个财年的 implied fiscal-Q4
+    // 有明确 period_start/period_end → 按它落入的 calendar 季补, 而非硬编码 calendar Q4。
+    //   · 自然年公司 (google/amazon): implied 落 calendar Q4 → 行为不变。
+    //   · 财年错位公司 (MSFT 6月末财年): implied fiscal Q4 落 calendar Q2 2025 → 补 Q2 槽,
+    //     否则会错误地报 CY2025 缺 Q2。Oracle 月度错位 (2/5/8/11 月末) 同理补齐, complete=true
+    //     但下面 strict 由 period_start/period_end 覆盖判断 → strict=false (自然年近似)。
+    // 只在 iq4 落在本 targetYear、其 calendar slot 尚空 (actual 未占) 时插 (优先级不变: actual > implied)。
+    const fys = [];
+    for (const p of this.periods(c)) {
+      if (p.kind === "annual" && p.status === "actual" && p.fiscal_year && !fys.includes(p.fiscal_year)) fys.push(p.fiscal_year);
+    }
+    for (const fy of fys) {
+      const iq4 = this.impliedQ4(c, fy);
+      if (iq4 && iq4.calendar_year === year && iq4.calendar_quarter && !byQ[iq4.calendar_quarter]) {
+        byQ[iq4.calendar_quarter] = iq4;
+        basisByQ[iq4.calendar_quarter] = "implied_q4";
       }
     }
 
@@ -792,7 +797,7 @@ const Selectors = {
     out.complete = out.missing.length === 0;
     for (const q of present) out.coverage[q] = basisByQ[q];
     out.sources = present.flatMap(q => byQ[q].sources || []);
-    if (basisByQ.Q4 === "implied_q4") out.basis = "implied_q4";
+    if (Object.values(basisByQ).includes("implied_q4")) out.basis = "implied_q4";
     if (!out.complete) return out;
     for (const m of this.PERIOD_METRICS) {
       const vals = this.CAL_QUARTERS.map(q => byQ[q][m]);

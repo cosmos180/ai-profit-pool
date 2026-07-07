@@ -68,6 +68,10 @@
   // 各镜头完整家数（呈现层计数，非财务算术——同 ranked/maxV 的排序/取极值性质）。
   const lensCompleteN = mode => pop.reduce((n, c) => n + (Selectors.companyMetricView(c, mode).complete ? 1 : 0), 0)
   const ttmDone = $derived(lensCompleteN('ttm'))
+  // 已迁入 periods 的家数（呈现层计数，非财务算术）。判定用 reason==='not_migrated' 这个精确
+  // token——coverage.missing_periods 是「该镜头所需 periods 不足」（三星/美光在 TTM 下也为
+  // true），不等于「未迁入」，误用会少算已迁但覆盖不足的公司。
+  const migratedN = $derived(pop.reduce((n, c) => n + (Selectors.companyMetricView(c, AUTO_LENS).coverage.reason === 'not_migrated' ? 0 : 1), 0))
   const autoLens = $derived(ttmDone / Math.max(pop.length, 1) >= LENS_MIN_RATIO ? AUTO_LENS : 'latestQuarter')
   const effLens = $derived(nav.reportLens === 'auto' ? autoLens : nav.reportLens)
   const autoFellBack = $derived(nav.reportLens === 'auto' && autoLens !== AUTO_LENS)
@@ -133,7 +137,7 @@
   </div>
   <div class="lens-note">
     此镜头只作用于<b>下方登记表</b>的「按镜头」数值/角标区；迁移图、AI 利润池、估值卡仍走年度（years[]）口径。
-    {#if autoFellBack}<br><b>默认 TTM 覆盖不足</b>（TTM 完整 {ttmDone}/{pop.length}，低于 1/3），已自动退回<b>最新季</b>——当前仅三星/美光迁入 <code style="font-family:var(--mono)">periods</code>，其余公司此镜头留空并标「尚未迁入 periods」。{/if}
+    {#if autoFellBack}<br><b>默认 TTM 覆盖不足</b>（TTM 完整 {ttmDone}/{pop.length}，低于 1/3），已自动退回<b>最新季</b>——当前 <b>{migratedN}/{pop.length}</b> 家已迁入 <code style="font-family:var(--mono)">periods</code>，其余公司此镜头留空并标「尚未迁入 periods」。{/if}
   </div>
 </div>
 
