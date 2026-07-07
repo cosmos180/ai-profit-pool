@@ -40,6 +40,14 @@
   - 进展:google/microsoft/amazon/oracle 已补最近约 8 季;softbank/tencent 仍缺口。
   - 软银收益最低(净利受投资损益主导)可最后/放弃,规格已注明
   - **补齐后删 `ttmNetIncomeUnified` 的 legacy fallback 分支**(period-base Phase 6.2 完全体):当前 nvda/samsung/broadcom/skhynix/tsmc/asml 的 TTM 仍走 legacy 回退(periods 尚不足四季);季度补齐至 periods 够用后,unified 可退掉 `legacy_fallback` 分支、迁移图 TTM 柱变纯 periods 口径。
+  - **★Retirement pass 执行口径(2026-07-07 用户拍板,逐批照此,不得放宽)**:
+    - 采购单以 `node tools/gap-report.cjs` 实跑为准;产物按 DATA-SPEC-dayu §2.A 吐 **periods 部分对象**,走 merge 部分合并。
+    - **tsmc / asml:路线 A**——Q1–Q4 全 actual、逐期 FX、**禁止 implied Q4**(季度逐期汇率与年报年均汇率不可硬相减;selector 的 FX 一致性拒绝是契约行为,保留。绝不为省一季而重录季度汇率——数据层不迎合派生逻辑,否则不可审计)。
+    - **broadcom / nvda:路线 B**——USD 报表,补缺季后允许 implied Q4。
+    - **samsung / skhynix:路线 B 可试**,但**验收必须核 selector 是否因 FX basis 拒绝 implied;若拒绝,不放宽规则,转路线 A**。
+    - **D3 quote 刷新先行**(quote-only 部分合并隔离性已验证,低风险前置批次)。
+    - **Tiger 边界**:US/HK/ADR 顺;韩/台/日**原股不塞 Tiger**;quote 刷新按可支持标的先更新,**不阻塞** periods 数据批次。
+    - Phase 6 final gate 不变:`legacy_fallback = 0` 才删旧消费路径(legacy 数据留审计)。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
   - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
