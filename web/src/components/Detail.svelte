@@ -140,6 +140,8 @@
       <div class="c"><div class="cl">自由现金流</div><div class="cv num {periodCashFcf != null && periodCashFcf >= 0 ? 'green' : ''}">{Fmt.bn(periodCashFcf, 1)}</div></div>
     </div>
 
+    <Sankey company={c} year={p} />
+
     {#if periodSegRows.length}
       <div class="section-h">季度分部营收 · 降序</div>
       <div class="card">

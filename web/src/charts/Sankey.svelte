@@ -9,11 +9,19 @@
   import { Fmt } from '../lib/fmt.js'
   import { Safe } from '../lib/safe.js'
 
+  const periodLabel = y => {
+    if (!y) return ''
+    if (y.fy) return y.fy
+    if (y.calendar_year != null && y.calendar_quarter) return `${y.calendar_year}${y.calendar_quarter}`
+    return y.period_end || y.period_id || ''
+  }
+
   // 返回 { svg, notes[], showInflowLegend } —— 供模板声明式渲染 legend/foot，svg 走 {@html}。
   export function buildSankey(c, y) {
     const f = Selectors.incomeFlow(y)
     if (f.revenue == null) return null // 无营收 → 整图不可用
     const rev = f.revenue
+    const label = periodLabel(y)
     const COL = { rev: 'var(--past)', profit: 'var(--ok)', out: 'var(--bad)', ai: 'var(--ai)', seg: '#9AA8A0', inflow: 'var(--ok-soft)' }
     const negProfit = (f.opProfit != null && f.opProfit < 0) || (f.netIncome != null && f.netIncome < 0)
 
@@ -46,7 +54,7 @@
     // A1：不再写死 width/height 属性——viewBox 定内部坐标，外层 CSS（.sankey-svg
     // width:100% + max-width:--sankeyW）等比缩放，窄屏完整可见无横向滚动、桌面不过拉。
     let s = `<svg class="sankey-svg" viewBox="0 0 ${W} ${H}" role="img" `
-      + `aria-label="${Safe.attr(c.name + ' ' + y.fy + ' 利润表资金流：营收 ' + Fmt.bn(rev) + ' 至净利润 ' + Fmt.bn(f.netIncome) + '，按金额宽度的桑基图')}">`
+      + `aria-label="${Safe.attr(c.name + ' ' + label + ' 利润表资金流：营收 ' + Fmt.bn(rev) + ' 至净利润 ' + Fmt.bn(f.netIncome) + '，按金额宽度的桑基图')}">`
 
     const band = (x0, yT0, yB0, x1, yT1, yB1, fill, op) => {
       const mx = (x0 + x1) / 2
@@ -183,7 +191,7 @@
       svg: s,
       notes,
       showInflowLegend: f.taxOther != null && f.taxOther < 0 && hasOpex,
-      fy: y.fy,
+      label,
       width: W,   // 内部坐标宽度（px）→ 模板设 --sankeyW 作 max-width，防桌面过度拉伸
     }
   }
@@ -198,7 +206,7 @@
 </script>
 
 {#if model}
-  <div class="section-h" style="margin-top:18px">利润表资金流 · {model.fy}</div>
+  <div class="section-h" style="margin-top:18px">利润表资金流 · {model.label}</div>
   <div class="card sankey-card">
     <p class="sankey-lead">一张图看这年的钱<b>从哪来、被什么吃掉、最后剩多少</b>：左侧各分部汇成营收，向右每一步分出成本/费用/税（红，向下流出），剩下的利润（绿）继续向右，终点是净利润。<b>流带越宽＝金额越大</b>。</p>
     <div class="sankey-scroll" style="--sankeyW:{model.width}px">{@html model.svg}</div>
