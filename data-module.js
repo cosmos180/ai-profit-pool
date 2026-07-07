@@ -492,10 +492,15 @@ const Selectors = {
     // Add-on quarters = the post-FY-end quarters, identified PURELY by date pairing
     // (never by parsing label or the free-text years[].period_end):
     // a quarter is an add-on iff it has a ~365-day-EARLIER counterpart also in the set
-    // (that earlier counterpart is the in-FY year-ago quarter we subtract). The
-    // year-ago quarters themselves are NOT add-ons (their own ~365d-ago twin isn't
-    // recorded). This generalises to N trailing quarters (Micron → 3 add-ons + 3 twins).
+    // (that earlier counterpart is the in-FY year-ago quarter we subtract).
+    // 关键修复(dense-series bug):早期数据只录「新季+孪生季」,「有更早孪生」即等价于
+    // 「财年后新季」;但 Dayu 补齐 8 连季后,财年内的季也有孪生,会被误当增量累加 →
+    // TTM 系统性高估(google 曾 190.95 vs 真值 160.21)。恢复注释本意:当锚定财年带
+    // 机读 period_end_iso 时,add-on 还必须严格晚于财年末;无 ISO 的老数据(稀疏录入)
+    // 保持原判据不变(其 add-on 本就都在财年后,行为不受影响)。
+    const fyEndT = this._parseDate(fy.period_end_iso);
     const addOns = dq.filter(x => {
+      if (fyEndT != null && x.t <= fyEndT) return false;   // 财年内的季绝不是增量季
       const prior = this._matchYearAgo(dq, x.t);
       return prior && prior.t < x.t;
     });

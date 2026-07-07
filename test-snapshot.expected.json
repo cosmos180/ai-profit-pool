@@ -454,7 +454,7 @@
         "fcf_yield": "ok",
         "ev_sales": "ok"
       },
-      "ttmNetIncome": 190.953,
+      "ttmNetIncome": 160.208,
       "ttmAsOf": "2026-03-31",
       "incomeFlowHas": {
         "gross": false,
@@ -496,7 +496,7 @@
         "fcf_yield": "ok",
         "ev_sales": "ok"
       },
-      "ttmNetIncome": 131.339,
+      "ttmNetIncome": 125.216,
       "ttmAsOf": "2026-03-31",
       "incomeFlowHas": {
         "gross": true,
@@ -538,7 +538,7 @@
         "fcf_yield": "ok",
         "ev_sales": "ok"
       },
-      "ttmNetIncome": 113.481,
+      "ttmNetIncome": 90.798,
       "ttmAsOf": "2026-03-31",
       "incomeFlowHas": {
         "gross": false,
@@ -580,7 +580,7 @@
         "fcf_yield": "ok",
         "ev_sales": "ok"
       },
-      "ttmNetIncome": 22.259,
+      "ttmNetIncome": null,
       "ttmAsOf": "2026-02-28",
       "incomeFlowHas": {
         "gross": false,
@@ -1139,13 +1139,13 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 434.498261,
-    "n": 11,
-    "asOfSpreadDays": 89,
+    "total": 404.892688,
+    "n": 10,
+    "asOfSpreadDays": 58,
     "stages": {
       "design": {
         "value": 160.105816,
-        "share": 0.368484,
+        "share": 0.395428,
         "companies": [
           {
             "id": "nvda",
@@ -1165,7 +1165,7 @@
       },
       "foundry": {
         "value": 36.151604,
-        "share": 0.083203,
+        "share": 0.089287,
         "companies": [
           {
             "id": "tsmc",
@@ -1178,7 +1178,7 @@
       },
       "memory": {
         "value": 92.095467,
-        "share": 0.211958,
+        "share": 0.227456,
         "companies": [
           {
             "id": "samsung",
@@ -1205,7 +1205,7 @@
       },
       "equipment": {
         "value": 4.051968,
-        "share": 0.009326,
+        "share": 0.010008,
         "companies": [
           {
             "id": "asml",
@@ -1227,36 +1227,29 @@
         "companies": []
       },
       "cloud": {
-        "value": 142.093407,
-        "share": 0.327029,
+        "value": 112.487834,
+        "share": 0.277821,
         "companies": [
           {
             "id": "google",
             "name": "Alphabet 谷歌",
-            "ttm": 20.584161,
+            "ttm": 17.269942,
             "asOf": "2026-03-31",
             "aiShare": 0.107797
           },
           {
             "id": "microsoft",
             "name": "Microsoft 微软",
-            "ttm": 45.564257,
+            "ttm": 43.44006,
             "asOf": "2026-03-31",
             "aiShare": 0.346921
           },
           {
             "id": "amazon",
             "name": "Amazon 亚马逊",
-            "ttm": 64.712881,
+            "ttm": 51.777832,
             "asOf": "2026-03-31",
             "aiShare": 0.570253
-          },
-          {
-            "id": "oracle",
-            "name": "Oracle 甲骨文",
-            "ttm": 11.232109,
-            "asOf": "2026-02-28",
-            "aiShare": 0.50461
           }
         ]
       }
