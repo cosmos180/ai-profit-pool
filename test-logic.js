@@ -688,6 +688,14 @@ const ttm1 = synQ("nvda",
 assert.equal(Selectors.ttmNetIncome(ttm1), 120);
 assert.equal(Selectors.ttmAsOf(ttm1), "2026-03-31");
 
+// revenue/op guidance without net_income is traceable but ignored by net-income TTM/asOf
+const ttmRevenueOnlyLatest = synQ("samsung",
+  [FY("FY2025", 100)],
+  [Q("2025-03-31", 10), Q("2026-03-31", 30),
+   { period_end: "2026-06-30", label: "Q2 guidance", net_income: null, revenue: 120, op_income: 60, sources: [] }]);
+assert.equal(Selectors.ttmNetIncome(ttmRevenueOnlyLatest), 120);
+assert.equal(Selectors.ttmAsOf(ttmRevenueOnlyLatest), "2026-03-31");
+
 // ---- multi add-on (e.g. Micron, 3 post-FY quarters): each rolled vs its year-ago twin ----
 // FY ni 100; add-ons Q2,Q3,Q4 of 2026 vs 2025 twins:
 //  +(12−4) +(15−5) +(20−6) = 8+10+14 = 32 → TTM = 132
@@ -712,10 +720,10 @@ assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)], [])), null);
 assert.equal(Selectors.ttmNetIncome({ id: "x", status: "populated", years: [FY("FY2025", 100)] }), null);
 // (b) no year-ago match for the latest quarter (only one quarter) → no add-on pair → null
 assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)], [Q("2026-03-31", 30)])), null);
-// (c) add-on quarter net_income null → null
+// (c) add-on quarter net_income null → ignored; no complete net-income pair → null
 assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)],
   [Q("2025-03-31", 10), Q("2026-03-31", null)])), null);
-// (d) year-ago quarter net_income null → null
+// (d) year-ago quarter net_income null → ignored; no complete net-income pair → null
 assert.equal(Selectors.ttmNetIncome(synQ("x", [FY("FY2025", 100)],
   [Q("2025-03-31", null), Q("2026-03-31", 30)])), null);
 // (e) latest complete FY net_income null → null

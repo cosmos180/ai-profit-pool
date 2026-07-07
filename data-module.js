@@ -452,9 +452,12 @@ const Selectors = {
      Works purely off quarters[].period_end (machine ISO date) — NEVER parses
      `label`, NEVER touches years[].period_end (free text). Generalises to N
      trailing quarters (e.g. Micron with 3 post-FY quarters).
-     Returns null (honest gap) if ANY required atom is missing:
-       no latest complete FY net_income / a post-FY quarter's net_income is null /
-       no ~365d-ago match for some add-on quarter / that match's net_income is null. */
+     Revenue-only / guidance-only quarter atoms are ignored here: they can live in
+     quarters[] for traceability, but net-income TTM only rolls from quarters that
+     actually carry net_income.
+     Returns null (honest gap) if required net-income atoms are missing:
+       no latest complete FY net_income / no paired post-FY net-income quarter /
+       no ~365d-ago net-income match for some add-on quarter. */
   DAY_MS: 86400000,
   YEAR_TOL_DAYS: 45,
 
@@ -470,6 +473,9 @@ const Selectors = {
       .filter(x => x.t != null)
       .sort((a, b) => a.t - b.t);
   },
+  _datedNetIncomeQuarters(c) {
+    return this._datedQuarters(c).filter(x => x.q.net_income != null);
+  },
 
   ttmNetIncome(c) {
     if (!c) return null;
@@ -477,7 +483,7 @@ const Selectors = {
     const fy = this.latestActual(c);
     if (!fy || fy.net_income == null) return null;
 
-    const dq = this._datedQuarters(c);
+    const dq = this._datedNetIncomeQuarters(c);
     if (!dq.length) return null;                       // no quarters → cannot self-roll → null (honest)
 
     // Add-on quarters = the post-FY-end quarters, identified PURELY by date pairing
@@ -514,9 +520,9 @@ const Selectors = {
     return best;
   },
 
-  /* as-of date (ISO string) of a company's latest reported quarter, or null */
+  /* as-of date (ISO string) of the latest quarter carrying net_income, or null */
   ttmAsOf(c) {
-    const dq = this._datedQuarters(c);
+    const dq = this._datedNetIncomeQuarters(c);
     return dq.length ? dq[dq.length - 1].q.period_end : null;
   },
 

@@ -565,14 +565,35 @@
           "period_end": "2026-03-31",
           "label": "Q1 2026（最新季）",
           "net_income": 33.21,
+          "op_income": 40.23,
+          "revenue": 94.18,
           "sources": [
             {
-              "label": "Samsung Q1 2026 业绩（净利 KRW 47.22T，同比 +475%）",
+              "label": "Samsung Q1 2026 业绩（营收 KRW 133.9T、营业利润 KRW 57.2T、净利 KRW 47.22T，同比 +475%）",
               "url": "https://news.samsung.com/global/samsung-electronics-announces-first-quarter-2026-results",
               "data_status": "official"
             },
             {
-              "label": "派生换算：KRW 47.22T ÷ USD/KRW 1421.779（与去年同季同口径汇率）= $33.21B（换算待核验；2026 汇率或偏强，绝对值或略高估，方向稳健）",
+              "label": "派生换算：KRW 133.9T / 57.2T / 47.22T ÷ USD/KRW 1421.779（与 2025 年度同口径汇率）= $94.18B / $40.23B / $33.21B（换算待核验；2026 汇率或偏强，绝对值或略高估，方向稳健）",
+              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_end": "2026-06-30",
+          "label": "Q2 2026 earnings guidance（最新公告，净利待完整季报）",
+          "net_income": null,
+          "op_income": 62.88,
+          "revenue": 120.27,
+          "sources": [
+            {
+              "label": "Samsung Q2 2026 earnings guidance（营收约 KRW 171T、营业利润约 KRW 89.4T；净利未披露）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-earnings-guidance-for-second-quarter-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "派生换算：KRW 171T / 89.4T ÷ USD/KRW 1421.779（暂沿用 2025 年度同口径汇率）= $120.27B / $62.88B；guidance 不是完整季报，net_income 留空",
               "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
               "data_status": "estimate"
             }

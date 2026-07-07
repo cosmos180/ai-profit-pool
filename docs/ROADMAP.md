@@ -39,6 +39,9 @@
 - [~] **D5 · 季度净利补齐 6 家**(🧑 Tiger `get_financial_report` period=季度,最近约 8 季;🤖 merge)
   - 进展:google/microsoft/amazon/oracle 已补最近约 8 季;softbank/tencent 仍缺口。
   - 软银收益最低(净利受投资损益主导)可最后/放弃,规格已注明
+- [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
+  - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
+  - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
 
 ## P2 · 喂前瞻——从看板跨到决策工具的门槛
 

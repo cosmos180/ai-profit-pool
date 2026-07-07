@@ -119,6 +119,7 @@
         "period_end": {"type": "string", "format": "date", "description": "Quarter-end date, ISO 8601 (YYYY-MM-DD). Machine-readable — the Selector uses this to pick the latest quarter and find its ~365-day-ago match. Do NOT use the free-text style of years[].period_end."},
         "label": {"type": "string", "description": "Human label for the quarter, e.g. 'Q1 FY2027' or 'CQ1 2026'. Display only; never parsed for date math (use period_end)."},
         "net_income": {"type": ["number", "null"], "description": "Quarterly net income in meta.unit (USD bn). null = reported-but-unknown / not yet captured. The atom TTM net income rolls from."},
+        "op_income": {"type": ["number", "null"], "description": "Optional quarterly operating income in meta.unit (USD bn). Useful for preliminary earnings/guidance that reports sales and operating profit before net income. Does not power net-income TTM."},
         "revenue": {"type": ["number", "null"], "description": "Optional quarterly revenue in meta.unit (USD bn). Enables TTM revenue / PS-TTM derivation."},
         "sources": {"type": "array", "items": {"$ref": "#/definitions/source"}, "description": "Provenance, mandatory per project invariant — each carries url + data_status."}
       }
