@@ -7,11 +7,28 @@
   import { Safe } from '../lib/safe.js'
   import Trend from '../charts/Trend.svelte'
   import ValuationCard from './ValuationCard.svelte'
+  import SourcesBlock from './SourcesBlock.svelte'
 
   const c = $derived(nav.companyId ? Store.byId(nav.companyId) : null)
 
   const la = $derived(c ? Selectors.latestActual(c) : null)
   const fc = $derived(c ? Selectors.forecastYear(c) : null)
+  const latestPeriod = $derived(c ? Selectors.latestQuarter(c) : null)
+  const latestView = $derived(c ? Selectors.companyMetricView(c, 'latestQuarter') : null)
+  const metricCn = { revenue: '营收', op_income: '经营利润', net_income: '净利' }
+  const missingMetricText = $derived(
+    latestView?.coverage?.missing_metric?.map(m => metricCn[m] || m).join(' / ') || ''
+  )
+  const latestReportCards = $derived.by(() => {
+    if (!latestView?.complete) return []
+    const cards = [
+      { lbl: '营收', val: Fmt.bn(latestView.revenue, 1), sub: `${latestView.label} · 截至 ${latestView.coverage.as_of}`, cls: '', sw: 'var(--past)' },
+      { lbl: '净利润', val: Fmt.bn(latestView.net_income, 1), sub: '最新实际季度', cls: 'accent', sw: 'var(--ok)' },
+    ]
+    if (latestView.op_income != null) cards.push({ lbl: '经营利润', val: Fmt.bn(latestView.op_income, 1), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
+    if (latestPeriod?.gross_profit != null) cards.push({ lbl: '毛利', val: Fmt.bn(latestPeriod.gross_profit, 1), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
+    return cards
+  })
 
   // KPI 卡（原 renderCompany cards 逻辑）。fmt 已在此完成，val/sub 是格式化串。
   const kpis = $derived.by(() => {
@@ -81,6 +98,25 @@
     <span class="segtag {Safe.cls(c.seg_profit)}">{Fmt.segLabel(c.seg_profit)}</span>
   </div>
   {#if c.lead}<p class="lead">{c.lead}</p>{/if}
+
+  <div class="section-h">最新报告期{#if latestView?.label} · {latestView.label}{/if}</div>
+  {#if latestReportCards.length}
+    <div class="kpis">
+      {#each latestReportCards as k}
+        <div class="card kpi {Safe.cls(k.cls)}">
+          <div class="k-lbl"><span class="swatch" style="background:{k.sw}"></span>{k.lbl}</div>
+          <div class="k-val">{k.val}</div>
+          <div class="k-sub">{k.sub}</div>
+        </div>
+      {/each}
+    </div>
+    {#if missingMetricText}
+      <div class="note-block"><b>季度口径说明：</b>{latestView.label} 已录入实际季度营收与净利；{missingMetricText} 未在当前季度原子中录入，诚实留空。</div>
+    {/if}
+    <SourcesBlock year={latestPeriod} />
+  {:else}
+    <div class="note-block" style="margin-top:0"><b>暂无实际季度原子。</b>该公司目前只能看下方年度事实或预测年。</div>
+  {/if}
 
   <div class="section-h">公司层面 · 量级</div>
   <div class="kpis">
