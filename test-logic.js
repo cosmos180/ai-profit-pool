@@ -1314,6 +1314,28 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(Selectors.impliedQ4(msftLike, "FY2025"), null);   // years[] annual 不被 impliedQ4 看见
   assert.equal(Selectors.ttmFromPeriods(msftLike, "net_income").usedImpliedQ4, false);
 
+  // ---- NVDA 型守卫 (1 月末财年): fiscal Q1 (period_end 4 月末) 的 calendar_quarter=Q2, FY≠CY;
+  //      annual 落 calendar Q1 (1 月末); 仅一个 fiscal Q1 → 无 Q2/Q3 → impliedQ4 null →
+  //      CY 只点亮 calendar Q2 槽, 绝不用 FY 冒充 CY, latestQuarter 走该季而非 annual。----
+  const nvdaLike = { id: "nvdalike", status: "populated", periods: [
+    P({ period_id: "nl-fy26-annual", kind: "annual", calendar_quarter: null,
+      period_start: "2025-01-27", period_end: "2026-01-25", calendar_year: 2026,
+      fiscal_year: "FY2026", fiscal_quarter: null, revenue: 215.94, net_income: 120.1 }),
+    P({ period_id: "nl-fy26q1", period_start: "2025-01-27", period_end: "2025-04-27",
+      calendar_year: 2025, calendar_quarter: "Q2", fiscal_year: "FY2026", fiscal_quarter: "Q1",
+      revenue: null, net_income: 18.8 }),
+  ] };
+  const nlq1 = Selectors.periods(nvdaLike).find(p => p.fiscal_quarter === "Q1");
+  assert.equal(nlq1.calendar_quarter, "Q2");                       // 4 月末 → 自然年 Q2
+  assert.notEqual(nlq1.calendar_year, Number(nlq1.fiscal_year.slice(2))); // CY2025 ≠ FY2026
+  assert.equal(Selectors.impliedQ4(nvdaLike, "FY2026"), null);     // 无 Q2/Q3 → 不派 implied
+  const nlCY = Selectors.calendarYear(nvdaLike, 2025);
+  assert.equal(nlCY.complete, false);
+  assert.deepEqual(nlCY.coverage, { Q2: "actual" });               // 只 calendar Q2 槽, 无 FY 冒充
+  assert.deepEqual(nlCY.missing, ["Q1", "Q3", "Q4"]);
+  assert.equal(Selectors.latestQuarter(nvdaLike).net_income, 18.8);// 走季度而非 annual
+  assert.equal(Selectors.fiscalYearFromPeriods(nvdaLike, "FY2026").basis, "annual_report");
+
   // =====================================================================
   // 集成①: calendarYear 用 implied Q4 补全 (自然年公司, 缺 calendar Q4)
   // =====================================================================

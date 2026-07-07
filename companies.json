@@ -383,6 +383,316 @@
             }
           ]
         }
+      ],
+      "periods": [
+        {
+          "period_id": "nvda-fy2024-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2023-01-30",
+          "period_end": "2024-01-28",
+          "calendar_year": 2024,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 60.92,
+          "gross_profit": null,
+          "op_income": 32.97,
+          "net_income": 29.76,
+          "cfo": 28.09,
+          "capex": 1.07,
+          "segments": [
+            {
+              "name": "Data Center 数据中心",
+              "kind": "platform",
+              "revenue": 47.52,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Gaming 游戏",
+              "kind": "platform",
+              "revenue": 10.45,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Professional Visualization 专业可视化",
+              "kind": "platform",
+              "revenue": 1.55,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Automotive 汽车",
+              "kind": "platform",
+              "revenue": 1.09,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "OEM & Other",
+              "kind": "platform",
+              "revenue": 0.31,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "FY2024 业绩（FY2025 新闻稿含上一年对比）",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025",
+              "data_status": "official"
+            },
+            {
+              "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+              "data_status": "estimate"
+            },
+            {
+              "label": "period_start 推导：NVDA 1 月末财年，FY2024 起 = 上一财年 FY2023 末（2023-01-29）+1 天 = 2023-01-30（fy_note 文档化财年界，years[] 未含 FY2023 原子）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "nvda-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-01-29",
+          "period_end": "2025-01-26",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 130.5,
+          "gross_profit": null,
+          "op_income": 81.45,
+          "net_income": 72.88,
+          "cfo": 64.09,
+          "capex": 3.24,
+          "segments": [
+            {
+              "name": "Data Center 数据中心",
+              "kind": "platform",
+              "revenue": 115.19,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Gaming 游戏",
+              "kind": "platform",
+              "revenue": 11.35,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Professional Visualization 专业可视化",
+              "kind": "platform",
+              "revenue": 1.88,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Automotive 汽车",
+              "kind": "platform",
+              "revenue": 1.69,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "OEM & Other",
+              "kind": "platform",
+              "revenue": 0.39,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "FY2025 业绩新闻稿",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2025 10-K（Note 16）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+              "data_status": "estimate"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2024 末（2024-01-28）+1 天 = 2024-01-29",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "nvda-fy2026-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-01-27",
+          "period_end": "2026-01-25",
+          "calendar_year": 2026,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 215.94,
+          "gross_profit": null,
+          "op_income": 130.39,
+          "net_income": 120.1,
+          "cfo": 102.7,
+          "capex": 6.1,
+          "segments": [
+            {
+              "name": "Data Center 数据中心",
+              "kind": "platform",
+              "revenue": 193.74,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Gaming 游戏",
+              "kind": "platform",
+              "revenue": 16.04,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Professional Visualization 专业可视化",
+              "kind": "platform",
+              "revenue": 3.19,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Automotive 汽车",
+              "kind": "platform",
+              "revenue": 2.35,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "OEM & Other",
+              "kind": "platform",
+              "revenue": 0.62,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Q4 & FY2026 业绩新闻稿",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2026 10-K",
+              "url": "https://www.publicnow.com/view/2882BBE40A7C6C824C8A8D4C36B7AE84D3C63264?1772059708=",
+              "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2026 现金流量表，CFO $102.7B / capex（购建固定资产）$6.1B，待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+              "data_status": "estimate"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2025 末（2025-01-26）+1 天 = 2025-01-27",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "nvda-fy2026q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-01-27",
+          "period_end": "2025-04-27",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": null,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 18.8,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "NVIDIA Q1 FY2027 新闻稿（披露去年同季 Q1 FY2026 净利 $18.8B）",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+              "data_status": "official"
+            },
+            {
+              "label": "calendar_quarter 由日期数学得出：period_end 2025-04-27（4 月）落自然年 Q2；fiscal Q1 FY2026 ≠ calendar Q2（NVDA 1 月末财年错位）。period_start = 上一财年 FY2025 末（2025-01-26）+1 天 = 2025-01-27",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "nvda-fy2027q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-01-26",
+          "period_end": "2026-04-26",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2027",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": null,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 58.3,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "NVIDIA Q1 FY2027 新闻稿（GAAP 净利 $58.3B，同比 +211%）",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+              "data_status": "official"
+            },
+            {
+              "label": "calendar_quarter 由日期数学得出：period_end 2026-04-26（4 月）落自然年 Q2；fiscal Q1 FY2027 ≠ calendar Q2。period_start = 上一财年 FY2026 末（2026-01-25）+1 天 = 2026-01-26",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+              "data_status": "derived"
+            }
+          ]
+        }
       ]
     },
     {
@@ -988,6 +1298,288 @@
               "label": "Broadcom Q2 FY2026 业绩新闻稿（GAAP 净利 $9,310M，营收 $22,187M）",
               "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026",
               "data_status": "official"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "period_id": "broadcom-fy2023-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2022-10-31",
+          "period_end": "2023-10-29",
+          "calendar_year": 2023,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2023",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 35.819,
+          "gross_profit": null,
+          "op_income": 16.207,
+          "net_income": 14.082,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "Semiconductor solutions 半导体解决方案",
+              "kind": "platform",
+              "revenue": 28.182,
+              "op_income": 16.486,
+              "op_margin": 0.585,
+              "is_ai": true
+            },
+            {
+              "name": "Infrastructure software 基础设施软件",
+              "kind": "platform",
+              "revenue": 7.637,
+              "op_income": 5.639,
+              "op_margin": 0.738,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Broadcom FY2023 10-K（Segment Information）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016823000096/avgo-20231029.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：Broadcom 10 月末财年，FY2023 起 = 上一财年 FY2022 末（2022-10-30）+1 天 = 2022-10-31（fy_note 文档化财年界，years[] 未含 FY2022 原子）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016823000096/avgo-20231029.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2024-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2023-10-30",
+          "period_end": "2024-11-03",
+          "calendar_year": 2024,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 51.574,
+          "gross_profit": null,
+          "op_income": 13.463,
+          "net_income": 5.895,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "Semiconductor solutions 半导体解决方案",
+              "kind": "platform",
+              "revenue": 30.096,
+              "op_income": 16.759,
+              "op_margin": 0.557,
+              "is_ai": true
+            },
+            {
+              "name": "Infrastructure software 基础设施软件",
+              "kind": "platform",
+              "revenue": 21.478,
+              "op_income": 13.977,
+              "op_margin": 0.651,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Broadcom FY2024 10-K（Segment Information）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016824000139/avgo-20241103.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2023 末（2023-10-29）+1 天 = 2023-10-30",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016824000139/avgo-20241103.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-11-04",
+          "period_end": "2025-11-02",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 63.887,
+          "gross_profit": null,
+          "op_income": 25.484,
+          "net_income": 23.126,
+          "cfo": 27.537,
+          "capex": 0.623,
+          "segments": [
+            {
+              "name": "Semiconductor solutions 半导体解决方案",
+              "kind": "platform",
+              "revenue": 36.858,
+              "op_income": 21.232,
+              "op_margin": 0.576,
+              "is_ai": true
+            },
+            {
+              "name": "Infrastructure software 基础设施软件",
+              "kind": "platform",
+              "revenue": 27.029,
+              "op_income": 20.765,
+              "op_margin": 0.768,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Broadcom FY2025 10-K（Segment Information）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 Q4 业绩新闻稿现金流，CFO $27,537M / capex $623M，待核验）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+              "data_status": "estimate"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2024 末（2024-11-03）+1 天 = 2024-11-04",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2025q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2024-11-04",
+          "period_end": "2025-02-02",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 14.916,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 5.503,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Broadcom Q1 FY2025 业绩新闻稿（GAAP 净利 $5,503M，营收 $14,916M）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2025-financial",
+              "data_status": "official"
+            },
+            {
+              "label": "calendar_quarter 由日期数学得出：period_end 2025-02-02（2 月）落自然年 Q1。period_start = 上一财年 FY2024 末（2024-11-03）+1 天 = 2024-11-04",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2025-financial",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2025q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-02-03",
+          "period_end": "2025-05-04",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 15.004,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 4.965,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Broadcom Q2 FY2025 业绩新闻稿（GAAP 净利 $4,965M，营收 $15,004M）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2025",
+              "data_status": "official"
+            },
+            {
+              "label": "calendar_quarter 由日期数学得出：period_end 2025-05-04（5 月）落自然年 Q2。period_start = 上一季 Q1 FY2025 末（2025-02-02）+1 天 = 2025-02-03",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2026q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-11-03",
+          "period_end": "2026-02-01",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 19.311,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 7.349,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Broadcom Q1 FY2026 业绩新闻稿（GAAP 净利 $7,349M，营收 $19,311M）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "calendar_quarter 由日期数学得出：period_end 2026-02-01（2 月）落自然年 Q1。period_start = 上一财年 FY2025 末（2025-11-02）+1 天 = 2025-11-03",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-02-02",
+          "period_end": "2026-05-03",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 22.187,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 9.31,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Broadcom Q2 FY2026 业绩新闻稿（GAAP 净利 $9,310M，营收 $22,187M）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "calendar_quarter 由日期数学得出：period_end 2026-05-03（5 月）落自然年 Q2。period_start = 上一季 Q1 FY2026 末（2026-02-01）+1 天 = 2026-02-02",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026",
+              "data_status": "derived"
             }
           ]
         }
@@ -5752,6 +6344,149 @@
               "label": "Arm FY2026 Form 20-F filed 2026-05-26（FY2026 revenue $4,920M, gross profit $4,799M, operating income $900M, net income $904M; License $2,307M / Royalty $2,613M; CFO $1,524M, capex $545M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
               "data_status": "official"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "period_id": "arm-fy2024-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2023-04-01",
+          "period_end": "2024-03-31",
+          "calendar_year": 2024,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 3.233,
+          "gross_profit": null,
+          "op_income": 0.111,
+          "net_income": 0.306,
+          "cfo": 1.09,
+          "capex": 0.092,
+          "segments": [
+            {
+              "name": "License and other revenue 授权及其他收入",
+              "kind": "platform",
+              "revenue": 1.431,
+              "op_income": null,
+              "op_margin": null
+            },
+            {
+              "name": "Royalty revenue 版税收入",
+              "kind": "platform",
+              "revenue": 1.802,
+              "op_income": null,
+              "op_margin": null
+            }
+          ],
+          "sources": [
+            {
+              "label": "Arm FY2026 Form 20-F filed 2026-05-26（comparative statements: FY2024 revenue $3,233M, gross profit $3,079M, operating income $111M, net income $306M; License $1,431M / Royalty $1,802M; CFO $1,090M, capex $92M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：Arm 3 月末财年（fy_note: FY2024 = 2023-04-01 至 2024-03-31），起 = 上一财年 FY2023 末（2023-03-31）+1 天 = 2023-04-01（years[] 未含 FY2023 原子）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "arm-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-04-01",
+          "period_end": "2025-03-31",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 4.007,
+          "gross_profit": null,
+          "op_income": 0.831,
+          "net_income": 0.792,
+          "cfo": 0.397,
+          "capex": 0.219,
+          "segments": [
+            {
+              "name": "License and other revenue 授权及其他收入",
+              "kind": "platform",
+              "revenue": 1.839,
+              "op_income": null,
+              "op_margin": null
+            },
+            {
+              "name": "Royalty revenue 版税收入",
+              "kind": "platform",
+              "revenue": 2.168,
+              "op_income": null,
+              "op_margin": null
+            }
+          ],
+          "sources": [
+            {
+              "label": "Arm FY2026 Form 20-F filed 2026-05-26（comparative statements: FY2025 revenue $4,007M, gross profit $3,886M, operating income $831M, net income $792M; License $1,839M / Royalty $2,168M; CFO $397M, capex $219M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2024 末（2024-03-31）+1 天 = 2024-04-01",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "arm-fy2026-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "calendar_year": 2026,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 4.92,
+          "gross_profit": null,
+          "op_income": 0.9,
+          "net_income": 0.904,
+          "cfo": 1.524,
+          "capex": 0.545,
+          "segments": [
+            {
+              "name": "License and other revenue 授权及其他收入",
+              "kind": "platform",
+              "revenue": 2.307,
+              "op_income": null,
+              "op_margin": null
+            },
+            {
+              "name": "Royalty revenue 版税收入",
+              "kind": "platform",
+              "revenue": 2.613,
+              "op_income": null,
+              "op_margin": null
+            }
+          ],
+          "sources": [
+            {
+              "label": "Arm FY2026 Form 20-F filed 2026-05-26（FY2026 revenue $4,920M, gross profit $4,799M, operating income $900M, net income $904M; License $2,307M / Royalty $2,613M; CFO $1,524M, capex $545M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2025 末（2025-03-31）+1 天 = 2025-04-01",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
+              "data_status": "derived"
             }
           ]
         }
