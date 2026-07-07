@@ -16,11 +16,12 @@
 
 ## P0 · 完成口径换血(消灭混合态)——当前最大可信度漏洞
 
-背景:已拍板「全量迁真实」,但目前**仅 tsmc/FY2025 是财报官方口径**,其余 12 家仍是情景/混合来源。
-混合态每停留一天,核心视图(迁移图/AI 池/龙头占比)可信度打一天折扣。
+背景:已拍板「全量迁真实」。云四家与 ARM 已明显推进到 official 主表口径,但非 SEC 公司、部分历史财年与 TSMC FY2024 偏差仍需继续收敛。
+混合态每停留一天,核心视图(迁移图/AI 池/龙头占比)可信度都会打折扣。
 
-- [ ] **D1 · 12 家迁真实口径**(🧑 财报 PDF 丢进来 或 Tiger skill 按 `DATA-SPEC-tiger.md` 吐 JSON;🤖 提取/对账/merge)
-  - 批次优先级:①云四家 google/microsoft/amazon/oracle(10-K 顺带分部经营利润,喂 D4)→ ②存储 samsung/micron/skhynix + 设计 nvda/broadcom → ③其余 asml/softbank/tencent
+- [~] **D1 · 12 家迁真实口径**(🧑 财报 PDF 丢进来 或 Tiger skill 按 `DATA-SPEC-tiger.md` 吐 JSON;🤖 提取/对账/merge)
+  - 进展:云四家 google/microsoft/amazon/oracle 已用 Dayu/SEC 补到 official 年度/季度主表;ARM 已补 official。后续优先处理非 SEC 与 TSMC FY2024 官方偏差。
+  - 批次优先级:①云四家 google/microsoft/amazon/oracle(已完成主表;oracle 缺云分部经营利润)→ ②存储 samsung/micron/skhynix + 设计 nvda/broadcom → ③其余 asml/softbank/tencent
   - 每家要求:actual 年(营收/毛利率/经营利润/净利/capex/CFO)+ 平台/分部拆分 + 来源标注;**整批换,不留混合**
 - [ ] **D2 · TSMC FY2024 官方修正**(🧑 需 FY2024 年报/20-F 的平台拆分;🤖 提取)
   - 已知偏差:官方 rev 90.08 / ni 36.52 vs 库内 88.268 / 35.327;上次因缺 FY2024 平台拆分被对账闸门正确拦回
@@ -32,11 +33,11 @@
 背景:首页 $291B AI 池 **100% proxy**(营收占比冒充利润占比,零 sourced);
 而 google/microsoft/amazon 的**分部经营利润已在库里**(seg_profit=yes),材料早有、只差用起来。
 
-- [ ] **D4 · 云厂 AI 归因 proxy→sourced**(🤖 架构师定口径 + 工程师落地;🧑 确认口径)
-  - 用已录云分部经营利润推 `ai_profit_share`(带 `ai_share_source`,data_status=derived/estimate)
-  - 先 google/microsoft/amazon 三家;oracle 分部利润未披露(seg_profit=no)→ 留 proxy
-- [ ] **D5 · 季度净利补齐 6 家**(🧑 Tiger `get_financial_report` period=季度,最近约 8 季;🤖 merge)
-  - 缺口:softbank/tencent/google/microsoft/amazon/oracle → TTM 柱云环节现为 0
+- [x] **D4 · 云厂 AI 归因 proxy→sourced**(🤖 架构师定口径 + 工程师落地;🧑 确认口径)
+  - 已用 FY2025/FY2026 已录云分部经营利润推 `ai_profit_share`(带 `ai_share_source`,data_status=derived):google/microsoft/amazon。
+  - 口径:云分部经营利润 / 公司总经营利润,是 cloud/AI infrastructure proxy,不是公司披露的 AI-only profit;oracle 分部利润未披露→ 留 proxy。
+- [~] **D5 · 季度净利补齐 6 家**(🧑 Tiger `get_financial_report` period=季度,最近约 8 季;🤖 merge)
+  - 进展:google/microsoft/amazon/oracle 已补最近约 8 季;softbank/tencent 仍缺口。
   - 软银收益最低(净利受投资损益主导)可最后/放弃,规格已注明
 
 ## P2 · 喂前瞻——从看板跨到决策工具的门槛
@@ -50,8 +51,8 @@
 
 ## P3 · 工程加固(小而防烂,🤖 团队直接做,不依赖数据)
 
-- [ ] **E1 · validate.py TODAY 去硬编码**——现钉死 2026-06-30,随真实时间流逝新鲜度检查会失真;改真实日期(一行,防「悄悄坏」)
-- [ ] **E2 · 测试拆分:逻辑回归 vs 数据快照**——现每次数据更新都要手改硬编码断言(TSMC 已痛过);拆开后数据刷新不再碰测试文件,是 D1 批量换血的前置减摩
+- [x] **E1 · validate.py TODAY 去硬编码**——已改为真实 `date.today()`;quote 新鲜度随真实日期滚动。
+- [x] **E2 · 测试拆分:逻辑回归 vs 数据快照**——已拆为 `test-logic.js` + `test-snapshot.js`;数据刷新用快照更新,逻辑回归保持稳定。
 - [ ] **E3 · FX 口径统一**——各公司历史条目汇率来源异质(都有标注、不算错);随 D1 换血顺手统一为「公司隐含均汇优先,否则期间均汇,来源注明」
 
 ## P4 · 产品决策(不排期,需要用户拍板后才动)

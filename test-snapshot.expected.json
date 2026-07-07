@@ -463,8 +463,8 @@
         "segments": true
       },
       "aiShare": {
-        "value": 0.145729,
-        "basis": "proxy"
+        "value": 0.107797,
+        "basis": "sourced"
       }
     },
     "microsoft": {
@@ -505,8 +505,8 @@
         "segments": true
       },
       "aiShare": {
-        "value": 0.377195,
-        "basis": "proxy"
+        "value": 0.346921,
+        "basis": "sourced"
       }
     },
     "amazon": {
@@ -547,8 +547,8 @@
         "segments": true
       },
       "aiShare": {
-        "value": 0.179552,
-        "basis": "proxy"
+        "value": 0.570253,
+        "basis": "sourced"
       }
     },
     "oracle": {
@@ -637,17 +637,17 @@
     }
   },
   "aiPool": {
-    "total": 291.289165,
+    "total": 313.538513,
     "n": 13,
     "N": 14,
     "basisCount": {
-      "sourced": 0,
-      "proxy": 13
+      "sourced": 3,
+      "proxy": 10
     },
     "byStage": {
       "design": {
         "value": 121.094924,
-        "share": 0.415721,
+        "share": 0.38622,
         "companies": [
           {
             "id": "nvda",
@@ -667,7 +667,7 @@
       },
       "foundry": {
         "value": 32.02198,
-        "share": 0.109932,
+        "share": 0.102131,
         "companies": [
           {
             "id": "tsmc",
@@ -680,7 +680,7 @@
       },
       "memory": {
         "value": 44.43246,
-        "share": 0.152537,
+        "share": 0.141713,
         "companies": [
           {
             "id": "samsung",
@@ -707,7 +707,7 @@
       },
       "equipment": {
         "value": 3.856615,
-        "share": 0.01324,
+        "share": 0.0123,
         "companies": [
           {
             "id": "asml",
@@ -720,7 +720,7 @@
       },
       "invest": {
         "value": 2.568954,
-        "share": 0.008819,
+        "share": 0.008193,
         "companies": [
           {
             "id": "softbank",
@@ -733,7 +733,7 @@
       },
       "app": {
         "value": 6.96255,
-        "share": 0.023903,
+        "share": 0.022206,
         "companies": [
           {
             "id": "tencent",
@@ -745,29 +745,29 @@
         ]
       },
       "cloud": {
-        "value": 80.351681,
-        "share": 0.275849,
+        "value": 102.60103,
+        "share": 0.327236,
         "companies": [
           {
             "id": "google",
             "name": "Alphabet 谷歌",
-            "ni": 19.261039,
-            "aiShare": 0.145729,
-            "basis": "proxy"
+            "ni": 14.247529,
+            "aiShare": 0.107797,
+            "basis": "sourced"
           },
           {
             "id": "microsoft",
             "name": "Microsoft 微软",
-            "ni": 38.410563,
-            "aiShare": 0.377195,
-            "basis": "proxy"
+            "ni": 35.327659,
+            "aiShare": 0.346921,
+            "basis": "sourced"
           },
           {
             "id": "amazon",
             "name": "Amazon 亚马逊",
-            "ni": 13.945789,
-            "aiShare": 0.179552,
-            "basis": "proxy"
+            "ni": 44.291551,
+            "aiShare": 0.570253,
+            "basis": "sourced"
           },
           {
             "id": "oracle",
@@ -783,13 +783,13 @@
   "migration": [
     {
       "label": "≈2023",
-      "total": 95.597275,
+      "total": 103.241374,
       "n": 12,
       "N": 13,
       "stages": {
         "design": {
           "value": 34.293537,
-          "share": 0.358729,
+          "share": 0.332169,
           "companies": [
             {
               "id": "nvda",
@@ -805,7 +805,7 @@
         },
         "foundry": {
           "value": 11.960655,
-          "share": 0.125115,
+          "share": 0.115851,
           "companies": [
             {
               "id": "tsmc",
@@ -816,7 +816,7 @@
         },
         "memory": {
           "value": -7.695663,
-          "share": -0.080501,
+          "share": -0.07454,
           "companies": [
             {
               "id": "micron",
@@ -832,7 +832,7 @@
         },
         "equipment": {
           "value": 2.806086,
-          "share": 0.029353,
+          "share": 0.02718,
           "companies": [
             {
               "id": "asml",
@@ -843,7 +843,7 @@
         },
         "invest": {
           "value": -0.103302,
-          "share": -0.001081,
+          "share": -0.001001,
           "companies": [
             {
               "id": "softbank",
@@ -854,7 +854,7 @@
         },
         "app": {
           "value": 3.649871,
-          "share": 0.03818,
+          "share": 0.035353,
           "companies": [
             {
               "id": "tencent",
@@ -864,23 +864,23 @@
           ]
         },
         "cloud": {
-          "value": 50.686091,
-          "share": 0.530204,
+          "value": 58.33019,
+          "share": 0.564989,
           "companies": [
             {
               "id": "google",
               "name": "Alphabet 谷歌",
-              "ni": 7.94332
+              "ni": 7.95488
             },
             {
               "id": "microsoft",
               "name": "Microsoft 微软",
-              "ni": 30.016933
+              "ni": 25.10355
             },
             {
               "id": "amazon",
               "name": "Amazon 亚马逊",
-              "ni": 4.804025
+              "ni": 17.349948
             },
             {
               "id": "oracle",
@@ -893,13 +893,13 @@
     },
     {
       "label": "≈2024",
-      "total": 186.649341,
+      "total": 201.566475,
       "n": 13,
       "N": 14,
       "stages": {
         "design": {
           "value": 67.76989,
-          "share": 0.363087,
+          "share": 0.336216,
           "companies": [
             {
               "id": "nvda",
@@ -915,7 +915,7 @@
         },
         "foundry": {
           "value": 18.016898,
-          "share": 0.096528,
+          "share": 0.089384,
           "companies": [
             {
               "id": "tsmc",
@@ -926,7 +926,7 @@
         },
         "memory": {
           "value": 22.939949,
-          "share": 0.122904,
+          "share": 0.113808,
           "companies": [
             {
               "id": "samsung",
@@ -947,7 +947,7 @@
         },
         "equipment": {
           "value": 2.412878,
-          "share": 0.012927,
+          "share": 0.011971,
           "companies": [
             {
               "id": "asml",
@@ -958,7 +958,7 @@
         },
         "invest": {
           "value": 0.628622,
-          "share": 0.003368,
+          "share": 0.003119,
           "companies": [
             {
               "id": "softbank",
@@ -969,7 +969,7 @@
         },
         "app": {
           "value": 4.964004,
-          "share": 0.026595,
+          "share": 0.024627,
           "companies": [
             {
               "id": "tencent",
@@ -979,23 +979,23 @@
           ]
         },
         "cloud": {
-          "value": 69.917099,
-          "share": 0.374591,
+          "value": 84.834232,
+          "share": 0.420875,
           "companies": [
             {
               "id": "google",
               "name": "Alphabet 谷歌",
-              "ni": 12.365081
+              "ni": 10.79242
             },
             {
               "id": "microsoft",
               "name": "Microsoft 微软",
-              "ni": 37.883932
+              "ni": 30.576229
             },
             {
               "id": "amazon",
               "name": "Amazon 亚马逊",
-              "ni": 9.988852
+              "ni": 33.78635
             },
             {
               "id": "oracle",
@@ -1008,13 +1008,13 @@
     },
     {
       "label": "≈2025",
-      "total": 291.289165,
+      "total": 313.538513,
       "n": 13,
       "N": 14,
       "stages": {
         "design": {
           "value": 121.094924,
-          "share": 0.415721,
+          "share": 0.38622,
           "companies": [
             {
               "id": "nvda",
@@ -1030,7 +1030,7 @@
         },
         "foundry": {
           "value": 32.02198,
-          "share": 0.109932,
+          "share": 0.102131,
           "companies": [
             {
               "id": "tsmc",
@@ -1041,7 +1041,7 @@
         },
         "memory": {
           "value": 44.43246,
-          "share": 0.152537,
+          "share": 0.141713,
           "companies": [
             {
               "id": "samsung",
@@ -1062,7 +1062,7 @@
         },
         "equipment": {
           "value": 3.856615,
-          "share": 0.01324,
+          "share": 0.0123,
           "companies": [
             {
               "id": "asml",
@@ -1073,7 +1073,7 @@
         },
         "invest": {
           "value": 2.568954,
-          "share": 0.008819,
+          "share": 0.008193,
           "companies": [
             {
               "id": "softbank",
@@ -1084,7 +1084,7 @@
         },
         "app": {
           "value": 6.96255,
-          "share": 0.023903,
+          "share": 0.022206,
           "companies": [
             {
               "id": "tencent",
@@ -1094,23 +1094,23 @@
           ]
         },
         "cloud": {
-          "value": 80.351681,
-          "share": 0.275849,
+          "value": 102.60103,
+          "share": 0.327236,
           "companies": [
             {
               "id": "google",
               "name": "Alphabet 谷歌",
-              "ni": 19.261039
+              "ni": 14.247529
             },
             {
               "id": "microsoft",
               "name": "Microsoft 微软",
-              "ni": 38.410563
+              "ni": 35.327659
             },
             {
               "id": "amazon",
               "name": "Amazon 亚马逊",
-              "ni": 13.945789
+              "ni": 44.291551
             },
             {
               "id": "oracle",
@@ -1124,28 +1124,28 @@
   ],
   "leader": {
     "id": "nvda",
-    "share": 0.369917,
-    "pool": 291.289165,
+    "share": 0.343667,
+    "pool": 313.538513,
     "n": 13,
     "N": 14,
     "basisCount": {
-      "sourced": 0,
-      "proxy": 13
+      "sourced": 3,
+      "proxy": 10
     }
   },
   "yoy": {
-    "value": 0.560623,
+    "value": 0.555509,
     "migLastLabel": "≈2025",
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 401.380593,
+    "total": 434.498261,
     "n": 11,
     "asOfSpreadDays": 89,
     "stages": {
       "design": {
         "value": 160.105816,
-        "share": 0.398888,
+        "share": 0.368484,
         "companies": [
           {
             "id": "nvda",
@@ -1165,7 +1165,7 @@
       },
       "foundry": {
         "value": 36.151604,
-        "share": 0.090068,
+        "share": 0.083203,
         "companies": [
           {
             "id": "tsmc",
@@ -1178,7 +1178,7 @@
       },
       "memory": {
         "value": 92.095467,
-        "share": 0.229447,
+        "share": 0.211958,
         "companies": [
           {
             "id": "samsung",
@@ -1205,7 +1205,7 @@
       },
       "equipment": {
         "value": 4.051968,
-        "share": 0.010095,
+        "share": 0.009326,
         "companies": [
           {
             "id": "asml",
@@ -1227,29 +1227,29 @@
         "companies": []
       },
       "cloud": {
-        "value": 108.975739,
-        "share": 0.271502,
+        "value": 142.093407,
+        "share": 0.327029,
         "companies": [
           {
             "id": "google",
             "name": "Alphabet 谷歌",
-            "ttm": 27.827443,
+            "ttm": 20.584161,
             "asOf": "2026-03-31",
-            "aiShare": 0.145729
+            "aiShare": 0.107797
           },
           {
             "id": "microsoft",
             "name": "Microsoft 微软",
-            "ttm": 49.540468,
+            "ttm": 45.564257,
             "asOf": "2026-03-31",
-            "aiShare": 0.377195
+            "aiShare": 0.346921
           },
           {
             "id": "amazon",
             "name": "Amazon 亚马逊",
-            "ttm": 20.375719,
+            "ttm": 64.712881,
             "asOf": "2026-03-31",
-            "aiShare": 0.179552
+            "aiShare": 0.570253
           },
           {
             "id": "oracle",
