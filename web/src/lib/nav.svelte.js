@@ -5,11 +5,15 @@ class Nav {
   companyId = $state(null)
   fy = $state(null)
   homeMetric = $state('revenue')
+  // 登记表报告镜头（口径，非指标）：'auto' = 组件按覆盖度自动选（默认 TTM，不足退最新季），
+  // 或显式 'latestQuarter' | 'ttm' | 'calendarYear' | 'fiscalYear'。仅作用于登记表数值/角标区。
+  reportLens = $state('auto')
 
   goHome() { this.companyId = null; this.fy = null; this.view = 'home'; scrollTop() }
   goCompany(id) { this.companyId = id; this.fy = null; this.view = 'company'; scrollTop() }
   goDetail(id, fy) { this.companyId = id; this.fy = fy; this.view = 'detail'; scrollTop() }
   setHomeMetric(m) { this.homeMetric = m }
+  setReportLens(l) { this.reportLens = l }
 }
 
 function scrollTop() {

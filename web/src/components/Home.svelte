@@ -56,6 +56,44 @@
     return { show: false }
   })
 
+  // ---- 报告镜头（口径，非指标）：只作用于登记表下方的「按镜头」数值/角标区 ----
+  // 迁移图 / AI 池 hero / 估值卡仍走 years[] 口径（Phase 5 全量迁完才切；本轮克制不动）。
+  const lensModes = [
+    { k: 'latestQuarter', label: '最新季' }, { k: 'ttm', label: 'TTM' },
+    { k: 'calendarYear', label: '自然年' }, { k: 'fiscalYear', label: '财年' },
+  ]
+  const lensLabel = { latestQuarter: '最新季', ttm: 'TTM', calendarYear: '自然年', fiscalYear: '财年' }
+  const AUTO_LENS = 'ttm'          // 默认偏好口径
+  const LENS_MIN_RATIO = 1 / 3     // TTM 完整覆盖 < 1/3 → 自动退回最新季（口径不足以横比）
+  // 各镜头完整家数（呈现层计数，非财务算术——同 ranked/maxV 的排序/取极值性质）。
+  const lensCompleteN = mode => pop.reduce((n, c) => n + (Selectors.companyMetricView(c, mode).complete ? 1 : 0), 0)
+  const ttmDone = $derived(lensCompleteN('ttm'))
+  const autoLens = $derived(ttmDone / Math.max(pop.length, 1) >= LENS_MIN_RATIO ? AUTO_LENS : 'latestQuarter')
+  const effLens = $derived(nav.reportLens === 'auto' ? autoLens : nav.reportLens)
+  const autoFellBack = $derived(nav.reportLens === 'auto' && autoLens !== AUTO_LENS)
+
+  // 镜头 coverage 文案（纯呈现：把 coverage.reason/标记翻成人话）。
+  const METRIC_CN = { revenue: '营收', op_income: '经营利润', net_income: '净利' }
+  const lensReason = v => {
+    const r = v.coverage.reason
+    if (r === 'not_migrated') return '尚未迁入 periods'
+    if (r === 'missing_quarters') return '缺 ' + v.coverage.missing_quarters.join('/')
+    if (r === 'gap') return 'TTM 缺季（不连续）'
+    if (r === 'insufficient_quarters') return v.mode === 'ttm' ? '季度不足四季' : '季度不足'
+    if (r === 'no_actual_quarter') return '无实际季度'
+    if (r === 'no_fiscal_year') return '无年度事实'
+    return null
+  }
+  // 完整行的角标（Q4 implied / 自然年近似 / 缺某指标）——纯呈现。
+  const lensBadges = v => {
+    const b = []
+    if (v.coverage.used_implied_q4) b.push({ txt: 'Q4 implied', cls: 'impl', tip: '该季 Q4 由「年度事实 − 前三财季」派生（implied Q4）' })
+    if (v.mode === 'calendarYear' && v.coverage.strict === false) b.push({ txt: '自然年近似', cls: 'proxy', tip: '四季未严格拼满 1/1~12/31，为报告期近似（strict=false）' })
+    if (v.mode === 'fiscalYear' && v.coverage.basis === 'annual_report') b.push({ txt: '年度事实', cls: 'ok', tip: '来自 kind=annual 官方全年事实（优于季度求和）' })
+    for (const m of v.coverage.missing_metric) b.push({ txt: '缺' + METRIC_CN[m], cls: 'miss', tip: m + ' 在该口径下缺失，诚实留空' })
+    return b
+  }
+
   // 每行呈现数据（取值来自 Selectors，barW 是布局百分比非财务量）。
   const rows = $derived(ranked.map(c => {
     const la = Selectors.latestActual(c)
@@ -63,16 +101,41 @@
     const ry = la ? Selectors.revYoY(c, la.fy) : null
     const val = Selectors.homeMetric(c, key)
     const barVal = val ?? 0   // 仅用于 bar 宽度渲染，非把 null 当业务值展示（数值列走 Fmt 渲 "—"）
+    const view = Selectors.companyMetricView(c, effLens)   // 当前镜头的视图模型（口径）
     return {
-      c, la, fc, ry, val,
+      c, la, fc, ry, val, view,
+      reason: lensReason(view),
+      badges: lensBadges(view),
       rel: relBadge(c),   // 估值倍数排序时的同环节相对角标（否则 null）
       barW: Math.max(0, Math.min(100, barVal / maxV * 100)).toFixed(1),
     }
   }))
+  const lensDone = $derived(rows.filter(r => r.view.complete).length)
 </script>
 
 <h1 class="title">公司对比</h1>
 <p class="lead">数据已从界面剥离到 <code style="font-family:var(--mono)">companies.json</code>（受 <code style="font-family:var(--mono)">schema.json</code> 约束、由 <code style="font-family:var(--mono)">validate.py</code> 把关）。此页只负责<b>呈现与跳转</b>；一切派生（利润率、同比、对账）由数据访问层现算。</p>
+
+<div class="lens-bar" role="group" aria-label="报告镜头">
+  <div class="lens-head">
+    <span class="lens-eyebrow">报告镜头</span>
+    <span class="lens-cur">{lensLabel[effLens]}</span>
+    <span class="lens-badge" title="按当前镜头，口径完整（含净利）的公司数 / 已补录公司数">{lensDone}/{pop.length} 完整</span>
+    {#if nav.reportLens === 'auto'}<span class="lens-auto">自动</span>{/if}
+  </div>
+  <div class="lens-modes">
+    {#each lensModes as m (m.k)}
+      <button class="lensbtn" aria-pressed={effLens === m.k} onclick={() => nav.setReportLens(m.k)}>{m.label}</button>
+    {/each}
+    {#if nav.reportLens !== 'auto'}
+      <button class="lensbtn reset" onclick={() => nav.setReportLens('auto')} title="恢复按覆盖度自动选镜头">↺ 自动</button>
+    {/if}
+  </div>
+  <div class="lens-note">
+    此镜头只作用于<b>下方登记表</b>的「按镜头」数值/角标区；迁移图、AI 利润池、估值卡仍走年度（years[]）口径。
+    {#if autoFellBack}<br><b>默认 TTM 覆盖不足</b>（TTM 完整 {ttmDone}/{pop.length}，低于 1/3），已自动退回<b>最新季</b>——当前仅三星/美光迁入 <code style="font-family:var(--mono)">periods</code>，其余公司此镜头留空并标「尚未迁入 periods」。{/if}
+  </div>
+</div>
 
 <div class="section-h">覆盖情况</div>
 <div class="cover">
@@ -138,6 +201,17 @@
           <span class="tagx">{r.c.region}</span>
           <span class="tagx">{r.c.sector}</span>
           <span class="segtag {Safe.cls(r.c.seg_profit)}">{Fmt.segLabel(r.c.seg_profit)}</span>
+        </div>
+        <div class="lensval {r.view.complete ? '' : 'muted'}">
+          {#if r.view.complete}
+            <span class="lv-num num">{Fmt.bn(r.view.net_income, 1)}</span>
+            <span class="lv-lab">净利 · {lensLabel[effLens]}{#if r.view.label} {r.view.label}{/if}</span>
+            {#each r.badges as b}<span class="lv-badge {b.cls}" title={b.tip}>{b.txt}</span>{/each}
+          {:else}
+            <span class="lv-num muted">—</span>
+            <span class="lv-lab">{lensLabel[effLens]}</span>
+            {#if r.reason}<span class="lv-badge miss" title="该镜头下此口径不可得，诚实留空（不伪造）">{r.reason}</span>{/if}
+          {/if}
         </div>
       </div>
       <div class="cmetric">

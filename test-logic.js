@@ -1417,4 +1417,173 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(ttmRealQ4.value, 45);                  // 真实 Q4(9) + 10+12+14
 }
 
+// =====================================================================
+// Phase 4 view model: companyMetricView(c, mode, opts)
+//   四镜头基本形状 / 无 periods 公司诚实空态 / 缺 AI share / implied Q4 标记透传 /
+//   coverage 三分(missing_periods·missing_metric·missing_ai_share) / null 安全。
+//   合成数据、数据无关。
+// =====================================================================
+{
+  const P = (o) => ({
+    kind: "quarter", status: "actual", period_start: null,
+    fiscal_year: null, fiscal_quarter: null, currency: "USD", fx_to_usd: 1,
+    revenue: null, gross_profit: null, op_income: null, net_income: null,
+    cfo: null, capex: null, segments: [], sources: [], ...o,
+  });
+
+  // 自然年公司: FY2025 annual + Q1-Q3 (→ implied Q4) + FY2026 Q1-Q3, 公司级 ai_profit_share=0.5。
+  const AN = P({ period_id: "an25", kind: "annual", calendar_quarter: null,
+    period_start: "2025-01-01", period_end: "2025-12-31", calendar_year: 2025,
+    fiscal_year: "FY2025", revenue: 100, op_income: 30, net_income: 20, cfo: 40, capex: 10,
+    sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] });
+  const FQ = (fq, pe, ps, cy, cq, fy, rev, op, ni) => P({ period_id: fy + fq, period_end: pe, period_start: ps,
+    calendar_year: cy, calendar_quarter: cq, fiscal_year: fy, fiscal_quarter: fq,
+    revenue: rev, op_income: op, net_income: ni, cfo: null, capex: null,
+    sources: [{ label: fq, url: "https://x/" + fy + fq, data_status: "official" }] });
+  const co = { id: "vm", name: "VM", status: "populated", ai_profit_share: 0.5,
+    years: [{ fy: "FY2025", status: "actual", revenue: 100, net_income: 20 }],
+    periods: [
+      AN,
+      FQ("Q1", "2025-03-31", "2025-01-01", 2025, "Q1", "FY2025", 10, 3, 2),
+      FQ("Q2", "2025-06-30", "2025-04-01", 2025, "Q2", "FY2025", 20, 6, 4),
+      FQ("Q3", "2025-09-30", "2025-07-01", 2025, "Q3", "FY2025", 30, 9, 6),
+      FQ("Q1", "2026-03-31", "2026-01-01", 2026, "Q1", "FY2026", 12, 4, 3),
+      FQ("Q2", "2026-06-30", "2026-04-01", 2026, "Q2", "FY2026", 15, 5, 4),
+      FQ("Q3", "2026-09-30", "2026-07-01", 2026, "Q3", "FY2026", 18, 6, 5),
+    ] };
+
+  // ---- latestQuarter: 最新实际季 (2026 Q3) ----
+  const lq = Selectors.companyMetricView(co, "latestQuarter");
+  assert.equal(lq.mode, "latestQuarter");
+  assert.equal(lq.label, "2026Q3");
+  assert.equal(lq.complete, true);
+  assert.equal(lq.revenue, 18); assert.equal(lq.op_income, 6); assert.equal(lq.net_income, 5);
+  assert.equal(lq.coverage.source, "periods");
+  assert.equal(lq.coverage.missing_periods, false);
+  assert.deepEqual(lq.coverage.missing_metric, []);
+  assert.equal(lq.coverage.as_of, "2026-09-30");
+  assert.equal(lq.aiShare, 0.5);
+  assert.equal(lq.aiWeightedNetIncome, 2.5);          // 5 × 0.5
+
+  // ---- ttm: implied FY2025 Q4(8) + FY2026 Q1/Q2/Q3(3+4+5) 连号 → net_income 20 ----
+  const tt = Selectors.companyMetricView(co, "ttm");
+  assert.equal(tt.mode, "ttm");
+  assert.equal(tt.label, "TTM");
+  assert.equal(tt.complete, true);
+  assert.equal(tt.net_income, 20);                    // 8 + 3 + 4 + 5
+  assert.equal(tt.revenue, 85);                       // impliedQ4 rev 40 + 12 + 15 + 18
+  assert.equal(tt.op_income, 27);                     // impliedQ4 op 12 + 4 + 5 + 6
+  assert.equal(tt.coverage.used_implied_q4, true);    // implied Q4 标记透传
+  assert.deepEqual(tt.coverage.quarter_basis, ["implied_q4", "actual", "actual", "actual"]);
+  assert.equal(tt.coverage.as_of, "2026-09-30");
+  assert.equal(tt.aiWeightedNetIncome, 10);           // 20 × 0.5
+  assert.ok(tt.warnings.some(w => /implied Q4/.test(w)));
+
+  // ---- calendarYear(2025): Q1-Q3 actual + implied Q4 → complete, strict, implied 标记 ----
+  const cy = Selectors.companyMetricView(co, "calendarYear", { year: 2025 });
+  assert.equal(cy.mode, "calendarYear");
+  assert.equal(cy.label, "CY2025");
+  assert.equal(cy.complete, true);
+  assert.equal(cy.revenue, 100); assert.equal(cy.net_income, 20);
+  assert.equal(cy.coverage.used_implied_q4, true);    // Q4 由 implied 补 → 标记透传
+  assert.equal(cy.coverage.strict, true);             // 显式 period_start 拼满自然年
+  assert.equal(cy.coverage.coverage_start, "2025-01-01");
+  assert.equal(cy.coverage.coverage_end, "2025-12-31");
+  assert.ok(cy.warnings.some(w => /implied/.test(w)));
+  assert.equal(cy.aiWeightedNetIncome, 10);
+
+  // ---- calendarYear(2026): 仅 Q1-Q3, 无 annual FY2026 → 缺 Q4 → 不完整, 灰显带原因 ----
+  const cy26 = Selectors.companyMetricView(co, "calendarYear", { year: 2026 });
+  assert.equal(cy26.complete, false);
+  assert.equal(cy26.net_income, null);
+  assert.equal(cy26.coverage.missing_periods, true);
+  assert.deepEqual(cy26.coverage.missing_quarters, ["Q4"]);
+  assert.equal(cy26.coverage.reason, "missing_quarters");
+  assert.equal(cy26.aiWeightedNetIncome, null);       // 净利 null → 加权 null (绝不 0)
+
+  // ---- fiscalYear: 默认取有 annual 的最新 FY (FY2025) → annual_report, complete ----
+  const fy = Selectors.companyMetricView(co, "fiscalYear");
+  assert.equal(fy.mode, "fiscalYear");
+  assert.equal(fy.label, "FY2025");
+  assert.equal(fy.complete, true);
+  assert.equal(fy.coverage.basis, "annual_report");
+  assert.equal(fy.revenue, 100); assert.equal(fy.net_income, 20);
+  assert.equal(fy.aiWeightedNetIncome, 10);
+
+  // 显式请求无年度事实的 FY2026 → quarter_sum 仅 3 季 → 不完整
+  const fy26 = Selectors.companyMetricView(co, "fiscalYear", { fy: "FY2026" });
+  assert.equal(fy26.complete, false);
+  assert.equal(fy26.coverage.basis, "quarter_sum");
+  assert.equal(fy26.coverage.reason, "insufficient_quarters");
+  assert.equal(fy26.net_income, null);
+
+  // =====================================================================
+  // 无 periods 公司: 诚实空态 (missing_periods + not_migrated), 不从 years[]/quarters[] 假装
+  // =====================================================================
+  const legacyCo = { id: "leg", name: "LEG", status: "populated", ai_profit_share: 0.4,
+    years: [{ fy: "FY2025", status: "actual", revenue: 100, net_income: 20 }],
+    quarters: [
+      { period_end: "2025-03-31", label: "Q1", net_income: 5, revenue: 25, sources: [] },
+      { period_end: "2026-03-31", label: "Q1", net_income: 6, revenue: 30, sources: [] },
+    ] };
+  for (const mode of Selectors.VIEW_MODES) {
+    const v = Selectors.companyMetricView(legacyCo, mode);
+    assert.equal(v.complete, false, mode + " 无 periods → 不完整");
+    assert.equal(v.coverage.missing_periods, true, mode + " missing_periods");
+    assert.equal(v.coverage.reason, "not_migrated", mode + " reason not_migrated");
+    assert.equal(v.coverage.source, "none");
+    assert.equal(v.revenue, null); assert.equal(v.net_income, null); // 绝不从 quarters[] 合成假装
+    assert.equal(v.aiWeightedNetIncome, null);        // 净利 null → 加权 null
+    assert.ok(v.warnings.some(w => /尚未迁入 periods/.test(w)));
+  }
+  // 无 periods 但公司级 aiShare 仍透出 (period-independent), 只是没有净利可加权
+  assert.equal(Selectors.companyMetricView(legacyCo, "ttm").aiShare, 0.4);
+  assert.equal(Selectors.companyMetricView(legacyCo, "ttm").coverage.missing_ai_share, false);
+
+  // =====================================================================
+  // 缺 AI share: aiShare=null → missing_ai_share, aiWeightedNetIncome=null (即便有净利)
+  // =====================================================================
+  const noAiCo = { id: "noai", name: "NOAI", status: "populated",
+    years: [{ fy: "FY2025", status: "actual", revenue: 100, net_income: 20, segments: [] }], // 无 is_ai → aiShare null
+    periods: [
+      FQ("Q1", "2025-03-31", "2025-01-01", 2025, "Q1", "FY2025", 10, 3, 2),
+      FQ("Q2", "2025-06-30", "2025-04-01", 2025, "Q2", "FY2025", 20, 6, 4),
+      FQ("Q3", "2025-09-30", "2025-07-01", 2025, "Q3", "FY2025", 30, 9, 6),
+      FQ("Q4", "2025-12-31", "2025-10-01", 2025, "Q4", "FY2025", 40, 12, 8),
+    ] };
+  const noAi = Selectors.companyMetricView(noAiCo, "calendarYear", { year: 2025 });
+  assert.equal(noAi.complete, true);                  // 四季齐 → 结构完整
+  assert.equal(noAi.net_income, 20);                  // 净利有值
+  assert.equal(noAi.aiShare, null);                   // 但缺 AI 占比
+  assert.equal(noAi.coverage.missing_ai_share, true);
+  assert.equal(noAi.aiWeightedNetIncome, null);       // 缺 share → 加权 null, 绝不 0
+  assert.ok(noAi.warnings.some(w => /缺 AI 占比/.test(w)));
+
+  // 结构完整但某指标缺 → missing_metric (op_income 缺一季)
+  const gapCo = { id: "gapc", name: "GAP", status: "populated", ai_profit_share: 0.5,
+    years: [{ fy: "FY2025", status: "actual", revenue: 100, net_income: 20 }],
+    periods: [
+      FQ("Q1", "2025-03-31", "2025-01-01", 2025, "Q1", "FY2025", 10, 3, 2),
+      FQ("Q2", "2025-06-30", "2025-04-01", 2025, "Q2", "FY2025", 20, null, 4), // op 缺
+      FQ("Q3", "2025-09-30", "2025-07-01", 2025, "Q3", "FY2025", 30, 9, 6),
+      FQ("Q4", "2025-12-31", "2025-10-01", 2025, "Q4", "FY2025", 40, 12, 8),
+    ] };
+  const gv = Selectors.companyMetricView(gapCo, "calendarYear", { year: 2025 });
+  assert.equal(gv.complete, true);                    // 季度覆盖完整 → complete (net 有值)
+  assert.equal(gv.revenue, 100); assert.equal(gv.net_income, 20);
+  assert.equal(gv.op_income, null);                   // 一季 op 缺 → 该指标 null
+  assert.deepEqual(gv.coverage.missing_metric, ["op_income"]);
+
+  // =====================================================================
+  // null 安全 / 未知镜头
+  // =====================================================================
+  const vnull = Selectors.companyMetricView(null, "ttm");
+  assert.equal(vnull.complete, false);
+  assert.equal(vnull.coverage.missing_periods, true);
+  assert.equal(vnull.revenue, null); assert.equal(vnull.aiShare, null);
+  const vbad = Selectors.companyMetricView(co, "nope");
+  assert.equal(vbad.complete, false);
+  assert.equal(vbad.coverage.reason, "unknown_mode");
+}
+
 console.log("logic tests passed");

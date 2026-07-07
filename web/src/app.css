@@ -61,6 +61,30 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .chip:hover:not([aria-pressed="true"]){border-color:var(--ink-soft);color:var(--ink)}
 .metric-hint{font-size:12px;color:#6b4e16;background:linear-gradient(0deg,var(--est-soft),var(--card));border:1px solid #E4CFA4;border-left:3px solid var(--est);border-radius:9px;padding:9px 13px;margin:-2px 0 13px;line-height:1.5}
 .metric-hint b{color:#5d4410}
+/* ---- 报告镜头（口径）切换条：视觉上区别于指标 chips —— 蓝色(--ai)语义 + 分段控件 ---- */
+.lens-bar{border:1px solid var(--ai-soft);border-left:3px solid var(--ai);background:linear-gradient(0deg,var(--ai-soft),var(--card));border-radius:11px;padding:12px 14px;margin:16px 0 6px}
+.lens-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:9px}
+.lens-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ai)}
+.lens-cur{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.lens-badge{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ai);background:var(--card);border:1px solid var(--ai-soft);border-radius:20px;padding:2px 10px}
+.lens-auto{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);background:var(--card-2);border:1px solid var(--line-soft);border-radius:5px;padding:2px 6px}
+.lens-modes{display:inline-flex;flex-wrap:wrap;gap:2px;background:var(--card-2);border:1px solid var(--line);border-radius:9px;padding:3px}
+.lensbtn{appearance:none;border:0;background:transparent;color:var(--ink-soft);font-family:var(--sans);font-size:13px;font-weight:500;padding:6px 14px;border-radius:7px;cursor:pointer;transition:.12s}
+.lensbtn[aria-pressed="true"]{background:var(--ai);color:#fff;box-shadow:0 1px 2px rgba(24,33,29,.15)}
+.lensbtn:hover:not([aria-pressed="true"]){color:var(--ink);background:var(--card)}
+.lensbtn.reset{color:var(--ink-faint);font-family:var(--mono);font-size:12px}
+.lens-note{font-size:12px;color:var(--ink-soft);line-height:1.55;margin-top:9px}.lens-note b{color:var(--ink)}
+/* ---- 每行「按镜头」值/角标区（登记表数值列的镜头补充，不改现有 years[] 指标列）---- */
+.lensval{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:7px}
+.lensval .lv-num{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink)}
+.lensval .lv-num.muted{color:var(--ink-faint)}
+.lensval.muted{opacity:.72}
+.lv-lab{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+.lv-badge{font-family:var(--mono);font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:5px;letter-spacing:.02em;cursor:help}
+.lv-badge.ok{background:var(--ok-soft);color:var(--ok-deep)}
+.lv-badge.impl{background:var(--ai-soft);color:var(--ai)}
+.lv-badge.proxy{background:var(--est-soft);color:#8a5a0f}
+.lv-badge.miss{background:var(--card-2);color:var(--ink-faint);border:1px solid var(--line-soft)}
 .dir{display:flex;flex-direction:column;gap:11px}
 .crow{display:grid;grid-template-columns:46px 1.5fr 1.3fr 1fr;gap:14px;align-items:center;padding:15px 17px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;border:1px solid var(--line);background:var(--card);border-radius:14px;text-align:left;font-family:inherit;width:100%}
 .crow:hover{transform:translateY(-2px);box-shadow:0 10px 30px -18px rgba(24,33,29,.4);border-color:var(--ink-soft)}

@@ -96,7 +96,10 @@ const Selectors = {
   cashConversion(y) { const f = this.fcf(y); return (f != null && y.net_income) ? f / y.net_income : null; },
 
   /* ---- company-level helpers ---- */
-  actualYears(c)   { return c.years.filter(y => y.status === "actual"); },
+  // null-safe: a company without a years[] array (e.g. a periods-only synthetic, or a
+  // future company migrated to periods[] before years[] backfill) yields [] rather than
+  // throwing — so aiShare/latestActual stay safe when called from companyMetricView.
+  actualYears(c)   { return (c && Array.isArray(c.years) ? c.years : []).filter(y => y.status === "actual"); },
   forecastYear(c)  { return c.years.find(y => y.status === "forecast"); },
   latestActual(c)  { const a = this.actualYears(c); return a.length ? a[a.length - 1] : null; },
   yearIndex(c, fy) { return c.years.findIndex(y => y.fy === fy); },
@@ -912,6 +915,176 @@ const Selectors = {
       const vals = qs.map(q => q[m]);
       out[m] = vals.every(v => v != null) ? vals.reduce((s, v) => s + v, 0) : null;
     }
+    return out;
+  },
+
+  /* =====================================================================
+     Phase 4 view model — companyMetricView(c, mode, opts). ONE dumb-view-ready
+     projection per reporting lens, so Svelte components stay calculation-free.
+     mode ∈ latestQuarter | ttm | calendarYear | fiscalYear; each DELEGATES to the
+     existing period selector (latestQuarter / ttmFromPeriods / calendarYear /
+     fiscalYearFromPeriods). ttm runs ttmFromPeriods once PER metric (revenue /
+     op_income / net_income), each independently null.
+     AI attribution stays COMPANY-LEVEL (Decision Addendum): aiShare = aiShare(c).value;
+     aiShare null → aiWeightedNetIncome null (NEVER 0).
+     HONEST EMPTY (biggest edge case this round): a company NOT yet migrated to a real
+     periods[] returns complete=false with coverage.missing_periods + reason
+     "not_migrated" — it is NEVER faked from years[]/quarters[] synth here. (The synth
+     path in periods() is backward-compat plumbing for the lower selectors; the Phase 4
+     lens deliberately requires genuine periods[] so the coverage badge is truthful,
+     e.g. today only Samsung/Micron carry periods → the rest read as not-migrated.)
+     coverage DISTINGUISHES (plan §4.1): missing_periods (structural period shortfall
+     for this lens, incl. not-migrated), missing_metric (structure present but a metric
+     null), missing_ai_share; PLUS strict/proxy (CY) and implied-Q4 usage (CY/TTM).
+     `complete` = structural coverage present for the mode AND net_income non-null (the
+     pool headline). Returns { mode, label, complete, coverage, revenue, op_income,
+     net_income, aiShare, aiWeightedNetIncome, warnings[] }. All null-safe. 算不存. */
+  VIEW_METRICS: ["revenue", "op_income", "net_income"],
+  VIEW_MODES: ["latestQuarter", "ttm", "calendarYear", "fiscalYear"],
+
+  /* compact calendar tag of a period, e.g. "2026Q1" (identifier, not label parse) */
+  _periodTag(p) {
+    if (!p) return null;
+    if (p.calendar_year != null && p.calendar_quarter) return "" + p.calendar_year + p.calendar_quarter;
+    return p.period_end || p.period_id || null;
+  },
+  /* max string (lexical) ignoring null — FY labels sort correctly ("FY2025" < "FY2026") */
+  _maxStr(arr) { let b = null; for (const x of arr) { if (x != null && (b == null || String(x) > String(b))) b = x; } return b; },
+  /* default calendar year for CY lens = latest calendar year among actual quarter periods */
+  _defaultCalYear(c) {
+    const ys = this.actualPeriods(c).filter(p => p.kind === "quarter" && p.calendar_year != null).map(p => p.calendar_year);
+    return ys.length ? Math.max(...ys) : null;
+  },
+  /* default fiscal year for FY lens = latest FY with an annual actual fact (official full
+     year available), else latest FY among actual quarters. */
+  _defaultFiscalYear(c) {
+    const ap = this.actualPeriods(c);
+    const annualFys = ap.filter(p => p.kind === "annual" && p.fiscal_year).map(p => p.fiscal_year);
+    if (annualFys.length) return this._maxStr(annualFys);
+    return this._maxStr(ap.filter(p => p.kind === "quarter" && p.fiscal_year).map(p => p.fiscal_year));
+  },
+
+  companyMetricView(c, mode, opts) {
+    opts = opts || {};
+    const out = {
+      mode, label: null, complete: false,
+      coverage: {
+        source: "none",
+        missing_periods: false,
+        missing_quarters: [],
+        missing_metric: [],
+        missing_ai_share: false,
+        strict: null,
+        coverage_start: null,
+        coverage_end: null,
+        used_implied_q4: false,
+        quarter_basis: null,
+        gap: null,
+        basis: null,
+        as_of: null,
+        reason: null,
+      },
+      revenue: null, op_income: null, net_income: null,
+      aiShare: null, aiWeightedNetIncome: null,
+      warnings: [],
+    };
+    if (!c) { out.coverage.missing_periods = true; out.coverage.reason = "no_company"; return out; }
+
+    // AI share is company-level and period-independent → computed for every company (even
+    // not-migrated) for transparency; aiWeightedNetIncome still needs a mode net income.
+    const ai = this.aiShare(c);
+    out.aiShare = ai.value;
+    if (ai.value == null) { out.coverage.missing_ai_share = true; out.warnings.push("缺 AI 占比：不计入 AI 加权池"); }
+
+    // GATE: only genuinely-migrated companies (real periods[]) get a period-base lens.
+    const hasPeriods = Array.isArray(c.periods) && c.periods.length > 0;
+    if (!hasPeriods) {
+      out.coverage.missing_periods = true;
+      out.coverage.reason = "not_migrated";
+      out.warnings.push("该公司尚未迁入 periods（此镜头暂不适用，legacy years[] 口径见公司页）");
+      return out;
+    }
+    out.coverage.source = "periods";
+
+    const fill = () => {   // copy the derived metrics + flag per-metric gaps + set complete
+      const miss = this.VIEW_METRICS.filter(m => out[m] == null);
+      out.coverage.missing_metric = miss;
+      out.complete = out.net_income != null;
+      if (miss.length && !out.coverage.reason) out.coverage.reason = "missing_metric";
+    };
+
+    if (mode === "latestQuarter") {
+      const q = this.latestQuarter(c);
+      if (!q) {
+        out.coverage.missing_periods = true;
+        out.coverage.reason = "no_actual_quarter";
+        out.warnings.push("无实际季度（仅有 guidance / 年度期）");
+      } else {
+        out.label = this._periodTag(q);
+        out.coverage.as_of = q.period_end || null;
+        for (const m of this.VIEW_METRICS) out[m] = q[m] != null ? q[m] : null;
+        fill();
+      }
+    } else if (mode === "ttm") {
+      const res = {};
+      for (const m of this.VIEW_METRICS) res[m] = this.ttmFromPeriods(c, m);
+      const ni = res.net_income;   // structural flags shared across the 3 metric windows
+      out.label = "TTM";
+      out.coverage.as_of = ni.asOf || null;
+      out.coverage.used_implied_q4 = !!ni.usedImpliedQ4;
+      out.coverage.quarter_basis = ni.basis || null;
+      out.coverage.gap = ni.gap || null;
+      if (!ni.contiguous) {
+        out.coverage.missing_periods = true;
+        out.coverage.reason = ni.gap ? "gap" : "insufficient_quarters";
+        out.warnings.push(ni.gap ? ("TTM 不连续：" + ni.gap) : "TTM 季度不足四季（覆盖不足）");
+      } else {
+        for (const m of this.VIEW_METRICS) out[m] = res[m].value;
+        fill();
+        if (ni.usedImpliedQ4) out.warnings.push("TTM 含 implied Q4（财年末 = 年度事实 − 前三季）");
+      }
+    } else if (mode === "calendarYear") {
+      const year = opts.year != null ? opts.year : this._defaultCalYear(c);
+      const cy = this.calendarYear(c, year);
+      out.label = cy.label;
+      out.coverage.strict = cy.strict;
+      out.coverage.coverage_start = cy.coverage_start;
+      out.coverage.coverage_end = cy.coverage_end;
+      out.coverage.used_implied_q4 = Object.values(cy.coverage || {}).includes("implied_q4");
+      if (!cy.complete) {
+        out.coverage.missing_periods = true;
+        out.coverage.missing_quarters = cy.missing;
+        out.coverage.reason = "missing_quarters";
+        out.warnings.push("自然年不完整：缺 " + cy.missing.join("/"));
+      } else {
+        for (const m of this.VIEW_METRICS) out[m] = cy[m] != null ? cy[m] : null;
+        fill();
+        if (out.coverage.used_implied_q4) out.warnings.push("自然年 Q4 为 implied 派生（年度事实 − 前三财季）");
+        if (!cy.strict) out.warnings.push("自然年为报告期近似（未严格覆盖 1-1~12-31）");
+      }
+    } else if (mode === "fiscalYear") {
+      const fy = opts.fy != null ? opts.fy : this._defaultFiscalYear(c);
+      const r = this.fiscalYearFromPeriods(c, fy);
+      out.label = r.label != null ? r.label : (fy || "FY?");
+      out.coverage.basis = r.basis;   // annual_report | quarter_sum
+      if (!r.complete) {
+        out.coverage.missing_periods = true;
+        out.coverage.reason = r.basis === "quarter_sum" ? "insufficient_quarters" : "no_fiscal_year";
+        out.warnings.push(r.basis === "quarter_sum"
+          ? ("财年不完整：" + r.quarters + "/4 实际季")
+          : "财年无年度事实");
+      } else {
+        for (const m of this.VIEW_METRICS) out[m] = r[m] != null ? r[m] : null;
+        fill();
+      }
+    } else {
+      out.coverage.reason = "unknown_mode";
+      out.warnings.push("未知镜头：" + mode);
+      return out;
+    }
+
+    out.aiWeightedNetIncome = (out.net_income != null && out.aiShare != null)
+      ? out.net_income * out.aiShare : null;
     return out;
   },
 
