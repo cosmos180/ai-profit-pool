@@ -507,3 +507,50 @@ My recommendation:
 - FX: company-disclosed average rate first; otherwise documented period average rate.
 - AI attribution: company-level for now; period-specific later only when there are real sources.
 
+
+---
+
+## Decision Addendum (2026-07-07, 用户拍板)
+
+本节固化用户就 implied Q4 策略与严格 CY 边界的拍板要点，作为落地契约（selector 层算不存）。
+
+### ① Implied Q4 派生（默认策略）
+
+`impliedQ4(c, fy)` 契约：
+```
+impliedQ4 = annualActual − sum(Q1, Q2, Q3)
+basis:      "implied_q4"
+sources:    annual.sources + Q1.sources + Q2.sources + Q3.sources
+confidence: "derived_from_official"
+```
+
+**硬约束（全部满足才允许派生，否则返回 null——留空也比伪造好）：**
+- 同一 `fiscal_year` 存在 `kind=annual` 且 `status=actual` 的年度期；
+- 该 FY 的 `fiscal_quarter` Q1/Q2/Q3 都存在且 `kind=quarter`、`status=actual`；
+- 口径一致：annual 与三个季度**同 `currency` 且同 `fx_to_usd`**（混 FX/币种口径相减无意义 → null）；
+- **只对可加总流量指标**做减法：`revenue / gross_profit / op_income / net_income / cfo / capex`；某指标在 annual 或任一季缺失 → 该指标 null（逐指标诚实缺口）；
+- **绝不**对 EPS / margin / AI share / 估值倍数做相减；
+- 分部 Q4：仅当 annual 与 Q1–Q3 都带**同一套 segment key 集**（按 name）才逐分部推 revenue，否则 `segments: []`（绝不给部分/臆造的分部集）。
+- Q4 期形状：`period_end = annual.period_end`（财年末）；`period_start = Q3.period_end + 1 天`；`calendar_year/calendar_quarter` 由 `period_end` 日期推导；`fiscal_quarter = "Q4"`。
+
+**优先级阶梯（消费方统一遵守）：** actual reported quarter > implied Q4 > guidance > null。
+
+**集成：**
+- `calendarYear(c, year)`：仅**自然年口径**——缺 calendar Q4 而 Q1–Q3 齐时，用 annual−(fiscal Q1–3) 补，且仅当 implied 财季 Q4 恰落 calendar Q4（`iq4.calendar_quarter==="Q4"` 且落本年）。补全后 `basis="implied_q4"`、`coverage.Q4="implied_q4"`。财年错位公司的 implied 财季 Q4 不落 calendar Q4 → 不补，仍 incomplete。
+- `ttmFromPeriods(c, metric)`：implied Q4 作为**真实占位季**参与连号判断，补上美股财年末系统性缺失的第四季；输出带 `basis[]`（每季 `actual|implied_q4`）与 `usedImpliedQ4`。actual Q4 优先，已占该日历季则不插 implied。
+- `fiscalYearFromPeriods(c, fy)`：**不**合成 implied Q4——implied Q4 派生自 annual，而 annual 存在时 `annual_report` 分支已直接返回官方全年事实（严格优于用差值重构），故无可达缺口；阶梯 `annual_report > quarter_sum` 已包含之。
+
+**8-K 例外触发条件：** 默认走 implied Q4；仅当公司发布独立 Q4 / 全年 8-K 且其数值与 implied 差异实质、或 implied 硬约束不满足时，才以 8-K 独立季 actual 原子取代 implied（actual 优先于 implied）。
+
+### ② 严格 CY 边界（用户原话：「CY 视图不能只看 period_end 年份」）
+
+`calendarYear(c, year)` 升级：
+- **严格 CY**：参与的四季 `[period_start, period_end]` 连续拼接后完整覆盖 `YYYY-01-01 ~ YYYY-12-31`（端点容差 ±4 天，吸收季历末日自然浮动）→ 才标 `strict: true`；
+- **财年错位公司**（NVDA 1 月末 / MSFT 6 月末 / ORCL 5 月末等）四个 fiscal 季拼不满严格覆盖 → **出 proxy 并显式标注**：`strict:false`，由 `coverage_start / coverage_end` 说清（与「灰显带原因」的产品倾向一致，label 保持纯标识 `CY####`，proxy 标注由视图据 `strict` 生成）；
+- `period_start` 为 null（如 synth 路径）→ 无法验证覆盖 → 最多 proxy，不给 strict；
+- 现有 `validate` 的 `calendar_year == period_end 年` 规则不变（那是原子标注，视图层负严格性）。
+- 返回形状新增：`strict`（bool）、`coverage_start`、`coverage_end`、`coverage`（各现存日历季 → `actual|implied_q4`）。
+
+### FX / 币种存储口径（三星等非 USD 源）
+
+存储层金额均已换算为 USD bn。`currency` 记**源币**、`fx_to_usd` 记换算率。三星原子源币为 KRW、换算率 `1421.779`（与年度口径一致，见各原 source 注明「换算待核验」）→ periods 采 `currency:"KRW", fx_to_usd:1421.779`（诚实保留源币 + 已文档化汇率，满足「非 USD 必带正 fx」校验）。美光源币 USD → `currency:"USD", fx_to_usd:1`。

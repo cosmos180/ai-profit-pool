@@ -599,6 +599,174 @@
             }
           ]
         }
+      ],
+      "periods": [
+        {
+          "period_id": "samsung-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-01-01",
+          "period_end": "2025-12-31",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 234.636,
+          "gross_profit": null,
+          "op_income": 30.666,
+          "net_income": 31.131,
+          "cfo": 60.01,
+          "capex": 37.07,
+          "segments": [
+            {
+              "name": "DX 终端体验（手机/家电/网络）",
+              "kind": "division",
+              "revenue": 132.229,
+              "op_income": 9.073,
+              "op_margin": 0.069,
+              "is_ai": false
+            },
+            {
+              "name": "DS 半导体（存储/代工/LSI）",
+              "kind": "division",
+              "revenue": 91.505,
+              "op_income": 17.513,
+              "op_margin": 0.191,
+              "is_ai": true
+            },
+            {
+              "name": "SDC 显示面板",
+              "kind": "division",
+              "revenue": 20.96,
+              "op_income": 2.884,
+              "op_margin": 0.138,
+              "is_ai": false
+            },
+            {
+              "name": "Harman 车载/音频",
+              "kind": "division",
+              "revenue": 11.113,
+              "op_income": 1.055,
+              "op_margin": 0.095,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Samsung Q4 & FY2025 业绩新闻稿（分部营收/营业利润）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+              "data_status": "official"
+            },
+            {
+              "label": "Samsung 2025 合并财报（净利润）",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 合并现金流：CFO KRW 85.32T ÷ 1421.779 = $60.01B；capex KRW 52.7T ÷ 1421.779 = $37.07B，KRW 换算待核验）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "samsung-2025q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q1",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": null,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 5.78,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Samsung Q1 2025 业绩（净利 KRW 8.22T）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-first-quarter-2025-results",
+              "data_status": "official"
+            },
+            {
+              "label": "派生换算：KRW 8.22T ÷ USD/KRW 1421.779（2025 年均，与年度口径一致）= $5.78B（季度本币×年均汇率，换算待核验）",
+              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_id": "samsung-2026q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-01-01",
+          "period_end": "2026-03-31",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q1",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 94.18,
+          "gross_profit": null,
+          "op_income": 40.23,
+          "net_income": 33.21,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Samsung Q1 2026 业绩（营收 KRW 133.9T、营业利润 KRW 57.2T、净利 KRW 47.22T，同比 +475%）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-first-quarter-2026-results",
+              "data_status": "official"
+            },
+            {
+              "label": "派生换算：KRW 133.9T / 57.2T / 47.22T ÷ USD/KRW 1421.779（与 2025 年度同口径汇率）= $94.18B / $40.23B / $33.21B（换算待核验；2026 汇率或偏强，绝对值或略高估，方向稳健）",
+              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_id": "samsung-2026q2-guidance",
+          "kind": "quarter",
+          "status": "guidance",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 120.27,
+          "gross_profit": null,
+          "op_income": 62.88,
+          "net_income": null,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Samsung Q2 2026 earnings guidance（营收约 KRW 171T、营业利润约 KRW 89.4T；净利未披露）",
+              "url": "https://news.samsung.com/global/samsung-electronics-announces-earnings-guidance-for-second-quarter-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "派生换算：KRW 171T / 89.4T ÷ USD/KRW 1421.779（暂沿用 2025 年度同口径汇率）= $120.27B / $62.88B；guidance 不是完整季报，net_income 留空",
+              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+              "data_status": "estimate"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1351,6 +1519,200 @@
               "label": "Micron FQ3 FY2026 业绩新闻稿/8-K（GAAP 净利 $28.24B，营收 $41.46B，AI/HBM 超级周期）",
               "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2026",
               "data_status": "official"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "period_id": "micron-fy2025q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2024-08-30",
+          "period_end": "2024-11-28",
+          "calendar_year": 2024,
+          "calendar_quarter": "Q4",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 8.71,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 1.87,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Micron FQ1 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.87B，营收 $8.71B）",
+              "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-first-quarter-fiscal-2025",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：链首 FQ1 FY2025 取上一财年末 +1 天（Micron 52/53 周财年，FY2024 止 2024-08-29 → 起 2024-08-30）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "micron-fy2025q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2024-11-29",
+          "period_end": "2025-02-27",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 8.05,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 1.58,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Micron FQ2 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.58B，营收 $8.05B）",
+              "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-second-quarter-fiscal-2025",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：链内取上一季 period_end +1 天（FQ1 FY2025 止 2024-11-28 → 起 2024-11-29）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "micron-fy2025q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-02-28",
+          "period_end": "2025-05-29",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q3",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 9.3,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 1.89,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Micron FQ3 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.89B，营收 $9.30B）",
+              "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2025",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：链内取上一季 period_end +1 天（FQ2 FY2025 止 2025-02-27 → 起 2025-02-28）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "micron-fy2026q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-08-29",
+          "period_end": "2025-11-27",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q4",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 13.64,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 5.24,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Micron FQ1 FY2026 业绩新闻稿/8-K（GAAP 净利 $5.24B，营收 $13.64B）",
+              "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-first-quarter-fiscal-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：链首 FQ1 FY2026 取上一财年末 +1 天（Micron 52/53 周财年，FY2025 止 2025-08-28 → 起 2025-08-29）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "micron-fy2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-11-28",
+          "period_end": "2026-02-26",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 23.86,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 13.79,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Micron FQ2 FY2026 业绩新闻稿/8-K（GAAP 净利 $13.79B，营收 $23.86B）",
+              "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-second-quarter-fiscal-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：链内取上一季 period_end +1 天（FQ1 FY2026 止 2025-11-27 → 起 2025-11-28）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "micron-fy2026q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-02-27",
+          "period_end": "2026-05-28",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q3",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 41.46,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 28.24,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Micron FQ3 FY2026 业绩新闻稿/8-K（GAAP 净利 $28.24B，营收 $41.46B，AI/HBM 超级周期）",
+              "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2026",
+              "data_status": "official"
+            },
+            {
+              "label": "period_start 推导：链内取上一季 period_end +1 天（FQ2 FY2026 止 2026-02-26 → 起 2026-02-27）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "derived"
             }
           ]
         }

@@ -1046,6 +1046,10 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(cy.net_income, 20); assert.equal(cy.cfo, 40); assert.equal(cy.capex, 10);
   assert.equal(cy.label, "CY2025"); assert.equal(cy.year, 2025); assert.equal(cy.basis, "periods");
   assert.equal(cy.sources.length, 1);                      // provenance aggregated from the quarters
+  // 严格 CY: cyc 四季 period_start 均为 null (P() 默认) → 无法验证覆盖 → strict=false (proxy)
+  assert.equal(cy.strict, false);
+  assert.equal(cy.coverage_start, null);
+  assert.deepEqual(cy.coverage, { Q1: "actual", Q2: "actual", Q3: "actual", Q4: "actual" });
 
   // ---- three quarters → incomplete with missing quarter list, metrics null ----
   const cy3 = Selectors.calendarYear({ id: "x", periods: [
@@ -1224,6 +1228,193 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(Selectors.fiscalYearFromPeriods(null, "FY2025").basis, null);
   const fyNone = Selectors.fiscalYearFromPeriods({ id: "e" }, "FY2099");
   assert.equal(fyNone.complete, false); assert.equal(fyNone.quarters, 0);
+
+  // =====================================================================
+  // impliedQ4(c, fy) —— annual − (fiscal Q1+Q2+Q3), 默认策略 (用户拍板 2026-07-07)
+  // 全部硬约束满足→出值+basis; 缺 annual/缺一季/口径不一→null; 逐指标缺→该指标 null;
+  // 分部同 key 集才推, 否则 []。
+  // =====================================================================
+  // 年度 + 三季 (自然年, USD, fx=1); 每指标 annual − Σ(Q1..Q3)
+  const AN = P({
+    period_id: "annual25", kind: "annual", calendar_quarter: null,
+    period_start: "2025-01-01", period_end: "2025-12-31", calendar_year: 2025,
+    fiscal_year: "FY2025", fiscal_quarter: null,
+    revenue: 100, gross_profit: 60, op_income: 30, net_income: 20, cfo: 40, capex: 10,
+    segments: [{ name: "A", kind: "platform", revenue: 60, is_ai: true }, { name: "B", kind: "platform", revenue: 40, is_ai: false }],
+    sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }],
+  });
+  const FQ = (fq, pe, ps, rev, gp, op, ni, cfo, capex, segs) => P({
+    period_id: "fy25" + fq, period_end: pe, period_start: ps, calendar_year: 2025,
+    calendar_quarter: fq, fiscal_year: "FY2025", fiscal_quarter: fq,
+    revenue: rev, gross_profit: gp, op_income: op, net_income: ni, cfo, capex,
+    segments: segs || [], sources: [{ label: fq, url: "https://x/" + fq, data_status: "official" }],
+  });
+  const q1 = FQ("Q1", "2025-03-31", "2025-01-01", 10, 6, 3, 2, 4, 1, [{ name: "A", kind: "platform", revenue: 6, is_ai: true }, { name: "B", kind: "platform", revenue: 4 }]);
+  const q2 = FQ("Q2", "2025-06-30", "2025-04-01", 20, 12, 6, 4, 8, 2, [{ name: "A", kind: "platform", revenue: 12, is_ai: true }, { name: "B", kind: "platform", revenue: 8 }]);
+  const q3 = FQ("Q3", "2025-09-30", "2025-07-01", 30, 18, 9, 6, 12, 3, [{ name: "A", kind: "platform", revenue: 18, is_ai: true }, { name: "B", kind: "platform", revenue: 12 }]);
+  const iqCo = { id: "iq", status: "populated", periods: [AN, q1, q2, q3] };
+  const iq = Selectors.impliedQ4(iqCo, "FY2025");
+  assert.equal(iq.basis, "implied_q4");
+  assert.equal(iq.confidence, "derived_from_official");
+  assert.equal(iq.kind, "quarter"); assert.equal(iq.fiscal_quarter, "Q4");
+  assert.equal(iq.revenue, 40);        // 100 − (10+20+30)
+  assert.equal(iq.gross_profit, 24);   // 60 − (6+12+18)
+  assert.equal(iq.op_income, 12);      // 30 − (3+6+9)
+  assert.equal(iq.net_income, 8);      // 20 − (2+4+6)
+  assert.equal(iq.cfo, 16);            // 40 − (4+8+12)
+  assert.equal(iq.capex, 4);           // 10 − (1+2+3)
+  assert.equal(iq.period_start, "2025-10-01");  // Q3 末 2025-09-30 +1 天 (链内推导)
+  assert.equal(iq.period_end, "2025-12-31");    // = annual 财年末
+  assert.equal(iq.calendar_year, 2025);
+  assert.equal(iq.calendar_quarter, "Q4");      // date math of 12-31
+  assert.equal(iq.sources.length, 4);           // annual + Q1 + Q2 + Q3 provenance 拼接
+  // 分部 Q4: 同 key 集 {A,B} → 逐分部推 revenue
+  assert.deepEqual(iq.segments.map(s => s.name).sort(), ["A", "B"]);
+  const segA = iq.segments.find(s => s.name === "A"), segB = iq.segments.find(s => s.name === "B");
+  assert.equal(segA.revenue, 24);      // 60 − (6+12+18)
+  assert.equal(segA.is_ai, true);
+  assert.equal(segB.revenue, 16);      // 40 − (4+8+12)
+
+  // ---- 缺 annual → null ----
+  assert.equal(Selectors.impliedQ4({ id: "x", periods: [q1, q2, q3] }, "FY2025"), null);
+  // ---- 缺一季 (Q2) → null ----
+  assert.equal(Selectors.impliedQ4({ id: "x", periods: [AN, q1, q3] }, "FY2025"), null);
+  // ---- guidance 季不算 actual → 视为缺季 → null ----
+  const q2g = Object.assign({}, q2, { status: "guidance" });
+  assert.equal(Selectors.impliedQ4({ id: "x", periods: [AN, q1, q2g, q3] }, "FY2025"), null);
+  // ---- 口径不一: 某季 currency 不同 → null ----
+  const q2krw = Object.assign({}, q2, { currency: "KRW", fx_to_usd: 1421.779 });
+  assert.equal(Selectors.impliedQ4({ id: "x", periods: [AN, q1, q2krw, q3] }, "FY2025"), null);
+  // ---- 口径不一: fx 不同 → null ----
+  const q2fx = Object.assign({}, q2, { fx_to_usd: 2 });
+  assert.equal(Selectors.impliedQ4({ id: "x", periods: [AN, q1, q2fx, q3] }, "FY2025"), null);
+  // ---- 逐指标缺: annual 缺 cfo → 该指标 null, 其余照算 ----
+  const AN_noCfo = Object.assign({}, AN, { cfo: null });
+  const iqNoCfo = Selectors.impliedQ4({ id: "x", periods: [AN_noCfo, q1, q2, q3] }, "FY2025");
+  assert.equal(iqNoCfo.cfo, null);
+  assert.equal(iqNoCfo.net_income, 8);  // 其余不受影响
+  // ---- 分部 key 集不一致 → segments [] (绝不推部分/臆造分部) ----
+  const q3diff = FQ("Q3", "2025-09-30", "2025-07-01", 30, 18, 9, 6, 12, 3, [{ name: "C", kind: "platform", revenue: 30 }]);
+  const iqSegDiff = Selectors.impliedQ4({ id: "x", periods: [AN, q1, q2, q3diff] }, "FY2025");
+  assert.deepEqual(iqSegDiff.segments, []);
+  assert.equal(iqSegDiff.revenue, 40);  // 顶层可加指标仍推
+  // ---- null-safe ----
+  assert.equal(Selectors.impliedQ4(null, "FY2025"), null);
+  assert.equal(Selectors.impliedQ4(iqCo, null), null);
+
+  // ---- 微软案例守卫: annual 在 years[] 而非 periods[] → impliedQ4 只从 periods[] 取 annual,
+  //      periods() 从 quarters[] 合成全是 kind=quarter (无 annual) → 不误触发 → null ----
+  const msftLike = { id: "msft2", status: "populated",
+    years: [{ fy: "FY2025", status: "actual", revenue: 100, net_income: 20 }],
+    quarters: [
+      { period_end: "2025-03-31", label: "Q1", net_income: 2, sources: [] },
+      { period_end: "2025-06-30", label: "Q2", net_income: 4, sources: [] },
+      { period_end: "2025-09-30", label: "Q3", net_income: 6, sources: [] },
+    ] };
+  assert.equal(Selectors.impliedQ4(msftLike, "FY2025"), null);   // years[] annual 不被 impliedQ4 看见
+  assert.equal(Selectors.ttmFromPeriods(msftLike, "net_income").usedImpliedQ4, false);
+
+  // =====================================================================
+  // 集成①: calendarYear 用 implied Q4 补全 (自然年公司, 缺 calendar Q4)
+  // =====================================================================
+  const cyImpliedCo = { id: "cyi", status: "populated", periods: [AN, q1, q2, q3] };
+  const cyi = Selectors.calendarYear(cyImpliedCo, 2025);
+  assert.equal(cyi.complete, true);                   // Q4 由 annual−(Q1-3) 补 → 完整
+  assert.deepEqual(cyi.missing, []);
+  assert.equal(cyi.basis, "implied_q4");              // basis 标注 implied
+  assert.equal(cyi.coverage.Q4, "implied_q4");
+  assert.equal(cyi.coverage.Q1, "actual");
+  assert.equal(cyi.revenue, 100);                     // 10+20+30+40 = annual 100
+  assert.equal(cyi.net_income, 20);                   // 2+4+6+8
+  // 严格 CY: Q1..Q3 start 01-01/04-01/07-01 + implied Q4 [10-01,12-31] → 覆盖 01-01~12-31 → strict
+  assert.equal(cyi.strict, true);
+  assert.equal(cyi.coverage_start, "2025-01-01");
+  assert.equal(cyi.coverage_end, "2025-12-31");
+
+  // 财年错位公司不误用 implied Q4 补 calendar Q4: implied 财季 Q4 不落 calendar Q4 → 仍 incomplete。
+  // (Micron 型: annual 财年末非 12-31; 这里用 annual period_end 2025-08-31 → implied Q4 calendar Q3)
+  const shiftedAnnual = P({ period_id: "san", kind: "annual", calendar_quarter: null,
+    period_start: "2024-09-01", period_end: "2025-08-31", calendar_year: 2025, fiscal_year: "FY2025",
+    revenue: 100, net_income: 20, sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] });
+  // 财年错位: fiscal Q1/Q2/Q3 落在 calendar Q4'24 / Q1'25 / Q2'25 (calendar_quarter ≠ fiscal_quarter)
+  const sq1 = P({ period_id: "sq1", period_end: "2024-11-30", period_start: "2024-09-01", calendar_year: 2024, calendar_quarter: "Q4", fiscal_year: "FY2025", fiscal_quarter: "Q1", revenue: 10, net_income: 2, sources: [{ label: "q", url: "https://x/1", data_status: "official" }] });
+  const sq2 = P({ period_id: "sq2", period_end: "2025-02-28", period_start: "2024-12-01", calendar_year: 2025, calendar_quarter: "Q1", fiscal_year: "FY2025", fiscal_quarter: "Q2", revenue: 20, net_income: 4, sources: [{ label: "q", url: "https://x/2", data_status: "official" }] });
+  const sq3 = P({ period_id: "sq3", period_end: "2025-05-31", period_start: "2025-03-01", calendar_year: 2025, calendar_quarter: "Q2", fiscal_year: "FY2025", fiscal_quarter: "Q3", revenue: 30, net_income: 6, sources: [{ label: "q", url: "https://x/3", data_status: "official" }] });
+  const shiftCo = { id: "shiftimp", status: "populated", periods: [shiftedAnnual, sq1, sq2, sq3] };
+  const iqShift = Selectors.impliedQ4(shiftCo, "FY2025");
+  assert.equal(iqShift.calendar_quarter, "Q3");       // period_end 2025-08-31 → 日历 Q3, 非 Q4
+  const cyShiftImp = Selectors.calendarYear(shiftCo, 2025);
+  assert.equal(cyShiftImp.complete, false);           // implied 财季 Q4 ≠ calendar Q4 → 不补 → 仍缺
+
+  // =====================================================================
+  // 集成②: 严格 CY —— 自然年四季 (显式 period_start) → strict=true
+  // =====================================================================
+  const strictCo = { id: "strict", status: "populated", periods: [
+    P({ period_id: "s1", period_end: "2025-03-31", period_start: "2025-01-01", calendar_year: 2025, calendar_quarter: "Q1", net_income: 2, revenue: 10 }),
+    P({ period_id: "s2", period_end: "2025-06-30", period_start: "2025-04-01", calendar_year: 2025, calendar_quarter: "Q2", net_income: 4, revenue: 20 }),
+    P({ period_id: "s3", period_end: "2025-09-30", period_start: "2025-07-01", calendar_year: 2025, calendar_quarter: "Q3", net_income: 6, revenue: 30 }),
+    P({ period_id: "s4", period_end: "2025-12-31", period_start: "2025-10-01", calendar_year: 2025, calendar_quarter: "Q4", net_income: 8, revenue: 40 }),
+  ]};
+  const cyStrict = Selectors.calendarYear(strictCo, 2025);
+  assert.equal(cyStrict.complete, true);
+  assert.equal(cyStrict.strict, true);                // 四季拼接覆盖自然年首尾
+  assert.equal(cyStrict.basis, "periods");            // 全 actual, 未用 implied
+  assert.equal(cyStrict.coverage_start, "2025-01-01");
+  assert.equal(cyStrict.coverage_end, "2025-12-31");
+  assert.equal(cyStrict.revenue, 100);
+
+  // period_start 缺一 → 无法验证覆盖 → proxy (strict=false), 但 complete 仍 true
+  const proxyCo = { id: "proxy", status: "populated", periods: [
+    P({ period_id: "p1", period_end: "2025-03-31", period_start: "2025-01-01", calendar_year: 2025, calendar_quarter: "Q1", net_income: 2 }),
+    P({ period_id: "p2", period_end: "2025-06-30", period_start: null, calendar_year: 2025, calendar_quarter: "Q2", net_income: 4 }),
+    P({ period_id: "p3", period_end: "2025-09-30", period_start: "2025-07-01", calendar_year: 2025, calendar_quarter: "Q3", net_income: 6 }),
+    P({ period_id: "p4", period_end: "2025-12-31", period_start: "2025-10-01", calendar_year: 2025, calendar_quarter: "Q4", net_income: 8 }),
+  ]};
+  const cyProxy = Selectors.calendarYear(proxyCo, 2025);
+  assert.equal(cyProxy.complete, true);
+  assert.equal(cyProxy.strict, false);                // 有一季 period_start 缺 → 至多 proxy
+  assert.equal(cyProxy.coverage_start, null);         // 起点不全 → coverage_start 留空
+
+  // incomplete 年不给 strict (缺季 → strict 保持 false, coverage_* null)
+  const cyIncomplete = Selectors.calendarYear({ id: "inc", periods: [
+    P({ period_id: "i1", period_end: "2025-03-31", period_start: "2025-01-01", calendar_year: 2025, calendar_quarter: "Q1", net_income: 2 }),
+  ]}, 2025);
+  assert.equal(cyIncomplete.complete, false);
+  assert.equal(cyIncomplete.strict, false);
+  assert.equal(cyIncomplete.coverage_start, null);
+
+  // =====================================================================
+  // 集成③: ttmFromPeriods 用 implied Q4 补上美股财年末系统性缺失的第四季
+  // =====================================================================
+  // 自然年公司: FY2025 annual + FY2025 Q1-Q3 + FY2026 Q1-Q3 (无独立 Q4)。
+  // implied FY2025 Q4 (2025-12-31) 插入 Q3'25 与 Q1'26 之间 → 最新四季连号。
+  const fy26q = (fq, pe, ni) => P({ period_id: "fy26" + fq, period_end: pe,
+    calendar_year: 2026, calendar_quarter: fq, fiscal_year: "FY2026", fiscal_quarter: fq, net_income: ni,
+    sources: [{ label: fq, url: "https://x/26" + fq, data_status: "official" }] });
+  const ttmImpCo = { id: "ttmimp", status: "populated", periods: [
+    AN, q1, q2, q3,                                   // FY2025 annual + Q1-Q3 (ni 2/4/6 → implied Q4 ni 8)
+    fy26q("Q1", "2026-03-31", 10), fy26q("Q2", "2026-06-30", 12), fy26q("Q3", "2026-09-30", 14),
+  ]};
+  const ttmImp = Selectors.ttmFromPeriods(ttmImpCo, "net_income");
+  assert.equal(ttmImp.usedImpliedQ4, true);
+  assert.equal(ttmImp.contiguous, true);              // implied Q4 当占位季 → 连号成立
+  assert.equal(ttmImp.complete, true);
+  assert.equal(ttmImp.value, 44);                     // implied Q4(8) + 2026 Q1/Q2/Q3(10+12+14)
+  assert.equal(ttmImp.asOf, "2026-09-30");
+  assert.deepEqual(ttmImp.basis, ["implied_q4", "actual", "actual", "actual"]);
+  // 对照: 抽掉 annual (无 implied) → 最新四季 Q1'25..Q1'26 缺 Q4'25 占位 → 不连续 → null
+  const ttmNoAnnual = Selectors.ttmFromPeriods({ id: "na", periods: [q1, q2, q3,
+    fy26q("Q1", "2026-03-31", 10), fy26q("Q2", "2026-06-30", 12), fy26q("Q3", "2026-09-30", 14)] }, "net_income");
+  assert.equal(ttmNoAnnual.usedImpliedQ4, false);
+  assert.equal(ttmNoAnnual.value, null);
+  assert.equal(ttmNoAnnual.contiguous, false);
+  // actual Q4 优先于 implied Q4: 若已存在真实 Q4'25 季, 不重复插 implied
+  const realQ4 = P({ period_id: "realq4", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4",
+    fiscal_year: "FY2025", fiscal_quarter: "Q4", net_income: 9, sources: [] });
+  const ttmRealQ4 = Selectors.ttmFromPeriods({ id: "rq", periods: [AN, q1, q2, q3, realQ4,
+    fy26q("Q1", "2026-03-31", 10), fy26q("Q2", "2026-06-30", 12), fy26q("Q3", "2026-09-30", 14)] }, "net_income");
+  assert.equal(ttmRealQ4.usedImpliedQ4, false);       // 真实 Q4 占位 → implied 不插
+  assert.equal(ttmRealQ4.value, 45);                  // 真实 Q4(9) + 10+12+14
 }
 
 console.log("logic tests passed");

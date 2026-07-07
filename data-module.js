@@ -557,6 +557,12 @@ const Selectors = {
     const t = this._parseDate(iso);
     return t == null ? null : new Date(t).getUTCFullYear();
   },
+  /* ISO date + n days → ISO (UTC, YYYY-MM-DD). null if unparseable. */
+  _addDaysISO(iso, n) {
+    const t = this._parseDate(iso);
+    if (t == null) return null;
+    return new Date(t + n * this.DAY_MS).toISOString().slice(0, 10);
+  },
 
   /* Synthesize a period-like object from a legacy quarter atom. status is ALWAYS
      "actual" (legacy quarters have no status field — see KNOWN LIMITATION above).
@@ -636,6 +642,103 @@ const Selectors = {
     };
   },
 
+  /* ---- Implied fiscal-Q4 (DEFAULT策略, 用户拍板 2026-07-07) ----
+     impliedQ4 = annual actual − (fiscal Q1+Q2+Q3 actual). 派生算不存 —— 在 selector 层算出一个
+     季度形状的 Q4 占位期, 打 basis="implied_q4" / confidence="derived_from_official", 绝不写回
+     companies.json。返回 null（留空也比伪造好）当以下 HARD CONSTRAINTS 有任一不满足:
+       · 该 fiscal_year 存在 kind=annual & status=actual 的年度期;
+       · 该 FY 的 fiscal Q1/Q2/Q3 都存在 (kind=quarter & status=actual);
+       · 口径一致: annual 与三个季度同 currency 且同 fx_to_usd（混 FX/币种口径相减无意义 → null）。
+     只对【可加总流量指标】做减法 (revenue/gross_profit/op_income/net_income/cfo/capex);
+     EPS / margin / AI share / 估值倍数 永不相减。某指标在 annual 或任一季缺失 → 该指标 null
+     (诚实的逐指标缺口)。分部 Q4 仅当 annual 与 Q1-Q3 都带【同一套 segment key 集】(按 name)
+     才逐分部相减 revenue, 否则 segments:[] (绝不给部分/臆造的分部集)。
+     消费方优先级阶梯: actual reported quarter > implied Q4 > guidance > null。 */
+  IMPLIED_Q4_METRICS: ["revenue", "gross_profit", "op_income", "net_income", "cfo", "capex"],
+
+  impliedQ4(c, fy) {
+    if (!c || fy == null) return null;
+    const all = this.periods(c);
+    const annual = all.find(p => p.kind === "annual" && p.status === "actual" && p.fiscal_year === fy);
+    if (!annual) return null;                                  // 无年度 actual → 无从相减
+    const q = {};
+    for (const p of all) {
+      if (p.kind === "quarter" && p.status === "actual" && p.fiscal_year === fy
+          && (p.fiscal_quarter === "Q1" || p.fiscal_quarter === "Q2" || p.fiscal_quarter === "Q3")) {
+        q[p.fiscal_quarter] = p;                               // 排序升序 → 同键后者覆盖, 无害
+      }
+    }
+    const q1 = q.Q1, q2 = q.Q2, q3 = q.Q3;
+    if (!q1 || !q2 || !q3) return null;                        // 三季不齐 → null
+    // 口径一致性: annual + Q1-Q3 同币同 fx（否则相减无意义）
+    const cur = annual.currency, fx = annual.fx_to_usd;
+    for (const p of [q1, q2, q3]) {
+      if (p.currency !== cur || p.fx_to_usd !== fx) return null;
+    }
+    const out = {
+      period_id: `${c.id || "?"}-${fy}-impliedq4`,
+      kind: "quarter", status: "actual",
+      period_start: this._addDaysISO(q3.period_end, 1),        // 链内推导: Q3 末 +1 天
+      period_end: annual.period_end,                           // 财年末
+      calendar_year: annual.calendar_year != null ? annual.calendar_year : this._calYearOf(annual.period_end),
+      calendar_quarter: this._calQuarterOf(annual.period_end),
+      fiscal_year: fy, fiscal_quarter: "Q4",
+      currency: cur, fx_to_usd: fx,
+      basis: "implied_q4", confidence: "derived_from_official",
+      segments: [],
+      sources: [...(annual.sources || []), ...(q1.sources || []), ...(q2.sources || []), ...(q3.sources || [])],
+      _implied: true,
+    };
+    for (const m of this.IMPLIED_Q4_METRICS) {
+      const av = annual[m], v1 = q1[m], v2 = q2[m], v3 = q3[m];
+      out[m] = (av != null && v1 != null && v2 != null && v3 != null) ? av - (v1 + v2 + v3) : null;
+    }
+    // 分部 Q4: 仅当 annual 与 Q1-Q3 同一套 segment key 集（按 name）才逐分部推 revenue
+    const keyset = (p) => new Set((p.segments || []).map(s => s.name));
+    const aKeys = keyset(annual);
+    const sameKeys = (p) => { const k = keyset(p); return k.size === aKeys.size && [...k].every(x => aKeys.has(x)); };
+    if (aKeys.size && sameKeys(q1) && sameKeys(q2) && sameKeys(q3)) {
+      const byName = (p, name) => (p.segments || []).find(s => s.name === name);
+      out.segments = [...aKeys].map(name => {
+        const a = byName(annual, name), s1 = byName(q1, name), s2 = byName(q2, name), s3 = byName(q3, name);
+        const rev = (a.revenue != null && s1.revenue != null && s2.revenue != null && s3.revenue != null)
+          ? a.revenue - (s1.revenue + s2.revenue + s3.revenue) : null;
+        return { name, kind: a.kind, revenue: rev, is_ai: !!a.is_ai };
+      });
+    }
+    return out;
+  },
+
+  /* Actual quarter periods PLUS derivable implied-Q4 placeholders, in ONE date-sorted list,
+     each tagged _basis ("actual" | "implied_q4"). An implied Q4 is inserted ONLY when its
+     calendar-quarter slot is not already held by an actual quarter (priority ladder:
+     actual > implied). Continuity/TTM treat the implied Q4 as a real placeholder quarter. */
+  _quartersWithImpliedQ4(c) {
+    const actual = this.actualPeriods(c)
+      .filter(p => p.kind === "quarter")
+      .map(p => Object.assign({}, p, { _basis: "actual" }));
+    const occupied = new Set();
+    for (const p of actual) { const i = this._quarterIndex(p); if (i != null) occupied.add(i); }
+    const fys = [];
+    for (const p of this.periods(c)) {
+      if (p.kind === "annual" && p.status === "actual" && p.fiscal_year && !fys.includes(p.fiscal_year)) fys.push(p.fiscal_year);
+    }
+    const merged = actual.slice();
+    for (const fy of fys) {
+      const iq4 = this.impliedQ4(c, fy);
+      if (!iq4) continue;
+      const i = this._quarterIndex(iq4);
+      if (i == null || occupied.has(i)) continue;              // actual 已占该季 → 不重复插 (actual 优先)
+      occupied.add(i);
+      merged.push(Object.assign({}, iq4, { _basis: "implied_q4" }));
+    }
+    return merged
+      .map(p => ({ p, t: this._parseDate(p.period_end) }))
+      .filter(x => x.t != null)
+      .sort((a, b) => a.t - b.t)
+      .map(x => x.p);
+  },
+
   /* Derive a NATURAL (calendar) year from quarterly period facts.
      Uses ONLY kind=quarter && status=actual periods with calendar_year===year,
      keyed off calendar_quarter (so a fiscal-year-shifted company still yields the
@@ -643,25 +746,60 @@ const Selectors = {
      all four quarters carry it non-null; otherwise that metric is null (chosen
      representation: complete reflects QUARTER coverage, each metric independently
      null on any gap). guidance never participates. basis:"periods". */
+  CY_STRICT_TOL_DAYS: 4,   // 严格 CY 边界容差: 拼接后端点须落在 YYYY-01-01 / YYYY-12-31 的 ±4 天内
+                           // (吸收季历末日的自然浮动, 如 3-31/6-30/9-30/12-31 与实际报告期末微差)
+
   calendarYear(c, year) {
     const out = {
       label: "CY" + year, year, complete: false, missing: this.CAL_QUARTERS.slice(),
       revenue: null, op_income: null, net_income: null, cfo: null, capex: null,
       sources: [], basis: "periods",
+      // 严格 CY 边界 (用户拍板 2026-07-07): strict=true 仅当四季 [start,end] 拼接完整覆盖
+      // 自然年首尾; 覆盖不可验证 (period_start 缺) 或财年错位拼不满 → strict=false 的
+      // "reporting-period CY proxy" (仍出值, 由 strict/coverage_* 显式标注, 视图负责灰显带因)。
+      strict: false, coverage_start: null, coverage_end: null, coverage: {},
     };
     if (!c || year == null) return out;
     const qs = this.actualPeriods(c)
       .filter(p => p.kind === "quarter" && p.calendar_year === year && p.calendar_quarter);
-    const byQ = {};
-    for (const p of qs) byQ[p.calendar_quarter] = p;   // sorted ascending → latest wins on dup
+    const byQ = {}, basisByQ = {};
+    for (const p of qs) { byQ[p.calendar_quarter] = p; basisByQ[p.calendar_quarter] = "actual"; } // sorted asc → latest wins on dup
+
+    // implied Q4 补全 (仅自然年口径): 缺 calendar Q4 而 Q1-Q3 齐 → 用 annual−(fiscalQ1-3) 补。
+    // 只对自然年公司成立: 其 fiscal Q4 恰是 calendar Q4 (impliedQ4.calendar_quarter==="Q4" 且落本年)。
+    // 财年错位公司 (Micron 等) 的 implied 财季 Q4 不落 calendar Q4 → 条件不满足 → 不补 (仍 incomplete)。
+    if (!byQ.Q4 && byQ.Q1 && byQ.Q2 && byQ.Q3) {
+      const annual = this.periods(c).find(p => p.kind === "annual" && p.status === "actual"
+        && (p.calendar_year != null ? p.calendar_year : this._calYearOf(p.period_end)) === year);
+      if (annual && annual.fiscal_year) {
+        const iq4 = this.impliedQ4(c, annual.fiscal_year);
+        if (iq4 && iq4.calendar_year === year && iq4.calendar_quarter === "Q4") {
+          byQ.Q4 = iq4; basisByQ.Q4 = "implied_q4";
+        }
+      }
+    }
+
     const present = this.CAL_QUARTERS.filter(q => byQ[q]);
     out.missing = this.CAL_QUARTERS.filter(q => !byQ[q]);
     out.complete = out.missing.length === 0;
+    for (const q of present) out.coverage[q] = basisByQ[q];
     out.sources = present.flatMap(q => byQ[q].sources || []);
+    if (basisByQ.Q4 === "implied_q4") out.basis = "implied_q4";
     if (!out.complete) return out;
     for (const m of this.PERIOD_METRICS) {
       const vals = this.CAL_QUARTERS.map(q => byQ[q][m]);
       out[m] = vals.every(v => v != null) ? vals.reduce((s, v) => s + v, 0) : null;
+    }
+    // 严格 CY 边界: 四季 period_start/period_end 拼接须覆盖 [year-01-01, year-12-31] (±容差)。
+    // 任一 period_start 缺 (synth 路径) → 无法验证覆盖 → 至多 proxy (strict=false)。
+    const startTs = this.CAL_QUARTERS.map(q => this._parseDate(byQ[q].period_start));
+    const endTs = this.CAL_QUARTERS.map(q => this._parseDate(byQ[q].period_end));
+    if (startTs.every(t => t != null)) out.coverage_start = new Date(Math.min(...startTs)).toISOString().slice(0, 10);
+    if (endTs.every(t => t != null)) out.coverage_end = new Date(Math.max(...endTs)).toISOString().slice(0, 10);
+    if (out.coverage_start && out.coverage_end) {
+      const jan1 = this._parseDate(year + "-01-01"), dec31 = this._parseDate(year + "-12-31");
+      const tol = this.CY_STRICT_TOL_DAYS * this.DAY_MS;
+      out.strict = Math.abs(Math.min(...startTs) - jan1) <= tol && Math.abs(Math.max(...endTs) - dec31) <= tol;
     }
     return out;
   },
@@ -696,12 +834,17 @@ const Selectors = {
      null for such companies; the FY-anchored ttmNetIncome(c) above remains the fallback.
      Returns { metric, value, complete, quarters, asOf, contiguous, gap }. */
   ttmFromPeriods(c, metric) {
-    const qs = this.actualPeriods(c).filter(p => p.kind === "quarter");
+    // 组合季 = actual 季 + 可派生的 implied Q4 占位季 (优先级: actual > implied Q4)。implied Q4
+    // 参与连号判断 (当作真实占位季), 补上美股财年末系统性缺失的第四季。无年度期/凑不齐硬约束 →
+    // 无 implied → 退化为纯 actual 序列 (行为不变)。
+    const qs = this._quartersWithImpliedQ4(c);
     const last4 = qs.slice(-4);
     const out = {
       metric, value: null, complete: false, quarters: qs.length,
       asOf: last4.length ? last4[last4.length - 1].period_end : null,
       contiguous: false, gap: null,
+      basis: last4.map(p => p._basis || "actual"),                 // 每季来源: actual | implied_q4
+      usedImpliedQ4: last4.some(p => p._basis === "implied_q4"),
     };
     if (last4.length < 4) return out;                    // not enough quarters (coverage shortfall, not a gap)
     // continuity: consecutive calendar-quarter indices, else report the first hole
@@ -732,7 +875,15 @@ const Selectors = {
      present; a metric sums only when complete AND all four carry it non-null, else
      null. Mixed actual/guarterly-guidance never completes: guidance quarters are
      excluded from the sum, so a fiscal year holding a guidance quarter stays <4
-     actual → incomplete. Returns
+     actual → incomplete.
+     NOTE on implied Q4: fiscalYearFromPeriods intentionally does NOT synthesize an
+     implied Q4. implied Q4 = annual − (Q1+Q2+Q3), so it can only exist when an annual
+     period exists — and when it does, the annual_report branch below already returns the
+     official full-year fact directly (strictly better than reconstructing it from a
+     difference). So there is no reachable gap for implied Q4 to fill here; the ladder
+     (annual_report > quarter_sum) subsumes it. (calendarYear / ttmFromPeriods DO use
+     implied Q4, where an annual can complete a calendar/rolling window the quarters miss.)
+     Returns
      { fy, label, basis, complete, revenue, op_income, net_income, cfo, capex, quarters, sources }. */
   fiscalYearFromPeriods(c, fy) {
     const out = {
