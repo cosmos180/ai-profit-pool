@@ -63,18 +63,40 @@
     { k: 'calendarYear', label: '自然年' }, { k: 'fiscalYear', label: '财年' },
   ]
   const lensLabel = { latestQuarter: '最新季', ttm: 'TTM', calendarYear: '自然年', fiscalYear: '财年' }
-  const AUTO_LENS = 'ttm'          // 默认偏好口径
-  const LENS_MIN_RATIO = 1 / 3     // TTM 完整覆盖 < 1/3 → 自动退回最新季（口径不足以横比）
-  // 各镜头完整家数（呈现层计数，非财务算术——同 ranked/maxV 的排序/取极值性质）。
-  const lensCompleteN = mode => pop.reduce((n, c) => n + (Selectors.companyMetricView(c, mode).complete ? 1 : 0), 0)
-  const ttmDone = $derived(lensCompleteN('ttm'))
-  // 已迁入 periods 的家数（呈现层计数，非财务算术）。判定用 reason==='not_migrated' 这个精确
-  // token——coverage.missing_periods 是「该镜头所需 periods 不足」（三星/美光在 TTM 下也为
-  // true），不等于「未迁入」，误用会少算已迁但覆盖不足的公司。
-  const migratedN = $derived(pop.reduce((n, c) => n + (Selectors.companyMetricView(c, AUTO_LENS).coverage.reason === 'not_migrated' ? 0 : 1), 0))
-  const autoLens = $derived(ttmDone / Math.max(pop.length, 1) >= LENS_MIN_RATIO ? AUTO_LENS : 'latestQuarter')
+  const AUTO_LENS = 'latestQuarter' // 默认看最新已发布季度，让 2026Q1/Q2 第一眼可见
+  const autoLens = $derived(AUTO_LENS)
   const effLens = $derived(nav.reportLens === 'auto' ? autoLens : nav.reportLens)
-  const autoFellBack = $derived(nav.reportLens === 'auto' && autoLens !== AUTO_LENS)
+
+  const qTag = q => q?.calendar_year != null && q?.calendar_quarter ? `${q.calendar_year}${q.calendar_quarter}` : null
+  const latestReportCoverage = $derived.by(() => {
+    const latest = pop.map(c => ({ c, q: Selectors.latestQuarter(c) })).filter(x => x.q)
+    const actualByTag = new Map()
+    for (const item of latest) {
+      const tag = qTag(item.q)
+      if (!tag) continue
+      if (!actualByTag.has(tag)) actualByTag.set(tag, [])
+      actualByTag.get(tag).push(item.c)
+    }
+    const actual = [...actualByTag.entries()]
+      .sort(([a], [b]) => b.localeCompare(a))
+      .map(([tag, companies]) => ({ tag, n: companies.length, names: companies.map(x => shortName(x)).join(' / ') }))
+
+    const guidanceByTag = new Map()
+    for (const c of pop) {
+      const qs = Selectors.periods(c).filter(p => p.kind === 'quarter' && p.status === 'guidance')
+      for (const q of qs) {
+        const tag = qTag(q)
+        if (!tag) continue
+        if (!guidanceByTag.has(tag)) guidanceByTag.set(tag, [])
+        guidanceByTag.get(tag).push(c)
+      }
+    }
+    const guidance = [...guidanceByTag.entries()]
+      .sort(([a], [b]) => b.localeCompare(a))
+      .map(([tag, companies]) => ({ tag, n: companies.length, names: companies.map(x => shortName(x)).join(' / ') }))
+
+    return { actualN: latest.length, actual, guidance }
+  })
 
   // 镜头 coverage 文案（纯呈现：把 coverage.reason/标记翻成人话）。
   const METRIC_CN = { revenue: '营收', op_income: '经营利润', net_income: '净利' }
@@ -135,9 +157,18 @@
       <button class="lensbtn reset" onclick={() => nav.setReportLens('auto')} title="恢复按覆盖度自动选镜头">↺ 自动</button>
     {/if}
   </div>
+  <div class="latest-strip" aria-label="最新财报覆盖">
+    <span class="latest-label">最新财报</span>
+    <span class="latest-total">{latestReportCoverage.actualN}/{pop.length} 家有实际季度</span>
+    {#each latestReportCoverage.actual as item (item.tag)}
+      <span class="latest-chip" title={item.names}>{item.tag} · {item.n} 家</span>
+    {/each}
+    {#each latestReportCoverage.guidance as item (item.tag)}
+      <span class="latest-chip guide" title={item.names}>{item.tag} guidance · {item.n} 家</span>
+    {/each}
+  </div>
   <div class="lens-note">
-    此镜头只作用于<b>下方登记表</b>的「按镜头」数值/角标区；迁移图、AI 利润池、估值卡仍走年度（years[]）口径。
-    {#if autoFellBack}<br><b>默认 TTM 覆盖不足</b>（TTM 完整 {ttmDone}/{pop.length}，低于 1/3），已自动退回<b>最新季</b>——当前 <b>{migratedN}/{pop.length}</b> 家已迁入 <code style="font-family:var(--mono)">periods</code>，其余公司此镜头留空并标「尚未迁入 periods」。{/if}
+    默认展示<b>最新季</b>，用于看 2026 年已发布财报；TTM 仍适合横向比较利润池，自然年 2026 在 Q1-Q4 未齐前会诚实显示缺季。此镜头只作用于<b>下方登记表</b>的「按镜头」数值/角标区；迁移图、AI 利润池、估值卡仍走年度（years[]）口径。
   </div>
 </div>
 
