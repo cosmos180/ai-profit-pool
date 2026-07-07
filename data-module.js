@@ -881,6 +881,52 @@ const Selectors = {
     return out;
   },
 
+  /* ---- TTM net income, UNIFIED (period-base refactor · Phase 6.2 过渡版, 算不存) ----
+     过渡期 TTM 口径统一入口: 优先 periods (含 implied Q4), periods 凑不齐时回退 legacy
+     ttmNetIncome(c) —— 让消费方 (profitPoolTTM) 既吃到已迁移公司的 periods 口径, 又不丢
+     未补齐季度公司的历史 TTM。**这是过渡口径, 非严格 periods-pure** —— 严格镜头
+     (companyMetricView "ttm") 仍只走 ttmFromPeriods (无回退)。最终退旧 (删 legacy_fallback
+     分支) 待稀疏公司季度补齐后另启 (Phase 6.2 完全体)。
+     阶梯 (优先级): periods (complete 且 value 非 null) > legacy_fallback (ttmNetIncome 非 null) > null。
+     全 null 安全。Returns { value, basis, asOf, coverage }:
+       · basis="periods":          coverage 透传 periods 侧 quarter_basis[]/usedImpliedQ4/quarters/contiguous;
+       · basis="legacy_fallback":  coverage.reason="periods_insufficient" + periods 侧覆盖摘要 (为何不够);
+       · basis=null (皆无):         value=null, coverage.reason="no_ttm"。 */
+  ttmNetIncomeUnified(c) {
+    if (!c) return { value: null, basis: null, asOf: null, coverage: { reason: "no_company" } };
+    const p = this.ttmFromPeriods(c, "net_income");
+    if (p.complete && p.value != null) {
+      return {
+        value: p.value,
+        basis: "periods",
+        asOf: p.asOf,
+        coverage: {
+          quarter_basis: p.basis,          // 每季来源: actual | implied_q4
+          usedImpliedQ4: p.usedImpliedQ4,
+          quarters: p.quarters,
+          contiguous: p.contiguous,
+        },
+      };
+    }
+    const leg = this.ttmNetIncome(c);
+    if (leg != null) {
+      return {
+        value: leg,
+        basis: "legacy_fallback",
+        asOf: this.ttmAsOf(c),
+        coverage: {
+          reason: "periods_insufficient",  // periods 侧为何不够 (下方摘要)
+          quarter_basis: p.basis,
+          usedImpliedQ4: p.usedImpliedQ4,
+          quarters: p.quarters,
+          contiguous: p.contiguous,
+          gap: p.gap,
+        },
+      };
+    }
+    return { value: null, basis: null, asOf: null, coverage: { reason: "no_ttm", quarters: p.quarters, gap: p.gap } };
+  },
+
   /* Company-reported FISCAL year from periods (period-base).
      If a kind=annual period with matching fiscal_year exists → official full-year
      fact wins (basis="annual_report", complete). Else sum actual quarters sharing
@@ -1036,6 +1082,9 @@ const Selectors = {
         fill();
       }
     } else if (mode === "ttm") {
+      // 镜头是**严格 periods-pure** 口径: 只走 ttmFromPeriods (无 legacy 回退), 与过渡口径的
+      // 池子 (profitPoolTTM → ttmNetIncomeUnified, 含 legacy_fallback) 定位不同 —— 镜头严格、
+      // 池子从全。故未迁移公司此处诚实 incomplete, 而非借 legacy 补 (Phase 6.2 过渡版分层)。
       const res = {};
       for (const m of this.VIEW_METRICS) res[m] = this.ttmFromPeriods(c, m);
       const ni = res.net_income;   // structural flags shared across the 3 metric windows
@@ -1101,8 +1150,12 @@ const Selectors = {
   /* ---- TTM profit pool (value-chain stacked, self-rolled per company, AI-weighted) ----
      口径统一 (ADR-3): TTM 净利同样按 aiShare(c) 加权,与 profitPoolAI / profitPoolMigration
      的三根年度柱完全同口径 —— 同一张迁移图不再混"全额 TTM vs 加权年度"。
-       ni = ttmNetIncome(c) × aiShare(c).value (公司级,用 latestActual 的 is_ai 代理)。
-     Per-company null-safe & honest-gap: ttmNetIncome 为 null 或 aiShare.value 为 null 的
+     Phase 6.2 过渡: TTM 净利改走 ttmNetIncomeUnified(c) —— 已迁移公司吃 periods 口径 (含
+     implied Q4), 稀疏公司回退 legacy ttmNetIncome。故这是**过渡口径的池子** (periods+legacy
+     混采), 与严格 periods-pure 的镜头 (companyMetricView "ttm") 定位不同: 池子要尽量全 (补最新季),
+     镜头要严格 (只认 periods)。per-member 透传 basis, 返回 basisCount 供视图诚实标注口径构成。
+       ni = ttmNetIncomeUnified(c).value × aiShare(c).value (公司级,用 latestActual 的 is_ai 代理)。
+     Per-company null-safe & honest-gap: unified value 为 null 或 aiShare.value 为 null 的
      公司一律 DROP(绝不计 0、不 impute),与年度口径一致。total 仅累计加权后的贡献者。
      Reuses the same _aggregateStages atom as the annual migration so stage口径 cannot drift.
      asOfSpreadDays = max−min of contributing companies' latest-quarter dates — lets
@@ -1110,23 +1163,25 @@ const Selectors = {
   profitPoolTTM(companies) {
     const list = companies || [];
     const rows = [];
+    const basisCount = { periods: 0, legacy_fallback: 0 };
     let spreadMin = Infinity, spreadMax = -Infinity;
     for (const c of list) {
-      const ttm = this.ttmNetIncome(c);
-      if (ttm == null) continue;                        // honest gap: skip, never impute
+      const u = this.ttmNetIncomeUnified(c);            // 过渡口径: periods > legacy_fallback > null
+      if (u.value == null) continue;                    // honest gap: skip, never impute
       const share = this.aiShare(c).value;              // company-level, latestActual is_ai proxy
       if (share == null) continue;                      // no aiShare → drop (ADR-3, same as annual)
-      const asOf = this.ttmAsOf(c);
+      basisCount[u.basis] = (basisCount[u.basis] || 0) + 1;
+      const asOf = u.asOf;
       const t = this._parseDate(asOf);
       if (t != null) { if (t < spreadMin) spreadMin = t; if (t > spreadMax) spreadMax = t; }
-      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: ttm * share, asOf, aiShare: share });
+      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: u.value * share, asOf, aiShare: share, basis: u.basis });
     }
     const total = rows.reduce((s, r) => s + r.ni, 0);
     const stages = this._aggregateStages(rows, total).map(s => ({
       ...s,
       companies: s.companies.map(m => {
         const src = rows.find(r => r.id === m.id);
-        return { id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf, aiShare: src ? src.aiShare : null };
+        return { id: m.id, name: m.name, ttm: m.ni, asOf: m.asOf, aiShare: src ? src.aiShare : null, basis: src ? src.basis : null };
       }),
     }));
     const asOfSpreadDays = rows.length
@@ -1138,6 +1193,7 @@ const Selectors = {
       n: rows.length,
       asOfSpreadDays,
       stages,
+      basisCount,   // {periods:n, legacy_fallback:m} — 口径构成 (视图诚实标注, 组件零算术)
     };
   },
 

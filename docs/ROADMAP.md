@@ -39,6 +39,7 @@
 - [~] **D5 · 季度净利补齐 6 家**(🧑 Tiger `get_financial_report` period=季度,最近约 8 季;🤖 merge)
   - 进展:google/microsoft/amazon/oracle 已补最近约 8 季;softbank/tencent 仍缺口。
   - 软银收益最低(净利受投资损益主导)可最后/放弃,规格已注明
+  - **补齐后删 `ttmNetIncomeUnified` 的 legacy fallback 分支**(period-base Phase 6.2 完全体):当前 nvda/samsung/broadcom/skhynix/tsmc/asml 的 TTM 仍走 legacy 回退(periods 尚不足四季);季度补齐至 periods 够用后,unified 可退掉 `legacy_fallback` 分支、迁移图 TTM 柱变纯 periods 口径。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
   - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
@@ -58,6 +59,9 @@
 - [x] **E1 · validate.py TODAY 去硬编码**——已改为真实 `date.today()`;quote 新鲜度随真实日期滚动。
 - [x] **E2 · 测试拆分:逻辑回归 vs 数据快照**——已拆为 `test-logic.js` + `test-snapshot.js`;数据刷新用快照更新,逻辑回归保持稳定。
 - [ ] **E3 · FX 口径统一**——各公司历史条目汇率来源异质(都有标注、不算错);随 D1 换血顺手统一为「公司隐含均汇优先,否则期间均汇,来源注明」
+- [~] **E4 · period-base 数据模型重构**(🤖 团队;计划见 `docs/plans/period-base-refactor.md`)——把 app 重建在 report-period 原子(`periods[]`)之上,FY/CY/TTM/最新季/AI 归因/估值全由 Selector 派生。
+  - **Phase 1–5 全量完成 14/14**:schema `periods[]` + validate 契约、selector 层(periods/calendarYear/ttmFromPeriods/fiscalYearFromPeriods/companyMetricView + implied Q4 派生 + 严格 CY 边界)、四镜头视图、14 家公司全部迁入 `periods[]`。
+  - **Phase 6 过渡版落地**:6.1 `years[]/quarters[]` 标 legacy(schema/DATA-SPEC/本文,零行为变化);6.2 过渡 `ttmNetIncomeUnified`(periods > legacy_fallback > null)接入 `profitPoolTTM`——oracle 由 periods 口径接回(TTM 池 10→11 家),迁移图 TTM 柱诚实标注口径构成(periods 5 家 · legacy 回退 6 家)。**最终退旧(删 legacy fallback)见 D5 备注**,待稀疏公司季度补齐后另启。
 
 ## P4 · 产品决策(不排期,需要用户拍板后才动)
 

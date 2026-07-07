@@ -1139,80 +1139,91 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 404.892688,
-    "n": 10,
-    "asOfSpreadDays": 58,
+    "total": 413.626978,
+    "n": 11,
+    "asOfSpreadDays": 61,
+    "basisCount": {
+      "periods": 5,
+      "legacy_fallback": 6
+    },
     "stages": {
       "design": {
         "value": 160.105816,
-        "share": 0.395428,
+        "share": 0.387078,
         "companies": [
           {
             "id": "nvda",
             "name": "NVIDIA 英伟达",
             "ttm": 143.192109,
             "asOf": "2026-04-26",
-            "aiShare": 0.897194
+            "aiShare": 0.897194,
+            "basis": "legacy_fallback"
           },
           {
             "id": "broadcom",
             "name": "Broadcom 博通",
             "ttm": 16.913707,
             "asOf": "2026-05-03",
-            "aiShare": 0.576925
+            "aiShare": 0.576925,
+            "basis": "legacy_fallback"
           }
         ]
       },
       "foundry": {
         "value": 36.151604,
-        "share": 0.089287,
+        "share": 0.087401,
         "companies": [
           {
             "id": "tsmc",
             "name": "TSMC 台积电",
             "ttm": 36.151604,
             "asOf": "2026-03-31",
-            "aiShare": 0.580003
+            "aiShare": 0.580003,
+            "basis": "legacy_fallback"
           }
         ]
       },
       "memory": {
         "value": 92.095467,
-        "share": 0.227456,
+        "share": 0.222653,
         "companies": [
           {
             "id": "samsung",
             "name": "Samsung 三星电子",
             "ttm": 20.947919,
             "asOf": "2026-03-31",
-            "aiShare": 0.357711
+            "aiShare": 0.357711,
+            "basis": "legacy_fallback"
           },
           {
             "id": "micron",
             "name": "Micron 美光",
             "ttm": 18.260548,
             "asOf": "2026-05-28",
-            "aiShare": 0.361817
+            "aiShare": 0.361817,
+            "basis": "periods"
           },
           {
             "id": "skhynix",
             "name": "SK hynix",
             "ttm": 52.887,
             "asOf": "2026-03-31",
-            "aiShare": 1
+            "aiShare": 1,
+            "basis": "legacy_fallback"
           }
         ]
       },
       "equipment": {
         "value": 4.051968,
-        "share": 0.010008,
+        "share": 0.009796,
         "companies": [
           {
             "id": "asml",
             "name": "ASML",
             "ttm": 4.051968,
             "asOf": "2026-03-31",
-            "aiShare": 0.355187
+            "aiShare": 0.355187,
+            "basis": "legacy_fallback"
           }
         ]
       },
@@ -1227,29 +1238,40 @@
         "companies": []
       },
       "cloud": {
-        "value": 112.487834,
-        "share": 0.277821,
+        "value": 121.222124,
+        "share": 0.293071,
         "companies": [
           {
             "id": "google",
             "name": "Alphabet 谷歌",
             "ttm": 17.269942,
             "asOf": "2026-03-31",
-            "aiShare": 0.107797
+            "aiShare": 0.107797,
+            "basis": "periods"
           },
           {
             "id": "microsoft",
             "name": "Microsoft 微软",
             "ttm": 43.44006,
             "asOf": "2026-03-31",
-            "aiShare": 0.346921
+            "aiShare": 0.346921,
+            "basis": "periods"
           },
           {
             "id": "amazon",
             "name": "Amazon 亚马逊",
             "ttm": 51.777832,
             "asOf": "2026-03-31",
-            "aiShare": 0.570253
+            "aiShare": 0.570253,
+            "basis": "periods"
+          },
+          {
+            "id": "oracle",
+            "name": "Oracle 甲骨文",
+            "ttm": 8.73429,
+            "asOf": "2026-05-31",
+            "aiShare": 0.50461,
+            "basis": "periods"
           }
         ]
       }

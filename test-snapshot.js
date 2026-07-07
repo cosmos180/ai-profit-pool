@@ -116,7 +116,7 @@ function build() {
     migration: migration.map((m) => ({ label: m.label, total: m.total, n: m.n, N: m.N, stages: stagesMap(m.stages) })),
     leader: { id: leader.leader ? leader.leader.id : null, share: leader.share, pool: leader.pool, n: leader.n, N: leader.N, basisCount: leader.basisCount },
     yoy: { value: yoy.value, migLastLabel: yoy.migLast ? yoy.migLast.label : null, migPrevLabel: yoy.migPrev ? yoy.migPrev.label : null },
-    ttmPool: { total: ttmPool.total, n: ttmPool.n, asOfSpreadDays: ttmPool.asOfSpreadDays, stages: stagesMap(ttmPool.stages) },
+    ttmPool: { total: ttmPool.total, n: ttmPool.n, asOfSpreadDays: ttmPool.asOfSpreadDays, basisCount: ttmPool.basisCount, stages: stagesMap(ttmPool.stages) },
     stageValuationRel,
   });
 }

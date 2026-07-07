@@ -1,5 +1,8 @@
 # DATA-SPEC-tiger — 老虎证券(Tiger Open API)取数规格
 
+> ⚠ **新采集目标已切换为 `periods[]`(period-base 重构)。** `years[]` / `quarters[]` 已标 legacy(迁移兼容层,仅供旧视图/回退,最终退役见 `docs/plans/period-base-refactor.md` Phase 6.2)。
+> 新的财报事实请按报告期原子写 `periods[]`:每条一个 reported-period(`kind` = quarter | annual、`status` = actual | guidance | forecast),带 `period_start/period_end`(机读 ISO)、`calendar_year/calendar_quarter`、`fiscal_year/fiscal_quarter`、`currency/fx_to_usd`(非 USD 源必带正 `fx_to_usd`,如三星 KRW)、可空财务字段与 `sources[]`(url + data_status)。形状要点见计划文档 **Target Data Shape** 一节;字段映射细节可后续修订,本轮先立牌子。行情快照/预期 EPS 等 Tiger 特有输出不变。
+>
 > 面向对象:一个能调用 Tiger `QuoteClient` 的取数 skill。
 > 目标:skill 按本规格输出 JSON → 经 `tools/merge.py` 合并 → `validate.py` 0 ERROR → `cd web && bun run build` 上屏。
 > skill **只吐原始事实**,不算派生比率,不碰视图,不改代码。

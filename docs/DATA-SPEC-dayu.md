@@ -1,5 +1,8 @@
 # DATA-SPEC-dayu — Dayu MCP(SEC EDGAR)取数规格
 
+> ⚠ **新采集目标已切换为 `periods[]`(period-base 重构)。** `years[]` / `quarters[]` 已标 legacy(迁移兼容层,仅供旧视图/回退,最终退役见 `docs/plans/period-base-refactor.md` Phase 6.2)。
+> 新数据请按报告期原子录入 `periods[]`:每条是一个 reported-period 事实(`kind` = quarter | annual、`status` = actual | guidance | forecast),带 `period_start/period_end`(机读 ISO)、`calendar_year/calendar_quarter`、`fiscal_year/fiscal_quarter`、`currency/fx_to_usd`(非 USD 源必带正 `fx_to_usd`)、可空财务字段与 `sources[]`(url + data_status)。形状要点见计划文档 **Target Data Shape** 一节;字段映射细节可后续修订,本轮先立牌子。TTM/CY/FY 一律由 Selector 派生(算不存)。
+>
 > Dayu 是第三条采集通道,与 Tiger、「丢 PDF 人工提取」互补。跑在**用户本地**(需 DeepSeek key + EDGAR)。
 > 共享规则(单位 USD bn、id 硬清单、判断项不输出、输出 JSON 形状、merge 流程、自检清单)
 > **一律沿用 `DATA-SPEC-tiger.md` 第 1/4/5/7/8 节**,本文只写 Dayu 特有的部分。
