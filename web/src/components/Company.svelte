@@ -29,34 +29,57 @@
     if (latestPeriod?.gross_profit != null) cards.push({ lbl: '毛利', val: Fmt.bn(latestPeriod.gross_profit, 1), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
     return cards
   })
+  const periodTag = p => p?.calendar_year != null && p?.calendar_quarter ? `${p.calendar_year}${p.calendar_quarter}` : (p?.period_end || p?.period_id || '—')
 
   // KPI 卡（原 renderCompany cards 逻辑）。fmt 已在此完成，val/sub 是格式化串。
   const kpis = $derived.by(() => {
     if (!c) return []
-    const cards = la
+    return la
       ? [
           { lbl: `${la.fy} 营收`, val: Fmt.bn(la.revenue), sub: '最新实际', cls: '', sw: 'var(--past)' },
           { lbl: `${la.fy} 净利润`, val: Fmt.bn(la.net_income), sub: '净利率 ' + Fmt.pct(Selectors.netMargin(la)), cls: 'accent', sw: 'var(--ok)' },
           { lbl: `${la.fy} 毛利率`, val: Fmt.pct(la.gross_margin), sub: 'GAAP', cls: 'accent', sw: 'var(--ok)' },
         ]
       : [{ lbl: '实际财年', val: '—', sub: '尚未补录 actual 年', cls: '', sw: 'var(--past)' }]
-    if (fc) cards.push({ lbl: `${fc.fy} 营收`, val: '≈' + Fmt.bn(fc.revenue, 0), sub: '卖方一致预期', cls: 'est', sw: 'var(--est)' })
-    return cards
+  })
+
+  const quarterRows = $derived.by(() => {
+    if (!c) return []
+    return Selectors.periods(c)
+      .filter(p => p.kind === 'quarter' && p.status === 'actual')
+      .slice()
+      .sort((a, b) => (b.period_end || '').localeCompare(a.period_end || ''))
+      .map(p => ({
+        id: p.period_id || p.period_end,
+        tag: periodTag(p),
+        end: p.period_end,
+        revLabel: Fmt.bn(p.revenue, 1),
+        niLabel: Fmt.bn(p.net_income, 1),
+        nmLabel: Fmt.pct(p.revenue && p.net_income != null ? p.net_income / p.revenue : null),
+      }))
   })
 
   // 年份表行（原 cYears map）。点击 → goDetail。ry/netMargin 来自 Selectors。
   const yearRows = $derived.by(() => {
     if (!c) return []
-    return c.years.map(y => {
-      const fcc = y.status === 'forecast'
+    return c.years.filter(y => y.status !== 'forecast').map(y => {
       const ry = Selectors.revYoY(c, y.fy)
       return {
-        fy: y.fy, fcc, ry,
-        revLabel: (fcc ? '≈' : '') + Fmt.bn(y.revenue, fcc ? 0 : 1),
-        niLabel: y.net_income != null ? (fcc ? '≈' : '') + Fmt.bn(y.net_income, fcc ? 0 : 1) : '—',
+        fy: y.fy, ry,
+        revLabel: Fmt.bn(y.revenue, 1),
+        niLabel: y.net_income != null ? Fmt.bn(y.net_income, 1) : '—',
         nmLabel: Fmt.pct(Selectors.netMargin(y)),
       }
     })
+  })
+  const forecastRows = $derived.by(() => {
+    if (!c) return []
+    return c.years.filter(y => y.status === 'forecast').map(y => ({
+      fy: y.fy,
+      revLabel: '≈' + Fmt.bn(y.revenue, 0),
+      niLabel: y.net_income != null ? '≈' + Fmt.bn(y.net_income, 0) : '—',
+      nmLabel: Fmt.pct(Selectors.netMargin(y)),
+    }))
   })
 
   // —— 现金块（原 renderCash）：用 latestCashYear 回退（非 latestActual）——
@@ -150,11 +173,26 @@
 
   <ValuationCard company={c} />
 
-  <div class="section-h">按财年下钻 · 点击进入业务板块明细</div>
+  {#if quarterRows.length}
+    <div class="section-h">季度事实 · 实际报告期</div>
+    <div class="years">
+      {#each quarterRows as q (q.id)}
+        <div class="ycard qcard">
+          <div class="yhead"><span class="yfy">{q.tag}</span><span class="ybadge act">实际</span></div>
+          <div class="yrev num">{q.revLabel}</div>
+          <div class="yrevlbl">营收 · 截至 {q.end}</div>
+          <div class="yrow"><span class="l">净利润</span><span class="v num">{q.niLabel}</span></div>
+          <div class="yrow"><span class="l">净利率</span><span class="v num">{q.nmLabel}</span></div>
+        </div>
+      {/each}
+    </div>
+  {/if}
+
+  <div class="section-h">按财年下钻 · 实际年度</div>
   <div class="years">
     {#each yearRows as y (y.fy)}
-      <button class="ycard {y.fcc ? 'is-fc' : ''}" onclick={() => nav.goDetail(c.id, y.fy)}>
-        <div class="yhead"><span class="yfy">{y.fy}</span><span class="ybadge {y.fcc ? 'fc' : 'act'}">{y.fcc ? '预测' : '实际'}</span></div>
+      <button class="ycard" onclick={() => nav.goDetail(c.id, y.fy)}>
+        <div class="yhead"><span class="yfy">{y.fy}</span><span class="ybadge act">实际</span></div>
         <div class="yrev num">{y.revLabel}</div>
         <div class="yrevlbl">营收{#if y.ry != null} · 同比 {Fmt.yoy(y.ry)}{/if}</div>
         <div class="yrow"><span class="l">净利润</span><span class="v num">{y.niLabel}</span></div>
@@ -163,6 +201,22 @@
       </button>
     {/each}
   </div>
+
+  {#if forecastRows.length}
+    <div class="section-h">预测 · 非实际经营事实</div>
+    <div class="years">
+      {#each forecastRows as y (y.fy)}
+        <button class="ycard is-fc" onclick={() => nav.goDetail(c.id, y.fy)}>
+          <div class="yhead"><span class="yfy">{y.fy}</span><span class="ybadge fc">预测</span></div>
+          <div class="yrev num">{y.revLabel}</div>
+          <div class="yrevlbl">营收 · 卖方一致预期</div>
+          <div class="yrow"><span class="l">净利润</span><span class="v num">{y.niLabel}</span></div>
+          <div class="yrow"><span class="l">净利率</span><span class="v num">{y.nmLabel}</span></div>
+          <span class="yopen">查看预测锚点 →</span>
+        </button>
+      {/each}
+    </div>
+  {/if}
 
   <div class="note-block"><b>口径说明：</b>{note}</div>
 {/if}
