@@ -943,4 +943,259 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   _refreshStages(CANON_META);
 }
 
+// =====================================================================
+// Period-base layer (period-base refactor · Phase 2): periods/actualPeriods/
+// quarterPeriods/latestQuarter/periodCoverage/calendarYear/ttmFromPeriods/
+// fiscalYearFromPeriods. 合成数据、数据无关；覆盖乱序输入、guidance 可见性、
+// 缺司安全、三缺一、guidance 不补全、财年错位 CY 正确、annual 胜 quarter_sum、
+// 以及 legacy quarters[] 合成 status="actual" 的 Phase 3.1 边界。
+// =====================================================================
+{
+  // period 构造器：默认 quarter/actual/USD，o 覆盖任意字段
+  const P = (o) => ({
+    kind: "quarter", status: "actual", period_start: null,
+    fiscal_year: null, fiscal_quarter: null, currency: "USD", fx_to_usd: 1,
+    revenue: null, gross_profit: null, op_income: null, net_income: null,
+    cfo: null, capex: null, segments: [], sources: [], ...o,
+  });
+
+  // ---- periods(): 排序无视输入顺序 ----
+  const pc = { id: "pc", status: "populated", periods: [
+    P({ period_id: "q3", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", net_income: 3 }),
+    P({ period_id: "q1", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", net_income: 1 }),
+    P({ period_id: "q2", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", net_income: 2 }),
+  ]};
+  assert.deepEqual(Selectors.periods(pc).map(p => p.period_id), ["q1", "q2", "q3"]); // oldest→newest
+
+  // ---- guidance visible to periods()/quarterPeriods() but NOT actualPeriods()/latestQuarter() ----
+  const pg = { id: "pg", status: "populated", periods: [
+    P({ period_id: "a", period_end: "2026-03-31", calendar_year: 2026, calendar_quarter: "Q1", net_income: 10, revenue: 90 }),
+    P({ period_id: "g", period_end: "2026-06-30", calendar_year: 2026, calendar_quarter: "Q2",
+        status: "guidance", net_income: null, revenue: 120, op_income: 60 }),
+  ]};
+  assert.equal(Selectors.periods(pg).length, 2);           // guidance visible
+  assert.equal(Selectors.quarterPeriods(pg).length, 2);
+  assert.equal(Selectors.actualPeriods(pg).length, 1);     // guidance excluded
+  assert.equal(Selectors.latestQuarter(pg).period_id, "a"); // latestQuarter skips guidance
+
+  // ---- missing / empty company safe ----
+  assert.deepEqual(Selectors.periods(null), []);
+  assert.deepEqual(Selectors.periods({}), []);
+  assert.deepEqual(Selectors.actualPeriods(null), []);
+  assert.equal(Selectors.latestQuarter(null), null);
+  assert.equal(Selectors.latestQuarter({ id: "e", quarters: [] }), null);
+
+  // ---- synth from legacy quarters[]: status ALWAYS actual; calendar_quarter from DATE MATH ----
+  const legacy = { id: "lg", status: "populated", quarters: [
+    { period_end: "2026-04-26", label: "Q1 FY2027", net_income: 58.3, sources: [] },
+    { period_end: "2025-04-27", label: "Q1 FY2026", net_income: 18.8, sources: [] },
+  ]};
+  const lp = Selectors.periods(legacy);
+  assert.equal(lp.length, 2);
+  assert.equal(lp[0].period_end, "2025-04-27");            // sorted oldest first
+  assert.equal(lp[0].status, "actual");                    // legacy → always actual
+  assert.equal(lp[0].calendar_quarter, "Q2");              // Apr → Q2 (date math), NOT label 'Q1'
+  assert.equal(lp[0].calendar_year, 2025);
+  assert.equal(lp[0]._synth, true);
+  assert.equal(Selectors.latestQuarter(legacy).period_end, "2026-04-26");
+
+  // ---- Phase 3.1 边界：legacy quarters[] 里三星 Q2'26 guidance 原子（net_income=null,有 rev/op）----
+  // 无 status 字段 → 合成为 status="actual"，故被 latestQuarter 选中。Phase 3.1 把三星转成真
+  // periods[]（status="guidance"）后不再当 actual；UI 到 Phase 4 才接 periods[]，当前无可见影响。
+  const samsungLegacy = { id: "samsung", status: "populated", quarters: [
+    { period_end: "2025-03-31", label: "Q1 2025", net_income: 5.78, sources: [] },
+    { period_end: "2026-03-31", label: "Q1 2026", net_income: 33.21, revenue: 94.18, sources: [] },
+    { period_end: "2026-06-30", label: "Q2 2026 earnings guidance", net_income: null, revenue: 120.27, op_income: 62.88, sources: [] },
+  ]};
+  const slq = Selectors.latestQuarter(samsungLegacy);
+  assert.equal(slq.period_end, "2026-06-30");              // guidance atom synthesized as actual → picked (边界)
+  assert.equal(slq.status, "actual");
+  assert.equal(slq.net_income, null);                      // has rev/op → still a financial fact
+
+  // ---- periodCoverage ----
+  const cov = Selectors.periodCoverage(pg, "ttm");
+  assert.equal(cov.view, "ttm");
+  assert.equal(cov.source, "periods");
+  assert.equal(cov.total, 2);
+  assert.equal(cov.actualQuarters, 1);
+  assert.equal(cov.guidanceQuarters, 1);
+  assert.equal(cov.annual, 0);
+  assert.equal(cov.latestQuarterEnd, "2026-03-31");
+  const covLegacy = Selectors.periodCoverage(legacy);
+  assert.equal(covLegacy.source, "quarters");
+  assert.equal(covLegacy.view, null);
+  assert.equal(covLegacy.actualQuarters, 2);
+  const covEmpty = Selectors.periodCoverage(null);
+  assert.equal(covEmpty.total, 0);
+  assert.equal(covEmpty.latestQuarterEnd, null);
+
+  // =====================================================================
+  // calendarYear(c, year)
+  // =====================================================================
+  // ---- four actual quarters sum correctly ----
+  const cyc = { id: "cyc", status: "populated", periods: [
+    P({ period_id: "q1", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", revenue: 10, op_income: 3, net_income: 2, cfo: 4, capex: 1, sources: [{ label: "a", url: "https://x/1", data_status: "official" }] }),
+    P({ period_id: "q2", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", revenue: 20, op_income: 6, net_income: 4, cfo: 8, capex: 2 }),
+    P({ period_id: "q3", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", revenue: 30, op_income: 9, net_income: 6, cfo: 12, capex: 3 }),
+    P({ period_id: "q4", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", revenue: 40, op_income: 12, net_income: 8, cfo: 16, capex: 4 }),
+  ]};
+  const cy = Selectors.calendarYear(cyc, 2025);
+  assert.equal(cy.complete, true);
+  assert.deepEqual(cy.missing, []);
+  assert.equal(cy.revenue, 100); assert.equal(cy.op_income, 30);
+  assert.equal(cy.net_income, 20); assert.equal(cy.cfo, 40); assert.equal(cy.capex, 10);
+  assert.equal(cy.label, "CY2025"); assert.equal(cy.year, 2025); assert.equal(cy.basis, "periods");
+  assert.equal(cy.sources.length, 1);                      // provenance aggregated from the quarters
+
+  // ---- three quarters → incomplete with missing quarter list, metrics null ----
+  const cy3 = Selectors.calendarYear({ id: "x", periods: [
+    P({ period_id: "q1", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", revenue: 10, net_income: 2 }),
+    P({ period_id: "q2", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", revenue: 20, net_income: 4 }),
+    P({ period_id: "q4", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", revenue: 40, net_income: 8 }),
+  ]}, 2025);
+  assert.equal(cy3.complete, false);
+  assert.deepEqual(cy3.missing, ["Q3"]);
+  assert.equal(cy3.revenue, null);                         // incomplete → metrics null
+  assert.equal(cy3.net_income, null);
+
+  // ---- guidance Q4 does NOT complete a calendar year ----
+  const cyG = Selectors.calendarYear({ id: "x", periods: [
+    P({ period_id: "q1", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", revenue: 10, net_income: 2 }),
+    P({ period_id: "q2", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", revenue: 20, net_income: 4 }),
+    P({ period_id: "q3", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", revenue: 30, net_income: 6 }),
+    P({ period_id: "q4g", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", status: "guidance", revenue: 40, net_income: null }),
+  ]}, 2025);
+  assert.equal(cyG.complete, false);                       // guidance Q4 excluded → Q4 missing
+  assert.deepEqual(cyG.missing, ["Q4"]);
+  assert.equal(cyG.net_income, null);
+
+  // ---- fiscal-year-shifted company with four CALENDAR quarters → correct CY ----
+  // fiscal labels span FY2025/FY2026, but calendar tags align to CY2025 → CY keys off
+  // calendar_year/calendar_quarter, never fiscal_year.
+  const shifted = { id: "shift", periods: [
+    P({ period_id: "s1", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", fiscal_year: "FY2025", fiscal_quarter: "Q3", revenue: 10, net_income: 2 }),
+    P({ period_id: "s2", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", fiscal_year: "FY2025", fiscal_quarter: "Q4", revenue: 20, net_income: 4 }),
+    P({ period_id: "s3", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", fiscal_year: "FY2026", fiscal_quarter: "Q1", revenue: 30, net_income: 6 }),
+    P({ period_id: "s4", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", fiscal_year: "FY2026", fiscal_quarter: "Q2", revenue: 40, net_income: 8 }),
+  ]};
+  const cyShift = Selectors.calendarYear(shifted, 2025);
+  assert.equal(cyShift.complete, true);
+  assert.equal(cyShift.revenue, 100);                      // correct CY despite fiscal shift
+  assert.equal(cyShift.net_income, 20);
+
+  // ---- all four calendar quarters present (complete) but ONE metric has a gap → that metric null ----
+  const cyGap = Selectors.calendarYear({ id: "gap", periods: [
+    P({ period_id: "q1", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", revenue: 10, cfo: 4 }),
+    P({ period_id: "q2", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", revenue: 20, cfo: null }),
+    P({ period_id: "q3", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", revenue: 30, cfo: 12 }),
+    P({ period_id: "q4", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", revenue: 40, cfo: 16 }),
+  ]}, 2025);
+  assert.equal(cyGap.complete, true);                      // quarter coverage complete
+  assert.equal(cyGap.revenue, 100);                        // revenue all present → summed
+  assert.equal(cyGap.cfo, null);                           // one quarter's cfo missing → metric null
+
+  // ---- null-safe ----
+  assert.equal(Selectors.calendarYear(null, 2025).complete, false);
+  assert.equal(Selectors.calendarYear({ id: "e" }, 2025).complete, false);
+  assert.deepEqual(Selectors.calendarYear({ id: "e" }, 2025).missing, ["Q1", "Q2", "Q3", "Q4"]);
+
+  // =====================================================================
+  // ttmFromPeriods(c, metric)
+  // =====================================================================
+  const ttmBase = [
+    P({ period_id: "q1", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", revenue: 10, net_income: 2 }),
+    P({ period_id: "q2", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", revenue: 20, net_income: 4 }),
+    P({ period_id: "q3", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", revenue: 30, net_income: 6 }),
+    P({ period_id: "q4", period_end: "2026-03-31", calendar_year: 2026, calendar_quarter: "Q1", revenue: 40, net_income: 8 }),
+  ];
+  const ttmP = { id: "t", periods: ttmBase };
+  const tni = Selectors.ttmFromPeriods(ttmP, "net_income");
+  assert.equal(tni.value, 20); assert.equal(tni.complete, true);
+  assert.equal(tni.quarters, 4); assert.equal(tni.asOf, "2026-03-31");
+  assert.equal(Selectors.ttmFromPeriods(ttmP, "revenue").value, 100);
+
+  // ---- five quarters → uses LATEST four (drops oldest), not anchored to latestActual ----
+  const ttm5 = { id: "t5", periods: [
+    P({ period_id: "q0", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", net_income: 100 }),
+    ...ttmBase,
+  ]};
+  assert.equal(Selectors.ttmFromPeriods(ttm5, "net_income").value, 20); // latest 4 only
+
+  // ---- guidance-only latest quarter ignored (not in actualPeriods) ----
+  const ttmG = { id: "tg", periods: [
+    ...ttmBase,
+    P({ period_id: "g", period_end: "2026-06-30", calendar_year: 2026, calendar_quarter: "Q2", status: "guidance", net_income: null, revenue: 120 }),
+  ]};
+  const tg = Selectors.ttmFromPeriods(ttmG, "net_income");
+  assert.equal(tg.value, 20);                              // guidance ignored → still the 4 actual quarters
+  assert.equal(tg.asOf, "2026-03-31");
+
+  // ---- missing metric in one of the latest four → null, no crash ----
+  const ttmMiss = { id: "tm", periods: [
+    P({ period_id: "q1", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", net_income: 2 }),
+    P({ period_id: "q2", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", net_income: null }),
+    P({ period_id: "q3", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", net_income: 6 }),
+    P({ period_id: "q4", period_end: "2026-03-31", calendar_year: 2026, calendar_quarter: "Q1", net_income: 8 }),
+  ]};
+  const tmr = Selectors.ttmFromPeriods(ttmMiss, "net_income");
+  assert.equal(tmr.value, null); assert.equal(tmr.complete, false); assert.equal(tmr.quarters, 4);
+
+  // ---- fewer than four quarters → null + coverage ----
+  const ttm2 = { id: "t2", periods: [
+    P({ period_id: "q1", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", net_income: 6 }),
+    P({ period_id: "q2", period_end: "2026-03-31", calendar_year: 2026, calendar_quarter: "Q1", net_income: 8 }),
+  ]};
+  const t2 = Selectors.ttmFromPeriods(ttm2, "net_income");
+  assert.equal(t2.value, null); assert.equal(t2.complete, false);
+  assert.equal(t2.quarters, 2); assert.equal(t2.asOf, "2026-03-31");
+  const t0 = Selectors.ttmFromPeriods({ id: "z" }, "net_income");
+  assert.equal(t0.value, null); assert.equal(t0.quarters, 0); assert.equal(t0.asOf, null);
+  // synth-from-quarters path also feeds ttmFromPeriods (all actual)
+  assert.equal(Selectors.ttmFromPeriods(legacy, "net_income").quarters, 2);
+
+  // =====================================================================
+  // fiscalYearFromPeriods(c, fy)
+  // =====================================================================
+  const fyQuarters = [
+    P({ period_id: "q1", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", fiscal_year: "FY2025", revenue: 10, net_income: 2 }),
+    P({ period_id: "q2", period_end: "2025-06-30", calendar_year: 2025, calendar_quarter: "Q2", fiscal_year: "FY2025", revenue: 20, net_income: 4 }),
+    P({ period_id: "q3", period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", fiscal_year: "FY2025", revenue: 30, net_income: 6 }),
+    P({ period_id: "q4", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", fiscal_year: "FY2025", revenue: 40, net_income: 8 }),
+  ];
+  // ---- annual official beats quarter sum ----
+  const fyA = Selectors.fiscalYearFromPeriods({ id: "fyco", periods: [
+    P({ period_id: "a", kind: "annual", calendar_quarter: null, period_end: "2025-12-31", calendar_year: 2025, fiscal_year: "FY2025", revenue: 99, net_income: 20,
+        sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] }),
+    ...fyQuarters,
+  ]}, "FY2025");
+  assert.equal(fyA.basis, "annual_report");
+  assert.equal(fyA.revenue, 99);                           // annual official (99), NOT quarter sum (100)
+  assert.equal(fyA.net_income, 20);
+  assert.equal(fyA.complete, true);
+  assert.equal(fyA.sources.length, 1);
+
+  // ---- quarter sum works when annual missing ----
+  const fyQ = Selectors.fiscalYearFromPeriods({ id: "fyq", periods: fyQuarters }, "FY2025");
+  assert.equal(fyQ.basis, "quarter_sum");
+  assert.equal(fyQ.complete, true);
+  assert.equal(fyQ.revenue, 100);                          // sum of the four quarters
+  assert.equal(fyQ.net_income, 20);
+  assert.equal(fyQ.quarters, 4);
+
+  // ---- mixed actual/guidance quarters do NOT produce a completed fiscal year ----
+  const fyMix = Selectors.fiscalYearFromPeriods({ id: "fym", periods: [
+    ...fyQuarters.slice(0, 3),
+    P({ period_id: "q4g", period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", fiscal_year: "FY2025", status: "guidance", revenue: 40, net_income: null }),
+  ]}, "FY2025");
+  assert.equal(fyMix.basis, "quarter_sum");
+  assert.equal(fyMix.complete, false);                     // only 3 actual quarters → incomplete
+  assert.equal(fyMix.quarters, 3);
+  assert.equal(fyMix.revenue, null);                       // incomplete → metrics null
+
+  // ---- null-safe ----
+  assert.equal(Selectors.fiscalYearFromPeriods(null, "FY2025").basis, null);
+  const fyNone = Selectors.fiscalYearFromPeriods({ id: "e" }, "FY2099");
+  assert.equal(fyNone.complete, false); assert.equal(fyNone.quarters, 0);
+}
+
 console.log("logic tests passed");

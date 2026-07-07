@@ -526,6 +526,205 @@ const Selectors = {
     return dq.length ? dq[dq.length - 1].q.period_end : null;
   },
 
+  /* =====================================================================
+     Period-base layer (period-base refactor · Phase 2). Report-period base
+     facts live in c.periods[]; fiscal-year / calendar-year / TTM / latest-quarter
+     views are DERIVED here (算不存), never stored — a fiscal year is NEVER
+     rewritten as a calendar year. During migration these selectors PREFER
+     c.periods, and only where a company has none do they synthesize period-like
+     objects from the legacy quarters[] using ONLY period_end date math — labels
+     are NEVER parsed for dates. calendar_quarter of a synthesized period is
+     ceil(month/3) of period_end (date math, not the free-text label).
+     KNOWN LIMITATION (synth status): legacy quarters[] carry no status field, so
+     every synthesized period is status="actual". Samsung's Q2'26 guidance atom
+     currently lives in quarters[] (net_income=null, has revenue/op_income); until
+     Phase 3.1 converts Samsung to real periods[] with status="guidance", the synth
+     path treats it as actual (so latestQuarter can pick it). The UI does not consume
+     periods[] until Phase 4, so this has no user-visible effect. Tested + noted below.
+     All selectors null-safe. Existing ttmNetIncome(c) above is kept as-is (fallback).
+     ===================================================================== */
+  PERIOD_METRICS: ["revenue", "op_income", "net_income", "cfo", "capex"],
+  CAL_QUARTERS: ["Q1", "Q2", "Q3", "Q4"],
+
+  /* calendar quarter (Q1..Q4) from an ISO date's END MONTH — pure date math
+     (ceil(month/3)), NOT label parsing. null if unparseable. */
+  _calQuarterOf(iso) {
+    const t = this._parseDate(iso);
+    if (t == null) return null;
+    return "Q" + Math.ceil((new Date(t).getUTCMonth() + 1) / 3);
+  },
+  _calYearOf(iso) {
+    const t = this._parseDate(iso);
+    return t == null ? null : new Date(t).getUTCFullYear();
+  },
+
+  /* Synthesize a period-like object from a legacy quarter atom. status is ALWAYS
+     "actual" (legacy quarters have no status field — see KNOWN LIMITATION above).
+     Dates/tags come purely from period_end date math; financial fields carry over. */
+  _synthPeriodFromQuarter(q) {
+    const pe = q.period_end;
+    return {
+      period_id: q.label || pe || null,
+      kind: "quarter",
+      status: "actual",
+      period_start: null,
+      period_end: pe,
+      calendar_year: this._calYearOf(pe),
+      calendar_quarter: this._calQuarterOf(pe),
+      fiscal_year: null,
+      fiscal_quarter: null,
+      currency: null,
+      fx_to_usd: null,
+      revenue: q.revenue != null ? q.revenue : null,
+      gross_profit: null,
+      op_income: q.op_income != null ? q.op_income : null,
+      net_income: q.net_income != null ? q.net_income : null,
+      cfo: null,
+      capex: null,
+      segments: [],
+      sources: q.sources || [],
+      _synth: true,
+    };
+  },
+
+  /* All periods for a company, sorted oldest→newest by period_end. Prefers
+     c.periods; falls back to synthesizing from quarters[] (date-math only).
+     Periods without a parseable period_end are dropped (cannot be date-aligned). */
+  periods(c) {
+    if (!c) return [];
+    const src = Array.isArray(c.periods) && c.periods.length
+      ? c.periods.slice()
+      : (c.quarters || []).map(q => this._synthPeriodFromQuarter(q));
+    return src
+      .map(p => ({ p, t: this._parseDate(p.period_end) }))
+      .filter(x => x.t != null)
+      .sort((a, b) => a.t - b.t)
+      .map(x => x.p);
+  },
+
+  actualPeriods(c)  { return this.periods(c).filter(p => p.status === "actual"); },
+  quarterPeriods(c) { return this.periods(c).filter(p => p.kind === "quarter"); },
+
+  /* a period carries a financial fact if any monetary field is non-null */
+  _hasFinancialFact(p) {
+    return !!p && (p.revenue != null || p.gross_profit != null || p.op_income != null
+      || p.net_income != null || p.cfo != null || p.capex != null);
+  },
+
+  /* Latest ACTUAL quarter carrying at least one financial fact (guidance excluded).
+     null when none. */
+  latestQuarter(c) {
+    const qs = this.actualPeriods(c).filter(p => p.kind === "quarter" && this._hasFinancialFact(p));
+    return qs.length ? qs[qs.length - 1] : null;
+  },
+
+  /* Coverage summary for the period set (completeness metadata; view echoed).
+     Lightweight & null-safe — a fuller per-view coverage (missing_periods /
+     missing_metric / missing_ai_share) lands with the Phase 4 view model. */
+  periodCoverage(c, view) {
+    const all = this.periods(c);
+    const q = all.filter(p => p.kind === "quarter");
+    const latest = this.latestQuarter(c);
+    return {
+      view: view != null ? view : null,
+      source: (c && Array.isArray(c.periods) && c.periods.length) ? "periods" : "quarters",
+      total: all.length,
+      actualQuarters: q.filter(p => p.status === "actual").length,
+      guidanceQuarters: q.filter(p => p.status === "guidance").length,
+      annual: all.filter(p => p.kind === "annual").length,
+      latestQuarterEnd: latest ? latest.period_end : null,
+    };
+  },
+
+  /* Derive a NATURAL (calendar) year from quarterly period facts.
+     Uses ONLY kind=quarter && status=actual periods with calendar_year===year,
+     keyed off calendar_quarter (so a fiscal-year-shifted company still yields the
+     right CY). complete=true iff all of Q1-Q4 present. A metric is summed ONLY if
+     all four quarters carry it non-null; otherwise that metric is null (chosen
+     representation: complete reflects QUARTER coverage, each metric independently
+     null on any gap). guidance never participates. basis:"periods". */
+  calendarYear(c, year) {
+    const out = {
+      label: "CY" + year, year, complete: false, missing: this.CAL_QUARTERS.slice(),
+      revenue: null, op_income: null, net_income: null, cfo: null, capex: null,
+      sources: [], basis: "periods",
+    };
+    if (!c || year == null) return out;
+    const qs = this.actualPeriods(c)
+      .filter(p => p.kind === "quarter" && p.calendar_year === year && p.calendar_quarter);
+    const byQ = {};
+    for (const p of qs) byQ[p.calendar_quarter] = p;   // sorted ascending → latest wins on dup
+    const present = this.CAL_QUARTERS.filter(q => byQ[q]);
+    out.missing = this.CAL_QUARTERS.filter(q => !byQ[q]);
+    out.complete = out.missing.length === 0;
+    out.sources = present.flatMap(q => byQ[q].sources || []);
+    if (!out.complete) return out;
+    for (const m of this.PERIOD_METRICS) {
+      const vals = this.CAL_QUARTERS.map(q => byQ[q][m]);
+      out[m] = vals.every(v => v != null) ? vals.reduce((s, v) => s + v, 0) : null;
+    }
+    return out;
+  },
+
+  /* TTM for a metric from the latest FOUR actual quarters (period-base).
+     Requires the latest four actual quarters to ALL carry that metric non-null;
+     otherwise value=null with coverage. Does NOT anchor to latestActual — reads
+     straight off the actual quarter periods. <4 actual quarters → null + coverage.
+     Returns { metric, value, complete, quarters, asOf }. */
+  ttmFromPeriods(c, metric) {
+    const qs = this.actualPeriods(c).filter(p => p.kind === "quarter");
+    const last4 = qs.slice(-4);
+    const out = {
+      metric, value: null, complete: false, quarters: qs.length,
+      asOf: last4.length ? last4[last4.length - 1].period_end : null,
+    };
+    if (last4.length < 4) return out;                    // not enough quarters
+    const vals = last4.map(p => p[metric]);
+    if (!vals.every(v => v != null)) return out;         // metric gap in the window
+    out.value = vals.reduce((s, v) => s + v, 0);
+    out.complete = true;
+    return out;
+  },
+
+  /* Company-reported FISCAL year from periods (period-base).
+     If a kind=annual period with matching fiscal_year exists → official full-year
+     fact wins (basis="annual_report", complete). Else sum actual quarters sharing
+     that fiscal_year (basis="quarter_sum"), complete iff four actual quarters
+     present; a metric sums only when complete AND all four carry it non-null, else
+     null. Mixed actual/guarterly-guidance never completes: guidance quarters are
+     excluded from the sum, so a fiscal year holding a guidance quarter stays <4
+     actual → incomplete. Returns
+     { fy, label, basis, complete, revenue, op_income, net_income, cfo, capex, quarters, sources }. */
+  fiscalYearFromPeriods(c, fy) {
+    const out = {
+      fy, label: fy, basis: null, complete: false,
+      revenue: null, op_income: null, net_income: null, cfo: null, capex: null,
+      quarters: 0, sources: [],
+    };
+    if (!c || fy == null) return out;
+    const all = this.periods(c);
+    const annual = all.find(p => p.kind === "annual" && p.status === "actual" && p.fiscal_year === fy)
+                || all.find(p => p.kind === "annual" && p.fiscal_year === fy);
+    if (annual) {
+      out.basis = "annual_report";
+      out.complete = true;
+      for (const m of this.PERIOD_METRICS) out[m] = annual[m] != null ? annual[m] : null;
+      out.sources = annual.sources || [];
+      return out;
+    }
+    const qs = all.filter(p => p.kind === "quarter" && p.status === "actual" && p.fiscal_year === fy);
+    out.basis = "quarter_sum";
+    out.quarters = qs.length;
+    out.sources = qs.flatMap(q => q.sources || []);
+    out.complete = qs.length === 4;
+    if (!out.complete) return out;
+    for (const m of this.PERIOD_METRICS) {
+      const vals = qs.map(q => q[m]);
+      out[m] = vals.every(v => v != null) ? vals.reduce((s, v) => s + v, 0) : null;
+    }
+    return out;
+  },
+
   /* ---- TTM profit pool (value-chain stacked, self-rolled per company, AI-weighted) ----
      口径统一 (ADR-3): TTM 净利同样按 aiShare(c) 加权,与 profitPoolAI / profitPoolMigration
      的三根年度柱完全同口径 —— 同一张迁移图不再混"全额 TTM vs 加权年度"。
