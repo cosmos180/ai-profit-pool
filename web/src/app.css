@@ -117,6 +117,11 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .cbar .f{height:100%;border-radius:5px;background:var(--ok)}
 .cfore{font-family:var(--mono);font-size:11px;color:var(--est)}
 .copen{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}.crow:hover .copen{color:var(--ok)}
+.analysis-entry{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 4px;padding:11px 13px;border:1px solid var(--line-soft);background:var(--card);border-radius:10px}
+.ae-k{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint)}
+.ae-t{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.ae-btn{appearance:none;border:1px solid var(--ai-soft);background:var(--ai-soft);color:var(--ai);border-radius:7px;padding:7px 11px;font-family:var(--mono);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.ae-btn:hover{border-color:var(--ai);background:var(--card)}
 .prow{display:grid;grid-template-columns:46px 1.6fr 1fr;gap:14px;align-items:center;padding:14px 17px;border:1px dashed var(--line);border-radius:14px}
 .prow .logo{background:#E1E7E3;opacity:.85}.prow .logo span{color:var(--ink-faint)}
 .prow .cn{font-weight:600;font-size:15px;color:var(--ink-soft)}

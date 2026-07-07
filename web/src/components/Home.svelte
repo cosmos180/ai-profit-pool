@@ -1,12 +1,11 @@
 <script>
-  // Home（原 goHome/renderHome）：三卡 hero + poolNote + 迁移图 + 登记表 + 待补录。
+  // Home（原 goHome/renderHome）：报告镜头 + 登记表 + 待补录；高级分析另页承载。
   // 业务数据只从 lib/data.js 拿；组件内无财务算术（龙头占比/同比走 Selectors 派生）。
   import { nav } from '../lib/nav.svelte.js'
   import { Store, Selectors } from '../lib/data.js'
   import { Fmt } from '../lib/fmt.js'
   import { Safe } from '../lib/safe.js'
   import { HOME_METRIC_LABEL, HOME_METRIC_FMT, HOME_METRIC_LOWER_CHEAPER } from '../lib/constants.js'
-  import Migration from '../charts/Migration.svelte'
 
   const pop = $derived(Store.populated())
   const pend = $derived(Store.pending())
@@ -166,8 +165,13 @@
   </div>
 </div>
 
-<div class="section-h">利润池如何迁移</div>
-<Migration />
+<div class="analysis-entry">
+  <div>
+    <div class="ae-k">高级分析</div>
+    <div class="ae-t">AI 归因、利润池迁移、结构判断</div>
+  </div>
+  <button class="ae-btn" onclick={() => nav.goAnalysis()}>利润池迁移 →</button>
+</div>
 
 <div class="section-h">已补录公司 <span class="count">{pop.length} 家</span></div>
 <div class="metricbar">

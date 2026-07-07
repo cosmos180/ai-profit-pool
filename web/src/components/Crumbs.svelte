@@ -6,6 +6,7 @@
   // $derived：三级面包屑数据，输入是 nav 状态与 Store 原始值，不写回。
   const parts = $derived.by(() => {
     const arr = [{ label: '公司对比', go: () => nav.goHome() }]
+    if (nav.view === 'analysis') arr.push({ label: '高级分析', go: null })
     if (nav.companyId) {
       const c = Store.byId(nav.companyId)
       if (c) arr.push({ label: c.name, go: () => nav.goCompany(c.id) })
