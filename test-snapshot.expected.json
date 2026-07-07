@@ -1143,8 +1143,8 @@
     "n": 11,
     "asOfSpreadDays": 61,
     "basisCount": {
-      "periods": 6,
-      "legacy_fallback": 5
+      "periods": 7,
+      "legacy_fallback": 4
     },
     "stages": {
       "design": {
@@ -1157,7 +1157,7 @@
             "ttm": 143.192109,
             "asOf": "2026-04-26",
             "aiShare": 0.897194,
-            "basis": "legacy_fallback"
+            "basis": "periods"
           },
           {
             "id": "broadcom",
