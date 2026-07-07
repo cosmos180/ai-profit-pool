@@ -1472,60 +1472,6 @@
           ]
         },
         {
-          "period_id": "broadcom-fy2025-annual",
-          "kind": "annual",
-          "status": "actual",
-          "period_start": "2024-11-04",
-          "period_end": "2025-11-02",
-          "calendar_year": 2025,
-          "calendar_quarter": null,
-          "fiscal_year": "FY2025",
-          "fiscal_quarter": null,
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 63.887,
-          "gross_profit": null,
-          "op_income": 25.484,
-          "net_income": 23.126,
-          "cfo": 27.537,
-          "capex": 0.623,
-          "segments": [
-            {
-              "name": "Semiconductor solutions 半导体解决方案",
-              "kind": "platform",
-              "revenue": 36.858,
-              "op_income": 21.232,
-              "op_margin": 0.576,
-              "is_ai": true
-            },
-            {
-              "name": "Infrastructure software 基础设施软件",
-              "kind": "platform",
-              "revenue": 27.029,
-              "op_income": 20.765,
-              "op_margin": 0.768,
-              "is_ai": false
-            }
-          ],
-          "sources": [
-            {
-              "label": "Broadcom FY2025 10-K（Segment Information）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
-              "data_status": "official"
-            },
-            {
-              "label": "capex/CFO（FY2025 Q4 业绩新闻稿现金流，CFO $27,537M / capex $623M，待核验）",
-              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
-              "data_status": "estimate"
-            },
-            {
-              "label": "period_start 推导：上一财年 FY2024 末（2024-11-03）+1 天 = 2024-11-04",
-              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
-              "data_status": "derived"
-            }
-          ]
-        },
-        {
           "period_id": "broadcom-fy2025q1",
           "kind": "quarter",
           "status": "actual",
@@ -1585,6 +1531,87 @@
             {
               "label": "calendar_quarter 由日期数学得出：period_end 2025-05-04（5 月）落自然年 Q2。period_start = 上一季 Q1 FY2025 末（2025-02-02）+1 天 = 2025-02-03",
               "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2025",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2025q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-05-05",
+          "period_end": "2025-08-03",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q3",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q3",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 15.952,
+          "net_income": 4.14,
+          "gross_profit": 10.703,
+          "op_income": 5.887,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Broadcom Q3 FY2025 10-Q filed 2025-09-10 (revenue/net income/gross profit/op income; CFO/capex only nine-month cumulative, left null for quarter)",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000098/",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "broadcom-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-11-04",
+          "period_end": "2025-11-02",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 63.887,
+          "gross_profit": null,
+          "op_income": 25.484,
+          "net_income": 23.126,
+          "cfo": 27.537,
+          "capex": 0.623,
+          "segments": [
+            {
+              "name": "Semiconductor solutions 半导体解决方案",
+              "kind": "platform",
+              "revenue": 36.858,
+              "op_income": 21.232,
+              "op_margin": 0.576,
+              "is_ai": true
+            },
+            {
+              "name": "Infrastructure software 基础设施软件",
+              "kind": "platform",
+              "revenue": 27.029,
+              "op_income": 20.765,
+              "op_margin": 0.768,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Broadcom FY2025 10-K（Segment Information）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 Q4 业绩新闻稿现金流，CFO $27,537M / capex $623M，待核验）",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+              "data_status": "estimate"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2024 末（2024-11-03）+1 天 = 2024-11-04",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
               "data_status": "derived"
             }
           ]
@@ -4561,7 +4588,7 @@
           "fiscal_year": "FY2023",
           "fiscal_quarter": null,
           "currency": "CNY",
-          "fx_to_usd": 7.20,
+          "fx_to_usd": 7.2,
           "revenue": 84.6,
           "gross_profit": null,
           "op_income": null,
