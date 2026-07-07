@@ -1872,6 +1872,227 @@
             }
           ]
         }
+      ],
+      "periods": [
+        {
+          "period_id": "softbank-fy2023-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2023-04-01",
+          "period_end": "2024-03-31",
+          "calendar_year": 2024,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2023",
+          "fiscal_quarter": null,
+          "currency": "JPY",
+          "fx_to_usd": 151.41,
+          "revenue": 44.624,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": -1.504,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "Investment Business of Holding Companies 控股公司投资业务",
+              "kind": "platform",
+              "revenue": 0.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "SoftBank Vision Funds 软银愿景基金",
+              "kind": "platform",
+              "revenue": 0.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "SoftBank segment 软银电信与互联网",
+              "kind": "platform",
+              "revenue": 40.164,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Arm 芯片 IP",
+              "kind": "platform",
+              "revenue": 3.065,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Other 其他",
+              "kind": "platform",
+              "revenue": 1.395,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "SoftBank Group FY2024 Consolidated Financial Report（FY2023 对比期）",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2024_01_en.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "JPY→USD 换算率 151.41（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2023 期末汇率，见 fy_note",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2024_01_en.pdf",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "softbank-fy2024-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-04-01",
+          "period_end": "2025-03-31",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": null,
+          "currency": "JPY",
+          "fx_to_usd": 149.52,
+          "revenue": 48.447,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 7.714,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "Investment Business of Holding Companies 控股公司投资业务",
+              "kind": "platform",
+              "revenue": 0.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "SoftBank Vision Funds 软银愿景基金",
+              "kind": "platform",
+              "revenue": 0.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "SoftBank segment 软银电信与互联网",
+              "kind": "platform",
+              "revenue": 43.749,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "AI Computing segment AI 计算",
+              "kind": "platform",
+              "revenue": 3.948,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Other 其他",
+              "kind": "platform",
+              "revenue": 0.75,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "SoftBank Group FY2025 Consolidated Financial Report（FY2024 对比期，按 AI Computing 重分类）",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "JPY→USD 换算率 149.52（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2024 期末汇率，见 fy_note",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "softbank-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-04-01",
+          "period_end": "2026-03-31",
+          "calendar_year": 2026,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "JPY",
+          "fx_to_usd": 159.88,
+          "revenue": 48.778,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 31.288,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "Investment Business of Holding Companies 控股公司投资业务",
+              "kind": "platform",
+              "revenue": 0.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "SoftBank Vision Funds 软银愿景基金",
+              "kind": "platform",
+              "revenue": 0.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "SoftBank segment 软银电信与互联网",
+              "kind": "platform",
+              "revenue": 43.995,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "AI Computing segment AI 计算",
+              "kind": "platform",
+              "revenue": 4.005,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Other 其他",
+              "kind": "platform",
+              "revenue": 0.778,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "SoftBank Group FY2025 Consolidated Financial Report",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "JPY→USD 换算率 159.88（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2025 期末汇率，见 fy_note",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+              "data_status": "derived"
+            }
+          ]
+        }
       ]
     },
     {
@@ -4322,6 +4543,203 @@
             },
             {
               "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+              "data_status": "derived"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "period_id": "tencent-fy2023-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2023-01-01",
+          "period_end": "2023-12-31",
+          "calendar_year": 2023,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2023",
+          "fiscal_quarter": null,
+          "currency": "CNY",
+          "fx_to_usd": 7.20,
+          "revenue": 84.6,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 21.9,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 41.444,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 14.097,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 28.3,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 0.744,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2023 Annual & Q4 Results（2024-03-20）— 全年营收 RMB609.015B(USD84.6B)、归母净利 RMB157.68B、毛利 RMB293.1B(毛利率48%)；分部：VAS RMB298.4B、网络广告 RMB101.5B、金融科技及企业服务 RMB203.76B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2023-annual-and-fourth-quarter-results-302094552.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率 CNY→USD 7.20（CNY per USD，source-currency-per-USD 契约方向，FY2023 年均汇率），见 fy_note",
+              "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2023",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "tencent-fy2024-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-01-01",
+          "period_end": "2024-12-31",
+          "calendar_year": 2024,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": null,
+          "currency": "CNY",
+          "fx_to_usd": 7.185,
+          "revenue": 91.9,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 27.0,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 44.426,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 16.896,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 29.506,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.072,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2024 Annual & Q4 Results（2025-03-19）— 全年营收 RMB660.3B(USD91.9B)、归母净利 RMB194.1B(USD27.0B,+68%)、毛利 RMB349.2B(USD48.6B)；分部：VAS RMB319.2B、营销服务 RMB121.4B、金融科技及企业服务 RMB212.0B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率 CNY→USD 7.185（CNY per USD，source-currency-per-USD 契约方向，由腾讯官方披露 RMB/USD 对照反推），见 fy_note",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "tencent-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-01-01",
+          "period_end": "2025-12-31",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "CNY",
+          "fx_to_usd": 7.187,
+          "revenue": 104.6,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 36.1,
+          "cfo": 36.43,
+          "capex": 11.02,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 51.384,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 20.175,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 31.919,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 1.127,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2025 Annual & Q4 Results（2026-03-18）— 全年营收 RMB751.8B(+14%)、归母净利(IFRS) RMB259.6B、毛利 RMB422.6B；分部：VAS RMB369.3B、营销服务 RMB145.0B、金融科技及企业服务 RMB229.4B；FCF RMB182.6B、capex RMB79.2B、净现金 RMB107.1B",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+              "data_status": "official"
+            },
+            {
+              "label": "换算汇率 CNY→USD 7.187（CNY per USD，source-currency-per-USD 契约方向，FY2025 全年均值 x-rates/exchangerates.org.uk），见 fy_note",
               "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
               "data_status": "derived"
             }
