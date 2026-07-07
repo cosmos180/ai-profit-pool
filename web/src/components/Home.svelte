@@ -250,8 +250,14 @@
         </div>
       </div>
       <div class="cmetric">
-        <div class="mv num">{HOME_METRIC_FMT[key](r.val)}{#if r.rel}<span class="relbadge {r.rel.cls}">{r.rel.txt}</span>{/if}</div>
-        <div class="ms">最新实际 · {r.la ? (r.la.period_end || r.la.fy) : '无实际年'}{#if r.ry != null} · <span class={r.ry >= 0 ? 'up' : 'dn'}>{Fmt.yoy(r.ry)}</span>{/if}</div>
+        {#if r.view.complete}
+          <div class="mv num">{Fmt.bn(r.view.revenue, 1)}</div>
+          <div class="ms primary">营收 · {lensLabel[effLens]}{#if r.view.label} {r.view.label}{/if}</div>
+          <div class="ms">净利 {Fmt.bn(r.view.net_income, 1)} · 年度{HOME_METRIC_LABEL[key]} {HOME_METRIC_FMT[key](r.val)}</div>
+        {:else}
+          <div class="mv num">{HOME_METRIC_FMT[key](r.val)}{#if r.rel}<span class="relbadge {r.rel.cls}">{r.rel.txt}</span>{/if}</div>
+          <div class="ms">最新实际 · {r.la ? (r.la.period_end || r.la.fy) : '无实际年'}{#if r.ry != null} · <span class={r.ry >= 0 ? 'up' : 'dn'}>{Fmt.yoy(r.ry)}</span>{/if}</div>
+        {/if}
       </div>
       <div class="cbarcell">
         <div class="cbar"><div class="f" style="width:{r.barW}%"></div></div>
