@@ -5017,6 +5017,76 @@
               "data_status": "derived"
             }
           ]
+        },
+        {
+          "period_id": "tencent-2026q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-01-01",
+          "period_end": "2026-03-31",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q1",
+          "currency": "CNY",
+          "fx_to_usd": 6.927341,
+          "revenue": 28.36,
+          "gross_profit": 16.062,
+          "op_income": 9.726,
+          "net_income": 8.386,
+          "cfo": 12.795,
+          "capex": 4.61,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 13.874,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 5.51,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 8.645,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 0.331,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Tencent 2026 First Quarter Results（2026-05-13）— 1Q2026 revenue RMB196.458B, gross profit RMB111.265B, IFRS operating profit RMB67.375B, profit attributable to equity holders RMB58.093B; segments: VAS RMB96.110B, Marketing Services RMB38.171B, FinTech and Business Services RMB59.885B, Others RMB2.292B",
+              "url": "https://static.www.tencent.com/uploads/2026/05/13/47382ae415a209fd161bc19a1f9b3704.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Tencent 2026 First Quarter Results — free cash flow RMB56.7B, capital expenditures RMB31.936B; cfo derived as FCF + capex = RMB88.636B, capex stored as absolute value",
+              "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2026-first-quarter-results-302770779.html",
+              "data_status": "derived"
+            },
+            {
+              "label": "FX: USD/CNY 2026 Q1 weighted monthly average = 6.927341 CNY per USD（x-rates Jan/Feb/Mar 2026 monthly averages weighted by days; source-currency-per-USD）",
+              "url": "https://www.x-rates.com/average/?amount=1&from=USD&to=CNY&year=2026",
+              "data_status": "derived"
+            }
+          ]
         }
       ]
     },
