@@ -1139,17 +1139,17 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 413.626978,
+    "total": 413.687046,
     "n": 11,
     "asOfSpreadDays": 61,
     "basisCount": {
-      "periods": 7,
-      "legacy_fallback": 4
+      "periods": 9,
+      "legacy_fallback": 2
     },
     "stages": {
       "design": {
         "value": 160.105816,
-        "share": 0.387078,
+        "share": 0.387022,
         "companies": [
           {
             "id": "nvda",
@@ -1170,22 +1170,22 @@
         ]
       },
       "foundry": {
-        "value": 36.151604,
-        "share": 0.087401,
+        "value": 36.178284,
+        "share": 0.087453,
         "companies": [
           {
             "id": "tsmc",
             "name": "TSMC 台积电",
-            "ttm": 36.151604,
+            "ttm": 36.178284,
             "asOf": "2026-03-31",
             "aiShare": 0.580003,
-            "basis": "legacy_fallback"
+            "basis": "periods"
           }
         ]
       },
       "memory": {
         "value": 92.095467,
-        "share": 0.222653,
+        "share": 0.222621,
         "companies": [
           {
             "id": "samsung",
@@ -1214,16 +1214,16 @@
         ]
       },
       "equipment": {
-        "value": 4.051968,
-        "share": 0.009796,
+        "value": 4.085355,
+        "share": 0.009875,
         "companies": [
           {
             "id": "asml",
             "name": "ASML",
-            "ttm": 4.051968,
+            "ttm": 4.085355,
             "asOf": "2026-03-31",
             "aiShare": 0.355187,
-            "basis": "legacy_fallback"
+            "basis": "periods"
           }
         ]
       },
@@ -1239,7 +1239,7 @@
       },
       "cloud": {
         "value": 121.222124,
-        "share": 0.293071,
+        "share": 0.293029,
         "companies": [
           {
             "id": "google",
