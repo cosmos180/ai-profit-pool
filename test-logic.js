@@ -1112,7 +1112,33 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const tni = Selectors.ttmFromPeriods(ttmP, "net_income");
   assert.equal(tni.value, 20); assert.equal(tni.complete, true);
   assert.equal(tni.quarters, 4); assert.equal(tni.asOf, "2026-03-31");
+  assert.equal(tni.contiguous, true); assert.equal(tni.gap, null); // Q2→Q3→Q4→Q1 连续 12 个月
   assert.equal(Selectors.ttmFromPeriods(ttmP, "revenue").value, 100);
+
+  // ---- 连续性校验：最新四季不连号（美股财年末季系统性缺失，如微软缺 calendar-Q2）→ null + gap ----
+  // 不静默把横跨 13 个月的 Q1,Q3,Q4,Q1 当 TTM 相加（留空也比填错好；FY 锚定 ttmNetIncome 才是 fallback）。
+  const msftShape = { id: "msft", status: "populated", periods: [
+    P({ period_id: "q1a", period_end: "2025-03-31", calendar_year: 2025, calendar_quarter: "Q1", net_income: 25 }),
+    P({ period_id: "q3",  period_end: "2025-09-30", calendar_year: 2025, calendar_quarter: "Q3", net_income: 27 }), // 缺 Q2 (2025-06)
+    P({ period_id: "q4",  period_end: "2025-12-31", calendar_year: 2025, calendar_quarter: "Q4", net_income: 38 }),
+    P({ period_id: "q1b", period_end: "2026-03-31", calendar_year: 2026, calendar_quarter: "Q1", net_income: 31 }),
+  ]};
+  const ms = Selectors.ttmFromPeriods(msftShape, "net_income");
+  assert.equal(ms.value, null);            // 不连续 → 不给错值
+  assert.equal(ms.complete, false);
+  assert.equal(ms.contiguous, false);
+  assert.equal(ms.quarters, 4);
+  assert.match(ms.gap, /2025-03-31.*2025-09-30.*缺 1 季/); // 缺口精确指向 Q1 与 Q3 之间
+
+  // ---- fiscal-year-shifted 连号仍成立：NVDA Apr/Jul/Oct/Jan → Q2,Q3,Q4,Q1 连续 ----
+  const nvdaShape = { id: "nvda2", status: "populated", periods: [
+    P({ period_id: "fq1", period_end: "2025-04-30", calendar_year: 2025, calendar_quarter: "Q2", net_income: 10 }),
+    P({ period_id: "fq2", period_end: "2025-07-31", calendar_year: 2025, calendar_quarter: "Q3", net_income: 12 }),
+    P({ period_id: "fq3", period_end: "2025-10-31", calendar_year: 2025, calendar_quarter: "Q4", net_income: 14 }),
+    P({ period_id: "fq4", period_end: "2026-01-31", calendar_year: 2026, calendar_quarter: "Q1", net_income: 16 }),
+  ]};
+  const nv = Selectors.ttmFromPeriods(nvdaShape, "net_income");
+  assert.equal(nv.value, 52); assert.equal(nv.contiguous, true); assert.equal(nv.gap, null); // 财年错位不影响连号
 
   // ---- five quarters → uses LATEST four (drops oldest), not anchored to latestActual ----
   const ttm5 = { id: "t5", periods: [
@@ -1139,6 +1165,7 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   ]};
   const tmr = Selectors.ttmFromPeriods(ttmMiss, "net_income");
   assert.equal(tmr.value, null); assert.equal(tmr.complete, false); assert.equal(tmr.quarters, 4);
+  assert.equal(tmr.contiguous, true); assert.equal(tmr.gap, null); // 连号成立，仅指标缺一季 → 非缺口
 
   // ---- fewer than four quarters → null + coverage ----
   const ttm2 = { id: "t2", periods: [
@@ -1148,6 +1175,7 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const t2 = Selectors.ttmFromPeriods(ttm2, "net_income");
   assert.equal(t2.value, null); assert.equal(t2.complete, false);
   assert.equal(t2.quarters, 2); assert.equal(t2.asOf, "2026-03-31");
+  assert.equal(t2.contiguous, false); assert.equal(t2.gap, null); // 不足四季是覆盖不足，非缺口
   const t0 = Selectors.ttmFromPeriods({ id: "z" }, "net_income");
   assert.equal(t0.value, null); assert.equal(t0.quarters, 0); assert.equal(t0.asOf, null);
   // synth-from-quarters path also feeds ttmFromPeriods (all actual)

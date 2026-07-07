@@ -666,21 +666,60 @@ const Selectors = {
     return out;
   },
 
+  /* calendar-quarter INDEX of a period = calendar_year*4 + (Qn-1), so consecutive
+     reported quarters differ by exactly 1 — robust across fiscal-year-shifted
+     companies (NVDA Apr/Jul/Oct/Jan → Q2,Q3,Q4,Q1 still index-consecutive). Uses
+     the stored calendar tags, falling back to period_end date math when absent
+     (synth path already fills these). null when neither is derivable. */
+  _quarterIndex(p) {
+    if (!p) return null;
+    const y = p.calendar_year != null ? p.calendar_year : this._calYearOf(p.period_end);
+    const cq = p.calendar_quarter || this._calQuarterOf(p.period_end);
+    const qn = cq ? Number(cq.slice(1)) : NaN;
+    if (y == null || !(qn >= 1 && qn <= 4)) return null;
+    return y * 4 + (qn - 1);
+  },
+
   /* TTM for a metric from the latest FOUR actual quarters (period-base).
-     Requires the latest four actual quarters to ALL carry that metric non-null;
-     otherwise value=null with coverage. Does NOT anchor to latestActual — reads
-     straight off the actual quarter periods. <4 actual quarters → null + coverage.
-     Returns { metric, value, complete, quarters, asOf }. */
+     CONTINUITY-GUARDED: the latest four actual quarters must be strictly
+     consecutive calendar quarters (index step 1) so they cover EXACTLY ~12 months.
+     A non-contiguous window (e.g. Q1,Q3,Q4,Q1 spanning 13 months) is NOT a real
+     TTM — return value=null with a `gap` note rather than silently summing a wrong
+     number (留空也比填错好). When contiguous, all four must carry the metric non-null;
+     otherwise value=null (contiguous=true, gap=null). Does NOT anchor to latestActual.
+     <4 actual quarters → null (contiguous=false, gap=null; a coverage shortfall, not a hole).
+     STRUCTURAL FACT: US filers issue no standalone 10-Q for their fiscal Q4 — the 4th
+     quarter is implicit in the 10-K, so Dayu's quarters[] systematically omit each
+     company's fiscal-year-end quarter (e.g. Microsoft lacks the 2025-06 / calendar-Q2
+     atom). Until those Q4 atoms are supplied (derived from 10-K annual minus the first
+     three quarters, or taken from the 8-K earnings release), this path honestly returns
+     null for such companies; the FY-anchored ttmNetIncome(c) above remains the fallback.
+     Returns { metric, value, complete, quarters, asOf, contiguous, gap }. */
   ttmFromPeriods(c, metric) {
     const qs = this.actualPeriods(c).filter(p => p.kind === "quarter");
     const last4 = qs.slice(-4);
     const out = {
       metric, value: null, complete: false, quarters: qs.length,
       asOf: last4.length ? last4[last4.length - 1].period_end : null,
+      contiguous: false, gap: null,
     };
-    if (last4.length < 4) return out;                    // not enough quarters
+    if (last4.length < 4) return out;                    // not enough quarters (coverage shortfall, not a gap)
+    // continuity: consecutive calendar-quarter indices, else report the first hole
+    const idx = last4.map(p => this._quarterIndex(p));
+    for (let i = 0; i < idx.length - 1; i++) {
+      if (idx[i] == null || idx[i + 1] == null) {
+        out.gap = `无法判定连续性（${last4[i].period_end} 或 ${last4[i + 1].period_end} 缺日历季标记）`;
+        return out;
+      }
+      if (idx[i + 1] !== idx[i] + 1) {
+        const miss = idx[i + 1] - idx[i] - 1;
+        out.gap = `${last4[i].period_end} 与 ${last4[i + 1].period_end} 之间缺 ${miss} 季`;
+        return out;                                      // non-contiguous → null, never a wrong sum
+      }
+    }
+    out.contiguous = true;
     const vals = last4.map(p => p[metric]);
-    if (!vals.every(v => v != null)) return out;         // metric gap in the window
+    if (!vals.every(v => v != null)) return out;         // metric gap in the window → value null (contiguous but incomplete)
     out.value = vals.reduce((s, v) => s + v, 0);
     out.complete = true;
     return out;
