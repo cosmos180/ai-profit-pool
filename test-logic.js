@@ -1346,6 +1346,35 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const cyShiftImp = Selectors.calendarYear(shiftCo, 2025);
   assert.equal(cyShiftImp.complete, false);           // implied 财季 Q4 ≠ calendar Q4 → 不补 → 仍缺
 
+  // ---- 云队列财年错位守卫 (MSFT 6月末 / Oracle 5月末 型): implied 财季 Q4 落 calendar Q2。
+  //      TTM 用 implied Q4 点亮 (末四季连号含 implied); 但 calendarYear(2025) 只补 calendar Q4 槽,
+  //      故 CY 仍缺 Q2 → 诚实 incomplete (FY 不冒充 CY)。锁定四家真实形状里最细的那个边界。 ----
+  const cloudQ = (pe, cy, cq, fy, fq, ni) => P({ period_id: `c-${pe}`, period_end: pe,
+    calendar_year: cy, calendar_quarter: cq, fiscal_year: fy, fiscal_quarter: fq,
+    revenue: 10, net_income: ni, sources: [{ label: "10-Q", url: "https://x/q", data_status: "official" }] });
+  const cloudAnnual = P({ period_id: "c-fy2025", kind: "annual", calendar_quarter: null,
+    period_start: "2024-07-01", period_end: "2025-06-30", calendar_year: 2025, fiscal_year: "FY2025",
+    revenue: 100, net_income: 20, sources: [{ label: "10-K", url: "https://x/k", data_status: "official" }] });
+  const cloudShift = { id: "cloudshift", status: "populated", periods: [
+    cloudAnnual,
+    cloudQ("2024-09-30", 2024, "Q3", "FY2025", "Q1", 3),   // fiscal Q1 FY2025 → 日历 Q3'24
+    cloudQ("2024-12-31", 2024, "Q4", "FY2025", "Q2", 4),   // fiscal Q2 FY2025 → 日历 Q4'24
+    cloudQ("2025-03-31", 2025, "Q1", "FY2025", "Q3", 5),   // fiscal Q3 FY2025 → 日历 Q1'25
+    cloudQ("2025-09-30", 2025, "Q3", "FY2026", "Q1", 6),   // fiscal Q1 FY2026 → 日历 Q3'25
+    cloudQ("2025-12-31", 2025, "Q4", "FY2026", "Q2", 7),   // fiscal Q2 FY2026 → 日历 Q4'25
+    cloudQ("2026-03-31", 2026, "Q1", "FY2026", "Q3", 9),   // fiscal Q3 FY2026 → 日历 Q1'26
+  ]};
+  const iqCloud = Selectors.impliedQ4(cloudShift, "FY2025");
+  assert.equal(iqCloud.calendar_quarter, "Q2");       // period_end 2025-06-30 → 日历 Q2 (6月末财年)
+  assert.equal(iqCloud.net_income, 8);                // 20 − (3+4+5)
+  const ttmCloud = Selectors.ttmFromPeriods(cloudShift, "net_income");
+  assert.equal(ttmCloud.complete, true);              // 末四季 = implied Q2'25 + Q3'25 + Q4'25 + Q1'26 连号
+  assert.equal(ttmCloud.usedImpliedQ4, true);
+  assert.equal(ttmCloud.value, 30);                   // 8 + 6 + 7 + 9
+  const cyCloud = Selectors.calendarYear(cloudShift, 2025);
+  assert.equal(cyCloud.complete, false);              // 有 calendar Q1/Q3/Q4, 缺 Q2 (implied 落 Q2, 只补 Q4 槽)
+  assert.deepEqual(cyCloud.missing, ["Q2"]);          // FY 不冒充 CY: 诚实缺 Q2
+
   // =====================================================================
   // 集成②: 严格 CY —— 自然年四季 (显式 period_start) → strict=true
   // =====================================================================
