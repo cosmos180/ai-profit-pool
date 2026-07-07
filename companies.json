@@ -594,21 +594,16 @@
       "lead": "按 Semiconductor solutions / Infrastructure software 两个报告分部披露营收与营业利润。分部营收合计等于合并营收，分部营业利润之和高于合并营业利润，差额来自未分配费用（收购无形资产摊销、股权激励等）。",
       "fy_note": "财年截止于 10 月最后一个星期日。分部营业利润用于经营分部表现评估；合并营业利润还扣除了未分配费用。",
       "quote": {
-        "as_of": "2026-06-26",
-        "market_cap": 1736.0,
+        "as_of": "2026-07-06",
+        "market_cap": 1780.0,
         "net_debt": 49.6,
-        "price": 365.02,
+        "price": 373.9,
         "price_currency": "USD",
         "sources": [
           {
-            "label": "companiesmarketcap.com — Broadcom market cap (US$1.736T @ 2026-06)",
-            "url": "https://companiesmarketcap.com/broadcom/marketcap/",
-            "data_status": "official"
-          },
-          {
-            "label": "stockanalysis.com — AVGO close $365.02 @ 2026-06-26",
+            "label": "stockanalysis.com — AVGO market cap $1.78T and close $373.90 @ 2026-07-06",
             "url": "https://stockanalysis.com/stocks/avgo/",
-            "data_status": "official"
+            "data_status": "estimate"
           },
           {
             "label": "net_debt（估算）：FY2025（截至 2025-11-02）长期债务 ≈ $63.8B，减 现金及等价物 ≈ $14.2B → 净负债 ≈ +$49.6B（口径：排经营租赁；当前部分债务暂未单列，可能略低估总债务，待核验 10-K）",
@@ -724,6 +719,32 @@
               "label": "capex/CFO（FY2025 Q4 业绩新闻稿现金流，CFO $27,537M / capex $623M，待核验）",
               "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
               "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2026E",
+          "period_end": "财年截至 2026-10-31",
+          "period_end_iso": "2026-10-31",
+          "status": "forecast",
+          "revenue": 106.04,
+          "net_income": 44.45,
+          "consensus_rev": "$106.0B",
+          "consensus_eps": "$11.62",
+          "consensus_eps_value": 11.62,
+          "consensus_eps_currency": "USD",
+          "consensus_eps_source": [
+            {
+              "label": "StockAnalysis/S&P Global consensus FY2026 EPS average $11.62; last updated 2026-06-29",
+              "url": "https://stockanalysis.com/stocks/avgo/forecast/",
+              "data_status": "consensus"
+            }
+          ],
+          "sources": [
+            {
+              "label": "StockAnalysis/S&P Global FY2026 forecast: revenue $106.04B, net income $44.45B, EPS $11.62",
+              "url": "https://stockanalysis.com/stocks/avgo/forecast/",
+              "data_status": "consensus"
             }
           ]
         }
@@ -1487,21 +1508,16 @@
       "lead": "全球最大的半导体代工企业，AI 计算与先进芯片制程的核心制造者。HPC 平台包含 AI 加速器、服务器 CPU 与其他高性能计算芯片，并不等同于纯 AI 收入。",
       "fy_note": "TWD→USD 采用 SEC Form 20-F 披露的期末 Noon Buying Rate（2023: 30.62 / 2024: 32.79 / 2025: 31.37）。平台营收基于官方 HPC/Smartphone/IoT/Automotive/DCE/Other 占比并与合并营收对账。",
       "quote": {
-        "as_of": "2026-06-26",
-        "market_cap": 2360.0,
+        "as_of": "2026-07-06",
+        "market_cap": 1990.0,
         "net_debt": -69.26,
-        "price": 432.35,
+        "price": 451.79,
         "price_currency": "USD",
         "sources": [
           {
-            "label": "companiesmarketcap.com — TSMC market cap (US$2.36T @ 2026-06-26)",
-            "url": "https://companiesmarketcap.com/tsmc/marketcap/",
-            "data_status": "official"
-          },
-          {
-            "label": "stockanalysis.com — TSM(ADR) close $432.35 @ 2026-06-26（ADR 计价，含台股+ADR 全口径）",
+            "label": "stockanalysis.com — TSM market cap $1.99T and ADR close $451.79 @ 2026-07-06",
             "url": "https://stockanalysis.com/stocks/tsm/",
-            "data_status": "official"
+            "data_status": "estimate"
           },
           {
             "label": "net_debt（估算）：4Q25（截至 2025-12-31）长期有息债务 ≈ NT$896.06B，减 现金及有价证券 ≈ NT$3,068.59B → 净现金 NT$−2,172.53B ÷ NT/USD 31.37（期末 Noon Buying，与营收换算一致）= −$69.26B（口径：排经营租赁；“现金及有价证券”或含部分长期有价金融资产，真实净现金或略小，方向稳健，待核验合并报表）",
@@ -1742,6 +1758,37 @@
             }
           ],
           "period_end_iso": "2025-12-31"
+        },
+        {
+          "fy": "FY2026E",
+          "period_end": "自然年 2026（截至 2026-12-31）",
+          "period_end_iso": "2026-12-31",
+          "status": "forecast",
+          "revenue": 161.55,
+          "net_income": 80.15,
+          "consensus_rev": "$161.6B（TWD 5.18T 折算）",
+          "consensus_eps": "$15.47 per ADR",
+          "consensus_eps_value": 15.466963,
+          "consensus_eps_currency": "USD",
+          "consensus_eps_source": [
+            {
+              "label": "StockAnalysis/S&P Global FY2026 forecast normalized to USD ADR EPS: TWD EPS 99.19, ADS ratio 5 common shares per ADS, implied by forecast-page forward PE 29.21 and ADR close $451.79",
+              "url": "https://stockanalysis.com/stocks/tsm/forecast/",
+              "data_status": "consensus"
+            }
+          ],
+          "sources": [
+            {
+              "label": "StockAnalysis/S&P Global FY2026 forecast: revenue TWD 5.18T, net income TWD 2.57T, EPS TWD 99.19; USD values derived with implied TWD/USD 32.06 from ADR EPS normalization",
+              "url": "https://stockanalysis.com/stocks/tsm/forecast/",
+              "data_status": "consensus"
+            },
+            {
+              "label": "TSMC ADS ratio: each ADS represents five common shares",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000114554907000749/h01195fv3asr.htm",
+              "data_status": "official"
+            }
+          ]
         }
       ],
       "quarters": [
@@ -1795,21 +1842,16 @@
       "lead": "全球光刻机核心供应商，独家提供 EUV 光刻系统。EUV/High-NA EUV 是先进制程 AI 芯片制造的底层关键设备，但 ASML 是单一报告经营分部，不披露产品级利润。",
       "fy_note": "自然年，财年截至 12 月 31 日。EUR→USD 按 ECB 每日历史汇率年度平均值折算（2023: 1.081269 / 2024: 1.082380 / 2025: 1.129983）。产品平台拆分为 EUV、DUV、量测与检测、装机基地管理。",
       "quote": {
-        "as_of": "2026-06-26",
-        "market_cap": 711.0,
+        "as_of": "2026-07-06",
+        "market_cap": 715.48,
         "net_debt": -11.33,
-        "price": 1794.62,
+        "price": 1825.07,
         "price_currency": "USD",
         "sources": [
           {
-            "label": "stockanalysis.com — ASML market cap (US$711.2B @ 2026-06-26)",
-            "url": "https://stockanalysis.com/stocks/asml/market-cap/",
-            "data_status": "official"
-          },
-          {
-            "label": "stockanalysis.com — ASML(US) close $1,794.62 @ 2026-06-26",
-            "url": "https://stockanalysis.com/stocks/asml/history/",
-            "data_status": "official"
+            "label": "stockanalysis.com — ASML market cap $715.48B and NASDAQ close $1,825.07 @ 2026-07-06",
+            "url": "https://stockanalysis.com/stocks/asml/",
+            "data_status": "estimate"
           },
           {
             "label": "net_debt（估算）：FY2025（截至 2025-12-31）有息债务 ≈ €2.71B，减 现金及等价物+短期投资 ≈ €12.741B → 净现金 €−10.031B × EUR/USD 1.129983（与营收年均汇率一致）= −$11.33B（口径：排经营租赁；现金含短期投资；待核验年报）",
@@ -1973,6 +2015,37 @@
               "label": "capex/CFO（FY2025 现金流，EUR 口径与营收一致：CFO €12.659B / capex（购建固定资产）€1.574B，待核验）",
               "url": "https://ourbrand.asml.com/m/419103cb23dfeaa4/original/asml-2025-annual-report-financial-performance-section.pdf",
               "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "fy": "FY2026E",
+          "period_end": "自然年 2026（截至 2026-12-31）",
+          "period_end_iso": "2026-12-31",
+          "status": "forecast",
+          "revenue": 44.92,
+          "net_income": 13.98,
+          "consensus_rev": "$44.9B（EUR 39.27B 折算）",
+          "consensus_eps": "$36.41",
+          "consensus_eps_value": 36.414006,
+          "consensus_eps_currency": "USD",
+          "consensus_eps_source": [
+            {
+              "label": "StockAnalysis/S&P Global FY2026 forecast normalized to USD NASDAQ-share EPS: EUR EPS 31.83, ASML NASDAQ registry share trades 1:1 with ordinary share, implied by forecast-page forward PE 50.12 and close $1,825.07",
+              "url": "https://stockanalysis.com/stocks/asml/forecast/",
+              "data_status": "consensus"
+            }
+          ],
+          "sources": [
+            {
+              "label": "StockAnalysis/S&P Global FY2026 forecast: revenue EUR 39.27B, net income EUR 12.22B, EPS EUR 31.83; USD values derived with implied EUR/USD 1.144 from USD EPS normalization",
+              "url": "https://stockanalysis.com/stocks/asml/forecast/",
+              "data_status": "consensus"
+            },
+            {
+              "label": "ASML investor relations: ordinary shares trade on NASDAQ in USD and Euronext Amsterdam in EUR",
+              "url": "https://www.asml.com/investors/shares",
+              "data_status": "official"
             }
           ]
         }

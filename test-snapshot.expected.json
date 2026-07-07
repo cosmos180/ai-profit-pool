@@ -133,7 +133,7 @@
     },
     "broadcom": {
       "latestActualFy": "FY2025",
-      "forecastFy": null,
+      "forecastFy": "FY2026E",
       "segmentKind": "platform",
       "reconcileOk": true,
       "reconcilePartition": true,
@@ -146,14 +146,14 @@
       "niYoY": 2.922986,
       "homeRevenue": 63.887,
       "homeNetIncome": 23.126,
-      "marketCap": 1736,
+      "marketCap": 1780,
       "netDebt": 49.6,
-      "ev": 1785.6,
-      "evSales": 27.949348,
-      "pe": 75.067024,
-      "ps": 27.172977,
-      "fcfYield": 0.015503,
-      "forwardPE": null,
+      "ev": 1829.6,
+      "evSales": 28.638064,
+      "pe": 76.969645,
+      "ps": 27.861693,
+      "fcfYield": 0.01512,
+      "forwardPE": 32.177281,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -301,7 +301,7 @@
     },
     "tsmc": {
       "latestActualFy": "FY2025",
-      "forecastFy": null,
+      "forecastFy": "FY2026E",
       "segmentKind": "platform",
       "reconcileOk": true,
       "reconcilePartition": true,
@@ -314,14 +314,14 @@
       "niYoY": 0.562827,
       "homeRevenue": 122.42,
       "homeNetIncome": 55.21,
-      "marketCap": 2360,
+      "marketCap": 1990,
       "netDebt": -69.26,
-      "ev": 2290.74,
-      "evSales": 18.712139,
-      "pe": 42.745879,
-      "ps": 19.277896,
-      "fcfYield": 0.013868,
-      "forwardPE": null,
+      "ev": 1920.74,
+      "evSales": 15.689757,
+      "pe": 36.044195,
+      "ps": 16.255514,
+      "fcfYield": 0.016446,
+      "forwardPE": 29.210001,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -343,7 +343,7 @@
     },
     "asml": {
       "latestActualFy": "FY2025",
-      "forecastFy": null,
+      "forecastFy": "FY2026E",
       "segmentKind": "platform",
       "reconcileOk": true,
       "reconcilePartition": true,
@@ -356,14 +356,14 @@
       "niYoY": 0.324954,
       "homeRevenue": 36.913,
       "homeNetIncome": 10.858,
-      "marketCap": 711,
+      "marketCap": 715.48,
       "netDebt": -11.33,
-      "ev": 699.67,
-      "evSales": 18.954569,
-      "pe": 65.481672,
-      "ps": 19.261507,
-      "fcfYield": 0.015591,
-      "forwardPE": null,
+      "ev": 704.15,
+      "evSales": 19.075935,
+      "pe": 65.894272,
+      "ps": 19.382873,
+      "fcfYield": 0.015493,
+      "forwardPE": 50.120001,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -1266,7 +1266,7 @@
     "nvda": {
       "pe": {
         "value": 39.467111,
-        "median": 75.067024,
+        "median": 76.969645,
         "relative": "low",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1274,7 +1274,7 @@
       },
       "ps": {
         "value": 21.950542,
-        "median": 27.172977,
+        "median": 27.861693,
         "relative": "low",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1282,7 +1282,7 @@
       },
       "fcfYield": {
         "value": 0.02038,
-        "median": 0.015503,
+        "median": 0.01512,
         "relative": "high",
         "cohortN": 3,
         "lowerCheaper": false,
@@ -1290,7 +1290,7 @@
       },
       "evSales": {
         "value": 21.700056,
-        "median": 24.824702,
+        "median": 25.16906,
         "relative": null,
         "cohortN": 2,
         "lowerCheaper": true,
@@ -1333,32 +1333,32 @@
     },
     "broadcom": {
       "pe": {
-        "value": 75.067024,
-        "median": 75.067024,
+        "value": 76.969645,
+        "median": 76.969645,
         "relative": "mid",
         "cohortN": 3,
         "lowerCheaper": true,
         "insufficient": false
       },
       "ps": {
-        "value": 27.172977,
-        "median": 27.172977,
+        "value": 27.861693,
+        "median": 27.861693,
         "relative": "mid",
         "cohortN": 3,
         "lowerCheaper": true,
         "insufficient": false
       },
       "fcfYield": {
-        "value": 0.015503,
-        "median": 0.015503,
+        "value": 0.01512,
+        "median": 0.01512,
         "relative": "mid",
         "cohortN": 3,
         "lowerCheaper": false,
         "insufficient": false
       },
       "evSales": {
-        "value": 27.949348,
-        "median": 24.824702,
+        "value": 28.638064,
+        "median": 25.16906,
         "relative": null,
         "cohortN": 2,
         "lowerCheaper": true,
@@ -1469,32 +1469,32 @@
     },
     "tsmc": {
       "pe": {
-        "value": 42.745879,
-        "median": 42.745879,
+        "value": 36.044195,
+        "median": 36.044195,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       },
       "ps": {
-        "value": 19.277896,
-        "median": 19.277896,
+        "value": 16.255514,
+        "median": 16.255514,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       },
       "fcfYield": {
-        "value": 0.013868,
-        "median": 0.013868,
+        "value": 0.016446,
+        "median": 0.016446,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": false,
         "insufficient": true
       },
       "evSales": {
-        "value": 18.712139,
-        "median": 18.712139,
+        "value": 15.689757,
+        "median": 15.689757,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
@@ -1503,32 +1503,32 @@
     },
     "asml": {
       "pe": {
-        "value": 65.481672,
-        "median": 65.481672,
+        "value": 65.894272,
+        "median": 65.894272,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       },
       "ps": {
-        "value": 19.261507,
-        "median": 19.261507,
+        "value": 19.382873,
+        "median": 19.382873,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       },
       "fcfYield": {
-        "value": 0.015591,
-        "median": 0.015591,
+        "value": 0.015493,
+        "median": 0.015493,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": false,
         "insufficient": true
       },
       "evSales": {
-        "value": 18.954569,
-        "median": 18.954569,
+        "value": 19.075935,
+        "median": 19.075935,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
@@ -1708,7 +1708,7 @@
     "arm": {
       "pe": {
         "value": 393.440265,
-        "median": 75.067024,
+        "median": 76.969645,
         "relative": "high",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1716,7 +1716,7 @@
       },
       "ps": {
         "value": 72.29065,
-        "median": 27.172977,
+        "median": 27.861693,
         "relative": "high",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1724,7 +1724,7 @@
       },
       "fcfYield": {
         "value": 0.002753,
-        "median": 0.015503,
+        "median": 0.01512,
         "relative": "low",
         "cohortN": 3,
         "lowerCheaper": false,
@@ -1732,7 +1732,7 @@
       },
       "evSales": {
         "value": null,
-        "median": 24.824702,
+        "median": 25.16906,
         "relative": null,
         "cohortN": 2,
         "lowerCheaper": true,

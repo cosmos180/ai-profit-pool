@@ -42,13 +42,13 @@
 
 ## P2 · 喂前瞻——从看板跨到决策工具的门槛
 
-背景:前瞻 PE 空盒子已建好(schema/validate/Selector/UI 全就绪),首批美元同币大票已点亮;
+背景:前瞻 PE 空盒子已建好(schema/validate/Selector/UI 全就绪),核心大票已点亮;
 分析师头号诉求:「不做前瞻,comps 对我只是起点;做了,我天天开它。」
 
-- [~] **D6 · consensus EPS 灌入**(🧑 Tiger/公开一致预期源;🤖 merge)
-  - 已完成首批同币可直接算 forward PE:nvda/google/microsoft/amazon/oracle。
+- [x] **D6 · consensus EPS 灌入**(🧑 Tiger/公开一致预期源;🤖 merge)
+  - 已完成核心大票 forward PE:nvda/broadcom/tsmc/asml/google/microsoft/amazon/oracle。
   - 字段:forecast 年 `consensus_eps_value` + `consensus_eps_currency` + `consensus_eps_source`(**data_status 必为 consensus**)。
-  - 待办:tsmc/asml 的预测 EPS 源为 TWD/EUR,而当前 price 是 USD ADR;需补 ADR/FX 换算口径后再点亮,不硬跨币。
+  - tsmc/asml 已把 TWD/EUR 预测 EPS 归一为 USD ADR / NASDAQ registry-share 口径,避免跨币硬算。
 
 ## P3 · 工程加固(小而防烂,🤖 团队直接做,不依赖数据)
 
