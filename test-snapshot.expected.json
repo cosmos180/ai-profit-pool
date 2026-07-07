@@ -62,14 +62,14 @@
       "niYoY": 0.647914,
       "homeRevenue": 215.94,
       "homeNetIncome": 120.1,
-      "marketCap": 4660,
+      "marketCap": 4740,
       "netDebt": -54.09,
-      "ev": 4605.91,
-      "evSales": 21.329582,
-      "pe": 38.800999,
-      "ps": 21.580069,
-      "fcfYield": 0.02073,
-      "forwardPE": null,
+      "ev": 4685.91,
+      "evSales": 21.700056,
+      "pe": 39.467111,
+      "ps": 21.950542,
+      "fcfYield": 0.02038,
+      "forwardPE": 21.800446,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -427,7 +427,7 @@
     },
     "google": {
       "latestActualFy": "FY2025",
-      "forecastFy": null,
+      "forecastFy": "FY2026E",
       "segmentKind": "platform",
       "reconcileOk": true,
       "reconcilePartition": true,
@@ -440,14 +440,14 @@
       "niYoY": 0.320142,
       "homeRevenue": 402.836,
       "homeNetIncome": 132.17,
-      "marketCap": 4286,
+      "marketCap": 4470,
       "netDebt": null,
       "ev": null,
       "evSales": null,
-      "pe": 32.427934,
-      "ps": 10.639565,
-      "fcfYield": 0.017094,
-      "forwardPE": null,
+      "pe": 33.82008,
+      "ps": 11.096327,
+      "fcfYield": 0.016391,
+      "forwardPE": 25.770745,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -469,7 +469,7 @@
     },
     "microsoft": {
       "latestActualFy": "FY2025",
-      "forecastFy": null,
+      "forecastFy": "FY2026E",
       "segmentKind": "platform",
       "reconcileOk": true,
       "reconcilePartition": true,
@@ -482,14 +482,14 @@
       "niYoY": 0.155396,
       "homeRevenue": 281.724,
       "homeNetIncome": 101.832,
-      "marketCap": 3110,
+      "marketCap": 2870,
       "netDebt": null,
       "ev": null,
       "evSales": null,
-      "pe": 30.540498,
-      "ps": 11.039173,
-      "fcfYield": 0.023026,
-      "forwardPE": null,
+      "pe": 28.183675,
+      "ps": 10.187275,
+      "fcfYield": 0.024952,
+      "forwardPE": 22.992866,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -511,7 +511,7 @@
     },
     "amazon": {
       "latestActualFy": "FY2025",
-      "forecastFy": null,
+      "forecastFy": "FY2026E",
       "segmentKind": "platform",
       "reconcileOk": true,
       "reconcilePartition": true,
@@ -524,14 +524,14 @@
       "niYoY": 0.31093,
       "homeRevenue": 716.924,
       "homeNetIncome": 77.67,
-      "marketCap": 2500,
+      "marketCap": 2630,
       "netDebt": null,
       "ev": null,
       "evSales": null,
-      "pe": 32.18746,
-      "ps": 3.48712,
-      "fcfYield": 0.003078,
-      "forwardPE": null,
+      "pe": 33.861208,
+      "ps": 3.66845,
+      "fcfYield": 0.002926,
+      "forwardPE": 28.064368,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -553,7 +553,7 @@
     },
     "oracle": {
       "latestActualFy": "FY2026",
-      "forecastFy": null,
+      "forecastFy": "FY2027E",
       "segmentKind": "platform",
       "reconcileOk": true,
       "reconcilePartition": true,
@@ -566,14 +566,14 @@
       "niYoY": 0.370793,
       "homeRevenue": 67.357,
       "homeNetIncome": 17.309,
-      "marketCap": 425,
+      "marketCap": 414.1,
       "netDebt": null,
       "ev": null,
       "evSales": null,
-      "pe": 24.5537,
-      "ps": 6.309663,
-      "fcfYield": -0.055732,
-      "forwardPE": null,
+      "pe": 23.92397,
+      "ps": 6.147839,
+      "fcfYield": -0.057199,
+      "forwardPE": 17.858385,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
@@ -1265,7 +1265,7 @@
   "stageValuationRel": {
     "nvda": {
       "pe": {
-        "value": 38.800999,
+        "value": 39.467111,
         "median": 75.067024,
         "relative": "low",
         "cohortN": 3,
@@ -1273,7 +1273,7 @@
         "insufficient": false
       },
       "ps": {
-        "value": 21.580069,
+        "value": 21.950542,
         "median": 27.172977,
         "relative": "low",
         "cohortN": 3,
@@ -1281,7 +1281,7 @@
         "insufficient": false
       },
       "fcfYield": {
-        "value": 0.02073,
+        "value": 0.02038,
         "median": 0.015503,
         "relative": "high",
         "cohortN": 3,
@@ -1289,8 +1289,8 @@
         "insufficient": false
       },
       "evSales": {
-        "value": 21.329582,
-        "median": 24.639465,
+        "value": 21.700056,
+        "median": 24.824702,
         "relative": null,
         "cohortN": 2,
         "lowerCheaper": true,
@@ -1358,7 +1358,7 @@
       },
       "evSales": {
         "value": 27.949348,
-        "median": 24.639465,
+        "median": 24.824702,
         "relative": null,
         "cohortN": 2,
         "lowerCheaper": true,
@@ -1571,24 +1571,24 @@
     },
     "google": {
       "pe": {
-        "value": 32.427934,
-        "median": 31.363979,
+        "value": 33.82008,
+        "median": 31.001878,
         "relative": "mid",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "ps": {
-        "value": 10.639565,
-        "median": 8.474614,
+        "value": 11.096327,
+        "median": 8.167557,
         "relative": "high",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "fcfYield": {
-        "value": 0.017094,
-        "median": 0.010086,
+        "value": 0.016391,
+        "median": 0.009658,
         "relative": "high",
         "cohortN": 4,
         "lowerCheaper": false,
@@ -1605,24 +1605,24 @@
     },
     "microsoft": {
       "pe": {
-        "value": 30.540498,
-        "median": 31.363979,
+        "value": 28.183675,
+        "median": 31.001878,
         "relative": "mid",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "ps": {
-        "value": 11.039173,
-        "median": 8.474614,
+        "value": 10.187275,
+        "median": 8.167557,
         "relative": "high",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "fcfYield": {
-        "value": 0.023026,
-        "median": 0.010086,
+        "value": 0.024952,
+        "median": 0.009658,
         "relative": "high",
         "cohortN": 4,
         "lowerCheaper": false,
@@ -1639,24 +1639,24 @@
     },
     "amazon": {
       "pe": {
-        "value": 32.18746,
-        "median": 31.363979,
+        "value": 33.861208,
+        "median": 31.001878,
         "relative": "mid",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "ps": {
-        "value": 3.48712,
-        "median": 8.474614,
+        "value": 3.66845,
+        "median": 8.167557,
         "relative": "low",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "fcfYield": {
-        "value": 0.003078,
-        "median": 0.010086,
+        "value": 0.002926,
+        "median": 0.009658,
         "relative": "low",
         "cohortN": 4,
         "lowerCheaper": false,
@@ -1673,24 +1673,24 @@
     },
     "oracle": {
       "pe": {
-        "value": 24.5537,
-        "median": 31.363979,
+        "value": 23.92397,
+        "median": 31.001878,
         "relative": "low",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "ps": {
-        "value": 6.309663,
-        "median": 8.474614,
+        "value": 6.147839,
+        "median": 8.167557,
         "relative": "low",
         "cohortN": 4,
         "lowerCheaper": true,
         "insufficient": false
       },
       "fcfYield": {
-        "value": -0.055732,
-        "median": 0.010086,
+        "value": -0.057199,
+        "median": 0.009658,
         "relative": "low",
         "cohortN": 4,
         "lowerCheaper": false,
@@ -1732,7 +1732,7 @@
       },
       "evSales": {
         "value": null,
-        "median": 24.639465,
+        "median": 24.824702,
         "relative": null,
         "cohortN": 2,
         "lowerCheaper": true,
