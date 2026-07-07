@@ -51,11 +51,12 @@
       .sort((a, b) => (b.period_end || '').localeCompare(a.period_end || ''))
       .map(p => ({
         id: p.period_id || p.period_end,
+        periodId: p.period_id,
         tag: periodTag(p),
         end: p.period_end,
         revLabel: Fmt.bn(p.revenue, 1),
         niLabel: Fmt.bn(p.net_income, 1),
-        nmLabel: Fmt.pct(p.revenue && p.net_income != null ? p.net_income / p.revenue : null),
+        nmLabel: Fmt.pct(Selectors.netMargin(p)),
       }))
   })
 
@@ -177,13 +178,14 @@
     <div class="section-h">季度事实 · 实际报告期</div>
     <div class="years">
       {#each quarterRows as q (q.id)}
-        <div class="ycard qcard">
+        <button class="ycard qcard" onclick={() => nav.goPeriod(c.id, q.periodId)} disabled={!q.periodId}>
           <div class="yhead"><span class="yfy">{q.tag}</span><span class="ybadge act">实际</span></div>
           <div class="yrev num">{q.revLabel}</div>
           <div class="yrevlbl">营收 · 截至 {q.end}</div>
           <div class="yrow"><span class="l">净利润</span><span class="v num">{q.niLabel}</span></div>
           <div class="yrow"><span class="l">净利率</span><span class="v num">{q.nmLabel}</span></div>
-        </div>
+          <span class="yopen">查看季度 →</span>
+        </button>
       {/each}
     </div>
   {/if}
