@@ -105,9 +105,9 @@
       "homeRevenue": 234.636,
       "homeNetIncome": 31.131,
       "marketCap": 1340,
-      "netDebt": -64.39,
-      "ev": 1275.61,
-      "evSales": 5.436549,
+      "netDebt": -77.57,
+      "ev": 1262.43,
+      "evSales": 5.380376,
       "pe": 43.043911,
       "ps": 5.710974,
       "fcfYield": 0.017119,
@@ -273,9 +273,9 @@
       "homeRevenue": 68.328,
       "homeNetIncome": 30.207,
       "marketCap": 1236,
-      "netDebt": -8.27,
-      "ev": 1227.73,
-      "evSales": 17.968183,
+      "netDebt": -22.77,
+      "ev": 1213.23,
+      "evSales": 17.755971,
       "pe": 40.917668,
       "ps": 18.089217,
       "fcfYield": 0.014515,
@@ -315,9 +315,9 @@
       "homeRevenue": 122.42,
       "homeNetIncome": 55.21,
       "marketCap": 1905,
-      "netDebt": -69.26,
-      "ev": 1835.74,
-      "evSales": 14.995426,
+      "netDebt": -77.58,
+      "ev": 1827.42,
+      "evSales": 14.927463,
       "pe": 34.504619,
       "ps": 15.561183,
       "fcfYield": 0.01718,
@@ -357,9 +357,9 @@
       "homeRevenue": 36.913,
       "homeNetIncome": 10.858,
       "marketCap": 679,
-      "netDebt": -11.33,
-      "ev": 667.67,
-      "evSales": 18.087666,
+      "netDebt": -6.52,
+      "ev": 672.48,
+      "evSales": 18.217972,
       "pe": 62.534537,
       "ps": 18.394604,
       "fcfYield": 0.016325,
@@ -567,9 +567,9 @@
       "homeRevenue": 67.357,
       "homeNetIncome": 17.309,
       "marketCap": 408,
-      "netDebt": null,
-      "ev": null,
-      "evSales": null,
+      "netDebt": 97.647,
+      "ev": 505.647,
+      "evSales": 7.50697,
       "pe": 23.571552,
       "ps": 6.057277,
       "fcfYield": -0.058054,
@@ -1355,8 +1355,8 @@
         "insufficient": false
       },
       "evSales": {
-        "value": 5.436549,
-        "median": 17.968183,
+        "value": 5.380376,
+        "median": 17.755971,
         "relative": "low",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1458,7 +1458,7 @@
       },
       "evSales": {
         "value": 28.494034,
-        "median": 17.968183,
+        "median": 17.755971,
         "relative": "high",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1491,8 +1491,8 @@
         "insufficient": false
       },
       "evSales": {
-        "value": 17.968183,
-        "median": 17.968183,
+        "value": 17.755971,
+        "median": 17.755971,
         "relative": "mid",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1525,8 +1525,8 @@
         "insufficient": true
       },
       "evSales": {
-        "value": 14.995426,
-        "median": 14.995426,
+        "value": 14.927463,
+        "median": 14.927463,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
@@ -1559,8 +1559,8 @@
         "insufficient": true
       },
       "evSales": {
-        "value": 18.087666,
-        "median": 18.087666,
+        "value": 18.217972,
+        "median": 18.217972,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
@@ -1628,9 +1628,9 @@
       },
       "evSales": {
         "value": null,
-        "median": null,
+        "median": 7.50697,
         "relative": null,
-        "cohortN": 0,
+        "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       }
@@ -1662,9 +1662,9 @@
       },
       "evSales": {
         "value": null,
-        "median": null,
+        "median": 7.50697,
         "relative": null,
-        "cohortN": 0,
+        "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       }
@@ -1696,9 +1696,9 @@
       },
       "evSales": {
         "value": null,
-        "median": null,
+        "median": 7.50697,
         "relative": null,
-        "cohortN": 0,
+        "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       }
@@ -1729,10 +1729,10 @@
         "insufficient": false
       },
       "evSales": {
-        "value": null,
-        "median": null,
+        "value": 7.50697,
+        "median": 7.50697,
         "relative": null,
-        "cohortN": 0,
+        "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       }
