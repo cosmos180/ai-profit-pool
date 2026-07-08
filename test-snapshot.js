@@ -116,7 +116,7 @@ function build() {
     migration: migration.map((m) => ({ label: m.label, total: m.total, n: m.n, N: m.N, stages: stagesMap(m.stages) })),
     leader: { id: leader.leader ? leader.leader.id : null, share: leader.share, pool: leader.pool, n: leader.n, N: leader.N, basisCount: leader.basisCount },
     yoy: { value: yoy.value, migLastLabel: yoy.migLast ? yoy.migLast.label : null, migPrevLabel: yoy.migPrev ? yoy.migPrev.label : null },
-    ttmPool: { total: ttmPool.total, n: ttmPool.n, asOfSpreadDays: ttmPool.asOfSpreadDays, stages: stagesMap(ttmPool.stages) },
+    ttmPool: { total: ttmPool.total, n: ttmPool.n, asOfSpreadDays: ttmPool.asOfSpreadDays, basisCount: ttmPool.basisCount, stages: stagesMap(ttmPool.stages) },
     stageValuationRel,
   });
 }
@@ -157,6 +157,24 @@ function invariants(snap) {
   for (const c of populated) {
     const b = (Selectors.aiShare(c) || {}).basis;
     assert.ok(["sourced", "proxy", "none"].includes(b), c.id + " aiShare basis 合法: " + b);
+  }
+  // ---- hotfix 2026-07-07 回归 (真实数据锚点): calendarYear 按 implied fiscal-Q4 落入的 calendar
+  //      slot 补齐, 故财年错位公司的 CY 也能诚实补齐。MSFT (6月末财年) 的 implied 落 calendar Q2 →
+  //      complete=true 且 strict=true (季恰对齐 3/6/9/12 月末); Oracle (月度错位 2/5/8/11 月末) →
+  //      complete=true 但 strict=false ("自然年近似")。数据刷新致形状变时这里会响, 属预期护栏。 ----
+  const byId = (id) => Store.companies().find((c) => c.id === id);
+  const msft = byId("microsoft");
+  if (msft) {
+    const cy = Selectors.calendarYear(msft, 2025);
+    assert.equal(cy.complete, true, "microsoft CY2025 应 complete (implied 落 calendar Q2 补齐)");
+    assert.equal(cy.strict, true, "microsoft CY2025 应 strict (季对齐日历季)");
+    assert.ok(!cy.missing.includes("Q2"), "microsoft CY2025 不再误报缺 Q2");
+  }
+  const ora = byId("oracle");
+  if (ora) {
+    const cy = Selectors.calendarYear(ora, 2025);
+    assert.equal(cy.complete, true, "oracle CY2025 应 complete");
+    assert.equal(cy.strict, false, "oracle CY2025 应 strict=false (月度错位, 自然年近似)");
   }
 }
 

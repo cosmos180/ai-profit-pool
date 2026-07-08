@@ -25,7 +25,6 @@
     const x = ttm.stages.find(t => t.stage === 'invest')
     return x ? x.share : null
   })
-
   // --- 布局常量（纯视觉几何，非财务）---
   const colW = 92, gap = 110, padL = 14, padT = 62, barH = 300, padB = 44
   const W = $derived(padL * 2 + columns.length * colW + (columns.length - 1) * (gap - colW))
@@ -192,7 +191,7 @@
                   {#if li.investEmpty}
                     <span class="gap-note">软银季度净利受投资损益主导，未纳入 TTM（覆盖缺口，非真实归零）</span>
                   {:else if li.members && li.members.length}
-                    {#each li.members as m, mi (m.name)}{#if mi}、{/if}<span class:neg={m.neg}>{m.name} {Fmt.bn(m.ttm, 1)}</span>{/each}
+                    {#each li.members as m, mi (m.name)}{#if mi}、{/if}<span class:neg={m.neg} title="periods 口径（含 implied Q4）">{m.name} {Fmt.bn(m.ttm, 1)}</span>{/each}
                   {:else}—{/if}
                 </span>
                 <span class="lar">TTM 占比　较 {last.label}

@@ -1,5 +1,9 @@
 # DATA-SPEC-dayu — Dayu MCP(SEC EDGAR)取数规格
 
+> ⚠ **新采集目标已切换为 `periods[]`(period-base 重构)。** `years[]` / `quarters[]` 已标 legacy;TTM UI 消费路径已完成 Phase 6 final,不再回退 legacy。`years[]` 暂留给年度视图/估值/前瞻等尚未迁移的旧消费链。
+> 新数据请按报告期原子录入 `periods[]`:每条是一个 reported-period 事实(`kind` = quarter | annual、`status` = actual | guidance | forecast),带 `period_start/period_end`(机读 ISO)、`calendar_year/calendar_quarter`、`fiscal_year/fiscal_quarter`、`currency/fx_to_usd`(非 USD 源必带正 `fx_to_usd`)、可空财务字段与 `sources[]`(url + data_status)。形状要点见计划文档 **Target Data Shape** 一节;字段映射细节可后续修订,本轮先立牌子。TTM/CY/FY 一律由 Selector 派生(算不存)。
+> **过渡期双写规则:** 下个财报季开始,年度 actual 事实必须同时写入 `periods[]` annual 和 legacy `years[]`(merge 支持按 `period_end_iso` 增量),直到年度视图/估值/AI 池/前瞻链完成广口径迁移;季度事实只写 `periods[]`。
+>
 > Dayu 是第三条采集通道,与 Tiger、「丢 PDF 人工提取」互补。跑在**用户本地**(需 DeepSeek key + EDGAR)。
 > 共享规则(单位 USD bn、id 硬清单、判断项不输出、输出 JSON 形状、merge 流程、自检清单)
 > **一律沿用 `DATA-SPEC-tiger.md` 第 1/4/5/7/8 节**,本文只写 Dayu 特有的部分。
@@ -30,6 +34,68 @@ Dayu 读的是官方文件,但它是 LLM 转述——**转述可能错,所以产
 
 > ticker 用真实交易代码(MSFT/GOOGL/AMZN/ORCL/NVDA/AVGO/MU/TSM/ASML);
 > 但输出 JSON 的 `id` 必须按 DATA-SPEC-tiger 第 1.1 节的**硬清单**(microsoft/google/amazon/oracle/nvda/broadcom/micron/tsmc/asml)。
+
+### 2.A retirement-pass 模板(**新采集首选,吐 `periods[]` 部分对象**)
+
+> **适用场景**:period-base 重构后的常规采集。Phase 6 final 后,TTM 池只认 `periods[]`;
+> 补季度原子用于点亮/更新 periods 口径,不再存在 legacy fallback。
+> 输出**只含 `periods` 的部分对象**,经 `merge.py` 按 `period_id` **增量并入**(其余数据分毫不动,
+> 见 tools/README「部分合并」)。已录入的年报/季度不必重复吐。
+>
+> **口径要点(与计划 Target Data Shape / Decision Addendum 一致)**:
+> - 一条 period = 一个 reported-period 事实,`kind` = `quarter` | `annual`、`status` = `actual` | `guidance` | `forecast`。
+> - `period_id` 命名惯例:`<id>-<fy 或 cy 标识><q>`,如 `nvda-fy2026q2`、`samsung-2025q3`、`broadcom-fy2025q3`(参照 companies.json 里既有 periods)。
+> - `period_start/period_end` 用**机读 ISO** `YYYY-MM-DD`(filing 明示的报告期首末日,勿臆造)。
+> - `calendar_year/calendar_quarter`(Q1–Q4,按 `period_end` 落哪个自然季)与 `fiscal_year/fiscal_quarter` 都要填——财年错位公司两者会不同(NVDA FY2026Q1 的 period_end 在 2025-04 → calendar Q2)。
+> - `currency` 记源币;`fx_to_usd` 记「源币/USD」换算率,**USD 源填 `1`**;非 USD 必带正 `fx_to_usd`。
+>   ⚠ **implied Q4 口径**:若这批季度将用于 implied Q4 派生(annual − Q1–Q3),则 annual 与 Q1/Q2/Q3
+>   必须**同 `currency` 且同 `fx_to_usd`**(混 FX 相减无意义 → selector 会返 null)。年均汇率口径(samsung/skhynix)
+>   四季用同一 `fx_to_usd`;逐期汇率口径(tsmc/asml 现状)无法走 implied,需改走**四季全 actual**(路线 A)。
+> - 财务字段单位一律 **USD bn(÷1e9,4 位小数)**;`revenue`/`net_income` 必吐,其余(`gross_profit`/`op_income`/`cfo`/`capex`)可 null;缺就 null,**绝不编造**。
+> - `net_income` 取归母 GAAP;`capex` 取绝对值。`segments` 本轮季度补录一般 `[]`(分部 is_ai 是判断项,人工负责)。
+> - `sources[]` 每条含 filing 类型 + **提交日期** + `data_status:"official"`(一手 filing),url 用该公司 EDGAR/官方 filing 索引页。
+>
+> **提示词**(逐家跑;`{TICKER}` 换真实代码,`{ID}` 换硬清单 id,`{季度清单}` 照 gap-report 的购物清单填):
+
+```
+读取 {TICKER} 的 {季度清单}(如 FQ2'26、FQ3'26),只用本次检索到的 10-Q / 6-K / 季度 8-K
+filing 原文数字(禁止用训练记忆补空,拿不到留 null),为每个季度产出一个 reported-period 原子,
+最终**只输出一个 periods 部分对象**(不要吐 years/quarters/quote/判断项):
+
+{
+  "id": "{ID}",
+  "periods": [
+    { "period_id": "{ID}-<fy><q>",          // 命名惯例见 companies.json 既有 periods
+      "kind": "quarter", "status": "actual",
+      "period_start": "YYYY-MM-DD", "period_end": "YYYY-MM-DD",   // filing 明示的报告期首末日(ISO)
+      "calendar_year": 20XX, "calendar_quarter": "QX",           // 按 period_end 落的自然季
+      "fiscal_year": "FY20XX", "fiscal_quarter": "QX",
+      "currency": "<源币 ISO>", "fx_to_usd": <源币/USD;USD 源=1>,
+      "revenue": <USD bn 4位>, "net_income": <归母 GAAP USD bn 4位>,
+      "gross_profit": <或 null>, "op_income": <或 null>, "cfo": <或 null>, "capex": <绝对值或 null>,
+      "segments": [],
+      "sources": [ { "label": "<10-Q/6-K/8-K + 提交日期>", "url": "<EDGAR/官方 filing 索引页>",
+                     "data_status": "official" } ] }
+  ],
+  "_selfcheck": {   // 自校验(merge 前人工核对后删除):
+    "disclosed_figures": "<每季 filing 明文披露的营收/净利原文,与上面 USD bn 换算前后互验>",
+    "fx_consistency": "<若供 implied Q4:annual 与 Q1–Q3 是否同 currency 同 fx_to_usd>",
+    "filing_refs": ["<每季用到的 filing:类型/accession/提交日>"]
+  }
+}
+
+硬规则:单位 USD bn(÷1e9,4位小数);非美元报表按 filing 披露美元数优先,否则注明所用汇率与口径
+(implied Q4 需 annual 与 Q1–Q3 同 fx_to_usd);capex 取绝对值;net_income 取归母 GAAP;
+缺任何字段填 null 绝不编造;calendar_quarter 按 period_end 日期落季,与 fiscal_quarter 可能不同;
+不要输出 chain_stage / ai_exposure / is_ai / seg_profit / valuation_caveat / 中文名(判断项,人工负责);
+不要输出市值/股价/预期 EPS(不在 filing);**只吐 periods 部分对象,merge 会按 period_id 增量并入**。
+```
+
+### 2.B 旧模板(整对象 years/quarters,legacy——仅在需要整录一家新公司时用)
+
+> ⚠ 下面是 period-base 重构**之前**的整对象模板,输出 `years[]`/`quarters[]`(已标 legacy)。
+> 常规补录一律用 **2.A**;仅当要整录一家从未入库的公司(需完整对象走覆盖录入)时才参考本模板,
+> 且事后应按 2.A 口径补 `periods[]`。
 
 ```
 读取 {TICKER} 最新年报(10-K 或 20-F)与最近约 8 个季度的季报(10-Q/6-K),只用本次检索到的

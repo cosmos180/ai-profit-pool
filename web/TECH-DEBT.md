@@ -22,3 +22,9 @@
 - 备注（迭代 A 收敛）：桑基外框已从写死 `width/height` 改为 `viewBox` + CSS
   等比缩放（A1）；分部占比标签已改用 `Selectors.incomeFlow` 的 `segment.share`
   下沉派生（A2）+ `Fmt.pctCompact` 防归零（A4）。命令式 SVG 本身的债不变。
+
+## 2. period-base Phase 6 final 后的边界
+
+- TTM UI 消费路径已退掉 legacy fallback：`profitPoolTTM` 和迁移图只吃 `periods[]`。
+- `years[]` 仍被年度视图、估值、AI 池、前瞻链消费；这是数据/selector 广口径迁移，不是当前 web 视图债，按 `docs/ROADMAP.md` 后续另立项。
+- 过渡期新年度 actual 事实需要双写 `periods[]` annual 与 legacy `years[]`，防止广口径迁移完成前旧消费链静默过期。

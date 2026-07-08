@@ -11,9 +11,39 @@
 
   const c = $derived(nav.companyId ? Store.byId(nav.companyId) : null)
   const y = $derived(c && nav.fy ? Selectors.yearByFy(c, nav.fy) : null)
+  const p = $derived(c && nav.periodId ? Selectors.periods(c).find(x => x.period_id === nav.periodId) : null)
+  const isPeriod = $derived(!!nav.periodId)
   const isForecast = $derived(y?.status === 'forecast')
 
   const firstWord = s => (s || '').split(' ')[0]
+  const periodTag = x => x?.calendar_year != null && x?.calendar_quarter ? `${x.calendar_year}${x.calendar_quarter}` : (x?.period_end || x?.period_id || '')
+  const periodTitle = $derived(p ? periodTag(p) : (nav.periodId || ''))
+  const periodCashFcf = $derived(p ? Selectors.fcf(p) : null)
+  const periodSegRows = $derived.by(() => {
+    if (!p) return []
+    const sorted = Selectors.revenueSorted(p)
+    const maxV = sorted[0] ? sorted[0].revenue : 1
+    return sorted.map(s => ({
+      name: s.name,
+      is_ai: s.is_ai,
+      revLabel: Fmt.bn(s.revenue, 2),
+      shareLabel: Fmt.pct(Selectors.segRevShare(p, s.name), 1),
+      barW: (s.revenue / maxV * 100).toFixed(1),
+    }))
+  })
+  const periodProfitRows = $derived.by(() => {
+    if (!p || !Selectors.hasSegmentProfit(p)) return []
+    const sorted = Selectors.profitSorted(p)
+    const maxV = sorted[0] ? sorted[0].op_income : 1
+    return sorted.map(s => ({
+      name: s.name,
+      is_ai: s.is_ai,
+      opLabel: Fmt.bn(s.op_income, 2),
+      marginLabel: Fmt.pct(Selectors.segOpMargin(s)),
+      barW: (s.op_income / maxV * 100).toFixed(1),
+    }))
+  })
+  const periodRec = $derived(p && periodSegRows.length ? Selectors.reconcile(p) : null)
 
   // —— actual：营收板块（降序）——
   const platRows = $derived.by(() => {
@@ -74,23 +104,83 @@
   })
 </script>
 
-{#if !c || !y}
-  <div class="dhead"><span class="dfy">{nav.fy ?? ''}</span></div>
-  <div class="note-block">未找到对应公司或财年。
+{#if !c || (isPeriod ? !p : !y)}
+  <div class="dhead"><span class="dfy">{nav.periodId ?? nav.fy ?? ''}</span></div>
+  <div class="note-block">未找到对应公司、财年或报告期。
     <button class="crumb" style="margin-top:8px;color:var(--ok)" onclick={() => nav.goHome()}>← 返回公司对比</button>
   </div>
 {:else}
   <div class="dhead">
-    <span class="dfy">{c.name} · {y.fy}</span>
-    <span class="dperiod">{y.period_end || ''}</span>
-    {#if isForecast}
+    <span class="dfy">{c.name} · {isPeriod ? periodTitle : y.fy}</span>
+    <span class="dperiod">{isPeriod ? (p.period_start && p.period_end ? `${p.period_start} ~ ${p.period_end}` : p.period_end || '') : (y.period_end || '')}</span>
+    {#if isPeriod}
+      <span class="dbadge ybadge act">实际 · 季度事实</span>
+    {:else if isForecast}
       <span class="dbadge ybadge fc">预测 · 卖方一致预期</span>
     {:else}
       <span class="dbadge ybadge act">实际 · GAAP</span>
     {/if}
   </div>
 
-  {#if isForecast}
+  {#if isPeriod}
+    <!-- ============ 实际报告期 ============ -->
+    <div class="section-h" style="margin-top:18px">公司层面 · {periodTitle}</div>
+    <div class="card csum">
+      <div class="c"><div class="cl">营收</div><div class="cv num">{Fmt.bn(p.revenue, 1)}</div></div>
+      <div class="c">
+        <div class="cl">毛利{#if p.gross_profit == null}<span class="cl-flag" title="该季度原子未录入毛利，诚实留空">未录入</span>{/if}</div>
+        <div class="cv num">{Fmt.bn(p.gross_profit, 1)}</div>
+      </div>
+      <div class="c"><div class="cl">经营利润</div><div class="cv num">{Fmt.bn(p.op_income, 1)}</div></div>
+      <div class="c"><div class="cl">经营利润率</div><div class="cv num">{Fmt.pct(Selectors.opMargin(p))}</div></div>
+      <div class="c"><div class="cl">净利润</div><div class="cv num green">{Fmt.bn(p.net_income, 1)}</div></div>
+      <div class="c"><div class="cl">净利率</div><div class="cv num green">{Fmt.pct(Selectors.netMargin(p))}</div></div>
+      <div class="c"><div class="cl">CFO</div><div class="cv num">{Fmt.bn(p.cfo, 1)}</div></div>
+      <div class="c"><div class="cl">capex</div><div class="cv num">{Fmt.bn(p.capex, 1)}</div></div>
+      <div class="c"><div class="cl">自由现金流</div><div class="cv num {periodCashFcf != null && periodCashFcf >= 0 ? 'green' : ''}">{Fmt.bn(periodCashFcf, 1)}</div></div>
+    </div>
+
+    <Sankey company={c} year={p} />
+
+    {#if periodSegRows.length}
+      <div class="section-h">季度分部营收 · 降序</div>
+      <div class="card">
+        <div class="plat">
+          {#each periodSegRows as s (s.name)}
+            <div class="platrow {s.is_ai ? 'ai' : ''}">
+              <div class="pt">
+                <span class="pname">{s.name}{#if s.is_ai}<span class="aitag">AI 主战场</span>{/if}</span>
+                <span class="pv num">{s.revLabel}<span class="sh">{s.shareLabel}</span></span>
+              </div>
+              <div class="ptrack"><div class="pfill" style="width:{s.barW}%"></div></div>
+            </div>
+          {/each}
+        </div>
+        {#if periodRec}<Reconcile rec={periodRec} />{/if}
+      </div>
+    {:else}
+      <div class="note-block"><b>季度分部未录入。</b>当前报告期只记录公司层面营收、利润和来源；公司若披露季度分部，补入 <code style="font-family:var(--mono)">periods[].segments</code> 后这里会自动展开。</div>
+    {/if}
+
+    {#if periodProfitRows.length}
+      <div class="section-h">季度分部利润与利润率 · 降序</div>
+      <div class="card">
+        <div class="plat">
+          {#each periodProfitRows as s (s.name)}
+            <div class="platrow {s.is_ai ? 'ai' : ''}">
+              <div class="pt">
+                <span class="pname">{s.name}{#if s.is_ai}<span class="aitag">AI 主战场</span>{/if}</span>
+                <span class="pv num">{s.opLabel}<span class="sh">利润率 {s.marginLabel}</span></span>
+              </div>
+              <div class="ptrack"><div class="pfill" style="width:{s.barW}%"></div></div>
+            </div>
+          {/each}
+        </div>
+      </div>
+    {/if}
+
+    <SourcesBlock year={p} />
+  {:else if isForecast}
     <!-- ============ 预测年 ============ -->
     <div class="section-h" style="margin-top:18px">本财年 · 预测（非实际）</div>
     <div class="note-block" style="margin-top:0"><b>这是预测，不是已实现的经营事实。</b>全年一致预期约 {Fmt.bn(y.revenue, 0)}{#if y.consensus_rev}（区间 {y.consensus_rev}）{/if}{#if y.consensus_eps}，一致预期 EPS 约 {y.consensus_eps}{/if}。下方锚点按可靠度分别标注。</div>

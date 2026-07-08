@@ -16,14 +16,15 @@
 
 ## P0 · 完成口径换血(消灭混合态)——当前最大可信度漏洞
 
-背景:已拍板「全量迁真实」,但目前**仅 tsmc/FY2025 是财报官方口径**,其余 12 家仍是情景/混合来源。
-混合态每停留一天,核心视图(迁移图/AI 池/龙头占比)可信度打一天折扣。
+背景:已拍板「全量迁真实」。云四家与 ARM 已明显推进到 official 主表口径,但非 SEC 公司、部分历史财年与 TSMC FY2024 偏差仍需继续收敛。
+混合态每停留一天,核心视图(迁移图/AI 池/龙头占比)可信度都会打折扣。
 
-- [ ] **D1 · 12 家迁真实口径**(🧑 财报 PDF 丢进来 或 Tiger skill 按 `DATA-SPEC-tiger.md` 吐 JSON;🤖 提取/对账/merge)
-  - 批次优先级:①云四家 google/microsoft/amazon/oracle(10-K 顺带分部经营利润,喂 D4)→ ②存储 samsung/micron/skhynix + 设计 nvda/broadcom → ③其余 asml/softbank/tencent
+- [~] **D1 · 12 家迁真实口径**(🧑 财报 PDF 丢进来 或 Tiger skill 按 `DATA-SPEC-tiger.md` 吐 JSON;🤖 提取/对账/merge)
+  - 进展:云四家 google/microsoft/amazon/oracle 已用 Dayu/SEC 补到 official 年度/季度主表;ARM 已补 official。后续优先处理非 SEC 与 TSMC FY2024 官方偏差。
+  - 批次优先级:①云四家 google/microsoft/amazon/oracle(已完成主表;oracle 缺云分部经营利润)→ ②存储 samsung/micron/skhynix + 设计 nvda/broadcom → ③其余 asml/softbank/tencent
   - 每家要求:actual 年(营收/毛利率/经营利润/净利/capex/CFO)+ 平台/分部拆分 + 来源标注;**整批换,不留混合**
-- [ ] **D2 · TSMC FY2024 官方修正**(🧑 需 FY2024 年报/20-F 的平台拆分;🤖 提取)
-  - 已知偏差:官方 rev 90.08 / ni 36.52 vs 库内 88.268 / 35.327;上次因缺 FY2024 平台拆分被对账闸门正确拦回
+- [x] **D2 · TSMC FY2024 官方修正**——已按 FY2025 同口径落库:官方美元披露 rev 90.08 / ni 36.52,公司隐含均汇 32.130(=TWD 2,894.31bn÷90.08),op/cfo 按隐含均汇重算(derived),平台拆分 51/35/6/5/1/2 × 90.08 精确对账;`years[]` 与 `periods[]` 双写一致。注:本执行环境 egress 拦 SEC/tsmc.com,数字经多源检索交叉印证(TWD÷隐含均汇/官方USD/分季合计三路闭合),口径注明于 sources。
+  - 同批:ARM `quote.net_debt` 补齐 = −3.601bn 净现金(FY2026 20-F @2026-03-31:现金 2.751+短投 0.850,零有息借款,租赁 0.432 按口径排除)→ EV/EV-Sales 点亮,设计环节 EV/Sales comps n=2→3 生效;已用 SEC 原文与本地 Dayu filing `fil_0001973239-26-000097` 复核并标 official。
 - [ ] **D3 · quote 快照刷新**(🧑 Tiger `get_financial_daily`;🤖 merge)
   - 现状停在 as_of 2026-06-26;13 家市值/价格/净债务分量刷到同一交易日
 
@@ -32,27 +33,44 @@
 背景:首页 $291B AI 池 **100% proxy**(营收占比冒充利润占比,零 sourced);
 而 google/microsoft/amazon 的**分部经营利润已在库里**(seg_profit=yes),材料早有、只差用起来。
 
-- [ ] **D4 · 云厂 AI 归因 proxy→sourced**(🤖 架构师定口径 + 工程师落地;🧑 确认口径)
-  - 用已录云分部经营利润推 `ai_profit_share`(带 `ai_share_source`,data_status=derived/estimate)
-  - 先 google/microsoft/amazon 三家;oracle 分部利润未披露(seg_profit=no)→ 留 proxy
-- [ ] **D5 · 季度净利补齐 6 家**(🧑 Tiger `get_financial_report` period=季度,最近约 8 季;🤖 merge)
-  - 缺口:softbank/tencent/google/microsoft/amazon/oracle → TTM 柱云环节现为 0
+- [x] **D4 · 云厂 AI 归因 proxy→sourced**(🤖 架构师定口径 + 工程师落地;🧑 确认口径)
+  - 已用 FY2025/FY2026 已录云分部经营利润推 `ai_profit_share`(带 `ai_share_source`,data_status=derived):google/microsoft/amazon。
+  - 口径:云分部经营利润 / 公司总经营利润,是 cloud/AI infrastructure proxy,不是公司披露的 AI-only profit;oracle 分部利润未披露→ 留 proxy。
+- [x] **D5 · 季度净利补齐 / Phase 6 final**(🧑 Tiger/Dayu/官方披露;🤖 merge)
+  - 进展:google/microsoft/amazon/oracle 已补最近约 8 季;softbank/tencent 仍缺口。
   - 软银收益最低(净利受投资损益主导)可最后/放弃,规格已注明
+  - **Phase 6 final 已完成**:`ttmNetIncomeUnified` 已退化为 `periods[] > null`;`profitPoolTTM` 与迁移图 TTM 柱不再消费/展示 `legacy_fallback`;旧 `ttmNetIncome(c)` 仅保留审计对账。
+  - **★Retirement pass 执行口径(2026-07-07 用户拍板,逐批照此,不得放宽)**:
+    - 采购单以 `node tools/gap-report.cjs` 实跑为准;产物按 DATA-SPEC-dayu §2.A 吐 **periods 部分对象**,走 merge 部分合并。
+    - **tsmc / asml:路线 A**——Q1–Q4 全 actual、逐期 FX、**禁止 implied Q4**(季度逐期汇率与年报年均汇率不可硬相减;selector 的 FX 一致性拒绝是契约行为,保留。绝不为省一季而重录季度汇率——数据层不迎合派生逻辑,否则不可审计)。
+    - **broadcom / nvda:路线 B**——USD 报表,补缺季后允许 implied Q4。
+    - **samsung / skhynix:路线 B 可试**,但**验收必须核 selector 是否因 FX basis 拒绝 implied;若拒绝,不放宽规则,转路线 A**。
+    - **D3 quote 刷新先行**(quote-only 部分合并隔离性已验证,低风险前置批次)。
+    - **Tiger 边界**:US/HK/ADR 顺;韩/台/日**原股不塞 Tiger**;quote 刷新按可支持标的先更新,**不阻塞** periods 数据批次。
+    - Phase 6 final gate 已满足:`legacy_fallback = 0`;legacy 数据留审计。
+  - **过渡期双写规则**:在年度视图/估值/AI 池/前瞻链完成广口径迁移前,年度 actual 事实同时写 `periods[]` annual 与 legacy `years[]`(按 `period_end_iso` 增量);季度事实只写 `periods[]`。
+- [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
+  - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
+  - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
 
 ## P2 · 喂前瞻——从看板跨到决策工具的门槛
 
-背景:前瞻 PE 空盒子已建好(schema/validate/Selector/UI 全就绪),**全空**;
+背景:前瞻 PE 空盒子已建好(schema/validate/Selector/UI 全就绪),核心大票已点亮;
 分析师头号诉求:「不做前瞻,comps 对我只是起点;做了,我天天开它。」
 
-- [ ] **D6 · consensus EPS 灌入**(🧑 Tiger `get_corporate_earnings_calendar` 预期 EPS;🤖 merge)
-  - 字段:forecast 年 `consensus_eps_value` + `consensus_eps_currency` + `consensus_eps_source`(**data_status 必为 consensus**)
-  - 宁缺毋滥:有清晰一致预期的大票先上(nvda/云四家/tsmc),拿不到的诚实留空
+- [x] **D6 · consensus EPS 灌入**(🧑 Tiger/公开一致预期源;🤖 merge)
+  - 已完成核心大票 forward PE:nvda/broadcom/tsmc/asml/google/microsoft/amazon/oracle。
+  - 字段:forecast 年 `consensus_eps_value` + `consensus_eps_currency` + `consensus_eps_source`(**data_status 必为 consensus**)。
+  - tsmc/asml 已把 TWD/EUR 预测 EPS 归一为 USD ADR / NASDAQ registry-share 口径,避免跨币硬算。
 
 ## P3 · 工程加固(小而防烂,🤖 团队直接做,不依赖数据)
 
-- [ ] **E1 · validate.py TODAY 去硬编码**——现钉死 2026-06-30,随真实时间流逝新鲜度检查会失真;改真实日期(一行,防「悄悄坏」)
-- [ ] **E2 · 测试拆分:逻辑回归 vs 数据快照**——现每次数据更新都要手改硬编码断言(TSMC 已痛过);拆开后数据刷新不再碰测试文件,是 D1 批量换血的前置减摩
+- [x] **E1 · validate.py TODAY 去硬编码**——已改为真实 `date.today()`;quote 新鲜度随真实日期滚动。
+- [x] **E2 · 测试拆分:逻辑回归 vs 数据快照**——已拆为 `test-logic.js` + `test-snapshot.js`;数据刷新用快照更新,逻辑回归保持稳定。
 - [ ] **E3 · FX 口径统一**——各公司历史条目汇率来源异质(都有标注、不算错);随 D1 换血顺手统一为「公司隐含均汇优先,否则期间均汇,来源注明」
+- [~] **E4 · period-base 数据模型重构**(🤖 团队;计划见 `docs/plans/period-base-refactor.md`)——把 app 重建在 report-period 原子(`periods[]`)之上,FY/CY/TTM/最新季/AI 归因/估值全由 Selector 派生。
+  - **Phase 1–5 全量完成 14/14**:schema `periods[]` + validate 契约、selector 层(periods/calendarYear/ttmFromPeriods/fiscalYearFromPeriods/companyMetricView + implied Q4 派生 + 严格 CY 边界)、四镜头视图、14 家公司全部迁入 `periods[]`。
+  - **Phase 6 final 落地(窄口径)**:6.1 `years[]/quarters[]` 标 legacy(schema/DATA-SPEC/本文,零行为变化);6.2 final `ttmNetIncomeUnified`(periods > null)接入 `profitPoolTTM`,迁移图 TTM 柱为单一 periods 口径。`years[]` 仍服务年度视图/估值/AI 池/前瞻链,广口径迁移另立项。
 
 ## P4 · 产品决策(不排期,需要用户拍板后才动)
 

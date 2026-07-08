@@ -78,6 +78,44 @@ python3 tools/merge.py /tmp/new.json --no-build # 合并+校验,暂不重建 app
 - 合并后若某公司仍缺 `chain_stage` 或 `is_ai` 分部,会提示它暂不参与利润池迁移/AI 加权池
   (其余页面正常显示,honest 降级)。
 
+### 部分合并(quote-only / periods-only 增量并入)
+
+merge 会按**对象形状**自动分两种模式,无需额外命令行开关:
+
+| 对象形状 | 判定信号 | 行为 |
+|---|---|---|
+| **完整对象** | 含 `years` 且未带 `"_partial": true` | 整对象覆盖(上面的覆盖保护照旧)——**现行行为零变更** |
+| **部分对象** | 缺 `years`,或显式 `"_partial": true` | **部分合并**:只更新对象里【提供的顶层键】,未提供的键一律保留旧值 |
+
+设计取舍:以「缺 `years`」作为部分对象的默认信号,是为了**拒绝静默整替换**——旧流程里一个
+quote-only 对象会把公司的 `years/quarters/periods` 全部冲成缺省。要对 `years` 本身做增量时,
+显式带 `"_partial": true` 即可(此时可携带 `years` 并走增量并入)。
+
+部分合并语义(**只更新提供的顶层键**):
+
+- `quote` 及其余非数组键 → **整体替换**该键;
+- `periods` → 按 `period_id` **增量并入**:同 `period_id` 替换该条、新 `period_id` 追加、其余 periods 不动,并入后按 `period_end` 排序;
+- `quarters` → 按 `period_end`、`years` → 按 `period_end_iso` 同理增量并入;
+- **未提供的顶层键一律保留旧值** —— 吐 quote-only / periods-only 不会冲毁公司其余数据。
+
+约束与报错(仍人话、失败即回滚):
+
+- 部分对象**只能更新已存在的公司**;指向不存在的 id → 报错(先用完整对象录入这家公司)。
+- 增量数组里每条必须带对应主键(`periods` 的 `period_id` 等);缺键或一次并入内主键重复 → 报错、不写盘。
+- 合并后仍强制过 `validate.py`,0 ERROR 才写盘并构建;任一步失败自动回滚。
+
+```bash
+# 只刷行情:吐一个 quote-only 部分对象(缺 years → 部分合并),其余数据分毫不动
+echo '{"id":"nvda","quote":{...}}' | python3 tools/merge.py - --dry-run   # 先 dry-run 看会改哪些键
+echo '{"id":"nvda","quote":{...}}' | python3 tools/merge.py -
+
+# 只补季度原子:吐 periods-only 部分对象,按 period_id 增量并入
+python3 tools/merge.py /tmp/nvda-periods.json --dry-run   # 报告 "periods: 替换 N / 新增 M"
+python3 tools/merge.py /tmp/nvda-periods.json
+```
+
+dry-run 会明确区分「**整对象覆盖**」与「**部分更新(哪些键 / 数组替换N·新增M)**」,便于下手前确认影响面。
+
 ### 用法建议
 1. 跑 `fetch_fmp.py` → 得到对象;2.(可选,建议)补齐判断项、做 USD 换算与数量级核验;
 3. `merge.py` 一条龙合并+校验+构建;4. 打开 `app.html`。全程不改任何代码。

@@ -3,10 +3,11 @@
   import { nav } from './lib/nav.svelte.js'
   import Crumbs from './components/Crumbs.svelte'
   import Home from './components/Home.svelte'
+  import Analysis from './components/Analysis.svelte'
   import Company from './components/Company.svelte'
   import Detail from './components/Detail.svelte'
 
-  const views = { home: Home, company: Company, detail: Detail }
+  const views = { home: Home, analysis: Analysis, company: Company, detail: Detail }
   const Current = $derived(views[nav.view] ?? Home)
 </script>
 
