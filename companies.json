@@ -3766,24 +3766,24 @@
           "fiscal_year": "FY2025",
           "fiscal_quarter": "Q1",
           "currency": "TWD",
-          "fx_to_usd": 32.87,
-          "revenue": null,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 11.0,
+          "fx_to_usd": 32.873247,
+          "revenue": 25.53,
+          "gross_profit": 15.009,
+          "op_income": 12.3834,
+          "net_income": 10.9987,
           "cfo": null,
           "capex": null,
           "segments": [],
           "sources": [
             {
-              "label": "TSMC 1Q25 业绩（净利 NT$361.56B，EPS NT$13.94 / US$2.12 per ADR）",
-              "url": "https://pr.tsmc.com/english/news/3222",
+              "label": "TSMC 1Q25 6-K filed 2025-04-17: net sales NT$839.254B / US$25.53B, gross profit NT$493.395B, operating income NT$407.081B, net income NT$361.564B",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000035/a1q25e_withguidancexfinal.htm",
               "data_status": "official"
             },
             {
-              "label": "派生换算：NT$361.56B ÷ NT/USD 32.87（1Q25 隐含汇率，由 TSMC 自报美元营收反推 NT$839.25B/US$25.53B）= $11.00B（换算待核验）",
-              "url": "https://anysilicon.com/tsmcs-financial-results-2025-q1/",
-              "data_status": "estimate"
+              "label": "FX derived from same release: NT$839.254B / US$25.53B = 32.873247 TWD per USD",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000035/a1q25e_withguidancexfinal.htm",
+              "data_status": "derived"
             }
           ]
         },
@@ -3800,20 +3800,20 @@
           "currency": "TWD",
           "fx_to_usd": 31.053941,
           "revenue": 30.07,
-          "gross_profit": 17.626,
-          "op_income": 14.923,
-          "net_income": 12.825,
+          "gross_profit": 17.6264,
+          "op_income": 14.9232,
+          "net_income": 12.8252,
           "cfo": null,
           "capex": null,
           "segments": [],
           "sources": [
             {
-              "label": "TSMC 2Q25 6-K earnings release: net sales NT$933.792B / US$30.07B, gross profit NT$547.369B, operating income NT$463.423B, net income NT$398.273B",
+              "label": "TSMC 2Q25 6-K filed 2025-07-17: net sales NT$933.792B / US$30.07B, gross profit NT$547.369B, operating income NT$463.423B, net income NT$398.273B",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000082/a2q25e_withguidancexfinal.htm",
               "data_status": "official"
             },
             {
-              "label": "FX derived from same release: NT$933.792B / US$30.07B = 31.053941 TWD per USD (source-currency-per-USD)",
+              "label": "FX derived from same release: NT$933.792B / US$30.07B = 31.053941 TWD per USD",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000082/a2q25e_withguidancexfinal.htm",
               "data_status": "derived"
             }
@@ -3832,20 +3832,20 @@
           "currency": "TWD",
           "fx_to_usd": 29.906888,
           "revenue": 33.1,
-          "gross_profit": 19.679,
-          "op_income": 16.741,
-          "net_income": 15.124,
+          "gross_profit": 19.6792,
+          "op_income": 16.7415,
+          "net_income": 15.1237,
           "cfo": null,
           "capex": null,
           "segments": [],
           "sources": [
             {
-              "label": "TSMC 3Q25 6-K earnings release: net sales NT$989.918B / US$33.10B, gross profit NT$588.543B, operating income NT$500.685B, net income NT$452.302B",
+              "label": "TSMC 3Q25 6-K filed 2025-10-16: net sales NT$989.918B / US$33.10B, gross profit NT$588.543B, operating income NT$500.685B, net income NT$452.302B",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000116/a3q25e_withguidancexfinal.htm",
               "data_status": "official"
             },
             {
-              "label": "FX derived from same release: NT$989.918B / US$33.10B = 29.906888 TWD per USD (source-currency-per-USD)",
+              "label": "FX derived from same release: NT$989.918B / US$33.10B = 29.906888 TWD per USD",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000116/a3q25e_withguidancexfinal.htm",
               "data_status": "derived"
             }
@@ -3955,20 +3955,20 @@
           "currency": "TWD",
           "fx_to_usd": 31.013638,
           "revenue": 33.73,
-          "gross_profit": 21.023,
-          "op_income": 18.215,
-          "net_income": 16.307,
+          "gross_profit": 21.0226,
+          "op_income": 18.2147,
+          "net_income": 16.3071,
           "cfo": null,
           "capex": null,
           "segments": [],
           "sources": [
             {
-              "label": "TSMC 4Q25 6-K earnings release: net sales NT$1,046.090B / US$33.73B, gross profit NT$651.987B, operating income NT$564.903B, net income NT$505.744B",
+              "label": "TSMC 4Q25 6-K filed 2026-01-15: net sales NT$1,046.090B / US$33.73B, gross profit NT$651.987B, operating income NT$564.903B, net income NT$505.744B",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000008/a4q25e_withguidancexfinal.htm",
               "data_status": "official"
             },
             {
-              "label": "FX derived from same release: NT$1,046.090B / US$33.73B = 31.013638 TWD per USD (source-currency-per-USD)",
+              "label": "FX derived from same release: NT$1,046.090B / US$33.73B = 31.013638 TWD per USD",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000008/a4q25e_withguidancexfinal.htm",
               "data_status": "derived"
             }
@@ -3985,24 +3985,24 @@
           "fiscal_year": "FY2026",
           "fiscal_quarter": "Q1",
           "currency": "TWD",
-          "fx_to_usd": 31.59,
-          "revenue": null,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 18.12,
+          "fx_to_usd": 31.590613,
+          "revenue": 35.9,
+          "gross_profit": 23.7822,
+          "op_income": 20.8596,
+          "net_income": 18.1218,
           "cfo": null,
           "capex": null,
           "segments": [],
           "sources": [
             {
-              "label": "TSMC 1Q26 业绩（净利 NT$572.48B，EPS NT$22.08 / US$3.49 per ADR，净利率 50.5%）",
-              "url": "https://pr.tsmc.com/english/news/3297",
+              "label": "TSMC 1Q26 6-K filed 2026-04-16: net sales NT$1,134.103B / US$35.90B, gross profit NT$751.295B, operating income NT$658.966B, net income NT$572.480B",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
               "data_status": "official"
             },
             {
-              "label": "派生换算：NT$572.48B ÷ NT/USD 31.59（1Q26 隐含汇率，由 TSMC 自报美元营收反推 NT$1,134.10B/US$35.90B）= $18.12B（换算待核验）",
+              "label": "FX derived from same release: NT$1,134.103B / US$35.90B = 31.590613 TWD per USD",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
-              "data_status": "estimate"
+              "data_status": "derived"
             }
           ]
         }

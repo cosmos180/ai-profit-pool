@@ -1139,7 +1139,7 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 413.687046,
+    "total": 413.68809,
     "n": 11,
     "asOfSpreadDays": 61,
     "basisCount": {
@@ -1149,7 +1149,7 @@
     "stages": {
       "design": {
         "value": 160.105816,
-        "share": 0.387022,
+        "share": 0.387021,
         "companies": [
           {
             "id": "nvda",
@@ -1170,13 +1170,13 @@
         ]
       },
       "foundry": {
-        "value": 36.178284,
-        "share": 0.087453,
+        "value": 36.179328,
+        "share": 0.087456,
         "companies": [
           {
             "id": "tsmc",
             "name": "TSMC 台积电",
-            "ttm": 36.178284,
+            "ttm": 36.179328,
             "asOf": "2026-03-31",
             "aiShare": 0.580003,
             "basis": "periods"
@@ -1239,7 +1239,7 @@
       },
       "cloud": {
         "value": 121.222124,
-        "share": 0.293029,
+        "share": 0.293028,
         "companies": [
           {
             "id": "google",
