@@ -191,7 +191,8 @@ const Selectors = {
      flips its has.* flag false so the view degrades honestly (renders a simplified
      flow) instead of fabricating a 0 or estimating a margin.
        segments[] = revenueSorted(y) (left tributaries into revenue; [] if undisclosed)
-       cogs/grossProfit  from gross_margin (both null if gross_margin missing)
+       cogs/grossProfit  from gross_profit when present; otherwise gross_margin
+                         (both null only if neither input exists)
        opex              = grossProfit − opProfit (null unless BOTH known)
        opProfit          = y.op_income
        taxOther          = opProfit − netIncome, SIGNED — negative means net > op
@@ -216,8 +217,9 @@ const Selectors = {
       share: (s.revenue != null && revenue) ? s.revenue / revenue : null,
     }));
 
-    const gm = y.gross_margin;
-    const grossProfit = (gm != null) ? revenue * gm : null;
+    const grossProfit = (y.gross_profit != null)
+      ? y.gross_profit
+      : (y.gross_margin != null ? revenue * y.gross_margin : null);
     const cogs        = (grossProfit != null) ? revenue - grossProfit : null;
 
     const opProfit = (y.op_income != null) ? y.op_income : null;

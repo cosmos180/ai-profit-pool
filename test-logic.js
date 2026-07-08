@@ -96,6 +96,20 @@ assert.deepEqual(flowFull.segments.map(s => s.name), ["AI 平台", "其他"]);
 assert.equal(flowFull.segments[0].is_ai, true);
 assert.equal(flowFull.segments[1].is_ai, false);
 
+// ---- synthetic: period-style records store gross_profit, not gross_margin ----
+// Quarterly periods ingest disclosed gross profit directly; the Sankey selector must
+// treat that as first-class input instead of downgrading the flow as missing gross.
+const ifGrossProfitOnly = {
+  period_id: "q-gp", kind: "quarter", status: "actual",
+  revenue: 100, gross_profit: 62, gross_margin: null, op_income: 25, net_income: 18,
+};
+const flowGrossProfitOnly = Selectors.incomeFlow(ifGrossProfitOnly);
+assert.equal(flowGrossProfitOnly.grossProfit, 62);
+assert.equal(flowGrossProfitOnly.cogs, 38);
+assert.equal(flowGrossProfitOnly.opex, 37);
+assert.equal(flowGrossProfitOnly.has.gross, true);
+assert.equal(flowGrossProfitOnly.has.opex, true);
+
 // ---- synthetic: gross_margin missing (Micron FY2023 / SoftBank shape) ----
 // gross/cogs/opex 不可画, 但 segments→revenue 和 revenue→…→net 简化流仍在
 const ifNoGross = {
