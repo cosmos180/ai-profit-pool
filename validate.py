@@ -365,6 +365,47 @@ def check(data):
         if c.get("seg_profit") == "no" and any_segment_profit:
             errors.append(f"ERROR {cid}: seg_profit='no' 但已录入分部营业利润")
 
+        # ---- 双写一致性（B1 估值链迁移配套兜底）----
+        # 估值链分母已切到 periods[] 侧「最新实际 annual period」，运行时不再回退 years[]。
+        # 双写纪律（年度 actual 事实同写 periods annual 与 legacy years）目前是人工约定，此处
+        # 在闸门显式钉住：每条 years[] actual 记录，必须有一条 kind=annual & status=actual 且财年
+        # 对齐（fiscal_year==fy，否则按 period_end 年份对齐 years.period_end_iso 年）的 period，
+        # 且两者 revenue/net_income 在容差内相等（相对 1e-6 或绝对 0.001）。缺失/不一致 → ERROR。
+        if c.get("status") == "populated":
+            annuals = [p for p in (c.get("periods") or [])
+                       if p.get("kind") == "annual" and p.get("status") == "actual"]
+            for y in [yy for yy in c.get("years", []) if yy.get("status") == "actual"]:
+                fy = y.get("fy")
+                cand = [p for p in annuals if p.get("fiscal_year") == fy]
+                if not cand:
+                    y_iso = y.get("period_end_iso")
+                    y_year = None
+                    try:
+                        y_year = date.fromisoformat(y_iso).year if y_iso else None
+                    except ValueError:
+                        y_year = None
+                    if y_year is not None:
+                        cand = [p for p in annuals
+                                if isinstance(p.get("period_end"), str)
+                                and p["period_end"][:4].isdigit()
+                                and int(p["period_end"][:4]) == y_year]
+                if not cand:
+                    errors.append(f"ERROR {cid}/{fy}: years[] 有 actual 记录，但 periods[] 缺对应的 "
+                                  f"annual actual double-write（按 fiscal_year 或 period_end 年份对齐）")
+                    continue
+                p = cand[0]
+                for field in ("revenue", "net_income"):
+                    yv, pv = y.get(field), p.get(field)
+                    if yv is None:
+                        continue
+                    if pv is None:
+                        errors.append(f"ERROR {cid}/{fy}: double-write 不一致 —— years.{field}={yv} 但 "
+                                      f"annual period（{p.get('fiscal_year') or p.get('period_end')}）该字段缺失")
+                        continue
+                    if abs(yv - pv) > 0.001 and (yv == 0 or abs(yv - pv) / abs(yv) > 1e-6):
+                        errors.append(f"ERROR {cid}/{fy}: double-write 不一致 —— years.{field}={yv} ≠ "
+                                      f"annual period.{field}={pv}（差 {round(pv - yv, 6):+}，超容差）")
+
     return errors, warns, oks
 
 def main():

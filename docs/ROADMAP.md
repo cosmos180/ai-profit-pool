@@ -71,6 +71,7 @@
 - [~] **E4 · period-base 数据模型重构**(🤖 团队;计划见 `docs/plans/period-base-refactor.md`)——把 app 重建在 report-period 原子(`periods[]`)之上,FY/CY/TTM/最新季/AI 归因/估值全由 Selector 派生。
   - **Phase 1–5 全量完成 14/14**:schema `periods[]` + validate 契约、selector 层(periods/calendarYear/ttmFromPeriods/fiscalYearFromPeriods/companyMetricView + implied Q4 派生 + 严格 CY 边界)、四镜头视图、14 家公司全部迁入 `periods[]`。
   - **Phase 6 final 落地(窄口径)**:6.1 `years[]/quarters[]` 标 legacy(schema/DATA-SPEC/本文,零行为变化);6.2 final `ttmNetIncomeUnified`(periods > null)接入 `profitPoolTTM`,迁移图 TTM 柱为单一 periods 口径。`years[]` 仍服务年度视图/估值/AI 池/前瞻链,广口径迁移另立项。
+  - **广口径迁移 B1(估值链)已落地**(2026-07-08,ADR `docs/plans/broad-migration-b1-valuation.md`):`pe/ps/evSales/fcfYield` 分母改读 periods 侧 `latestActualAnnual`/`latestCashActualAnnual`(纯 periods,无运行时回退);`validate.py` 加「双写一致性」硬 ERROR 兜底。四门禁全绿、快照零漂移、视图零改动。剩余三批(年度视图/桑基 → AI 池 → 前瞻)待续。
 
 ## P4 · 产品决策(不排期,需要用户拍板后才动)
 
