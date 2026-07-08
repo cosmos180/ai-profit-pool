@@ -25,10 +25,6 @@
     const x = ttm.stages.find(t => t.stage === 'invest')
     return x ? x.share : null
   })
-  // TTM 口径构成（Phase 6.2 过渡）：periods N 家 · legacy 回退 M 家。basisCount 由 Selector 给，
-  // 组件零财务算术——只做诚实呈现（迁移柱不装作全 periods）。
-  const ttmBasis = $derived(ttm.basisCount || { periods: 0, legacy_fallback: 0 })
-
   // --- 布局常量（纯视觉几何，非财务）---
   const colW = 92, gap = 110, padL = 14, padT = 62, barH = 300, padB = 44
   const W = $derived(padL * 2 + columns.length * colW + (columns.length - 1) * (gap - colW))
@@ -90,7 +86,7 @@
       const investEmpty = st.stage === 'invest' && !st.companies.length
       const members = investEmpty
         ? null
-        : st.companies.map(m => ({ name: m.name.split(' ')[0], ttm: m.ttm, neg: m.ttm < 0, legacy: m.basis === 'legacy_fallback' }))
+        : st.companies.map(m => ({ name: m.name.split(' ')[0], ttm: m.ttm, neg: m.ttm < 0 }))
       return {
         stage: st.stage,
         label: st.label,
@@ -195,7 +191,7 @@
                   {#if li.investEmpty}
                     <span class="gap-note">软银季度净利受投资损益主导，未纳入 TTM（覆盖缺口，非真实归零）</span>
                   {:else if li.members && li.members.length}
-                    {#each li.members as m, mi (m.name)}{#if mi}、{/if}<span class:neg={m.neg} title={m.legacy ? 'legacy 回退口径（periods 尚不足四季，暂用旧 TTM）' : 'periods 口径（含 implied Q4）'}>{m.name} {Fmt.bn(m.ttm, 1)}{#if m.legacy}<span class="basis-leg">回退</span>{/if}</span>{/each}
+                    {#each li.members as m, mi (m.name)}{#if mi}、{/if}<span class:neg={m.neg} title="periods 口径（含 implied Q4）">{m.name} {Fmt.bn(m.ttm, 1)}</span>{/each}
                   {:else}—{/if}
                 </span>
                 <span class="lar">TTM 占比　较 {last.label}
@@ -216,7 +212,6 @@
       <span class="n">②</span>混业公司按主营归桶：三星（存储+代工+消费）计入<b>存储</b>，博通（含软件）计入<b>设计</b>。
       <span class="n">③</span>投资环节（软银）为<b>投资损益口径、非经营利润</b>，与其余经营利润性质不同，同图并列仅为看结构。
       <span class="n">④</span><span class="ttm-tag">TTM</span> 为<b>滚动 12 个月估算、非已完成财年</b>（故用斜纹虚线区分）；各家截止日不一（跨度 {ttm.asOfSpreadDays} 天，美光季末 5-28、其余多为 3-31），横截面<b>非精确同期</b>。TTM 仅 {ttm.n} 家：软银季度净利受投资损益主导未录季度，<b>TTM 投资环节为覆盖缺口、非利润归零</b>，故 TTM 合计（{ttm.n} 家）<b>不可与年度柱（{last.n} 家）直接比高低</b>。
-      <span class="n">⑤</span>TTM 口径构成（迁移过渡）：<b>periods {ttmBasis.periods} 家</b>（已迁移到报告期原子，含 implied Q4 补财年末季）· <b>legacy 回退 {ttmBasis.legacy_fallback} 家</b>（季度尚不足四季，暂用旧财年锚定 TTM，图例标<span class="basis-leg">回退</span>）。两口径已就重合公司验证一致，混采仅为过渡；稀疏公司季度补齐后即退旧口径。
     </div>
   {/if}
 </div>

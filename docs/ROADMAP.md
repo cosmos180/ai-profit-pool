@@ -36,10 +36,10 @@
 - [x] **D4 · 云厂 AI 归因 proxy→sourced**(🤖 架构师定口径 + 工程师落地;🧑 确认口径)
   - 已用 FY2025/FY2026 已录云分部经营利润推 `ai_profit_share`(带 `ai_share_source`,data_status=derived):google/microsoft/amazon。
   - 口径:云分部经营利润 / 公司总经营利润,是 cloud/AI infrastructure proxy,不是公司披露的 AI-only profit;oracle 分部利润未披露→ 留 proxy。
-- [~] **D5 · 季度净利补齐 6 家**(🧑 Tiger `get_financial_report` period=季度,最近约 8 季;🤖 merge)
+- [x] **D5 · 季度净利补齐 / Phase 6 final**(🧑 Tiger/Dayu/官方披露;🤖 merge)
   - 进展:google/microsoft/amazon/oracle 已补最近约 8 季;softbank/tencent 仍缺口。
   - 软银收益最低(净利受投资损益主导)可最后/放弃,规格已注明
-  - **补齐后删 `ttmNetIncomeUnified` 的 legacy fallback 分支**(period-base Phase 6.2 完全体):当前 nvda/samsung/broadcom/skhynix/tsmc/asml 的 TTM 仍走 legacy 回退(periods 尚不足四季);季度补齐至 periods 够用后,unified 可退掉 `legacy_fallback` 分支、迁移图 TTM 柱变纯 periods 口径。
+  - **Phase 6 final 已完成**:`ttmNetIncomeUnified` 已退化为 `periods[] > null`;`profitPoolTTM` 与迁移图 TTM 柱不再消费/展示 `legacy_fallback`;旧 `ttmNetIncome(c)` 仅保留审计对账。
   - **★Retirement pass 执行口径(2026-07-07 用户拍板,逐批照此,不得放宽)**:
     - 采购单以 `node tools/gap-report.cjs` 实跑为准;产物按 DATA-SPEC-dayu §2.A 吐 **periods 部分对象**,走 merge 部分合并。
     - **tsmc / asml:路线 A**——Q1–Q4 全 actual、逐期 FX、**禁止 implied Q4**(季度逐期汇率与年报年均汇率不可硬相减;selector 的 FX 一致性拒绝是契约行为,保留。绝不为省一季而重录季度汇率——数据层不迎合派生逻辑,否则不可审计)。
@@ -47,7 +47,8 @@
     - **samsung / skhynix:路线 B 可试**,但**验收必须核 selector 是否因 FX basis 拒绝 implied;若拒绝,不放宽规则,转路线 A**。
     - **D3 quote 刷新先行**(quote-only 部分合并隔离性已验证,低风险前置批次)。
     - **Tiger 边界**:US/HK/ADR 顺;韩/台/日**原股不塞 Tiger**;quote 刷新按可支持标的先更新,**不阻塞** periods 数据批次。
-    - Phase 6 final gate 不变:`legacy_fallback = 0` 才删旧消费路径(legacy 数据留审计)。
+    - Phase 6 final gate 已满足:`legacy_fallback = 0`;legacy 数据留审计。
+  - **过渡期双写规则**:在年度视图/估值/AI 池/前瞻链完成广口径迁移前,年度 actual 事实同时写 `periods[]` annual 与 legacy `years[]`(按 `period_end_iso` 增量);季度事实只写 `periods[]`。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
   - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
@@ -69,7 +70,7 @@
 - [ ] **E3 · FX 口径统一**——各公司历史条目汇率来源异质(都有标注、不算错);随 D1 换血顺手统一为「公司隐含均汇优先,否则期间均汇,来源注明」
 - [~] **E4 · period-base 数据模型重构**(🤖 团队;计划见 `docs/plans/period-base-refactor.md`)——把 app 重建在 report-period 原子(`periods[]`)之上,FY/CY/TTM/最新季/AI 归因/估值全由 Selector 派生。
   - **Phase 1–5 全量完成 14/14**:schema `periods[]` + validate 契约、selector 层(periods/calendarYear/ttmFromPeriods/fiscalYearFromPeriods/companyMetricView + implied Q4 派生 + 严格 CY 边界)、四镜头视图、14 家公司全部迁入 `periods[]`。
-  - **Phase 6 过渡版落地**:6.1 `years[]/quarters[]` 标 legacy(schema/DATA-SPEC/本文,零行为变化);6.2 过渡 `ttmNetIncomeUnified`(periods > legacy_fallback > null)接入 `profitPoolTTM`——oracle 由 periods 口径接回(TTM 池 10→11 家),迁移图 TTM 柱诚实标注口径构成(periods 5 家 · legacy 回退 6 家)。**最终退旧(删 legacy fallback)见 D5 备注**,待稀疏公司季度补齐后另启。
+  - **Phase 6 final 落地(窄口径)**:6.1 `years[]/quarters[]` 标 legacy(schema/DATA-SPEC/本文,零行为变化);6.2 final `ttmNetIncomeUnified`(periods > null)接入 `profitPoolTTM`,迁移图 TTM 柱为单一 periods 口径。`years[]` 仍服务年度视图/估值/AI 池/前瞻链,广口径迁移另立项。
 
 ## P4 · 产品决策(不排期,需要用户拍板后才动)
 

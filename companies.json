@@ -85,6 +85,7 @@
         {
           "fy": "FY2024",
           "period_end": "截至 2024-01-28",
+          "period_end_iso": "2024-01-28",
           "status": "actual",
           "revenue": 60.92,
           "gross_margin": 0.727,
@@ -154,6 +155,7 @@
         {
           "fy": "FY2025",
           "period_end": "截至 2025-01-26",
+          "period_end_iso": "2025-01-26",
           "status": "actual",
           "revenue": 130.5,
           "gross_margin": 0.75,
@@ -228,6 +230,7 @@
         {
           "fy": "FY2026",
           "period_end": "截至 2026-01-25",
+          "period_end_iso": "2026-01-25",
           "status": "actual",
           "revenue": 215.94,
           "gross_margin": 0.711,
@@ -802,6 +805,7 @@
         {
           "fy": "FY2024",
           "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
           "status": "actual",
           "revenue": 220.576,
           "gross_margin": null,
@@ -862,6 +866,7 @@
         {
           "fy": "FY2025",
           "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
           "status": "actual",
           "revenue": 234.636,
           "gross_margin": null,
@@ -1333,6 +1338,7 @@
         {
           "fy": "FY2023",
           "period_end": "截至 2023-10-29",
+          "period_end_iso": "2023-10-29",
           "status": "actual",
           "revenue": 35.819,
           "gross_margin": 0.689,
@@ -1367,6 +1373,7 @@
         {
           "fy": "FY2024",
           "period_end": "截至 2024-11-03",
+          "period_end_iso": "2024-11-03",
           "status": "actual",
           "revenue": 51.574,
           "gross_margin": 0.63,
@@ -1401,6 +1408,7 @@
         {
           "fy": "FY2025",
           "period_end": "截至 2025-11-02",
+          "period_end_iso": "2025-11-02",
           "status": "actual",
           "revenue": 63.887,
           "gross_margin": 0.678,
@@ -1906,6 +1914,7 @@
         {
           "fy": "FY2023",
           "period_end": "截至 2024-03-31",
+          "period_end_iso": "2024-03-31",
           "status": "actual",
           "revenue": 44.624,
           "gross_margin": null,
@@ -1964,6 +1973,7 @@
         {
           "fy": "FY2024",
           "period_end": "截至 2025-03-31",
+          "period_end_iso": "2025-03-31",
           "status": "actual",
           "revenue": 48.447,
           "gross_margin": null,
@@ -2022,6 +2032,7 @@
         {
           "fy": "FY2025",
           "period_end": "截至 2026-03-31",
+          "period_end_iso": "2026-03-31",
           "status": "actual",
           "revenue": 48.778,
           "gross_margin": null,
@@ -2419,6 +2430,7 @@
         {
           "fy": "FY2023",
           "period_end": "截至 2023-08-31",
+          "period_end_iso": "2023-08-31",
           "status": "actual",
           "revenue": 15.54,
           "gross_margin": null,
@@ -2484,6 +2496,7 @@
         {
           "fy": "FY2024",
           "period_end": "截至 2024-08-29",
+          "period_end_iso": "2024-08-29",
           "status": "actual",
           "revenue": 25.111,
           "gross_margin": 0.224,
@@ -2549,6 +2562,7 @@
         {
           "fy": "FY2025",
           "period_end": "截至 2025-08-28",
+          "period_end_iso": "2025-08-28",
           "status": "actual",
           "revenue": 37.378,
           "gross_margin": 0.398,
@@ -3207,6 +3221,7 @@
         {
           "fy": "FY2023",
           "period_end": "自然年 2023（截至 2023-12-31）",
+          "period_end_iso": "2023-12-31",
           "status": "actual",
           "revenue": 25.075,
           "gross_margin": null,
@@ -3233,6 +3248,7 @@
         {
           "fy": "FY2024",
           "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
           "status": "actual",
           "revenue": 48.523,
           "gross_margin": null,
@@ -3259,6 +3275,7 @@
         {
           "fy": "FY2025",
           "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
           "status": "actual",
           "revenue": 68.328,
           "gross_margin": null,
@@ -3605,6 +3622,7 @@
         {
           "fy": "FY2023",
           "period_end": "自然年 2023（截至 2023-12-31）",
+          "period_end_iso": "2023-12-31",
           "status": "actual",
           "revenue": 70.599,
           "gross_margin": 0.544,
@@ -3673,12 +3691,12 @@
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm",
               "data_status": "estimate"
             }
-          ],
-          "period_end_iso": "2023-12-31"
+          ]
         },
         {
           "fy": "FY2024",
           "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
           "status": "actual",
           "revenue": 88.268,
           "gross_margin": 0.561,
@@ -3747,12 +3765,12 @@
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
               "data_status": "estimate"
             }
-          ],
-          "period_end_iso": "2024-12-31"
+          ]
         },
         {
           "fy": "FY2025",
           "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
           "status": "actual",
           "revenue": 122.42,
           "gross_margin": 0.599,
@@ -3831,8 +3849,7 @@
               "url": "https://investor.tsmc.com/chinese/annual-reports",
               "data_status": "official"
             }
-          ],
-          "period_end_iso": "2025-12-31"
+          ]
         },
         {
           "fy": "FY2026E",
@@ -4408,6 +4425,7 @@
         {
           "fy": "FY2023",
           "period_end": "自然年 2023（截至 2023-12-31）",
+          "period_end_iso": "2023-12-31",
           "status": "actual",
           "revenue": 29.798,
           "gross_margin": 0.513,
@@ -4458,6 +4476,7 @@
         {
           "fy": "FY2024",
           "period_end": "自然年 2024（截至 2024-12-31）",
+          "period_end_iso": "2024-12-31",
           "status": "actual",
           "revenue": 30.591,
           "gross_margin": 0.513,
@@ -4508,6 +4527,7 @@
         {
           "fy": "FY2025",
           "period_end": "自然年 2025（截至 2025-12-31）",
+          "period_end_iso": "2025-12-31",
           "status": "actual",
           "revenue": 36.913,
           "gross_margin": 0.528,
@@ -5051,6 +5071,7 @@
         {
           "fy": "FY2023",
           "period_end": "截至 2023-12-31",
+          "period_end_iso": "2023-12-31",
           "status": "actual",
           "revenue": 84.6,
           "gross_margin": 0.481,
@@ -5106,6 +5127,7 @@
         {
           "fy": "FY2024",
           "period_end": "截至 2024-12-31",
+          "period_end_iso": "2024-12-31",
           "status": "actual",
           "revenue": 91.9,
           "gross_margin": 0.529,
@@ -5161,6 +5183,7 @@
         {
           "fy": "FY2025",
           "period_end": "截至 2025-12-31",
+          "period_end_iso": "2025-12-31",
           "status": "actual",
           "revenue": 104.6,
           "gross_margin": 0.562,

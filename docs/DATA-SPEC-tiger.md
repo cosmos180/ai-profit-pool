@@ -1,7 +1,8 @@
 # DATA-SPEC-tiger — 老虎证券(Tiger Open API)取数规格
 
-> ⚠ **新采集目标已切换为 `periods[]`(period-base 重构)。** `years[]` / `quarters[]` 已标 legacy(迁移兼容层,仅供旧视图/回退,最终退役见 `docs/plans/period-base-refactor.md` Phase 6.2)。
+> ⚠ **新采集目标已切换为 `periods[]`(period-base 重构)。** `years[]` / `quarters[]` 已标 legacy;TTM UI 消费路径已完成 Phase 6 final,不再回退 legacy。`years[]` 暂留给年度视图/估值/前瞻等尚未迁移的旧消费链。
 > 新的财报事实请按报告期原子写 `periods[]`:每条一个 reported-period(`kind` = quarter | annual、`status` = actual | guidance | forecast),带 `period_start/period_end`(机读 ISO)、`calendar_year/calendar_quarter`、`fiscal_year/fiscal_quarter`、`currency/fx_to_usd`(非 USD 源必带正 `fx_to_usd`,如三星 KRW)、可空财务字段与 `sources[]`(url + data_status)。形状要点见计划文档 **Target Data Shape** 一节;字段映射细节可后续修订,本轮先立牌子。行情快照/预期 EPS 等 Tiger 特有输出不变。
+> **过渡期双写规则:** 年度 actual 事实必须同时写入 `periods[]` annual 和 legacy `years[]`(merge 支持按 `period_end_iso` 增量),直到年度视图/估值/AI 池/前瞻链完成广口径迁移;季度事实只写 `periods[]`。
 >
 > 面向对象:一个能调用 Tiger `QuoteClient` 的取数 skill。
 > 目标:skill 按本规格输出 JSON → 经 `tools/merge.py` 合并 → `validate.py` 0 ERROR → `cd web && bun run build` 上屏。
@@ -125,20 +126,20 @@ market_cap/price 来自 Tiger 行情 → `derived`(聚合源);若人工核对交
 - `capex` 与 `cfo` **建议成对录入**(只录一个 → WARN,FCF 无法派生)。
 - 所有数值 `data_status: "derived"`(Tiger 是聚合源,非一手 filing;人工对照 10-K/20-F 后可升 `official`)。
 
-### 1.4 quarters[](季度原子 — 供 TTM 自滚,见第 3 节)
+### 1.4 quarters[](legacy 季度原子 — 审计/旧模板)
 
-`additionalProperties:false`。来自 `get_financial_report(period_type=季度)`,升序。
+`additionalProperties:false`。来自 `get_financial_report(period_type=季度)`,升序。Phase 6 final 后,TTM UI 不再消费 `quarters[]`;新季度事实请输出 `periods[]` quarter。本节仅保留给旧对象/审计对账。
 
 | quarter 字段 | Tiger 来源 | 换算 / 约定 |
 |---|---|---|
-| `period_end` | 季末日 | ISO `YYYY-MM-DD`,**机读**。TTM 自滚只认它,不认 label |
+| `period_end` | 季末日 | ISO `YYYY-MM-DD`,**机读**。legacy 审计自滚只认它,不认 label |
 | `label` | — | 人读标签,如 `"Q1 FY2027"` / `"CQ1 2026"`。仅展示 |
 | `net_income` | 季度归母 GAAP 净利 | USD bn,`bn()`。缺 → `null`(会使该 TTM 派生为 null,诚实缺) |
 | `revenue` | 季度营收 | USD bn,可选(启用 TTM 营收/PS-TTM) |
 | `sources[]` | Tiger 季报链接 | 每条 `{label,url,data_status}`,`derived` |
 
-**需要几个季度?** TTM 自滚需要:最新完整 FY 之后的每个新季 **+ 各自 12 个月前的对位季**。
-稳妥取 **最近 8 个季度**,覆盖"3 个 post-FY 新季 + 3 个对位季"这类最长情形(如 Micron)。
+**历史说明:** 旧 TTM 自滚需要:最新完整 FY 之后的每个新季 **+ 各自 12 个月前的对位季**。
+现在只作审计参考;新采集不要为了 TTM 输出 `quarters[]`。
 
 ---
 
@@ -146,26 +147,25 @@ market_cap/price 来自 Tiger 行情 → `derived`(聚合源);若人工核对交
 
 ---
 
-## 3. TTM 口径选择 —— 结论:输出 quarters[],复用现有自滚(零代码改动)
+## 3. TTM 口径选择 —— 结论:输出 periods[],不存 Tiger LTM
 
-**背景:** Tiger 直接给 LTM(=TTM)聚合值;现有 data-module.js 的 `ttmNetIncome(c)` 从 `quarters[]`
-自滚(TTM = 最新完整 FY 净利 + FY 期末后各新季 − 各自 12 个月前对位季)。二选一。
+**背景:** Tiger 直接给 LTM(=TTM)聚合值;项目 Phase 6 final 后,TTM UI 消费路径只从 `periods[]`
+派生(`ttmNetIncomeUnified`: periods > null),旧 `ttmNetIncome(c)` 仅保留审计对账。
 
-**决策:skill 输出 `quarters[]`(原子季度),不输出 Tiger 的 LTM 聚合值。**
+**决策:skill 输出 `periods[]` quarter/annual 原子,不输出 Tiger 的 LTM 聚合值。**
 
 **理由:**
-1. **零代码改动 + 不变量对齐。** 现有 `profitPoolTTM` / `ttmNetIncome` 已按 quarters 自滚,且 TTM
-   是"算不存"的派生值(不变量 1)。若引入直接 TTM 字段,得改 schema + data-module + 所有 TTM 派生,
+1. **不变量对齐。** TTM 是"算不存"的派生值(不变量 1)。若引入直接 TTM 字段,得改 schema + data-module + 所有 TTM 派生,
    还等于**把派生值存进原始层**,违背核心不变量。
-2. **可追溯。** quarters[] 是带 period_end + source 的原子事实,视图能下钻、能对账;LTM 聚合值是
+2. **可追溯。** periods[] 是带 period_end + source 的原子事实,视图能下钻、能对账;LTM 聚合值是
    不透明黑盒,provenance 只能整体标一个来源。
-3. **口径统一。** 现有自滚对 FY 非自然年(NVDA 财年 1 月末)、多 post-FY 季(Micron)已处理妥当;
-   混入 Tiger LTM 会和自滚口径漂移。
+3. **口径统一。** `periods[]` 同时支持实际季度、annual official、implied Q4、自然年视图和最新季度页;
+   混入 Tiger LTM 会和 selector 派生口径漂移。
 
 **代价 & 接受:** 自滚要求"新季 + 对位季"齐全,任一季 `net_income` 缺 → TTM 派生 `null`(诚实缺,
-不 impute)。这正是期望行为。**skill 只要把最近 8 季如实吐出即可,TTM 交给 app 现算。**
+不 impute)。这正是期望行为。**skill 只要把最近季度/年度事实如实吐成 periods 即可,TTM 交给 app 现算。**
 
-> 若未来要"更准的一手 LTM",那是独立提案(需改 data-module),不在本规格;当前锁定 quarters 自滚。
+> 若未来要"更准的一手 LTM",那是独立提案(需改 data-module),不在本规格;当前锁定 periods 派生。
 
 ---
 
@@ -302,7 +302,7 @@ forecast 年填:`consensus_eps_value`(数值,`get_corporate_earnings_calendar` �
           "url": "https://.../tiger/financials/NVDA/income?period=quarter", "data_status": "derived" }
       ]
     }
-    // …最近约 8 季,升序;供 TTM 自滚
+    // …legacy 审计样例;新季度事实请输出 periods[] quarter
   ]
 }
 ```

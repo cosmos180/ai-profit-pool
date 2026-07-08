@@ -482,6 +482,10 @@ const Selectors = {
     return this._datedQuarters(c).filter(x => x.q.net_income != null);
   },
 
+  /* Audit-only legacy TTM path. Kept for historical reconciliation of years[] /
+     quarters[] snapshots, but no UI consumption path should call this after
+     Phase 6 final. Runtime TTM now uses ttmNetIncomeUnified(c), which is
+     periods-only. */
   ttmNetIncome(c) {
     if (!c) return null;
     // anchor on the latest COMPLETE fiscal year with a non-null net_income
@@ -540,18 +544,18 @@ const Selectors = {
      Period-base layer (period-base refactor · Phase 2). Report-period base
      facts live in c.periods[]; fiscal-year / calendar-year / TTM / latest-quarter
      views are DERIVED here (算不存), never stored — a fiscal year is NEVER
-     rewritten as a calendar year. During migration these selectors PREFER
-     c.periods, and only where a company has none do they synthesize period-like
-     objects from the legacy quarters[] using ONLY period_end date math — labels
-     are NEVER parsed for dates. calendar_quarter of a synthesized period is
-     ceil(month/3) of period_end (date math, not the free-text label).
+     rewritten as a calendar year. These selectors prefer c.periods; legacy
+     quarters[] synthesis is retained only for old compatibility views and tests.
+     Runtime TTM consumption is periods-only via ttmNetIncomeUnified(c).
+     calendar_quarter of a synthesized period is ceil(month/3) of period_end
+     (date math, not the free-text label).
      KNOWN LIMITATION (synth status): legacy quarters[] carry no status field, so
      every synthesized period is status="actual". Samsung's Q2'26 guidance atom
      currently lives in quarters[] (net_income=null, has revenue/op_income); until
      Phase 3.1 converts Samsung to real periods[] with status="guidance", the synth
      path treats it as actual (so latestQuarter can pick it). The UI does not consume
      periods[] until Phase 4, so this has no user-visible effect. Tested + noted below.
-     All selectors null-safe. Existing ttmNetIncome(c) above is kept as-is (fallback).
+     All selectors null-safe.
      ===================================================================== */
   PERIOD_METRICS: ["revenue", "op_income", "net_income", "cfo", "capex"],
   CAL_QUARTERS: ["Q1", "Q2", "Q3", "Q4"],
@@ -842,11 +846,8 @@ const Selectors = {
      otherwise value=null (contiguous=true, gap=null). Does NOT anchor to latestActual.
      <4 actual quarters → null (contiguous=false, gap=null; a coverage shortfall, not a hole).
      STRUCTURAL FACT: US filers issue no standalone 10-Q for their fiscal Q4 — the 4th
-     quarter is implicit in the 10-K, so Dayu's quarters[] systematically omit each
-     company's fiscal-year-end quarter (e.g. Microsoft lacks the 2025-06 / calendar-Q2
-     atom). Until those Q4 atoms are supplied (derived from 10-K annual minus the first
-     three quarters, or taken from the 8-K earnings release), this path honestly returns
-     null for such companies; the FY-anchored ttmNetIncome(c) above remains the fallback.
+     quarter is implicit in the 10-K, so implied Q4 placeholders may be derived from
+     official annual minus Q1-Q3 when the hard constraints pass.
      Returns { metric, value, complete, quarters, asOf, contiguous, gap }. */
   ttmFromPeriods(c, metric) {
     // 组合季 = actual 季 + 可派生的 implied Q4 占位季 (优先级: actual > implied Q4)。implied Q4
@@ -883,19 +884,18 @@ const Selectors = {
     return out;
   },
 
-  /* ---- TTM net income, UNIFIED (period-base refactor · Phase 6.2 过渡版, 算不存) ----
-     过渡期 TTM 口径统一入口: 优先 periods (含 implied Q4), periods 凑不齐时回退 legacy
-     ttmNetIncome(c) —— 让消费方 (profitPoolTTM) 既吃到已迁移公司的 periods 口径, 又不丢
-     未补齐季度公司的历史 TTM。**这是过渡口径, 非严格 periods-pure** —— 严格镜头
-     (companyMetricView "ttm") 仍只走 ttmFromPeriods (无回退)。最终退旧 (删 legacy_fallback
-     分支) 待稀疏公司季度补齐后另启 (Phase 6.2 完全体)。
-     阶梯 (优先级): periods (complete 且 value 非 null) > legacy_fallback (ttmNetIncome 非 null) > null。
+  /* ---- TTM net income, UNIFIED (period-base refactor · Phase 6 final, 算不存) ----
+     TTM 口径统一入口: 只认真实 periods[] (含 implied Q4), 不再回退 legacy
+     years[]/quarters[]。旧 ttmNetIncome(c) 仅作审计对账保留, 从 UI 消费路径摘除。
+     阶梯 (优先级): periods (complete 且 value 非 null) > null。
      全 null 安全。Returns { value, basis, asOf, coverage }:
        · basis="periods":          coverage 透传 periods 侧 quarter_basis[]/usedImpliedQ4/quarters/contiguous;
-       · basis="legacy_fallback":  coverage.reason="periods_insufficient" + periods 侧覆盖摘要 (为何不够);
        · basis=null (皆无):         value=null, coverage.reason="no_ttm"。 */
   ttmNetIncomeUnified(c) {
     if (!c) return { value: null, basis: null, asOf: null, coverage: { reason: "no_company" } };
+    if (!Array.isArray(c.periods) || !c.periods.length) {
+      return { value: null, basis: null, asOf: null, coverage: { reason: "no_periods" } };
+    }
     const p = this.ttmFromPeriods(c, "net_income");
     if (p.complete && p.value != null) {
       return {
@@ -907,22 +907,6 @@ const Selectors = {
           usedImpliedQ4: p.usedImpliedQ4,
           quarters: p.quarters,
           contiguous: p.contiguous,
-        },
-      };
-    }
-    const leg = this.ttmNetIncome(c);
-    if (leg != null) {
-      return {
-        value: leg,
-        basis: "legacy_fallback",
-        asOf: this.ttmAsOf(c),
-        coverage: {
-          reason: "periods_insufficient",  // periods 侧为何不够 (下方摘要)
-          quarter_basis: p.basis,
-          usedImpliedQ4: p.usedImpliedQ4,
-          quarters: p.quarters,
-          contiguous: p.contiguous,
-          gap: p.gap,
         },
       };
     }
@@ -1084,9 +1068,7 @@ const Selectors = {
         fill();
       }
     } else if (mode === "ttm") {
-      // 镜头是**严格 periods-pure** 口径: 只走 ttmFromPeriods (无 legacy 回退), 与过渡口径的
-      // 池子 (profitPoolTTM → ttmNetIncomeUnified, 含 legacy_fallback) 定位不同 —— 镜头严格、
-      // 池子从全。故未迁移公司此处诚实 incomplete, 而非借 legacy 补 (Phase 6.2 过渡版分层)。
+      // 镜头是 periods-pure 口径: 只走 ttmFromPeriods (无 legacy 回退)。
       const res = {};
       for (const m of this.VIEW_METRICS) res[m] = this.ttmFromPeriods(c, m);
       const ni = res.net_income;   // structural flags shared across the 3 metric windows
@@ -1152,10 +1134,8 @@ const Selectors = {
   /* ---- TTM profit pool (value-chain stacked, self-rolled per company, AI-weighted) ----
      口径统一 (ADR-3): TTM 净利同样按 aiShare(c) 加权,与 profitPoolAI / profitPoolMigration
      的三根年度柱完全同口径 —— 同一张迁移图不再混"全额 TTM vs 加权年度"。
-     Phase 6.2 过渡: TTM 净利改走 ttmNetIncomeUnified(c) —— 已迁移公司吃 periods 口径 (含
-     implied Q4), 稀疏公司回退 legacy ttmNetIncome。故这是**过渡口径的池子** (periods+legacy
-     混采), 与严格 periods-pure 的镜头 (companyMetricView "ttm") 定位不同: 池子要尽量全 (补最新季),
-     镜头要严格 (只认 periods)。per-member 透传 basis, 返回 basisCount 供视图诚实标注口径构成。
+     Phase 6 final: TTM 净利走 ttmNetIncomeUnified(c) —— periods[] 口径 (含 implied Q4),
+     无 legacy 回退。per-member 透传 basis, 返回 basisCount 供测试/审计确认口径构成。
        ni = ttmNetIncomeUnified(c).value × aiShare(c).value (公司级,用 latestActual 的 is_ai 代理)。
      Per-company null-safe & honest-gap: unified value 为 null 或 aiShare.value 为 null 的
      公司一律 DROP(绝不计 0、不 impute),与年度口径一致。total 仅累计加权后的贡献者。
@@ -1165,10 +1145,10 @@ const Selectors = {
   profitPoolTTM(companies) {
     const list = companies || [];
     const rows = [];
-    const basisCount = { periods: 0, legacy_fallback: 0 };
+    const basisCount = { periods: 0 };
     let spreadMin = Infinity, spreadMax = -Infinity;
     for (const c of list) {
-      const u = this.ttmNetIncomeUnified(c);            // 过渡口径: periods > legacy_fallback > null
+      const u = this.ttmNetIncomeUnified(c);            // final口径: periods > null
       if (u.value == null) continue;                    // honest gap: skip, never impute
       const share = this.aiShare(c).value;              // company-level, latestActual is_ai proxy
       if (share == null) continue;                      // no aiShare → drop (ADR-3, same as annual)
@@ -1195,7 +1175,7 @@ const Selectors = {
       n: rows.length,
       asOfSpreadDays,
       stages,
-      basisCount,   // {periods:n, legacy_fallback:m} — 口径构成 (视图诚实标注, 组件零算术)
+      basisCount,   // {periods:n} — final口径构成 (legacy fallback 已退役)
     };
   },
 
@@ -1242,8 +1222,8 @@ const Selectors = {
      AI-WEIGHTED (ni × aiShare.value) to match the hero pool口径 (ADR-3). Each position
      carries {n, N}: N = companies that have an actual year at that position (coverage
      denominator); n = of those, how many contributed (valid aiShare). Returns positions
-     chronological (old→new). Year alignment prefers year.period_end_iso, falling back to
-     the legacy free-text period_end regex (_yearOf). Net may be negative (downcycle);
+     chronological (old→new). Year alignment uses year.period_end_iso only; legacy
+     free-text period_end is display text, not a date source. Net may be negative (downcycle);
      share = value/total as-is when total>0, the view renders negatives. */
   profitPoolMigration(companies) {
     const list = companies || [];
@@ -1307,15 +1287,14 @@ const Selectors = {
     return { value, migLast, migPrev };
   },
 
-  /* extract a 4-digit year from a year record — prefer machine-readable period_end_iso
-     (ADR-2), fall back to a regex over the free-text period_end. null-safe. */
+  /* extract a 4-digit year from a year record using machine-readable period_end_iso
+     only (ADR-2). Free-text period_end is display text and must not drive UI logic. */
   _yearOf(y) {
     if (y && typeof y.period_end_iso === "string") {
       const mi = y.period_end_iso.match(/(\d{4})/);
       if (mi) return mi[1];
     }
-    const m = (y && typeof y.period_end === "string") ? y.period_end.match(/(\d{4})/) : null;
-    return m ? m[1] : null;
+    return null;
   },
   /* most-frequent value (ties → first seen); ignores null */
   _modeYear(years) {

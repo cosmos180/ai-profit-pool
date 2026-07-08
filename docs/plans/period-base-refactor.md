@@ -4,7 +4,7 @@
 
 **Goal:** Rebuild the app around report-period base facts, then derive fiscal-year, calendar-year, TTM, latest-quarter, AI attribution, ranking, and valuation views from those facts.
 
-**Architecture:** Keep raw reported facts immutable and source-backed in a new `periods[]` layer. Preserve the current `years[]` / `quarters[]` fields during migration, but make new selectors prefer `periods[]` and fall back only where explicitly tested. Views become derived projections with coverage metadata, so missing AI attribution or incomplete calendar years render as empty states instead of mixed assumptions.
+**Architecture:** Keep raw reported facts immutable and source-backed in a new `periods[]` layer. Preserve the current `years[]` / `quarters[]` fields during migration, but the TTM UI consumption path is now Phase 6 final: `periods[]` > null, with no legacy fallback. `years[]` remains only for annual/valuation/forecast legacy consumers until the broader migration is separately scheduled. Views become derived projections with coverage metadata, so missing AI attribution or incomplete calendar years render as empty states instead of mixed assumptions.
 
 **Tech Stack:** JSON schema, Python validator, plain JS selector layer (`data-module.js`), Svelte UI, existing Node/Bun tests (`test-logic.js`, `test-snapshot.js`, `bun run build`).
 
@@ -229,7 +229,7 @@ calendarYear(c, 2025) => {
 - TTM requires the latest four actual quarters with that metric non-null.
 - Do not anchor TTM to `latestActual` when periods are available.
 - If fewer than four quarters exist, return null and coverage metadata.
-- Keep existing `ttmNetIncome(c)` behavior as fallback while migration is incomplete.
+- Phase 6 final: keep existing `ttmNetIncome(c)` only as audit-only legacy reconciliation, not as a UI fallback.
 
 **Tests:**
 - Latest four actual quarters sum.
@@ -438,8 +438,11 @@ Companies:
 
 **Objective:** Finish the migration cleanly.
 
+**Status:** Complete for the narrow TTM path. `ttmNetIncomeUnified(c)` is `periods[]` > null; `ttmNetIncome(c)` remains audit-only for historical reconciliation. `profitPoolTTM` and the migration chart no longer consume or label `legacy_fallback`.
+
 **Precondition:**
-- Every populated company has enough `periods[]` to support the app's default view.
+- `legacy_fallback = 0` in the TTM pool.
+- Every actual `years[]` record has `period_end_iso`, so UI selectors do not need to parse `years[].period_end` free text for year alignment.
 - Snapshot tests document intentional metric changes.
 
 **Files:**
@@ -448,6 +451,8 @@ Companies:
 - Modify: `test-snapshot.expected.json`
 
 **Review gate:** No selector used by UI should parse `years[].period_end` free text.
+
+**Post-final data rule:** Until annual/valuation/AI-pool/forecast consumers migrate off `years[]`, annual actual ingestion must double-write `periods[]` annual and legacy `years[]` by `period_end_iso`; quarterly ingestion writes only `periods[]`.
 
 ---
 

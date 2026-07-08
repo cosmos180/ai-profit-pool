@@ -636,16 +636,16 @@ assert.deepEqual(Selectors.profitPoolMigration([]), []);
   assert.equal(mb.design, 0);
 }
 
-// ---- synthetic: year alignment prefers period_end_iso, falls back to period_end regex ----
+// ---- synthetic: year alignment uses period_end_iso only; free-text period_end is display text ----
 {
   // period_end_iso says 2025; the free-text period_end says 2099 (would mislead the regex)
   const c = [syn("nvda", [{ fy: "FY25", period_end_iso: "2025-06-30", period_end: "截至 2099",
     status: "actual", revenue: 100, net_income: 50, segments: [seg("AI", "platform", 100, true)] }])];
   assert.equal(Selectors.profitPoolMigration(c)[0].label, "≈2025"); // iso wins over free-text
-  // no iso → fall back to free-text regex
+  // no iso → null; never parse free-text period_end
   const c2 = [syn("nvda", [{ fy: "FY25", period_end: "自然年 2024",
     status: "actual", revenue: 100, net_income: 50, segments: [seg("AI", "platform", 100, true)] }])];
-  assert.equal(Selectors.profitPoolMigration(c2)[0].label, "≈2024");
+  assert.equal(Selectors._yearOf(c2[0].years[0]), null);
 }
 
 // =====================================================================
@@ -764,19 +764,41 @@ assert.equal(Selectors.ttmNetIncome(ttmNeg), -6);
 //   aiShare 来自公司级 ai_profit_share(synAI 注入)；缺则 DROP(不计 0)。
 // =====================================================================
 
-// synthetic helper that pins a company-level ai_profit_share (sourced basis) so
+// synthetic helpers that pin a company-level ai_profit_share (sourced basis) so
 // aiShare(c).value is deterministic — mirrors the real proxy path which all TTM heads have.
 const synAI = (id, share, years, quarters) => ({ ...synQ(id, years, quarters), ai_profit_share: share });
+const ttmPeriod = (period_id, period_end, calendar_year, calendar_quarter, net_income) => ({
+  period_id, kind: "quarter", status: "actual", period_start: null, period_end,
+  calendar_year, calendar_quarter, fiscal_year: "FYX", fiscal_quarter: calendar_quarter,
+  revenue: 100, net_income, segments: [], sources: [],
+});
+const synPeriodAI = (id, share, vals, ends) => ({
+  id, status: "populated", name: id.toUpperCase(), ai_profit_share: share,
+  years: [FY("FY2026", vals.reduce((s, v) => s + v, 0))],
+  periods: vals.map((v, i) => ttmPeriod(
+    `${id}-q${i + 1}`, ends[i][0], ends[i][1], ends[i][2], v
+  )),
+});
 
 // design=nvda, foundry=tsmc, memory=samsung+skhynix(+micron null), equipment=asml, invest=softbank(null)
 const ttmCos = [
-  synAI("nvda",     1.0, [FY("FY2026", 120.1)], [Q("2025-04-27", 18.8), Q("2026-04-26", 58.3)]), // TTM 159.6 ×1.0 = 159.6, asOf 2026-04-26
-  synAI("tsmc",     0.5, [FY("FY2025", 50)],    [Q("2025-03-31", 10),   Q("2026-03-31", 18)]),   // TTM 58 ×0.5 = 29, asOf 2026-03-31
-  synAI("samsung",  0.5, [FY("FY2025", 31)],    [Q("2025-03-31", 6),    Q("2026-03-31", 33)]),   // TTM 58 ×0.5 = 29
-  synAI("skhynix",  1.0, [FY("FY2025", 30)],    [Q("2025-03-31", 6),    Q("2026-03-31", 28)]),   // TTM 52 ×1.0 = 52
-  synAI("micron",   0.5, [FY("FY2025", 8)],     []),                                              // ttm null → skipped (aiShare irrelevant)
-  synAI("asml",     0.4, [FY("FY2025", 10)],    [Q("2025-03-31", 2),    Q("2026-03-31", 3)]),     // TTM 11 ×0.4 = 4.4
-  synAI("softbank", 0.1, [FY("FY2025", 31)],    []),                                              // ttm null → skipped
+  synPeriodAI("nvda", 1.0, [20, 30, 51.3, 58.3], [
+    ["2025-07-27", 2025, "Q3"], ["2025-10-26", 2025, "Q4"], ["2026-01-25", 2026, "Q1"], ["2026-04-26", 2026, "Q2"],
+  ]), // TTM 159.6 ×1.0 = 159.6, asOf 2026-04-26
+  synPeriodAI("tsmc", 0.5, [10, 12, 18, 18], [
+    ["2025-06-30", 2025, "Q2"], ["2025-09-30", 2025, "Q3"], ["2025-12-31", 2025, "Q4"], ["2026-03-31", 2026, "Q1"],
+  ]), // TTM 58 ×0.5 = 29, asOf 2026-03-31
+  synPeriodAI("samsung", 0.5, [6, 8, 11, 33], [
+    ["2025-06-30", 2025, "Q2"], ["2025-09-30", 2025, "Q3"], ["2025-12-31", 2025, "Q4"], ["2026-03-31", 2026, "Q1"],
+  ]), // TTM 58 ×0.5 = 29
+  synPeriodAI("skhynix", 1.0, [6, 8, 10, 28], [
+    ["2025-06-30", 2025, "Q2"], ["2025-09-30", 2025, "Q3"], ["2025-12-31", 2025, "Q4"], ["2026-03-31", 2026, "Q1"],
+  ]), // TTM 52 ×1.0 = 52
+  synAI("micron",   0.5, [FY("FY2025", 8)],     []), // no periods → skipped (aiShare irrelevant)
+  synPeriodAI("asml", 0.4, [2, 2, 4, 3], [
+    ["2025-06-30", 2025, "Q2"], ["2025-09-30", 2025, "Q3"], ["2025-12-31", 2025, "Q4"], ["2026-03-31", 2026, "Q1"],
+  ]), // TTM 11 ×0.4 = 4.4
+  synAI("softbank", 0.1, [FY("FY2025", 31)],    []), // no periods → skipped
 ];
 const ttmPool = Selectors.profitPoolTTM(ttmCos);
 assert.equal(ttmPool.label, "TTM(AI 加权,截至各家最近季报)");
@@ -796,19 +818,22 @@ assert.equal(tb.invest.value, 0);                            // softbank null �
 assert.equal(tb.invest.companies.length, 0);
 // shares sum to 1 (positive total)
 assert.ok(Math.abs(ttmPool.stages.reduce((s, x) => s + x.share, 0) - 1) < 1e-9);
-// per-company traceability carries weighted ttm + asOf + aiShare + basis (Phase 6.2 过渡)
-assert.deepEqual(tb.design.companies, [{ id: "nvda", name: "NVDA", ttm: 159.6, asOf: "2026-04-26", aiShare: 1.0, basis: "legacy_fallback" }]);
+// per-company traceability carries weighted ttm + asOf + aiShare + basis (Phase 6 final: periods-only)
+assert.deepEqual(tb.design.companies, [{ id: "nvda", name: "NVDA", ttm: 159.6, asOf: "2026-04-26", aiShare: 1.0, basis: "periods" }]);
 assert.deepEqual(tb.memory.companies.map(c => c.id), ["samsung", "skhynix"]);
 assert.deepEqual(tb.memory.companies.map(c => c.aiShare), [0.5, 1.0]);
-// Phase 6.2: these synth cos have only 2 quarters + no annual → periods incomplete → all legacy_fallback.
-assert.deepEqual(ttmPool.basisCount, { periods: 0, legacy_fallback: 5 });  // 5 contributors, all legacy
-assert.ok(ttmPool.stages.flatMap(s => s.companies).every(c => c.basis === "legacy_fallback"));
+assert.deepEqual(ttmPool.basisCount, { periods: 5 });  // 5 contributors, all periods
+assert.ok(ttmPool.stages.flatMap(s => s.companies).every(c => c.basis === "periods"));
 
 // ---- AI-weighting drops a company whose aiShare is null (has TTM but no share) ----
 // synQ (no ai_profit_share, no is_ai segments) → aiShare.value null → DROP, never counted as 0.
 const ttmShareNull = Selectors.profitPoolTTM([
-  synAI("nvda", 1.0, [FY("FY2026", 100)], [Q("2025-04-27", 10), Q("2026-04-26", 30)]), // ttm 120, share 1 → 120
-  synQ("tsmc",       [FY("FY2025", 50)],  [Q("2025-03-31", 10), Q("2026-03-31", 18)]), // ttm 58, share null → DROP
+  synPeriodAI("nvda", 1.0, [20, 30, 40, 30], [
+    ["2025-07-27", 2025, "Q3"], ["2025-10-26", 2025, "Q4"], ["2026-01-25", 2026, "Q1"], ["2026-04-26", 2026, "Q2"],
+  ]), // ttm 120, share 1 → 120
+  { ...synPeriodAI("tsmc", null, [10, 12, 18, 18], [
+    ["2025-06-30", 2025, "Q2"], ["2025-09-30", 2025, "Q3"], ["2025-12-31", 2025, "Q4"], ["2026-03-31", 2026, "Q1"],
+  ]), ai_profit_share: undefined }, // ttm 58, share null → DROP
 ]);
 assert.equal(ttmShareNull.n, 1);                         // tsmc dropped for null aiShare (not 0-counted)
 assert.equal(ttmShareNull.total, 120);                   // only nvda contributes
@@ -1579,7 +1604,7 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(ttmRealQ4.value, 45);                  // 真实 Q4(9) + 10+12+14
 
   // =====================================================================
-  // ttmNetIncomeUnified(c) — Phase 6.2 过渡口径: periods > legacy_fallback > null
+  // ttmNetIncomeUnified(c) — Phase 6 final: periods > null (legacy audit-only)
   // =====================================================================
   // ① periods 完整 (含 implied Q4) → basis="periods", value 来自 ttmFromPeriods, coverage 透传口径
   const uPeriods = Selectors.ttmNetIncomeUnified(ttmImpCo);
@@ -1589,41 +1614,40 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(uPeriods.coverage.usedImpliedQ4, true);
   assert.deepEqual(uPeriods.coverage.quarter_basis, ["implied_q4", "actual", "actual", "actual"]);
 
-  // ② periods 不足 (<4 季且无 annual → 无 implied) 但 legacy years[]/quarters[] 有 → legacy_fallback
-  //    合成: 只有 years[] (锚定财年) + 两季孪生 → ttmFromPeriods synth 仅 2 季 incomplete;
-  //    ttmNetIncome 走 legacy 路径给出 TTM。
+  // ② periods 不足 / 无真实 periods[] 时,即便 legacy years[]/quarters[] 可审计算出 TTM,
+  //    unified 消费入口也必须返回 null,不再 legacy_fallback。
   const legShape = synQ("legc", [FY("FY2025", 40)], [Q("2025-03-31", 6), Q("2026-03-31", 14)]);
   const uLegacy = Selectors.ttmNetIncomeUnified(legShape);
-  assert.equal(uLegacy.basis, "legacy_fallback");
-  assert.equal(uLegacy.value, Selectors.ttmNetIncome(legShape));  // 与 legacy 逐位一致
-  assert.equal(uLegacy.value, 48);                    // 40 + (14 − 6)
-  assert.equal(uLegacy.asOf, Selectors.ttmAsOf(legShape));
-  assert.equal(uLegacy.coverage.reason, "periods_insufficient");
+  assert.equal(Selectors.ttmNetIncome(legShape), 48);  // legacy 函数仍可审计对账
+  assert.equal(uLegacy.value, null);
+  assert.equal(uLegacy.basis, null);
+  assert.equal(uLegacy.asOf, null);
+  assert.equal(uLegacy.coverage.reason, "no_periods");
 
   // ③ 两者皆无 → value=null, basis=null (全 null 安全)
   const uNone = Selectors.ttmNetIncomeUnified({ id: "empty", status: "populated" });
   assert.equal(uNone.value, null);
   assert.equal(uNone.basis, null);
   assert.equal(uNone.asOf, null);
-  assert.equal(uNone.coverage.reason, "no_ttm");
+  assert.equal(uNone.coverage.reason, "no_periods");
   assert.deepEqual(Selectors.ttmNetIncomeUnified(null), { value: null, basis: null, asOf: null, coverage: { reason: "no_company" } });
 
-  // ④ profitPoolTTM 消费 unified: basisCount 计数 + oracle 型 (periods 有 / legacy 无) 接回
-  //    peri: periods 完整 (basis=periods); leg: 仅 legacy (basis=legacy_fallback); ora: periods 有 legacy 无。
+  // ④ profitPoolTTM 消费 unified: basisCount 计数 + oracle 型 (periods 有 / legacy 无) 接回;
+  //    仅 legacy 的公司不计入。
   const peri = { ...ttmImpCo, id: "nvda", ai_profit_share: 1.0 };          // periods 完整, design 桶
-  const leg = { ...legShape, id: "tsmc", ai_profit_share: 1.0 };           // legacy_fallback, foundry 桶
+  const leg = { ...legShape, id: "tsmc", ai_profit_share: 1.0 };           // legacy only → skipped
   const oraShape = { ...ttmImpCo, id: "skhynix", ai_profit_share: 1.0 };   // periods 有; 无 years/quarters → legacy 也无, 但 periods 已够 (oracle 型接回)
   const poolMix = Selectors.profitPoolTTM([peri, leg, oraShape]);
-  assert.deepEqual(poolMix.basisCount, { periods: 2, legacy_fallback: 1 });
-  assert.equal(poolMix.n, 3);
+  assert.deepEqual(poolMix.basisCount, { periods: 2 });
+  assert.equal(poolMix.n, 2);
   const mixCos = Object.fromEntries(poolMix.stages.flatMap(s => s.companies).map(c => [c.id, c]));
   assert.equal(mixCos.nvda.basis, "periods");
-  assert.equal(mixCos.tsmc.basis, "legacy_fallback");
+  assert.equal(mixCos.tsmc, undefined);
   assert.equal(mixCos.skhynix.basis, "periods");         // periods 有 legacy 无 → periods 接回 (与 oracle 真实数据同型)
   // oracle 型接回: 若无 periods 也无 legacy 的公司 → 不计入 (honest gap, 不 impute)
   const gone = Selectors.profitPoolTTM([{ id: "arm", status: "populated", ai_profit_share: 1.0 }]);
   assert.equal(gone.n, 0);
-  assert.deepEqual(gone.basisCount, { periods: 0, legacy_fallback: 0 });
+  assert.deepEqual(gone.basisCount, { periods: 0 });
 }
 
 // =====================================================================

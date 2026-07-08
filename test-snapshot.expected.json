@@ -1143,8 +1143,7 @@
     "n": 13,
     "asOfSpreadDays": 63,
     "basisCount": {
-      "periods": 13,
-      "legacy_fallback": 0
+      "periods": 13
     },
     "stages": {
       "design": {

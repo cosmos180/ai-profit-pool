@@ -1,7 +1,8 @@
 # DATA-SPEC-dayu — Dayu MCP(SEC EDGAR)取数规格
 
-> ⚠ **新采集目标已切换为 `periods[]`(period-base 重构)。** `years[]` / `quarters[]` 已标 legacy(迁移兼容层,仅供旧视图/回退,最终退役见 `docs/plans/period-base-refactor.md` Phase 6.2)。
+> ⚠ **新采集目标已切换为 `periods[]`(period-base 重构)。** `years[]` / `quarters[]` 已标 legacy;TTM UI 消费路径已完成 Phase 6 final,不再回退 legacy。`years[]` 暂留给年度视图/估值/前瞻等尚未迁移的旧消费链。
 > 新数据请按报告期原子录入 `periods[]`:每条是一个 reported-period 事实(`kind` = quarter | annual、`status` = actual | guidance | forecast),带 `period_start/period_end`(机读 ISO)、`calendar_year/calendar_quarter`、`fiscal_year/fiscal_quarter`、`currency/fx_to_usd`(非 USD 源必带正 `fx_to_usd`)、可空财务字段与 `sources[]`(url + data_status)。形状要点见计划文档 **Target Data Shape** 一节;字段映射细节可后续修订,本轮先立牌子。TTM/CY/FY 一律由 Selector 派生(算不存)。
+> **过渡期双写规则:** 下个财报季开始,年度 actual 事实必须同时写入 `periods[]` annual 和 legacy `years[]`(merge 支持按 `period_end_iso` 增量),直到年度视图/估值/AI 池/前瞻链完成广口径迁移;季度事实只写 `periods[]`。
 >
 > Dayu 是第三条采集通道,与 Tiger、「丢 PDF 人工提取」互补。跑在**用户本地**(需 DeepSeek key + EDGAR)。
 > 共享规则(单位 USD bn、id 硬清单、判断项不输出、输出 JSON 形状、merge 流程、自检清单)
@@ -36,8 +37,8 @@ Dayu 读的是官方文件,但它是 LLM 转述——**转述可能错,所以产
 
 ### 2.A retirement-pass 模板(**新采集首选,吐 `periods[]` 部分对象**)
 
-> **适用场景**:period-base 重构后的常规采集,尤其是 **fallback retirement pass**——给某公司补
-> 若干**季度原子**,把 TTM 从 legacy_fallback 点亮成 `periods` 口径(购物清单见 `tools/gap-report.mjs`)。
+> **适用场景**:period-base 重构后的常规采集。Phase 6 final 后,TTM 池只认 `periods[]`;
+> 补季度原子用于点亮/更新 periods 口径,不再存在 legacy fallback。
 > 输出**只含 `periods` 的部分对象**,经 `merge.py` 按 `period_id` **增量并入**(其余数据分毫不动,
 > 见 tools/README「部分合并」)。已录入的年报/季度不必重复吐。
 >
