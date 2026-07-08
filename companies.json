@@ -599,7 +599,7 @@
           "segments": [],
           "sources": [
             {
-              "label": "NVIDIA Q2 FY2026 10-Q filed 2025-08-27 (quarter facts from inline XBRL; CFO/capex only six-month cumulative, left null for quarter)",
+              "label": "NVIDIA Q2 FY2026 新闻稿 2025-08-27 + 10-Q filed 2025-08-27, period ended 2025-07-27",
               "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000209/",
               "data_status": "official"
             }
@@ -621,12 +621,12 @@
           "net_income": 31.91,
           "gross_profit": 41.849,
           "op_income": 36.01,
-          "cfo": null,
-          "capex": null,
+          "cfo": 23.75,
+          "capex": 1.637,
           "segments": [],
           "sources": [
             {
-              "label": "NVIDIA Q3 FY2026 10-Q filed 2025-11-19 (quarter facts from inline XBRL; CFO/capex only nine-month cumulative, left null for quarter)",
+              "label": "NVIDIA Q3 FY2026 新闻稿 2025-11-19 + 10-Q filed 2025-11-19, period ended 2025-10-26; CFO $23,750M & capex $1,637M 取自 FY2026 Q4/全年新闻稿 FCF 调节表三列中的 Q3 列（三个月口径）",
               "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000230/",
               "data_status": "official"
             }
@@ -1602,16 +1602,21 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 15.952,
-          "net_income": 4.14,
           "gross_profit": 10.703,
           "op_income": 5.887,
-          "cfo": null,
-          "capex": null,
+          "net_income": 4.14,
+          "cfo": 7.166,
+          "capex": 0.142,
           "segments": [],
           "sources": [
             {
-              "label": "Broadcom Q3 FY2025 10-Q filed 2025-09-10 (revenue/net income/gross profit/op income; CFO/capex only nine-month cumulative, left null for quarter)",
-              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000098/",
+              "label": "Broadcom Form 10-Q filed 2025-09-10, quarter ended 2025-08-03",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000098/avgo-20250803.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Broadcom Q3 FY2025 earnings release dated 2025-09-04, single-quarter CFO $7,166M and capex $142M",
+              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2025-financial",
               "data_status": "official"
             }
           ]
