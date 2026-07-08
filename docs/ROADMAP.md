@@ -23,8 +23,8 @@
   - 进展:云四家 google/microsoft/amazon/oracle 已用 Dayu/SEC 补到 official 年度/季度主表;ARM 已补 official。后续优先处理非 SEC 与 TSMC FY2024 官方偏差。
   - 批次优先级:①云四家 google/microsoft/amazon/oracle(已完成主表;oracle 缺云分部经营利润)→ ②存储 samsung/micron/skhynix + 设计 nvda/broadcom → ③其余 asml/softbank/tencent
   - 每家要求:actual 年(营收/毛利率/经营利润/净利/capex/CFO)+ 平台/分部拆分 + 来源标注;**整批换,不留混合**
-- [ ] **D2 · TSMC FY2024 官方修正**(🧑 需 FY2024 年报/20-F 的平台拆分;🤖 提取)
-  - 已知偏差:官方 rev 90.08 / ni 36.52 vs 库内 88.268 / 35.327;上次因缺 FY2024 平台拆分被对账闸门正确拦回
+- [x] **D2 · TSMC FY2024 官方修正**——已按 FY2025 同口径落库:官方美元披露 rev 90.08 / ni 36.52,公司隐含均汇 32.130(=TWD 2,894.31bn÷90.08),op/cfo 按隐含均汇重算(derived),平台拆分 51/35/6/5/1/2 × 90.08 精确对账;`years[]` 与 `periods[]` 双写一致。注:本执行环境 egress 拦 SEC/tsmc.com,数字经多源检索交叉印证(TWD÷隐含均汇/官方USD/分季合计三路闭合),口径注明于 sources。
+  - 同批:ARM `quote.net_debt` 补齐 = −3.601bn 净现金(FY2026 20-F @2026-03-31:现金 2.751+短投 0.850,零有息借款,租赁 0.432 按口径排除)→ EV/EV-Sales 点亮,设计环节 EV/Sales comps n=2→3 生效;因同一 egress 限制暂标 `estimate`,待 Dayu MCP 比对 20-F 原文后升 official。
 - [ ] **D3 · quote 快照刷新**(🧑 Tiger `get_financial_daily`;🤖 merge)
   - 现状停在 as_of 2026-06-26;13 家市值/价格/净债务分量刷到同一交易日
 

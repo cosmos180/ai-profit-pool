@@ -3698,17 +3698,17 @@
           "period_end": "自然年 2024（截至 2024-12-31）",
           "period_end_iso": "2024-12-31",
           "status": "actual",
-          "revenue": 88.268,
+          "revenue": 90.08,
           "gross_margin": 0.561,
-          "op_income": 40.319,
-          "net_income": 35.327,
+          "op_income": 41.147,
+          "net_income": 36.52,
           "capex": 29.76,
-          "cfo": 56.0,
+          "cfo": 56.837,
           "segments": [
             {
               "name": "HPC 高性能计算",
               "kind": "platform",
-              "revenue": 45.017,
+              "revenue": 45.941,
               "op_income": null,
               "op_margin": null,
               "is_ai": true
@@ -3716,7 +3716,7 @@
             {
               "name": "Smartphone 智能手机",
               "kind": "platform",
-              "revenue": 30.894,
+              "revenue": 31.528,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -3724,7 +3724,7 @@
             {
               "name": "IoT 物联网",
               "kind": "platform",
-              "revenue": 5.296,
+              "revenue": 5.405,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -3732,7 +3732,7 @@
             {
               "name": "Automotive 车用电子",
               "kind": "platform",
-              "revenue": 4.413,
+              "revenue": 4.504,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -3740,7 +3740,7 @@
             {
               "name": "DCE 数字消费电子",
               "kind": "platform",
-              "revenue": 0.883,
+              "revenue": 0.901,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -3748,7 +3748,7 @@
             {
               "name": "Other 其他",
               "kind": "platform",
-              "revenue": 1.765,
+              "revenue": 1.801,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -3756,14 +3756,24 @@
           ],
           "sources": [
             {
-              "label": "TSMC FY2024 Form 20-F（SEC Filing）",
+              "label": "台积电 4Q24 全年财报发布(SEC Form 6-K)+ 2024 年报官方美元披露:全年营收 US$90.08B、税后净利 US$36.52B、毛利率 56.1%、营业利益率 45.7%",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "公司隐含平均汇率 32.130 = 年报 TWD 营收 NT$2,894.31bn ÷ 官方 USD 营收 90.08;营业利润 = TWD 营业利益 NT$1,322.05bn ÷ 32.130;CFO = TWD 营业活动净现金流 NT$1,826.18bn ÷ 32.130",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
+              "data_status": "derived"
+            },
+            {
+              "label": "capex:TSMC 自报 2024 全年资本支出 US$29.76B(年报 TWD 约 956.01bn ÷ 32.130 亦得同值)",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
               "data_status": "official"
             },
             {
-              "label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
-              "data_status": "estimate"
+              "label": "分部:年报「依產品平台區分」HPC 51%/智能手机 35%/IoT 6%/车用 5%/DCE 1%/其他 2% × 官方美元营收 90.08(尾差 0.001 微调其他至 1.801 使合计精确=90.08)",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+              "data_status": "official"
             }
           ]
         },
@@ -4012,18 +4022,18 @@
           "fiscal_year": "FY2024",
           "fiscal_quarter": null,
           "currency": "TWD",
-          "fx_to_usd": 32.79,
-          "revenue": 88.268,
+          "fx_to_usd": 32.13,
+          "revenue": 90.08,
           "gross_profit": null,
-          "op_income": 40.319,
-          "net_income": 35.327,
-          "cfo": 56.0,
+          "op_income": 41.147,
+          "net_income": 36.52,
+          "cfo": 56.837,
           "capex": 29.76,
           "segments": [
             {
               "name": "HPC 高性能计算",
               "kind": "platform",
-              "revenue": 45.017,
+              "revenue": 45.941,
               "op_income": null,
               "op_margin": null,
               "is_ai": true
@@ -4031,7 +4041,7 @@
             {
               "name": "Smartphone 智能手机",
               "kind": "platform",
-              "revenue": 30.894,
+              "revenue": 31.528,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -4039,7 +4049,7 @@
             {
               "name": "IoT 物联网",
               "kind": "platform",
-              "revenue": 5.296,
+              "revenue": 5.405,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -4047,7 +4057,7 @@
             {
               "name": "Automotive 车用电子",
               "kind": "platform",
-              "revenue": 4.413,
+              "revenue": 4.504,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -4055,7 +4065,7 @@
             {
               "name": "DCE 数字消费电子",
               "kind": "platform",
-              "revenue": 0.883,
+              "revenue": 0.901,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -4063,7 +4073,7 @@
             {
               "name": "Other 其他",
               "kind": "platform",
-              "revenue": 1.765,
+              "revenue": 1.801,
               "op_income": null,
               "op_margin": null,
               "is_ai": false
@@ -4071,14 +4081,24 @@
           ],
           "sources": [
             {
-              "label": "TSMC FY2024 Form 20-F（SEC Filing）",
+              "label": "台积电 4Q24 全年财报发布(SEC Form 6-K)+ 2024 年报官方美元披露:全年营收 US$90.08B、税后净利 US$36.52B、毛利率 56.1%、营业利益率 45.7%",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "公司隐含平均汇率 32.130 = 年报 TWD 营收 NT$2,894.31bn ÷ 官方 USD 营收 90.08;营业利润 = TWD 营业利益 NT$1,322.05bn ÷ 32.130;CFO = TWD 营业活动净现金流 NT$1,826.18bn ÷ 32.130",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
+              "data_status": "derived"
+            },
+            {
+              "label": "capex:TSMC 自报 2024 全年资本支出 US$29.76B(年报 TWD 约 956.01bn ÷ 32.130 亦得同值)",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
               "data_status": "official"
             },
             {
-              "label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
-              "data_status": "estimate"
+              "label": "分部:年报「依產品平台區分」HPC 51%/智能手机 35%/IoT 6%/车用 5%/DCE 1%/其他 2% × 官方美元营收 90.08(尾差 0.001 微调其他至 1.801 使合计精确=90.08)",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+              "data_status": "official"
             }
           ]
         },
@@ -8708,11 +8728,16 @@
       "quote": {
         "as_of": "2026-06-26",
         "market_cap": 355.67,
-        "net_debt": null,
+        "net_debt": -3.601,
         "sources": [
           {
             "label": "public.com — Arm Holdings market cap ≈ $355.67B @ 2026-06-26（日内波动，取近似值）",
             "url": "https://public.com/stocks/arm/market-cap",
+            "data_status": "estimate"
+          },
+          {
+            "label": "net_debt=-3.601 bn（净现金）｜Arm Holdings plc Form 20-F FY2026，合并资产负债表日 2026-03-31：现金及等价物 $2,751M + 短期投资 $850M = $3,601M；有息借款 0（无债券/银行贷款/票据）；经营租赁负债 $39M(流动)+$393M(非流动)=$432M 及少量融资租赁按项目口径排除。计算：0 −(2.751+0.850)=-3.601 bn。注：因 SEC/EDGAR 出口被代理策略拦截，数值经检索聚合自该 20-F 归档核对（分量自洽 2751+850=3601），未直接打开主文件，待用 Dayu MCP/人工比对 20-F 原文后升 official。",
+            "url": "https://www.sec.gov/Archives/edgar/data/0001973239/000197323926000097/arm-20260331.htm",
             "data_status": "estimate"
           }
         ]

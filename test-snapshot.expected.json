@@ -310,8 +310,8 @@
       "topRevSegment": "HPC 高性能计算",
       "netMargin": 0.450988,
       "opMargin": 0.508283,
-      "revYoY": 0.386913,
-      "niYoY": 0.562827,
+      "revYoY": 0.359014,
+      "niYoY": 0.511774,
       "homeRevenue": 122.42,
       "homeNetIncome": 55.21,
       "marketCap": 1990,
@@ -609,9 +609,9 @@
       "homeRevenue": 4.92,
       "homeNetIncome": 0.904,
       "marketCap": 355.67,
-      "netDebt": null,
-      "ev": null,
-      "evSales": null,
+      "netDebt": -3.601,
+      "ev": 352.069,
+      "evSales": 71.55874,
       "pe": 393.440265,
       "ps": 72.29065,
       "fcfYield": 0.002753,
@@ -893,13 +893,13 @@
     },
     {
       "label": "≈2024",
-      "total": 201.566475,
+      "total": 202.174858,
       "n": 13,
       "N": 14,
       "stages": {
         "design": {
           "value": 67.76989,
-          "share": 0.336216,
+          "share": 0.335204,
           "companies": [
             {
               "id": "nvda",
@@ -914,19 +914,19 @@
           ]
         },
         "foundry": {
-          "value": 18.016898,
-          "share": 0.089384,
+          "value": 18.625281,
+          "share": 0.092125,
           "companies": [
             {
               "id": "tsmc",
               "name": "TSMC 台积电",
-              "ni": 18.016898
+              "ni": 18.625281
             }
           ]
         },
         "memory": {
           "value": 22.939949,
-          "share": 0.113808,
+          "share": 0.113466,
           "companies": [
             {
               "id": "samsung",
@@ -947,7 +947,7 @@
         },
         "equipment": {
           "value": 2.412878,
-          "share": 0.011971,
+          "share": 0.011935,
           "companies": [
             {
               "id": "asml",
@@ -958,7 +958,7 @@
         },
         "invest": {
           "value": 0.628622,
-          "share": 0.003119,
+          "share": 0.003109,
           "companies": [
             {
               "id": "softbank",
@@ -969,7 +969,7 @@
         },
         "app": {
           "value": 4.964004,
-          "share": 0.024627,
+          "share": 0.024553,
           "companies": [
             {
               "id": "tencent",
@@ -980,7 +980,7 @@
         },
         "cloud": {
           "value": 84.834232,
-          "share": 0.420875,
+          "share": 0.419608,
           "companies": [
             {
               "id": "google",
@@ -1134,7 +1134,7 @@
     }
   },
   "yoy": {
-    "value": 0.555509,
+    "value": 0.550828,
     "migLastLabel": "≈2025",
     "migPrevLabel": "≈2024"
   },
@@ -1322,11 +1322,11 @@
       },
       "evSales": {
         "value": 21.700056,
-        "median": 25.16906,
-        "relative": null,
-        "cohortN": 2,
+        "median": 28.638064,
+        "relative": "low",
+        "cohortN": 3,
         "lowerCheaper": true,
-        "insufficient": true
+        "insufficient": false
       }
     },
     "samsung": {
@@ -1390,11 +1390,11 @@
       },
       "evSales": {
         "value": 28.638064,
-        "median": 25.16906,
-        "relative": null,
-        "cohortN": 2,
+        "median": 28.638064,
+        "relative": "mid",
+        "cohortN": 3,
         "lowerCheaper": true,
-        "insufficient": true
+        "insufficient": false
       }
     },
     "softbank": {
@@ -1763,12 +1763,12 @@
         "insufficient": false
       },
       "evSales": {
-        "value": null,
-        "median": 25.16906,
-        "relative": null,
-        "cohortN": 2,
+        "value": 71.55874,
+        "median": 28.638064,
+        "relative": "high",
+        "cohortN": 3,
         "lowerCheaper": true,
-        "insufficient": true
+        "insufficient": false
       }
     }
   }
