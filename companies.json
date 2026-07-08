@@ -5208,6 +5208,102 @@
           ]
         },
         {
+          "period_id": "tencent-2025q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q1",
+          "currency": "CNY",
+          "fx_to_usd": 7.187,
+          "revenue": 25.0483,
+          "gross_profit": 13.9826,
+          "op_income": 8.0097,
+          "net_income": 6.6538,
+          "cfo": null,
+          "capex": 3.823,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Tencent 2025 First Quarter Results press release, condensed consolidated income statement",
+              "url": "https://static.www.tencent.com/uploads/2025/05/16/2af4e73edd208df236dadd8b9df89fc4.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "FX basis: CNY/USD 7.187, matching existing Tencent FY2025 annual route-B basis",
+              "url": "https://www.tencent.com/en-us/investors/financial-news.html",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_id": "tencent-2025q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-04-01",
+          "period_end": "2025-06-30",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q2",
+          "currency": "CNY",
+          "fx_to_usd": 7.187,
+          "revenue": 25.6719,
+          "gross_profit": 14.6115,
+          "op_income": 8.3629,
+          "net_income": 7.7401,
+          "cfo": null,
+          "capex": 2.6586,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Tencent 2025 Second Quarter Results press release, condensed consolidated income statement",
+              "url": "https://static.www.tencent.com/uploads/2025/08/13/56af6c5c98acdc7bd757a7bd208d8189.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "FX basis: CNY/USD 7.187, matching existing Tencent FY2025 annual route-B basis",
+              "url": "https://www.tencent.com/en-us/investors/financial-news.html",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_id": "tencent-2025q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-07-01",
+          "period_end": "2025-09-30",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q3",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q3",
+          "currency": "CNY",
+          "fx_to_usd": 7.187,
+          "revenue": 26.8358,
+          "gross_profit": 15.1382,
+          "op_income": 8.8429,
+          "net_income": 8.7843,
+          "cfo": null,
+          "capex": 1.8065,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Tencent 2025 Third Quarter Results press release, condensed consolidated income statement",
+              "url": "https://static.www.tencent.com/uploads/2025/11/13/a33b6f19738615834787623f17d20ba3.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "FX basis: CNY/USD 7.187, matching existing Tencent FY2025 annual route-B basis",
+              "url": "https://www.tencent.com/en-us/investors/financial-news.html",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
           "period_id": "tencent-fy2025-annual",
           "kind": "annual",
           "status": "actual",

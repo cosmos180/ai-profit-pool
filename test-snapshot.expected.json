@@ -1139,17 +1139,17 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 416.342376,
-    "n": 12,
+    "total": 423.639013,
+    "n": 13,
     "asOfSpreadDays": 63,
     "basisCount": {
-      "periods": 12,
+      "periods": 13,
       "legacy_fallback": 0
     },
     "stages": {
       "design": {
         "value": 160.105816,
-        "share": 0.384553,
+        "share": 0.37793,
         "companies": [
           {
             "id": "nvda",
@@ -1171,7 +1171,7 @@
       },
       "foundry": {
         "value": 36.179328,
-        "share": 0.086898,
+        "share": 0.085401,
         "companies": [
           {
             "id": "tsmc",
@@ -1185,7 +1185,7 @@
       },
       "memory": {
         "value": 92.14315,
-        "share": 0.221316,
+        "share": 0.217504,
         "companies": [
           {
             "id": "samsung",
@@ -1215,7 +1215,7 @@
       },
       "equipment": {
         "value": 4.123005,
-        "share": 0.009903,
+        "share": 0.009732,
         "companies": [
           {
             "id": "asml",
@@ -1229,7 +1229,7 @@
       },
       "invest": {
         "value": 2.568954,
-        "share": 0.00617,
+        "share": 0.006064,
         "companies": [
           {
             "id": "softbank",
@@ -1242,13 +1242,22 @@
         ]
       },
       "app": {
-        "value": 0,
-        "share": 0,
-        "companies": []
+        "value": 7.296636,
+        "share": 0.017224,
+        "companies": [
+          {
+            "id": "tencent",
+            "name": "Tencent 腾讯控股",
+            "ttm": 7.296636,
+            "asOf": "2026-03-31",
+            "aiShare": 0.192868,
+            "basis": "periods"
+          }
+        ]
       },
       "cloud": {
         "value": 121.222124,
-        "share": 0.29116,
+        "share": 0.286145,
         "companies": [
           {
             "id": "google",
