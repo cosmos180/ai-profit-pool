@@ -72,6 +72,7 @@
   - **Phase 1–5 全量完成 14/14**:schema `periods[]` + validate 契约、selector 层(periods/calendarYear/ttmFromPeriods/fiscalYearFromPeriods/companyMetricView + implied Q4 派生 + 严格 CY 边界)、四镜头视图、14 家公司全部迁入 `periods[]`。
   - **Phase 6 final 落地(窄口径)**:6.1 `years[]/quarters[]` 标 legacy(schema/DATA-SPEC/本文,零行为变化);6.2 final `ttmNetIncomeUnified`(periods > null)接入 `profitPoolTTM`,迁移图 TTM 柱为单一 periods 口径。`years[]` 仍服务年度视图/估值/AI 池/前瞻链,广口径迁移另立项。
   - **广口径迁移 B1(估值链)已落地**(2026-07-08,ADR `docs/plans/broad-migration-b1-valuation.md`):`pe/ps/evSales/fcfYield` 分母改读 periods 侧 `latestActualAnnual`/`latestCashActualAnnual`(纯 periods,无运行时回退);`validate.py` 加「双写一致性」硬 ERROR 兜底。四门禁全绿、快照零漂移、视图零改动。剩余三批(年度视图/桑基 → AI 池 → 前瞻)待续。
+  - **广口径迁移 B2(年度视图/桑基)最小批已落地**(2026-07-08,ADR `docs/plans/broad-migration-b2-annual-views.md`):**D1** `ValuationCard` 展示锚从 `latestActual` 迁 `latestActualAnnual`(`la.fy`→`la.fiscal_year`,同串零可见变化,closes #13);**D4** `validate.py` 双写一致性从 `revenue/net_income` 扩到 `op_income/cfo/capex + 逐分部`(name 对齐后 `revenue/op_income/op_margin/is_ai/kind` 相等),硬 ERROR。四门禁全绿(945/945 平价、快照零漂移)、web/src 除 ValuationCard 零改动。**D2/D3 数值行整迁门控在 annual period 的 `gross_profit` 补录**(periods 侧无毛利事实,硬迁会让毛利/毛利率整列消失);Home L230 自由文本锚保留 years。
 
 ## P4 · 产品决策(不排期,需要用户拍板后才动)
 

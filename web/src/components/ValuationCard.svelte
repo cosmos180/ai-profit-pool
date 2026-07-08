@@ -10,7 +10,7 @@
   let { company } = $props()
 
   const q = $derived(company?.quote || null)
-  const la = $derived(Selectors.latestActual(company))
+  const la = $derived(Selectors.latestActualAnnual(company))
   const note = $derived(company?.valuation_caveat?.note || '')
 
   // EV/Sales 副行：净现金 / 净负债状态（解释 EV 与市值差在哪）——文案分流，非计算。
@@ -79,7 +79,7 @@
 {:else}
   <div class="val-head">
     <span>市场快照 · <span class="asof">{q.as_of || '—'}</span></span>
-    <span class="mismatch">口径错位：<b>价格截至快照日</b>，倍数分母用<b>最新实际财年</b>{la ? ` ${la.fy} 业绩` : '业绩'}（两者时点不同，属正常）</span>
+    <span class="mismatch">口径错位：<b>价格截至快照日</b>，倍数分母用<b>最新实际财年</b>{la ? ` ${la.fiscal_year} 业绩` : '业绩'}（两者时点不同，属正常）</span>
   </div>
   <div class="kpis">
     {#each cards as d (d.key)}

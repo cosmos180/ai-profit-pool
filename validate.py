@@ -394,17 +394,55 @@ def check(data):
                                   f"annual actual double-write（按 fiscal_year 或 period_end 年份对齐）")
                     continue
                 p = cand[0]
-                for field in ("revenue", "net_income"):
+                p_tag = p.get("fiscal_year") or p.get("period_end")
+
+                def num_close(a, b):
+                    return abs(a - b) <= 0.001 or (a != 0 and abs(a - b) / abs(a) <= 1e-6)
+
+                # B2(D4): headline 流量字段全纳入双写钉子（不含 gross —— periods 侧无 gross_profit 事实）。
+                for field in ("revenue", "net_income", "op_income", "cfo", "capex"):
                     yv, pv = y.get(field), p.get(field)
                     if yv is None:
                         continue
                     if pv is None:
                         errors.append(f"ERROR {cid}/{fy}: double-write 不一致 —— years.{field}={yv} 但 "
-                                      f"annual period（{p.get('fiscal_year') or p.get('period_end')}）该字段缺失")
+                                      f"annual period（{p_tag}）该字段缺失")
                         continue
-                    if abs(yv - pv) > 0.001 and (yv == 0 or abs(yv - pv) / abs(yv) > 1e-6):
+                    if not num_close(yv, pv):
                         errors.append(f"ERROR {cid}/{fy}: double-write 不一致 —— years.{field}={yv} ≠ "
                                       f"annual period.{field}={pv}（差 {round(pv - yv, 6):+}，超容差）")
+
+                # B2(D4): 逐分部（按 name 对齐）钉住 revenue/op_income/op_margin/is_ai/kind。
+                # years 分部有名字但 periods 缺同名分部 → ERROR；同名分部逐字段比对。
+                p_segs = {s.get("name"): s for s in (p.get("segments") or []) if s.get("name")}
+                for ys in (y.get("segments") or []):
+                    nm = ys.get("name")
+                    if nm is None:
+                        continue
+                    ps = p_segs.get(nm)
+                    if ps is None:
+                        errors.append(f"ERROR {cid}/{fy}: double-write 分部不一致 —— years 有分部「{nm}」，"
+                                      f"但 annual period（{p_tag}）缺同名分部")
+                        continue
+                    for field in ("revenue", "op_income", "op_margin"):
+                        yv, pv = ys.get(field), ps.get(field)
+                        if yv is None:
+                            continue
+                        if pv is None:
+                            errors.append(f"ERROR {cid}/{fy}: 分部「{nm}」double-write 不一致 —— "
+                                          f"years.{field}={yv} 但 annual period 该字段缺失")
+                            continue
+                        if not num_close(yv, pv):
+                            errors.append(f"ERROR {cid}/{fy}: 分部「{nm}」double-write 不一致 —— "
+                                          f"years.{field}={yv} ≠ annual period.{field}={pv}"
+                                          f"（差 {round(pv - yv, 6):+}，超容差）")
+                    for field in ("is_ai", "kind"):
+                        yv, pv = ys.get(field), ps.get(field)
+                        if yv is None:
+                            continue
+                        if yv != pv:
+                            errors.append(f"ERROR {cid}/{fy}: 分部「{nm}」double-write 不一致 —— "
+                                          f"years.{field}={yv!r} ≠ annual period.{field}={pv!r}")
 
     return errors, warns, oks
 
