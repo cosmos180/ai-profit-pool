@@ -781,8 +781,8 @@
       "fy_note": "KRW→USD 采用 IRS 年度平均汇率（2024: 1364.153 / 2025: 1421.779），与工作簿一致。分部营收含内部交易（inter-divisional），故合计大于合并营收。",
       "quote": {
         "as_of": "2026-06-26",
-        "market_cap": 1340.0,
-        "net_debt": -64.39,
+        "market_cap": 1340,
+        "net_debt": -77.57,
         "sources": [
           {
             "label": "companiesmarketcap.com — Samsung market cap (KRW 2,056.67T @ 2026-06-26)",
@@ -795,8 +795,8 @@
             "data_status": "derived"
           },
           {
-            "label": "net_debt（派生）：2025 年末合并资产负债表 有息债务 ≈ KRW 6.30T，现金及短期金融工具 ≈ KRW 105.13T → 净现金 KRW −98.83T ÷ USD/KRW 1535（与市值同口径汇率）= −$64.39B（口径：排经营租赁；现金含短期金融工具/投资；换算待核验）",
-            "url": "https://stockanalysis.com/quote/krx/005930/financials/balance-sheet/",
+            "label": "net_debt=-77.57 bn｜삼성전자 2026년 1분기(2026-03-31) 연결. [직접 취득] 현금및현금성자산 73.31조원; 회사 헤드라인 순현금 119.24조원(=현금성자산 147.38조 − 차입금); 전분기(Q4 2025) 순현금 100.61조, 전년동기 93.99조. [파생/추정] 단기투자(단기금융상품+단기금융자산)=147.38−73.31=74.07조; 차입금=147.38−119.24=28.14조 (리스포함 여부 불명, 추정). 계산식: net_debt=차입금−(현금+단기투자)=28.14−73.31−74.07=−119.24조원 → −119.24조/1537.15=−$77.57B. 신뢰 앵커는 회사 공표 순현금 119.24조원(다수 매체 교차확인: 삼성 뉴스룸, Newspim). 분량 세부 스플릿(차입금/단기투자)은 원문 재무상태표 접근 불가로 파생값이며 미검증. 프로젝트 참고치(2025년말 −$64.39B) 대비 +20%, 동일 방향(순현금 증가) — Q1 사상최대 영업이익(57.2조)·영업현금흐름 40.27조 반영으로 일관.",
+            "url": "https://www.newspim.com/news/view/20260430000999",
             "data_status": "estimate"
           }
         ]
@@ -3192,9 +3192,9 @@
       "fy_note": "KRW→USD 采用 IRS 年度平均汇率（2023: 1306.686 / 2024: 1364.153 / 2025: 1421.779），与三星折算口径保持一致。分部利润未按 DRAM/NAND 对外披露。",
       "quote": {
         "as_of": "2026-06-26",
-        "market_cap": 1236.0,
-        "net_debt": -8.27,
-        "price": 2628000.0,
+        "market_cap": 1236,
+        "net_debt": -22.77,
+        "price": 2628000,
         "price_currency": "KRW",
         "sources": [
           {
@@ -3208,8 +3208,8 @@
             "data_status": "derived"
           },
           {
-            "label": "net_debt（估算）：2025 年末公司转为净现金，借款 ≈ KRW 22.2T，现金及等价物 ≈ KRW 34.9T → 净现金 KRW −12.7T ÷ USD/KRW 1535（与市值同口径汇率）= −$8.27B（口径：排经营租赁；仅计现金及等价物，未加短期投资故偏保守；换算待核验）",
-            "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+            "label": "net_debt=-22.77 bn｜SK hynix 2026년 1분기(2026-03-31) 연결. [직접 취득] 이자부부채 19.3조원(전분기比 −2.9조); 현금및단기투자 합계 54.3조원; 회사 공표 순현금 35조원(=54.3−19.3, 검증 일치); 현금및현금성자산(협의) 21.2조원. [파생] 단기투자(단기금융상품/예치금)=54.3−21.2=33.1조. 계산식: net_debt=19.3−21.2−33.1=−35.0조원 → −35.0조/1537.15=−$22.77B. 교차확인: PRNewswire/삼성계열아닌 SK hynix 1Q26 보도자료, news.skhynix.com, 다수 매체(Morningstar/Barchart/StorageNewsletter). 프로젝트 참고치(2025년말 −$8.27B, 현금성자산만·단기투자 미포함)와 방향 동일하나 크게 확대(>50%): 원인=(1)본건은 지시대로 단기금융상품을 현금류에 포함(참고치는 미포함으로 보수적), (2)Q1 사상최대 실적·현금창출, (3)이자부부채 22.2조→19.3조 축소. 모두 순현금 증가 방향으로 일관.",
+            "url": "https://www.prnewswire.com/news-releases/sk-hynix-announces-1q26-financial-results-302750959.html",
             "data_status": "estimate"
           }
         ]
@@ -3601,7 +3601,7 @@
         "market_cap": 1905,
         "price": 432.57,
         "price_currency": "USD",
-        "net_debt": -69.26,
+        "net_debt": -77.58,
         "sources": [
           {
             "label": "TSM ADR close 7/7 $432.57 (-4.25% vs 7/6 451.79) per Yahoo/macrotrends; market cap scaled from library 7/6 (1990bn/451.79) to stay on library methodology. NOTE: companiesmarketcap full-share-count gives ~2.1-2.2T (different share base)",
@@ -3609,8 +3609,8 @@
             "data_status": "estimate"
           },
           {
-            "label": "net_debt（估算）：4Q25（截至 2025-12-31）长期有息债务 ≈ NT$896.06B，减 现金及有价证券 ≈ NT$3,068.59B → 净现金 NT$−2,172.53B ÷ NT/USD 31.37（期末 Noon Buying，与营收换算一致）= −$69.26B（口径：排经营租赁；“现金及有价证券”或含部分长期有价金融资产，真实净现金或略小，方向稳健，待核验合并报表）",
-            "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617926000024/a2025q4consolidatedreport-.htm",
+            "label": "net_debt=-77.58 bn｜口径:net_debt = 有息债务 −(现金及等价物 + 短期投资)。分量(NT$bn,截至 2026-03-31):有息债务 901.02(TSMC 1Q26 投资人报告『Long-term Interest-bearing Debts』);现金及等价物 3035.64(1Q26 现金流量表期末余额,期初 2767.86 +约 268);现金及有价证券合计 3383.60(1Q26 投资人报告『Cash & Marketable Securities』,不含长期投资 NT$166.57B),据此短期投资 = 3383.60 − 3035.64 = 347.96(差额推导,即流动金融资产)。计算式:(901.02 − 3035.64 − 347.96)/32.0020 = -2482.58/32.0020 = -77.58 USD bn(净现金)。租赁负债排除见 lease_excluded_note。二手印证:数值经 stocktitan/investing.com/mlq.ai 等多站转载 TSMC 1Q26 摘要交叉一致。",
+            "url": "https://investor.tsmc.com/english/quarterly-results/2026/q1",
             "data_status": "estimate"
           }
         ]
@@ -4424,7 +4424,7 @@
         "market_cap": 679,
         "price": 1732,
         "price_currency": "USD",
-        "net_debt": -11.33,
+        "net_debt": -6.52,
         "sources": [
           {
             "label": "ASML (NASDAQ ADR) down ~5.08% on 7/7 (Samsung Q2 miss -> chip-equip selloff); price approximated from daily-move recap x library 7/6 close 1825.07 (~$1732, sources cite -3.6% EUR / -4.6% intraday / -5.08% full day). Market cap price-scaled from library 715.48bn/1825.07. Exact USD close not cleanly published as of 7/8",
@@ -4432,8 +4432,8 @@
             "data_status": "estimate"
           },
           {
-            "label": "net_debt（估算）：FY2025（截至 2025-12-31）有息债务 ≈ €2.71B，减 现金及等价物+短期投资 ≈ €12.741B → 净现金 €−10.031B × EUR/USD 1.129983（与营收年均汇率一致）= −$11.33B（口径：排经营租赁；现金含短期投资；待核验年报）",
-            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828025045043/pressreleasequarterlyresul.htm",
+            "label": "net_debt=-6.52 bn｜口径:net_debt = 有息债务 −(现金及等价物 + 短期投资)。分量(€bn,截至 2026-03-29):有息债务(长期债务/债券)2.7056;现金及等价物 7.9704;短期投资 0.4059;现金+短投合计 8.3763。EUR 净现金 = 2.7056 − 8.3763 = -5.6707。按期末汇率换算:-5.6707 × 1.149425 = -6.52 USD bn(净现金)。租赁排除见 lease_excluded_note。二手印证:cash €7,970.4M / ST inv €405.9M / LT debt €2,705.6M 经 SEC 6-K 摘要、asml.com/nasdaq 新闻稿、YCharts『Total Long-Term Debt』等多来源一致。",
+            "url": "https://www.asml.com/en/news/press-releases/2026/q1-2026-financial-results",
             "data_status": "estimate"
           }
         ]
@@ -7922,11 +7922,16 @@
         "market_cap": 408,
         "price": 141.6,
         "price_currency": "USD",
-        "net_debt": null,
+        "net_debt": 97.647,
         "sources": [
           {
             "label": "ORCL close $141.60 (-1.50% vs 07-06 $143.76, change confirmed); market cap derived from library implied share count (~2.88B); capital.com listed $411.4B (~2.90B shares)",
             "url": "https://stockanalysis.com/stocks/orcl/history/",
+            "data_status": "estimate"
+          },
+          {
+            "label": "net_debt=97.647 bn｜Oracle FY2026 年报（10-K，财年截至 2026-05-31，2026-06 下旬提交）。有息债务=Notes payable and other borrowings：非流动 122.342 bn + 流动 7.199 bn = 129.541 bn（不含经营租赁）。现金及等价物 31.289 bn（$31,289M）+ 短期投资 marketable securities 0.605 bn（$605M）。净债务 = 129.541 − 31.289 − 0.605 = 97.647 bn（正=净负债）。数值为二手来源交叉印证：总债务 129.541 bn 与长期债务 122.342 bn 由 macrotrends/finbox 印证，流动部分 7.199 bn 出自 10-K 资产负债表，三者相加自洽（122.342+7.199=129.541）；现金 31,289M 与短期投资 605M 由 10-K 资产负债表多源印证。SEC 原文因本环境 egress 拦截未直读，故标 estimate。",
+            "url": "https://www.macrotrends.net/stocks/charts/ORCL/oracle/long-term-debt",
             "data_status": "estimate"
           }
         ]
