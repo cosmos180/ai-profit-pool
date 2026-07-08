@@ -454,6 +454,8 @@ Companies:
 
 **Post-final data rule:** Until annual/valuation/AI-pool/forecast consumers migrate off `years[]`, annual actual ingestion must double-write `periods[]` annual and legacy `years[]` by `period_end_iso`; quarterly ingestion writes only `periods[]`.
 
+**Broad-migration progress (consumer ledger):** B1 valuation chain migrated (2026-07-08, ADR `broad-migration-b1-valuation.md`): `pe/ps/evSales/fcfYield` now read `latestActualAnnual`/`latestCashActualAnnual` (periods-only, no runtime `years[]` fallback); the double-write rule is now enforced as a hard ERROR in `validate.py`, so the discipline above is machine-checked rather than manual. Still on `years[]`: annual view / Sankey (`latestActual` headline branch of `homeMetric`), AI-pool (`aiShare` `is_ai` year anchor), forecast (`forwardPE`).
+
 ---
 
 ## Validation Commands for Every PR

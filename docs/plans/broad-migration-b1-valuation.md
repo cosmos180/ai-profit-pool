@@ -1,6 +1,7 @@
 # 广口径迁移 · 第一批「估值链」ADR
 
-> 状态：**设计稿（待拍板）**。作者：架构师。日期：2026-07-08。
+> 状态：**已落地**（2026-07-08 工程实现；四门禁全绿·快照零漂移）。作者：架构师。日期：2026-07-08。
+> 落地记录：`data-module.js` 新增 `latestActualAnnual`/`latestCashActualAnnual`，`pe/ps/evSales/fcfYield` 内部换源（签名/null 语义/caveat 三态不变）；`validate.py` 新增「双写一致性」硬 ERROR 兜底；`test-logic.js` 补 periods 夹具 + periods-wins/诚实退化用例。回退策略采「纯 periods 无运行时回退」（决策点 1 前者），validate 规则为硬 ERROR（决策点 2），保留 `latestCashActualAnnual` 现金年阶梯（决策点 3）。
 > 上游：`docs/plans/period-base-refactor.md`（Phase 6 final 已完成）、`docs/ROADMAP.md`（E4 + 过渡期双写规则）。
 > 范围：只把**估值倍数的分母**从 legacy `years[]` 切到 `periods[]` 的最新 actual annual。**不改任何生产代码**——本文只给契约与边界，落地交工程师。
 > 迁移顺序（用户已拍板）：**估值链 →** 年度视图/桑基 → AI 池 → 前瞻。本批只做第一段。

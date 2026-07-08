@@ -101,6 +101,7 @@ const Selectors = {
   // throwing — so aiShare/latestActual stay safe when called from companyMetricView.
   actualYears(c)   { return (c && Array.isArray(c.years) ? c.years : []).filter(y => y.status === "actual"); },
   forecastYear(c)  { return c.years.find(y => y.status === "forecast"); },
+  // 服务年度视图/首页 headline 与 AI 池链 (aiShare 的年份锚); 估值链已迁 latestActualAnnual, 不再消费。
   latestActual(c)  { const a = this.actualYears(c); return a.length ? a[a.length - 1] : null; },
   yearIndex(c, fy) { return c.years.findIndex(y => y.fy === fy); },
   yearByFy(c, fy)  { return c.years.find(y => y.fy === fy); },
@@ -248,11 +249,11 @@ const Selectors = {
   profitSorted(y)     { return this.revenueSegs(y).filter(s => s.op_income != null)
                                     .sort((a, b) => b.op_income - a.op_income); },
 
-  /* ---- valuation (single-slice market snapshot vs latest actual year) ----
+  /* ---- valuation (single-slice market snapshot vs latest actual annual period) ----
      quote.market_cap is the ONLY cross-currency-safe value (already USD bn, same 口径
      as revenue/net_income) — use it directly, never multiply by FX.
      valuation_caveat三态: 'na' → 整项留空(null); 'distorted' → 照常返回数值(供视图警示);
-     'ok'/缺省 → 正常。所有倍数 null-safe，分母统一用 latestActual。 */
+     'ok'/缺省 → 正常。所有倍数 null-safe，分母统一用 latestActualAnnual(periods 侧最新实际年)。 */
   marketCap(c)      { return c.quote?.market_cap ?? null; },
   netDebt(c)        { return c.quote?.net_debt ?? null; },
   valuationCaveat(c, key) { return c.valuation_caveat?.[key] ?? "ok"; },
@@ -264,10 +265,10 @@ const Selectors = {
     return (mc != null && nd != null) ? mc + nd : null;
   },
   /* EV/Sales：caveat 'na' → null；否则 ev 与最新实际年 revenue 都有 → ev/revenue。
-     'distorted'（如软银投资控股）仍出值，供视图警示。分母统一用 latestActual。 */
+     'distorted'（如软银投资控股）仍出值，供视图警示。分母统一用 latestActualAnnual。 */
   evSales(c) {
     if (this.valuationCaveat(c, "ev_sales") === "na") return null;
-    const e = this.ev(c), y = this.latestActual(c);
+    const e = this.ev(c), y = this.latestActualAnnual(c);
     return (e != null && y && y.revenue) ? e / y.revenue : null;
   },
   /* 净利润同比（PEG 近似的 G）：公司级最新实际年 vs 上一实际年 net_income。
@@ -284,19 +285,19 @@ const Selectors = {
 
   pe(c) {
     if (this.valuationCaveat(c, "pe") === "na") return null;
-    const mc = this.marketCap(c), y = this.latestActual(c);
+    const mc = this.marketCap(c), y = this.latestActualAnnual(c);
     return (mc != null && y && y.net_income) ? mc / y.net_income : null;
   },
   ps(c) {
     if (this.valuationCaveat(c, "ps") === "na") return null;
-    const mc = this.marketCap(c), y = this.latestActual(c);
+    const mc = this.marketCap(c), y = this.latestActualAnnual(c);
     return (mc != null && y && y.revenue) ? mc / y.revenue : null;
   },
   fcfYield(c) {
     if (this.valuationCaveat(c, "fcf_yield") === "na") return null;
-    // FCF from the latest year that actually carries cash inputs (capex/cfo lag the headline year),
-    // mirroring how the company-page cash block and fcfMargin/capexInt home metrics pick their year.
-    const mc = this.marketCap(c), f = this.fcf(this.latestCashYear(c));
+    // FCF from the latest annual actual period that carries cash inputs (capex/cfo lag the headline
+    // year), mirroring latestCashYear's intent on the periods side (see latestCashActualAnnual).
+    const mc = this.marketCap(c), f = this.fcf(this.latestCashActualAnnual(c));
     return (mc != null && f != null && mc) ? f / mc : null;
   },
 
@@ -409,7 +410,8 @@ const Selectors = {
   },
 
   /* ---- directory metric accessors (cross-company) ---- */
-  /* latest actual year that carries cash inputs (capex/cfo may lag the headline year) */
+  /* latest actual year that carries cash inputs (capex/cfo may lag the headline year).
+     服务 homeMetric 的 fcfMargin/capexInt (年度口径); 估值链 fcfYield 已迁 latestCashActualAnnual, 不再消费。 */
   latestCashYear(c) { return this.actualYears(c).reverse().find(y => y.capex != null || y.cfo != null) || null; },
 
   homeMetric(c, key) {
@@ -636,6 +638,25 @@ const Selectors = {
   latestQuarter(c) {
     const qs = this.actualPeriods(c).filter(p => p.kind === "quarter" && this._hasFinancialFact(p));
     return qs.length ? qs[qs.length - 1] : null;
+  },
+
+  /* 估值链分母源 (B1-migrated: periods-only, 禁止改回 latestActual)。
+     latestActualAnnual(c) → periods 侧「最新实际年」= 最新(periods 已按 period_end 升序 → 取末位)
+     满足 kind==="annual" && status==="actual" 的 period 对象; 无此类 period → null。
+     不回退 years[], 不借季度合成 —— 无 annual period 时 pe/ps/evSales 诚实留空。算不存。 */
+  latestActualAnnual(c) {
+    const anns = this.periods(c).filter(p => p.kind === "annual" && p.status === "actual");
+    return anns.length ? anns[anns.length - 1] : null;
+  },
+  /* fcfYield 专用现金年 (B1-migrated: periods-only, 禁止改回 latestCashYear)。
+     latestCashActualAnnual(c) → 从 annual actual periods 里自新到旧, 第一个 cfo!=null || capex!=null
+     者 (现金字段常滞后 headline 年, 镜像 latestCashYear 语义); 皆无 → null。算不存。 */
+  latestCashActualAnnual(c) {
+    const anns = this.periods(c).filter(p => p.kind === "annual" && p.status === "actual");
+    for (let i = anns.length - 1; i >= 0; i--) {
+      if (anns[i].cfo != null || anns[i].capex != null) return anns[i];
+    }
+    return null;
   },
 
   /* Coverage summary for the period set (completeness metadata; view echoed).

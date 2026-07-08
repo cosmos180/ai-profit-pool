@@ -206,15 +206,33 @@ assert.equal(Selectors.segOpMargin(null), null);                                
 assert.equal(Selectors.segOpMargin({ op_margin: 0 }), 0);                                    // op_margin=0 是有效值，不被误当缺失
 
 // =====================================================================
-// valuation: PE / PS / FCF yield (derived from quote vs latest actual; never stored)
+// valuation: PE / PS / FCF yield (derived from quote vs latest actual annual period; never stored)
+// B1 迁移: 估值四倍数分母已从 years[] 最新 actual 年切到 periods[] 最新 actual annual period。
+// 合成夹具用 withAnnualPeriods 把 years[] 的 actual 年等价镜像为 annual actual periods（双写口径），
+// 断言期望值保持不变；periods 与 years 不一致 / 缺 annual 的诚实退化用例单独构造 periods。
 // =====================================================================
-const vCompany = {
+function _annualPeriod(fy, i, y) {
+  return {
+    period_id: fy, kind: "annual", status: "actual", fiscal_year: fy,
+    period_end: y.period_end || `20${20 + i}-12-31`,
+    currency: "USD", fx_to_usd: 1,
+    revenue: y.revenue ?? null, net_income: y.net_income ?? null,
+    op_income: y.op_income ?? null, cfo: y.cfo ?? null, capex: y.capex ?? null,
+    segments: [], sources: [{ label: "syn", url: "https://example.com/x", data_status: "actual" }],
+  };
+}
+function withAnnualPeriods(c) {
+  const ays = (c.years || []).filter(y => y.status === "actual");
+  return { ...c, periods: ays.map((y, i) => _annualPeriod(y.fy, i, y)) };
+}
+
+const vCompany = withAnnualPeriods({
   id: "v-co", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
   years: [
     { fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }, // fcf = 20
   ],
-};
+});
 assert.equal(Selectors.marketCap(vCompany), 200);
 assert.equal(Selectors.pe(vCompany), 10);          // 200 / 20
 assert.equal(Selectors.ps(vCompany), 2);           // 200 / 100
@@ -225,7 +243,7 @@ assert.equal(Selectors.homeMetric(vCompany, "ps"), 2);
 assert.equal(Selectors.homeMetric(vCompany, "fcfYield"), 0.1);
 
 // null 降级：缺 quote → 所有倍数 null
-const noQuote = { id: "nq", status: "populated", years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }] };
+const noQuote = withAnnualPeriods({ id: "nq", status: "populated", years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }] });
 assert.equal(Selectors.marketCap(noQuote), null);
 assert.equal(Selectors.pe(noQuote), null);
 assert.equal(Selectors.ps(noQuote), null);
@@ -233,23 +251,23 @@ assert.equal(Selectors.fcfYield(noQuote), null);
 assert.equal(Selectors.homeMetric(noQuote, "pe"), null);
 
 // null 降级：有 quote 但缺分母 → 该倍数 null（FCF yield 缺 cfo/capex）
-const noDenom = { id: "nd", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
-  years: [{ fy: "FY1", status: "actual", revenue: 0, net_income: 0 }] };
+const noDenom = withAnnualPeriods({ id: "nd", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 0, net_income: 0 }] });
 assert.equal(Selectors.pe(noDenom), null);         // net_income 0 → 零分母
 assert.equal(Selectors.ps(noDenom), null);         // revenue 0 → 零分母
 assert.equal(Selectors.fcfYield(noDenom), null);   // 缺 cfo/capex → fcf null
 
-// null 降级：无实际年（仅预测）→ null
-const fcOnly = { id: "fc", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
-  years: [{ fy: "FY2027E", status: "forecast", revenue: 100, net_income: 20 }] };
+// null 降级：无实际年（仅预测）→ null（withAnnualPeriods 只镜像 actual 年 → periods 为空 → 无 annual actual）
+const fcOnly = withAnnualPeriods({ id: "fc", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+  years: [{ fy: "FY2027E", status: "forecast", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.pe(fcOnly), null);
 assert.equal(Selectors.ps(fcOnly), null);
 assert.equal(Selectors.fcfYield(fcOnly), null);
 
 // caveat="na" → 整项留空(null)，即便分母齐备
-const naCaveat = { id: "na", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
+const naCaveat = withAnnualPeriods({ id: "na", status: "populated", quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
   valuation_caveat: { pe: "na", fcf_yield: "na", ps: "ok" },
-  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }] });
 assert.equal(Selectors.pe(naCaveat), null);        // na → null
 assert.equal(Selectors.fcfYield(naCaveat), null);  // na → null
 assert.equal(Selectors.ps(naCaveat), 2);           // ps ok → 正常返回
@@ -259,9 +277,9 @@ assert.equal(Selectors.homeMetric(naCaveat, "pe"), null);
 assert.equal(Selectors.homeMetric(naCaveat, "fcfYield"), null);
 
 // caveat="distorted" → 仍返回数值（供视图警示），并能查到三态
-const distorted = { id: "ds", status: "populated", quote: { as_of: "2026-06-26", market_cap: 300, sources: [] },
+const distorted = withAnnualPeriods({ id: "ds", status: "populated", quote: { as_of: "2026-06-26", market_cap: 300, sources: [] },
   valuation_caveat: { ps: "distorted" },
-  years: [{ fy: "FY1", status: "actual", revenue: 50, net_income: 30 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 50, net_income: 30 }] });
 assert.equal(Selectors.ps(distorted), 6);          // distorted 仍算 300/50
 assert.equal(Selectors.valuationCaveat(distorted, "ps"), "distorted");
 
@@ -315,13 +333,13 @@ assert.equal(Selectors.forwardPE(fwdXCur), null);
 const fwdNaCaveat = { ...fwd, valuation_caveat: { pe: "na" } };
 assert.equal(Selectors.forwardPE(fwdNaCaveat), null);
 
-// FCF yield 现金口径：latestActual 缺现金时回退到 latestCashYear（早一年）
-const lagCash = { id: "lag", status: "populated", quote: { as_of: "2026-06-26", market_cap: 100, sources: [] },
+// FCF yield 现金口径：最新 annual 缺现金时回退到 latestCashActualAnnual（早一年带现金的 annual）
+const lagCash = withAnnualPeriods({ id: "lag", status: "populated", quote: { as_of: "2026-06-26", market_cap: 100, sources: [] },
   years: [
     { fy: "FY1", status: "actual", revenue: 50, net_income: 10, capex: 4, cfo: 14 },  // fcf = 10
     { fy: "FY2", status: "actual", revenue: 60, net_income: 12 },                      // 最新年无现金输入
-  ] };
-assert.equal(Selectors.fcf(Selectors.latestActual(lagCash)), null); // 最新年算不出 FCF
+  ] });
+assert.equal(Selectors.fcf(Selectors.latestActualAnnual(lagCash)), null); // 最新 annual 算不出 FCF
 assert.equal(Selectors.fcfYield(lagCash), 0.1);                     // 回退 FY1：fcf 10 / mcap 100
 assert.equal(Selectors.homeMetric(lagCash, "fcfYield"), 0.1);
 
@@ -331,68 +349,68 @@ assert.equal(Selectors.homeMetric(lagCash, "fcfYield"), 0.1);
 function syn0(id, years) { return { id, name: id.toUpperCase(), status: "populated", years }; }
 
 // 合成：净负债正 → EV>市值；净现金（负 net_debt）→ EV<市值
-const evDebt = { id: "evd", status: "populated",
+const evDebt = withAnnualPeriods({ id: "evd", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
-  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.netDebt(evDebt), 50);
 assert.equal(Selectors.ev(evDebt), 250);            // 200 + 50（净负债 → EV>市值）
 assert.equal(Selectors.evSales(evDebt), 2.5);       // 250 / 100
 
-const evCash = { id: "evc", status: "populated",
+const evCash = withAnnualPeriods({ id: "evc", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, net_debt: -60, sources: [] },
-  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.ev(evCash), 140);            // 200 + (−60)（净现金 → EV<市值）
 assert.equal(Selectors.evSales(evCash), 1.4);       // 140 / 100
 
 // 缺 net_debt（区分"缺失"与"0"）→ ev/evSales null（不可假设 EV=市值）
-const evNoDebt = { id: "evn", status: "populated",
+const evNoDebt = withAnnualPeriods({ id: "evn", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, sources: [] },
-  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.netDebt(evNoDebt), null);
 assert.equal(Selectors.ev(evNoDebt), null);
 assert.equal(Selectors.evSales(evNoDebt), null);
 
 // net_debt 显式为 0（零净负债，已知）→ EV=市值（与"缺失"不同）
-const evZero = { id: "evz", status: "populated",
+const evZero = withAnnualPeriods({ id: "evz", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 0, sources: [] },
-  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.ev(evZero), 200);            // 已知零净负债 → EV=市值
 assert.equal(Selectors.evSales(evZero), 2);
 
 // 缺 market_cap → ev null（即便有 net_debt）
-const evNoMc = { id: "evm", status: "populated",
+const evNoMc = withAnnualPeriods({ id: "evm", status: "populated",
   quote: { as_of: "2026-06-26", net_debt: 50, sources: [] },
-  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.ev(evNoMc), null);
 assert.equal(Selectors.evSales(evNoMc), null);
 
 // 零分母 revenue → evSales null
-const evNoRev = { id: "evr", status: "populated",
+const evNoRev = withAnnualPeriods({ id: "evr", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
-  years: [{ fy: "FY1", status: "actual", revenue: 0, net_income: 0 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 0, net_income: 0 }] });
 assert.equal(Selectors.ev(evNoRev), 250);
 assert.equal(Selectors.evSales(evNoRev), null);     // revenue 0 → 零分母
 
-// 仅预测年（无实际年）→ evSales null
-const evFcOnly = { id: "evf", status: "populated",
+// 仅预测年（无实际年）→ evSales null（withAnnualPeriods → periods 为空 → 无 annual actual）
+const evFcOnly = withAnnualPeriods({ id: "evf", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
-  years: [{ fy: "FY2027E", status: "forecast", revenue: 100, net_income: 20 }] };
+  years: [{ fy: "FY2027E", status: "forecast", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.evSales(evFcOnly), null);
 
 // caveat ev_sales="na" → evSales null（即便分母齐备），但 ev 原子值仍可算
-const evNa = { id: "evna", status: "populated",
+const evNa = withAnnualPeriods({ id: "evna", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
   valuation_caveat: { ev_sales: "na" },
-  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20 }] });
 assert.equal(Selectors.evSales(evNa), null);
 assert.equal(Selectors.ev(evNa), 250);
 assert.equal(Selectors.valuationCaveat(evNa, "ev_sales"), "na");
 
 // caveat ev_sales="distorted" → 仍出值（供视图警示）
-const evDist = { id: "evdi", status: "populated",
+const evDist = withAnnualPeriods({ id: "evdi", status: "populated",
   quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 100, sources: [] },
   valuation_caveat: { ev_sales: "distorted" },
-  years: [{ fy: "FY1", status: "actual", revenue: 50, net_income: 10 }] };
+  years: [{ fy: "FY1", status: "actual", revenue: 50, net_income: 10 }] });
 assert.equal(Selectors.evSales(evDist), 6);         // (200+100)/50，distorted 仍算
 assert.equal(Selectors.valuationCaveat(evDist, "ev_sales"), "distorted");
 
@@ -400,6 +418,83 @@ assert.equal(Selectors.valuationCaveat(evDist, "ev_sales"), "distorted");
 assert.equal(Selectors.homeMetric(evDebt, "evSales"), 2.5);
 assert.equal(Selectors.homeMetric(evNoDebt, "evSales"), null);
 assert.equal(Selectors.homeMetric(evNa, "evSales"), null);
+
+// =====================================================================
+// B1 迁移: 估值链 periods-only 诚实退化 + periods-wins（分母源 = latestActualAnnual，不借 years）
+// =====================================================================
+
+// ---- 无 annual period（只有季度 / 空）→ pe/ps/evSales 一律 null（绝不回退 years 补齐）----
+// years[] 明明带齐分母（若误读 years 会给出 pe=10），但 periods 无 annual actual → 诚实留空。
+const noAnnual = {
+  id: "no-annual", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }],
+  periods: [
+    { period_id: "q", kind: "quarter", status: "actual", fiscal_year: "FY1", fiscal_quarter: "Q1",
+      calendar_year: 2025, calendar_quarter: "Q1", period_end: "2025-03-31",
+      currency: "USD", fx_to_usd: 1, revenue: 25, net_income: 5, cfo: 12, capex: 7,
+      segments: [], sources: [{ label: "syn", url: "https://example.com/x", data_status: "actual" }] },
+  ],
+};
+assert.equal(Selectors.latestActualAnnual(noAnnual), null);   // 无 annual actual
+assert.equal(Selectors.pe(noAnnual), null);                   // 不借 years 的 FY1
+assert.equal(Selectors.ps(noAnnual), null);
+assert.equal(Selectors.evSales(noAnnual), null);
+assert.equal(Selectors.fcfYield(noAnnual), null);             // 无 annual → 无现金年 → null
+
+// ---- periods 与 years 不一致 → 估值链读的是 periods 值（迁移正确性核心断言）----
+// years 的最新 actual 年 rev=100/ni=20（若读 years：pe=10、ps=2）；periods annual rev=250/ni=40
+// （读 periods：pe=5、ps=0.8）。断言取 periods 值，证明分母源确实切到 latestActualAnnual。
+const skew = {
+  id: "skew", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 50, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 }],
+  periods: [
+    { period_id: "FY1", kind: "annual", status: "actual", fiscal_year: "FY1",
+      period_end: "2025-12-31", currency: "USD", fx_to_usd: 1,
+      revenue: 250, net_income: 40, cfo: 60, capex: 20,
+      segments: [], sources: [{ label: "syn", url: "https://example.com/x", data_status: "actual" }] },
+  ],
+};
+assert.equal(Selectors.pe(skew), 5);            // 200/40（periods 40），非 200/20（years 20）
+assert.equal(Selectors.ps(skew), 0.8);          // 200/250（periods 250），非 200/100（years 100）
+assert.equal(Selectors.evSales(skew), 1);       // (200+50)/250 = 1，用 periods revenue
+assert.equal(Selectors.fcfYield(skew), 0.2);    // fcf(60−20=40)/mcap 200，用 periods 现金字段
+
+// ---- fcfYield 现金年阶梯：最新 annual 缺 cfo/capex，回退更早带现金的 annual（periods-only）----
+const cashLadder = {
+  id: "cash-ladder", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 100, sources: [] },
+  years: [{ fy: "FY2", status: "actual", revenue: 60, net_income: 12 }],
+  periods: [
+    { period_id: "FY1", kind: "annual", status: "actual", fiscal_year: "FY1",
+      period_end: "2024-12-31", currency: "USD", fx_to_usd: 1,
+      revenue: 50, net_income: 10, cfo: 14, capex: 4,   // fcf = 10（更早年带现金）
+      segments: [], sources: [{ label: "syn", url: "https://example.com/x", data_status: "actual" }] },
+    { period_id: "FY2", kind: "annual", status: "actual", fiscal_year: "FY2",
+      period_end: "2025-12-31", currency: "USD", fx_to_usd: 1,
+      revenue: 60, net_income: 12, cfo: null, capex: null,   // 最新 annual 只录 headline
+      segments: [], sources: [{ label: "syn", url: "https://example.com/x", data_status: "actual" }] },
+  ],
+};
+assert.equal(Selectors.latestActualAnnual(cashLadder).fiscal_year, "FY2");      // pe/ps 用最新 annual
+assert.equal(Selectors.latestCashActualAnnual(cashLadder).fiscal_year, "FY1");  // fcfYield 回退更早现金年
+assert.equal(Selectors.fcfYield(cashLadder), 0.1);   // fcf 10 / mcap 100
+
+// ---- fcfYield 现金年阶梯：所有 annual 均缺现金 → null（不伪造）----
+const noCashAnywhere = {
+  id: "no-cash", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 100, sources: [] },
+  years: [{ fy: "FY1", status: "actual", revenue: 60, net_income: 12 }],
+  periods: [
+    { period_id: "FY1", kind: "annual", status: "actual", fiscal_year: "FY1",
+      period_end: "2025-12-31", currency: "USD", fx_to_usd: 1,
+      revenue: 60, net_income: 12, cfo: null, capex: null,
+      segments: [], sources: [{ label: "syn", url: "https://example.com/x", data_status: "actual" }] },
+  ],
+};
+assert.equal(Selectors.latestCashActualAnnual(noCashAnywhere), null);
+assert.equal(Selectors.fcfYield(noCashAnywhere), null);
 
 // ---- niYoY（PEG 近似的 G）：仅上一年 net_income>0 才算 ----
 const niPos = syn0("ni1", [
@@ -867,8 +962,9 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
 // =====================================================================
 {
   const y1 = (rev, ni) => ({ fy: "FY1", status: "actual", revenue: rev, net_income: ni });
-  // 便捷构造:同 chain_stage、有市值 → pe/ps 可算;可选 caveat
-  const vc = (id, stage, mcap, rev, ni, caveat) => ({
+  // 便捷构造:同 chain_stage、有市值 → pe/ps 可算;可选 caveat。
+  // B1: pe/ps 分母已迁 latestActualAnnual → 夹具用 withAnnualPeriods 镜像 years actual 年为 annual period。
+  const vc = (id, stage, mcap, rev, ni, caveat) => withAnnualPeriods({
     id, name: id.toUpperCase(), status: "populated", chain_stage: stage,
     quote: { as_of: "2026-06-26", market_cap: mcap, sources: [] },
     valuation_caveat: caveat || undefined,
@@ -910,7 +1006,8 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   // ---- 方向语义:fcfYield 越高越便宜 → lowerCheaper=false ----
   // fcfYield = fcf/mcap;fcf = cfo−capex。构造 5 家 yield: .01 .02 .03 .04 .05 → median .03
   const fy = (rev, ni, capex, cfo) => ({ fy: "FY1", status: "actual", revenue: rev, net_income: ni, capex, cfo });
-  const fc = (id, mcap, cfo) => ({ id, name: id.toUpperCase(), status: "populated", chain_stage: "memory",
+  // B1: fcfYield 现金源已迁 latestCashActualAnnual → 夹具镜像 years actual 年（含 cfo/capex）为 annual period。
+  const fc = (id, mcap, cfo) => withAnnualPeriods({ id, name: id.toUpperCase(), status: "populated", chain_stage: "memory",
     quote: { as_of: "2026-06-26", market_cap: mcap, sources: [] }, years: [fy(100, 10, 0, cfo)] });
   Store._data = { meta: CANON_META, companies: [
     fc("f1", 100, 1), fc("f2", 100, 2), fc("f3", 100, 3), fc("f4", 100, 4), fc("f5", 100, 5),
