@@ -9,7 +9,7 @@ It enforces the invariants this whole project exists to protect:
   - schema conformance (if `jsonschema` is installed; else a structural fallback)
   - reconciliation: platform-segment revenue must sum to company revenue
   - provenance: every actual year and every source must carry a source URL + data_status
-  - sanity: net_income <= revenue, margins in [0,1], etc.
+  - sanity: net_income <= revenue for operating companies, margins in [0,1], etc.
 Derived metrics are never stored, so they are never validated here — only raw facts.
 Exit code is non-zero if any ERROR is found (so it can gate a pipeline).
 """
@@ -19,6 +19,7 @@ from urllib.parse import urlparse
 
 TOL = 0.05  # USD bn tolerance for reconciliation
 TODAY = date.today()  # 取真实当日，用于快照新鲜度判断（as_of 晚于今天 / 早于 90 天 → WARN）
+INVESTMENT_INCOME_CAN_EXCEED_REVENUE = {"softbank"}
 
 def load(path):
     with open(path, encoding="utf-8") as f:
@@ -35,6 +36,11 @@ def schema_check(data, schema_path):
         return ["OK    JSON Schema 校验通过"]
     except Exception as e:
         return ["ERROR JSON Schema 校验失败: " + str(e).splitlines()[0]]
+
+def allows_net_income_above_revenue(cid):
+    # SoftBank 的利润高度受投资收益/估值重估驱动；这些收益不进入 Net sales，
+    # 所以单季归母净利可能超过销售收入。其他公司继续保留强校验。
+    return cid in INVESTMENT_INCOME_CAN_EXCEED_REVENUE
 
 def check(data):
     errors, warns, oks = [], [], []
@@ -210,8 +216,10 @@ def check(data):
             rev, ni = p.get("revenue"), p.get("net_income")
             if rev is not None and rev < 0:
                 errors.append(f"ERROR {ptag}: revenue({rev}) < 0")
-            if rev is not None and ni is not None and ni > rev + TOL:
+            if rev is not None and ni is not None and ni > rev + TOL and not allows_net_income_above_revenue(cid):
                 errors.append(f"ERROR {ptag}: net_income({ni}) > revenue({rev})")
+            elif rev is not None and ni is not None and ni > rev + TOL:
+                oks.append(f"INFO  {ptag}: net_income({ni}) > revenue({rev})，投资收益口径已按公司例外放行")
             capex = p.get("capex")
             if capex is not None and capex < 0:
                 errors.append(f"ERROR {ptag}: capex({capex}) < 0（请存非负量级，方向由派生层处理）")
@@ -266,8 +274,10 @@ def check(data):
                     if not s.get("url") or not s.get("data_status"):
                         errors.append(f"ERROR {tag}: source 缺少 url 或 data_status")
                 # sanity
-                if rev is not None and ni is not None and ni > rev + TOL:
+                if rev is not None and ni is not None and ni > rev + TOL and not allows_net_income_above_revenue(cid):
                     errors.append(f"ERROR {tag}: net_income({ni}) > revenue({rev})")
+                elif rev is not None and ni is not None and ni > rev + TOL:
+                    oks.append(f"INFO  {tag}: net_income({ni}) > revenue({rev})，投资收益口径已按公司例外放行")
                 # cash & capital intensity (raw facts; FCF is derived, never stored)
                 capex, cfo = y.get("capex"), y.get("cfo")
                 if capex is not None and capex < 0:

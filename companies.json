@@ -1036,6 +1036,117 @@
           ]
         },
         {
+          "period_id": "samsung-2025q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q1",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 55.663,
+          "gross_profit": 19.7855,
+          "op_income": 4.702,
+          "net_income": 5.6467,
+          "cfo": 11.6614,
+          "capex": 8.5316,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Samsung FY2025 Q1 reviewed consolidated financial statements, three-month period ended 2025-03-31",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter01_all.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Samsung 1Q 2025 earnings presentation, quarterly cash-flow summary",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_1Q_conference_eng.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "FX basis: KRW/USD 1421.779, matching existing Samsung FY2025 annual route-B basis",
+              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_id": "samsung-2025q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-04-01",
+          "period_end": "2025-06-30",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q2",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 52.4458,
+          "gross_profit": 17.933,
+          "op_income": 3.2889,
+          "net_income": 3.4703,
+          "cfo": 12.1749,
+          "capex": 9.1716,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Samsung FY2025 Q2 reviewed consolidated financial statements, three-month period ended 2025-06-30",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter02_all.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Samsung 2Q 2025 earnings presentation, quarterly cash-flow summary",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_2Q_conference_eng.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "FX basis: KRW/USD 1421.779, matching existing Samsung FY2025 annual route-B basis",
+              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_id": "samsung-2025q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-07-01",
+          "period_end": "2025-09-30",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q3",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q3",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 60.531,
+          "gross_profit": 23.5565,
+          "op_income": 8.5569,
+          "net_income": 8.4447,
+          "cfo": 15.9096,
+          "capex": 7.6032,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Samsung FY2025 Q3 reviewed consolidated financial statements, three-month period ended 2025-09-30",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter03_all.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Samsung 3Q 2025 earnings presentation, quarterly cash-flow summary",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_3Q_conference_eng.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "FX basis: KRW/USD 1421.779, matching existing Samsung FY2025 annual route-B basis",
+              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+              "data_status": "estimate"
+            }
+          ]
+        },
+        {
           "period_id": "samsung-fy2025-annual",
           "kind": "annual",
           "status": "actual",
@@ -1102,38 +1213,6 @@
               "label": "capex/CFO（FY2025 合并现金流：CFO KRW 85.32T ÷ 1421.779 = $60.01B；capex KRW 52.7T ÷ 1421.779 = $37.07B，KRW 换算待核验）",
               "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
               "data_status": "derived"
-            }
-          ]
-        },
-        {
-          "period_id": "samsung-2025q1",
-          "kind": "quarter",
-          "status": "actual",
-          "period_start": "2025-01-01",
-          "period_end": "2025-03-31",
-          "calendar_year": 2025,
-          "calendar_quarter": "Q1",
-          "fiscal_year": "FY2025",
-          "fiscal_quarter": "Q1",
-          "currency": "KRW",
-          "fx_to_usd": 1421.779,
-          "revenue": null,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 5.78,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
-          "sources": [
-            {
-              "label": "Samsung Q1 2025 业绩（净利 KRW 8.22T）",
-              "url": "https://news.samsung.com/global/samsung-electronics-announces-first-quarter-2025-results",
-              "data_status": "official"
-            },
-            {
-              "label": "派生换算：KRW 8.22T ÷ USD/KRW 1421.779（2025 年均，与年度口径一致）= $5.78B（季度本币×年均汇率，换算待核验）",
-              "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
-              "data_status": "estimate"
             }
           ]
         },
@@ -2103,6 +2182,87 @@
               "label": "JPY→USD 换算率 149.52（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2024 期末汇率，见 fy_note",
               "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
               "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "softbank-fy2025q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-04-01",
+          "period_end": "2025-06-30",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q1",
+          "currency": "JPY",
+          "fx_to_usd": 159.88,
+          "revenue": 11.3857,
+          "gross_profit": 5.9711,
+          "op_income": null,
+          "net_income": 2.6383,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "SoftBank Group Consolidated Financial Report for the Three-Month Period Ended June 30, 2025 (IFRS)",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2025_01_en.pdf",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "softbank-fy2025q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-07-01",
+          "period_end": "2025-09-30",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q3",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q2",
+          "currency": "JPY",
+          "fx_to_usd": 159.88,
+          "revenue": 11.9871,
+          "gross_profit": 6.2896,
+          "op_income": null,
+          "net_income": 15.6508,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "SoftBank Group Consolidated Financial Report for the Six-Month Period Ended September 30, 2025 (IFRS); standalone Q2 from three-month appendix",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q2fy2025_01_en.pdf",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "softbank-fy2025q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-10-01",
+          "period_end": "2025-12-31",
+          "calendar_year": 2025,
+          "calendar_quarter": "Q4",
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": "Q3",
+          "currency": "JPY",
+          "fx_to_usd": 159.88,
+          "revenue": 12.3993,
+          "gross_profit": 6.4103,
+          "op_income": null,
+          "net_income": 1.5548,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "SoftBank Group Consolidated Financial Report for the Nine-Month Period Ended December 31, 2025 (IFRS); standalone Q3 from three-month appendix",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q3fy2025_01_en.pdf",
+              "data_status": "official"
             }
           ]
         },

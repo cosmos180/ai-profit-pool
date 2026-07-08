@@ -1139,17 +1139,17 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 413.725739,
-    "n": 11,
+    "total": 416.342376,
+    "n": 12,
     "asOfSpreadDays": 63,
     "basisCount": {
-      "periods": 10,
-      "legacy_fallback": 1
+      "periods": 12,
+      "legacy_fallback": 0
     },
     "stages": {
       "design": {
         "value": 160.105816,
-        "share": 0.386985,
+        "share": 0.384553,
         "companies": [
           {
             "id": "nvda",
@@ -1171,7 +1171,7 @@
       },
       "foundry": {
         "value": 36.179328,
-        "share": 0.087448,
+        "share": 0.086898,
         "companies": [
           {
             "id": "tsmc",
@@ -1184,16 +1184,16 @@
         ]
       },
       "memory": {
-        "value": 92.095467,
-        "share": 0.2226,
+        "value": 92.14315,
+        "share": 0.221316,
         "companies": [
           {
             "id": "samsung",
             "name": "Samsung 三星电子",
-            "ttm": 20.947919,
+            "ttm": 20.995602,
             "asOf": "2026-03-31",
             "aiShare": 0.357711,
-            "basis": "legacy_fallback"
+            "basis": "periods"
           },
           {
             "id": "micron",
@@ -1215,7 +1215,7 @@
       },
       "equipment": {
         "value": 4.123005,
-        "share": 0.009966,
+        "share": 0.009903,
         "companies": [
           {
             "id": "asml",
@@ -1228,9 +1228,18 @@
         ]
       },
       "invest": {
-        "value": 0,
-        "share": 0,
-        "companies": []
+        "value": 2.568954,
+        "share": 0.00617,
+        "companies": [
+          {
+            "id": "softbank",
+            "name": "SoftBank Group 软银集团",
+            "ttm": 2.568954,
+            "asOf": "2026-03-31",
+            "aiShare": 0.082107,
+            "basis": "periods"
+          }
+        ]
       },
       "app": {
         "value": 0,
@@ -1239,7 +1248,7 @@
       },
       "cloud": {
         "value": 121.222124,
-        "share": 0.293001,
+        "share": 0.29116,
         "companies": [
           {
             "id": "google",
