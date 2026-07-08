@@ -745,23 +745,38 @@
           "fiscal_quarter": "Q1",
           "currency": "USD",
           "fx_to_usd": 1,
-          "revenue": null,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 58.3,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
+          "revenue": 81.615,
+          "gross_profit": 61.157,
+          "op_income": 53.536,
+          "net_income": 58.321,
+          "cfo": 50.344,
+          "capex": 1.757,
+          "segments": [
+            {
+              "name": "Compute & Networking 计算与网络",
+              "kind": "platform",
+              "revenue": 74.55,
+              "op_income": 53.335,
+              "is_ai": true
+            },
+            {
+              "name": "Graphics 图形",
+              "kind": "platform",
+              "revenue": 7.065,
+              "op_income": 2.941,
+              "is_ai": false
+            }
+          ],
           "sources": [
             {
-              "label": "NVIDIA Q1 FY2027 新闻稿（GAAP 净利 $58.3B，同比 +211%）",
-              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+              "label": "NVIDIA Form 10-Q filed 2026-05-28（FY2027 Q1 iXBRL: revenue $81,615M; gross profit $61,157M; operating income $53,536M; net income $58,321M; CFO $50,344M; capex $1,757M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
               "data_status": "official"
             },
             {
-              "label": "calendar_quarter 由日期数学得出：period_end 2026-04-26（4 月）落自然年 Q2；fiscal Q1 FY2027 ≠ calendar Q2。period_start = 上一财年 FY2026 末（2026-01-25）+1 天 = 2026-01-26",
-              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
-              "data_status": "derived"
+              "label": "NVIDIA Form 10-Q reportable segments（Compute & Networking $74,550M / op income $53,335M; Graphics $7,065M / $2,941M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "data_status": "official"
             }
           ]
         }
@@ -1817,22 +1832,47 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 22.187,
-          "gross_profit": null,
-          "op_income": null,
+          "gross_profit": 15.415,
+          "op_income": 10.788,
           "net_income": 9.31,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
+          "cfo": 10.493,
+          "capex": 0.231,
+          "segments": [
+            {
+              "name": "Semiconductor solutions 半导体解决方案",
+              "kind": "platform",
+              "revenue": 15.009,
+              "op_income": 9.281,
+              "is_ai": true
+            },
+            {
+              "name": "Infrastructure software 基础设施软件",
+              "kind": "platform",
+              "revenue": 7.178,
+              "op_income": 5.647,
+              "is_ai": false
+            }
+          ],
           "sources": [
             {
-              "label": "Broadcom Q2 FY2026 业绩新闻稿（GAAP 净利 $9,310M，营收 $22,187M）",
-              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026",
+              "label": "Broadcom Form 10-Q filed 2026-06-06（FY2026 Q2 iXBRL: revenue $22,187M; gross profit $15,415M; operating income $10,788M; net income $9,310M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
               "data_status": "official"
             },
             {
-              "label": "calendar_quarter 由日期数学得出：period_end 2026-05-03（5 月）落自然年 Q2。period_start = 上一季 Q1 FY2026 末（2026-02-01）+1 天 = 2026-02-02",
-              "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026",
+              "label": "Broadcom Form 10-Q reportable segments（Semiconductor solutions $15,009M / op income $9,281M; Infrastructure software $7,178M / $5,647M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived Q2 cash flow = FY2026 6M 10-Q ($18,753M CFO; $481M capex) minus FY2026 Q1 10-Q ($8,260M CFO; $250M capex)",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
               "data_status": "derived"
+            },
+            {
+              "label": "Broadcom Form 10-Q filed 2026-03-06（FY2026 Q1: CFO $8,260M; capex $250M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000016/avgo-20260201.htm",
+              "data_status": "official"
             }
           ]
         }
@@ -2828,84 +2868,6 @@
           ]
         },
         {
-          "period_id": "micron-fy2025-annual",
-          "kind": "annual",
-          "status": "actual",
-          "period_start": "2024-08-30",
-          "period_end": "2025-08-28",
-          "calendar_year": 2025,
-          "calendar_quarter": null,
-          "fiscal_year": "FY2025",
-          "fiscal_quarter": null,
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 37.378,
-          "gross_profit": null,
-          "op_income": 9.77,
-          "net_income": 8.539,
-          "cfo": 17.53,
-          "capex": 13.8,
-          "segments": [
-            {
-              "name": "CMBU 云存储",
-              "kind": "platform",
-              "revenue": 13.524,
-              "op_income": 6.129,
-              "op_margin": 0.453,
-              "is_ai": true
-            },
-            {
-              "name": "CDBU 核心数据中心",
-              "kind": "platform",
-              "revenue": 7.229,
-              "op_income": 2.18,
-              "op_margin": 0.302,
-              "is_ai": false
-            },
-            {
-              "name": "MCBU 移动和客户端",
-              "kind": "platform",
-              "revenue": 11.859,
-              "op_income": 1.981,
-              "op_margin": 0.167,
-              "is_ai": false
-            },
-            {
-              "name": "AEBU 汽车和嵌入式",
-              "kind": "platform",
-              "revenue": 4.753,
-              "op_income": 0.557,
-              "op_margin": 0.117,
-              "is_ai": false
-            },
-            {
-              "name": "Other 其他",
-              "kind": "platform",
-              "revenue": 0.013,
-              "op_income": -0.001,
-              "op_margin": -0.077,
-              "is_ai": false
-            }
-          ],
-          "sources": [
-            {
-              "label": "Micron FY2025 10-K（Note 26 Segment Disclosures）",
-              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
-              "data_status": "official"
-            },
-            {
-              "label": "capex/CFO（FY2025 现金流量表，CFO $17.53B / capex（投资固定资产，净）$13.80B，待核验）",
-              "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
-              "data_status": "estimate"
-            },
-            {
-              "label": "period_start 推导：上一财年 FY2024 止 2024-08-29 → 起 2024-08-30（与 micron-fy2025q1 起日一致）",
-              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
-              "data_status": "derived"
-            }
-          ]
-        },
-        {
           "period_id": "micron-fy2025q1",
           "kind": "quarter",
           "status": "actual",
@@ -3002,6 +2964,84 @@
           ]
         },
         {
+          "period_id": "micron-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-08-30",
+          "period_end": "2025-08-28",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 37.378,
+          "gross_profit": null,
+          "op_income": 9.77,
+          "net_income": 8.539,
+          "cfo": 17.53,
+          "capex": 13.8,
+          "segments": [
+            {
+              "name": "CMBU 云存储",
+              "kind": "platform",
+              "revenue": 13.524,
+              "op_income": 6.129,
+              "op_margin": 0.453,
+              "is_ai": true
+            },
+            {
+              "name": "CDBU 核心数据中心",
+              "kind": "platform",
+              "revenue": 7.229,
+              "op_income": 2.18,
+              "op_margin": 0.302,
+              "is_ai": false
+            },
+            {
+              "name": "MCBU 移动和客户端",
+              "kind": "platform",
+              "revenue": 11.859,
+              "op_income": 1.981,
+              "op_margin": 0.167,
+              "is_ai": false
+            },
+            {
+              "name": "AEBU 汽车和嵌入式",
+              "kind": "platform",
+              "revenue": 4.753,
+              "op_income": 0.557,
+              "op_margin": 0.117,
+              "is_ai": false
+            },
+            {
+              "name": "Other 其他",
+              "kind": "platform",
+              "revenue": 0.013,
+              "op_income": -0.001,
+              "op_margin": -0.077,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Micron FY2025 10-K（Note 26 Segment Disclosures）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "capex/CFO（FY2025 现金流量表，CFO $17.53B / capex（投资固定资产，净）$13.80B，待核验）",
+              "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
+              "data_status": "estimate"
+            },
+            {
+              "label": "period_start 推导：上一财年 FY2024 止 2024-08-29 → 起 2024-08-30（与 micron-fy2025q1 起日一致）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "data_status": "derived"
+            }
+          ]
+        },
+        {
           "period_id": "micron-fy2026q1",
           "kind": "quarter",
           "status": "actual",
@@ -3077,23 +3117,69 @@
           "fiscal_quarter": "Q3",
           "currency": "USD",
           "fx_to_usd": 1,
-          "revenue": 41.46,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 28.24,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
+          "revenue": 41.456,
+          "gross_profit": 35.056,
+          "op_income": 33.318,
+          "net_income": 28.243,
+          "cfo": 25.388,
+          "capex": 7.826,
+          "segments": [
+            {
+              "name": "CMBU 云存储",
+              "kind": "platform",
+              "revenue": 13.769,
+              "op_income": 10.793,
+              "is_ai": true
+            },
+            {
+              "name": "CDBU 核心数据中心",
+              "kind": "platform",
+              "revenue": 11.524,
+              "op_income": 9.519,
+              "is_ai": false
+            },
+            {
+              "name": "MCBU 移动和客户端",
+              "kind": "platform",
+              "revenue": 11.521,
+              "op_income": 9.873,
+              "is_ai": false
+            },
+            {
+              "name": "AEBU 汽车和嵌入式",
+              "kind": "platform",
+              "revenue": 4.634,
+              "op_income": 3.493,
+              "is_ai": false
+            },
+            {
+              "name": "Other 其他",
+              "kind": "platform",
+              "revenue": 0.008,
+              "op_income": 0.003,
+              "is_ai": false
+            }
+          ],
           "sources": [
             {
-              "label": "Micron FQ3 FY2026 业绩新闻稿/8-K（GAAP 净利 $28.24B，营收 $41.46B，AI/HBM 超级周期）",
-              "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2026",
+              "label": "Micron Form 10-Q filed 2026-06-26（FY2026 Q3 iXBRL: revenue $41,456M; gross profit $35,056M; operating income $33,318M; net income $28,243M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
               "data_status": "official"
             },
             {
-              "label": "period_start 推导：链内取上一季 period_end +1 天（FQ2 FY2026 止 2026-02-26 → 起 2026-02-27）",
-              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+              "label": "Micron Form 10-Q reportable segments（CMBU $13,769M / op income $10,793M; CDBU $11,524M / $9,519M; MCBU $11,521M / $9,873M; AEBU $4,634M / $3,493M; Other $8M / $3M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived Q3 cash flow = FY2026 9M 10-Q ($45,702M CFO; $19,602M capex) minus FY2026 6M 10-Q ($20,314M CFO; $11,776M capex)",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
               "data_status": "derived"
+            },
+            {
+              "label": "Micron Form 10-Q filed 2026-03-26（FY2026 Q2 YTD: CFO $20,314M; capex $11,776M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000006/mu-20260226.htm",
+              "data_status": "official"
             }
           ]
         }
@@ -4220,7 +4306,7 @@
           "period_id": "tsmc-2026q1",
           "kind": "quarter",
           "status": "actual",
-          "period_start": "2026-01-01",
+          "period_start": null,
           "period_end": "2026-03-31",
           "calendar_year": 2026,
           "calendar_quarter": "Q1",
@@ -4232,12 +4318,66 @@
           "gross_profit": 23.7822,
           "op_income": 20.8596,
           "net_income": 18.1218,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
+          "cfo": 22.127,
+          "capex": 11.111,
+          "segments": [
+            {
+              "name": "HPC 高性能计算",
+              "kind": "platform",
+              "revenue": 21.899,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Smartphone 智能手机",
+              "kind": "platform",
+              "revenue": 9.334,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "IoT 物联网",
+              "kind": "platform",
+              "revenue": 2.154,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Automotive 车用电子",
+              "kind": "platform",
+              "revenue": 1.436,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "DCE 数字消费电子",
+              "kind": "platform",
+              "revenue": 0.359,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Other 其他",
+              "kind": "platform",
+              "revenue": 0.718,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
           "sources": [
             {
               "label": "TSMC 1Q26 6-K filed 2026-04-16: net sales NT$1,134.103B / US$35.90B, gross profit NT$751.295B, operating income NT$658.966B, net income NT$572.480B",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "TSMC 1Q26 6-K: CFO NT$699B, capex NT$351B, platform revenue mix HPC 61% / Smartphone 26% / IoT 6% / Automotive 4% / DCE 1% / Other 2%",
               "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
               "data_status": "official"
             },
@@ -5796,6 +5936,33 @@
       ],
       "periods": [
         {
+          "period_id": "google-2023q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2023-07-01",
+          "period_end": "2023-09-30",
+          "calendar_year": 2023,
+          "calendar_quarter": "Q3",
+          "fiscal_year": "FY2023",
+          "fiscal_quarter": "Q3",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 76.693,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 19.689,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Alphabet 10-Q filed 2023-10-25（quarter ended 2023-09-30: revenue $76,693M, net income $19,689M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000094/goog-20230930.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
           "period_id": "google-fy2023-annual",
           "kind": "annual",
           "status": "actual",
@@ -5853,157 +6020,6 @@
             {
               "label": "Alphabet FY2023 Form 10-K filed 2024-01-31（SEC XBRL: CFO $101,746M, capex $32,251M；P&L 与现有 FY2024/press-release 口径交叉核对）",
               "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000022/goog-20231231.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "google-fy2024-annual",
-          "kind": "annual",
-          "status": "actual",
-          "period_start": "2024-01-01",
-          "period_end": "2024-12-31",
-          "calendar_year": 2024,
-          "calendar_quarter": null,
-          "fiscal_year": "FY2024",
-          "fiscal_quarter": null,
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 350.018,
-          "gross_profit": null,
-          "op_income": 112.39,
-          "net_income": 100.118,
-          "cfo": 125.299,
-          "capex": 52.535,
-          "segments": [
-            {
-              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
-              "kind": "platform",
-              "revenue": 305.141,
-              "op_income": 121.263,
-              "op_margin": 0.397,
-              "is_ai": false
-            },
-            {
-              "name": "Google Cloud 谷歌云",
-              "kind": "platform",
-              "revenue": 43.229,
-              "op_income": 6.112,
-              "op_margin": 0.141,
-              "is_ai": true
-            },
-            {
-              "name": "Other Bets 其他押注",
-              "kind": "platform",
-              "revenue": 1.648,
-              "op_income": -4.444,
-              "op_margin": null,
-              "is_ai": false
-            }
-          ],
-          "sources": [
-            {
-              "label": "Alphabet FY2024 业绩新闻稿（总营收 $350,018M、营业利润 $112,390M、净利 $100,118M；cost of revenues $146,306M → 毛利率 58.2%；分部 Cloud $43,229M / Other Bets $1,648M / 对冲 +$211M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
-              "data_status": "official"
-            },
-            {
-              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ +$211M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
-              "data_status": "derived"
-            },
-            {
-              "label": "Alphabet FY2024 Form 10-K filed 2025-02-05（SEC XBRL: CFO $125,299M, capex $52,535M；P&L 与现有 FY2024 口径交叉核对）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "google-fy2025-annual",
-          "kind": "annual",
-          "status": "actual",
-          "period_start": "2025-01-01",
-          "period_end": "2025-12-31",
-          "calendar_year": 2025,
-          "calendar_quarter": null,
-          "fiscal_year": "FY2025",
-          "fiscal_quarter": null,
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 402.836,
-          "gross_profit": null,
-          "op_income": 129.039,
-          "net_income": 132.17,
-          "cfo": 164.713,
-          "capex": 91.447,
-          "segments": [
-            {
-              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
-              "kind": "platform",
-              "revenue": 342.594,
-              "op_income": 139.404,
-              "op_margin": 0.407,
-              "is_ai": false
-            },
-            {
-              "name": "Google Cloud 谷歌云",
-              "kind": "platform",
-              "revenue": 58.705,
-              "op_income": 13.91,
-              "op_margin": 0.237,
-              "is_ai": true
-            },
-            {
-              "name": "Other Bets 其他押注",
-              "kind": "platform",
-              "revenue": 1.537,
-              "op_income": -7.515,
-              "op_margin": null,
-              "is_ai": false
-            }
-          ],
-          "sources": [
-            {
-              "label": "Alphabet Q4 & FY2025 业绩新闻稿（总营收 $402,836M、营业利润 $129,039M、净利 $132,170M；Google Cloud $58,705M、Other Bets $1,537M）",
-              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
-              "data_status": "official"
-            },
-            {
-              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ −$127M，使三分部合计=合并营收）",
-              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
-              "data_status": "derived"
-            },
-            {
-              "label": "Alphabet FY2025 Form 10-K filed 2026-02-05（SEC XBRL: revenue $402,836M, operating income $129,039M, net income $132,170M, CFO $164,713M, capex $91,447M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "google-2023q3",
-          "kind": "quarter",
-          "status": "actual",
-          "period_start": "2023-07-01",
-          "period_end": "2023-09-30",
-          "calendar_year": 2023,
-          "calendar_quarter": "Q3",
-          "fiscal_year": "FY2023",
-          "fiscal_quarter": "Q3",
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 76.693,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 19.689,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
-          "sources": [
-            {
-              "label": "Alphabet 10-Q filed 2023-10-25（quarter ended 2023-09-30: revenue $76,693M, net income $19,689M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000094/goog-20230930.htm",
               "data_status": "official"
             }
           ]
@@ -6090,6 +6106,68 @@
           ]
         },
         {
+          "period_id": "google-fy2024-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-01-01",
+          "period_end": "2024-12-31",
+          "calendar_year": 2024,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 350.018,
+          "gross_profit": null,
+          "op_income": 112.39,
+          "net_income": 100.118,
+          "cfo": 125.299,
+          "capex": 52.535,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 305.141,
+              "op_income": 121.263,
+              "op_margin": 0.397,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 43.229,
+              "op_income": 6.112,
+              "op_margin": 0.141,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.648,
+              "op_income": -4.444,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet FY2024 业绩新闻稿（总营收 $350,018M、营业利润 $112,390M、净利 $100,118M；cost of revenues $146,306M → 毛利率 58.2%；分部 Cloud $43,229M / Other Bets $1,648M / 对冲 +$211M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ +$211M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+              "data_status": "derived"
+            },
+            {
+              "label": "Alphabet FY2024 Form 10-K filed 2025-02-05（SEC XBRL: CFO $125,299M, capex $52,535M；P&L 与现有 FY2024 口径交叉核对）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
           "period_id": "google-2025q1",
           "kind": "quarter",
           "status": "actual",
@@ -6171,6 +6249,68 @@
           ]
         },
         {
+          "period_id": "google-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-01-01",
+          "period_end": "2025-12-31",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 402.836,
+          "gross_profit": null,
+          "op_income": 129.039,
+          "net_income": 132.17,
+          "cfo": 164.713,
+          "capex": 91.447,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+              "kind": "platform",
+              "revenue": 342.594,
+              "op_income": 139.404,
+              "op_margin": 0.407,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 58.705,
+              "op_income": 13.91,
+              "op_margin": 0.237,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 1.537,
+              "op_income": -7.515,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Alphabet Q4 & FY2025 业绩新闻稿（总营收 $402,836M、营业利润 $129,039M、净利 $132,170M；Google Cloud $58,705M、Other Bets $1,537M）",
+              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ −$127M，使三分部合计=合并营收）",
+              "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+              "data_status": "derived"
+            },
+            {
+              "label": "Alphabet FY2025 Form 10-K filed 2026-02-05（SEC XBRL: revenue $402,836M, operating income $129,039M, net income $132,170M, CFO $164,713M, capex $91,447M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
           "period_id": "google-2026q1",
           "kind": "quarter",
           "status": "actual",
@@ -6183,17 +6323,49 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 109.896,
-          "gross_profit": null,
-          "op_income": null,
+          "gross_profit": 68.625,
+          "op_income": 39.696,
           "net_income": 62.578,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
+          "cfo": 45.79,
+          "capex": 35.674,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（含收入对冲调节）",
+              "kind": "platform",
+              "revenue": 89.457,
+              "op_income": 40.589,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 20.028,
+              "op_income": 6.598,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 0.411,
+              "op_income": -2.1,
+              "is_ai": false
+            }
+          ],
           "sources": [
             {
-              "label": "Alphabet 10-Q filed 2026-04-30（quarter ended 2026-03-31: revenue $109,896M, net income $62,578M）",
+              "label": "Alphabet Form 10-Q filed 2026-04-30（Q1 2026 iXBRL: revenue $109,896M; cost of revenues $41,271M; operating income $39,696M; net income $62,578M; CFO $45,790M; capex $35,674M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
               "data_status": "official"
+            },
+            {
+              "label": "Alphabet Form 10-Q segment table（Google Services $89,637M, Google Cloud $20,028M, Other Bets $411M, revenue hedging -$180M folded into Services for platform reconciliation）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived gross profit = revenue $109,896M - cost of revenues $41,271M = $68,625M",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+              "data_status": "derived"
             }
           ]
         }
@@ -6579,6 +6751,60 @@
           ]
         },
         {
+          "period_id": "microsoft-fy2024q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2023-10-01",
+          "period_end": "2023-12-31",
+          "calendar_year": 2023,
+          "calendar_quarter": "Q4",
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 62.02,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 21.87,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Microsoft 10-Q filed 2024-01-30（quarter ended 2023-12-31: revenue $62,020M, net income $21,870M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024008814/msft-20231231.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "microsoft-fy2024q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2024-01-01",
+          "period_end": "2024-03-31",
+          "calendar_year": 2024,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": "Q3",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 61.858,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 21.939,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Microsoft 10-Q filed 2024-04-25（quarter ended 2024-03-31: revenue $61,858M, net income $21,939M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024048288/msft-20240331.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
           "period_id": "microsoft-fy2024-annual",
           "kind": "annual",
           "status": "actual",
@@ -6631,117 +6857,6 @@
             {
               "label": "Microsoft FY2024 Form 10-K filed 2024-07-30（SEC XBRL: revenue $245,122M, gross profit $171,008M, operating income $109,433M, net income $88,136M, CFO $118,548M, capex $44,477M）",
               "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024087843/msft-20240630.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "microsoft-fy2025-annual",
-          "kind": "annual",
-          "status": "actual",
-          "period_start": "2024-07-01",
-          "period_end": "2025-06-30",
-          "calendar_year": 2025,
-          "calendar_quarter": null,
-          "fiscal_year": "FY2025",
-          "fiscal_quarter": null,
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 281.724,
-          "gross_profit": null,
-          "op_income": 128.528,
-          "net_income": 101.832,
-          "cfo": 136.162,
-          "capex": 64.551,
-          "segments": [
-            {
-              "name": "Productivity and Business Processes 生产力与业务流程（重列含商业版 M365）",
-              "kind": "platform",
-              "revenue": 120.81,
-              "op_income": 69.773,
-              "op_margin": 0.578,
-              "is_ai": false
-            },
-            {
-              "name": "Intelligent Cloud 智能云（Azure 等）",
-              "kind": "platform",
-              "revenue": 106.265,
-              "op_income": 44.589,
-              "op_margin": 0.42,
-              "is_ai": true
-            },
-            {
-              "name": "More Personal Computing 个人计算",
-              "kind": "platform",
-              "revenue": 54.649,
-              "op_income": 14.166,
-              "op_margin": 0.259,
-              "is_ai": false
-            }
-          ],
-          "sources": [
-            {
-              "label": "Microsoft FY2025 业绩（重列口径，合计营收 $281,724M、营业利润 $128,528M、净利 $101,832M、毛利 $193,893M → 毛利率 68.8%；分部 PBP $120,810M / Intelligent Cloud $106,265M / MPC $54,649M）",
-              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2025-q4/press-release-webcast",
-              "data_status": "official"
-            },
-            {
-              "label": "Microsoft FY2025 Form 10-K filed 2025-07-30（SEC XBRL: revenue $281,724M, gross profit $193,893M, operating income $128,528M, net income $101,832M, CFO $136,162M, capex $64,551M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "microsoft-fy2024q2",
-          "kind": "quarter",
-          "status": "actual",
-          "period_start": "2023-10-01",
-          "period_end": "2023-12-31",
-          "calendar_year": 2023,
-          "calendar_quarter": "Q4",
-          "fiscal_year": "FY2024",
-          "fiscal_quarter": "Q2",
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 62.02,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 21.87,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
-          "sources": [
-            {
-              "label": "Microsoft 10-Q filed 2024-01-30（quarter ended 2023-12-31: revenue $62,020M, net income $21,870M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024008814/msft-20231231.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "microsoft-fy2024q3",
-          "kind": "quarter",
-          "status": "actual",
-          "period_start": "2024-01-01",
-          "period_end": "2024-03-31",
-          "calendar_year": 2024,
-          "calendar_quarter": "Q1",
-          "fiscal_year": "FY2024",
-          "fiscal_quarter": "Q3",
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 61.858,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 21.939,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
-          "sources": [
-            {
-              "label": "Microsoft 10-Q filed 2024-04-25（quarter ended 2024-03-31: revenue $61,858M, net income $21,939M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024048288/msft-20240331.htm",
               "data_status": "official"
             }
           ]
@@ -6828,6 +6943,63 @@
           ]
         },
         {
+          "period_id": "microsoft-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-07-01",
+          "period_end": "2025-06-30",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 281.724,
+          "gross_profit": null,
+          "op_income": 128.528,
+          "net_income": 101.832,
+          "cfo": 136.162,
+          "capex": 64.551,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程（重列含商业版 M365）",
+              "kind": "platform",
+              "revenue": 120.81,
+              "op_income": 69.773,
+              "op_margin": 0.578,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 106.265,
+              "op_income": 44.589,
+              "op_margin": 0.42,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 54.649,
+              "op_income": 14.166,
+              "op_margin": 0.259,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Microsoft FY2025 业绩（重列口径，合计营收 $281,724M、营业利润 $128,528M、净利 $101,832M、毛利 $193,893M → 毛利率 68.8%；分部 PBP $120,810M / Intelligent Cloud $106,265M / MPC $54,649M）",
+              "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2025-q4/press-release-webcast",
+              "data_status": "official"
+            },
+            {
+              "label": "Microsoft FY2025 Form 10-K filed 2025-07-30（SEC XBRL: revenue $281,724M, gross profit $193,893M, operating income $128,528M, net income $101,832M, CFO $136,162M, capex $64,551M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
           "period_id": "microsoft-fy2026q1",
           "kind": "quarter",
           "status": "actual",
@@ -6894,17 +7066,49 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 82.886,
-          "gross_profit": null,
-          "op_income": null,
+          "gross_profit": 56.058,
+          "op_income": 38.398,
           "net_income": 31.778,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
+          "cfo": 46.679,
+          "capex": 30.876,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程",
+              "kind": "platform",
+              "revenue": 35.013,
+              "op_income": 20.973,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 34.681,
+              "op_income": 13.753,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 13.192,
+              "op_income": 3.672,
+              "is_ai": false
+            }
+          ],
           "sources": [
             {
-              "label": "Microsoft 10-Q filed 2026-04-29（quarter ended 2026-03-31: revenue $82,886M, net income $31,778M）",
+              "label": "Microsoft Form 10-Q filed 2026-04-30（FY2026 Q3 iXBRL: revenue $82,886M; cost of revenue $26,828M; operating income $38,398M; net income $31,778M; CFO $46,679M; capex $30,876M）",
               "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
               "data_status": "official"
+            },
+            {
+              "label": "Microsoft Form 10-Q segment table（Productivity $35,013M / op income $20,973M; Intelligent Cloud $34,681M / $13,753M; More Personal Computing $13,192M / $3,672M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived gross profit = revenue $82,886M - cost of revenue $26,828M = $56,058M",
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "data_status": "derived"
             }
           ]
         }
@@ -7625,7 +7829,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 181.519,
-          "gross_profit": null,
+          "gross_profit": 94.056,
           "op_income": 23.852,
           "net_income": 30.255,
           "cfo": 26.032,
@@ -7658,19 +7862,24 @@
           ],
           "sources": [
             {
-              "label": "Amazon Form 10-Q filed 2026-04-30（quarter ended 2026-03-31）— net sales $181,519M, operating income $23,852M, net income $30,255M",
+              "label": "Amazon Form 10-Q filed 2026-04-30（Q1 2026: net sales $181,519M, cost of sales $87,463M, operating income $23,852M, net income $30,255M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
               "data_status": "official"
             },
             {
-              "label": "Amazon Form 10-Q segment table — North America net sales $104,143M / operating income $8,267M; International $39,789M / $1,424M; AWS $37,587M / $14,161M",
+              "label": "Amazon Form 10-Q cash flow statement — Q1 2026 net cash provided by operating activities $26,032M; purchases of property and equipment $44,203M",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
               "data_status": "official"
             },
             {
-              "label": "Amazon Form 10-Q cash flow statement — Q1 2026 net cash provided by operating activities $26,032M; purchases of property and equipment $44,203M (capex stored as absolute value)",
+              "label": "Amazon Form 10-Q segment table — North America $104,143M / op income $8,267M; International $39,789M / $1,424M; AWS $37,587M / $14,161M",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
               "data_status": "official"
+            },
+            {
+              "label": "Derived gross profit = net sales $181,519M - cost of sales $87,463M = $94,056M",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
+              "data_status": "derived"
             }
           ]
         }
@@ -8017,6 +8226,60 @@
       ],
       "periods": [
         {
+          "period_id": "oracle-fy2024q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2023-09-01",
+          "period_end": "2023-11-30",
+          "calendar_year": 2023,
+          "calendar_quarter": "Q4",
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 12.941,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 2.503,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Oracle 10-Q filed 2023-12-12（quarter ended 2023-11-30: revenue $12,941M, net income $2,503M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017023069682/orcl-20231130.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "oracle-fy2024q3",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2023-12-01",
+          "period_end": "2024-02-29",
+          "calendar_year": 2024,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": "Q3",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 13.28,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": 2.401,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "Oracle 10-Q filed 2024-03-12（quarter ended 2024-02-29: revenue $13,280M, net income $2,401M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024029904/orcl-20240229.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
           "period_id": "oracle-fy2024-annual",
           "kind": "annual",
           "status": "actual",
@@ -8077,192 +8340,6 @@
             {
               "label": "Oracle FY2024 Form 10-K filed 2024-06-20（SEC XBRL: revenue $52,961M, operating income $15,353M, net income $10,653M, CFO $18,673M, capex $6,866M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024075605/orcl-20240531.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "oracle-fy2025-annual",
-          "kind": "annual",
-          "status": "actual",
-          "period_start": "2024-06-01",
-          "period_end": "2025-05-31",
-          "calendar_year": 2025,
-          "calendar_quarter": null,
-          "fiscal_year": "FY2025",
-          "fiscal_quarter": null,
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 57.399,
-          "gross_profit": null,
-          "op_income": 17.678,
-          "net_income": 12.627,
-          "cfo": 20.821,
-          "capex": 21.215,
-          "segments": [
-            {
-              "name": "Cloud services and license support 云服务及授权支持",
-              "kind": "platform",
-              "revenue": 44.0,
-              "op_income": null,
-              "op_margin": null,
-              "is_ai": true
-            },
-            {
-              "name": "Cloud license and on-premise license 云授权及本地授权",
-              "kind": "platform",
-              "revenue": 5.2,
-              "op_income": null,
-              "op_margin": null,
-              "is_ai": false
-            },
-            {
-              "name": "Hardware + Services 硬件与服务",
-              "kind": "platform",
-              "revenue": 8.2,
-              "op_income": null,
-              "op_margin": null,
-              "is_ai": false
-            }
-          ],
-          "sources": [
-            {
-              "label": "Oracle FY2025 业绩新闻稿（总营收 $57.4B、GAAP 营业利润 $17.7B、GAAP 净利 $12.4B、CFO $20.8B；云服务及授权支持 $44.0B、云授权及本地授权 $5.2B；硬件+服务 $8.2B 为对账拆分）",
-              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
-              "data_status": "official"
-            },
-            {
-              "label": "capex FY2025 ≈$21.2B（公司披露净资本开支，含营收型设备；CFO $20.8B 官方）— capex 为估算量级，待 10-K 核验；硬件+服务合并因新闻稿未单列年度细项",
-              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
-              "data_status": "estimate"
-            },
-            {
-              "label": "Oracle FY2025 Form 10-K filed 2025-06-18（SEC XBRL: revenue $57,399M, operating income $17,678M, net income $12,627M, CFO $20,821M, capex $21,215M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017025087926/orcl-20250531.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "oracle-fy2026-annual",
-          "kind": "annual",
-          "status": "actual",
-          "period_start": "2025-06-01",
-          "period_end": "2026-05-31",
-          "calendar_year": 2026,
-          "calendar_quarter": null,
-          "fiscal_year": "FY2026",
-          "fiscal_quarter": null,
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 67.357,
-          "gross_profit": null,
-          "op_income": 20.606,
-          "net_income": 17.309,
-          "cfo": 31.977,
-          "capex": 55.663,
-          "segments": [
-            {
-              "name": "Cloud 云（OCI 基础设施 + SaaS 应用）",
-              "kind": "platform",
-              "revenue": 33.989,
-              "op_income": null,
-              "op_margin": null,
-              "is_ai": true
-            },
-            {
-              "name": "Software 软件（授权及本地）",
-              "kind": "platform",
-              "revenue": 24.541,
-              "op_income": null,
-              "op_margin": null,
-              "is_ai": false
-            },
-            {
-              "name": "Services 服务",
-              "kind": "platform",
-              "revenue": 5.743,
-              "op_income": null,
-              "op_margin": null,
-              "is_ai": false
-            },
-            {
-              "name": "Hardware 硬件",
-              "kind": "platform",
-              "revenue": 3.084,
-              "op_income": null,
-              "op_margin": null,
-              "is_ai": false
-            }
-          ],
-          "sources": [
-            {
-              "label": "Oracle Q4 & FY2026 业绩新闻稿（总营收 $67.4B、GAAP 营业利润 $20.6B、GAAP 净利 $17.0B、CFO $32.0B；Cloud $34.0B、Software $24.5B、Services $5.7B、Hardware $3.1B → 合计四舍五入 $67.4B）",
-              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
-              "data_status": "official"
-            },
-            {
-              "label": "FY2026 起公司改以 Cloud(IaaS+SaaS)/Software/Services/Hardware 口径披露；Hardware 取 $3.2B（原文 $3.1B 上调 0.1 以使四线合计=$67.4B 对账），与 FY2024/FY2025 四线口径不完全可比",
-              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
-              "data_status": "derived"
-            },
-            {
-              "label": "Oracle FY2026 Form 10-K filed 2026-06-22（SEC XBRL: revenue $67,357M, operating income $20,606M, net income $17,309M, CFO $31,977M, capex $55,663M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "oracle-fy2024q2",
-          "kind": "quarter",
-          "status": "actual",
-          "period_start": "2023-09-01",
-          "period_end": "2023-11-30",
-          "calendar_year": 2023,
-          "calendar_quarter": "Q4",
-          "fiscal_year": "FY2024",
-          "fiscal_quarter": "Q2",
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 12.941,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 2.503,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
-          "sources": [
-            {
-              "label": "Oracle 10-Q filed 2023-12-12（quarter ended 2023-11-30: revenue $12,941M, net income $2,503M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017023069682/orcl-20231130.htm",
-              "data_status": "official"
-            }
-          ]
-        },
-        {
-          "period_id": "oracle-fy2024q3",
-          "kind": "quarter",
-          "status": "actual",
-          "period_start": "2023-12-01",
-          "period_end": "2024-02-29",
-          "calendar_year": 2024,
-          "calendar_quarter": "Q1",
-          "fiscal_year": "FY2024",
-          "fiscal_quarter": "Q3",
-          "currency": "USD",
-          "fx_to_usd": 1,
-          "revenue": 13.28,
-          "gross_profit": null,
-          "op_income": null,
-          "net_income": 2.401,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
-          "sources": [
-            {
-              "label": "Oracle 10-Q filed 2024-03-12（quarter ended 2024-02-29: revenue $13,280M, net income $2,401M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024029904/orcl-20240229.htm",
               "data_status": "official"
             }
           ]
@@ -8349,6 +8426,68 @@
           ]
         },
         {
+          "period_id": "oracle-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-06-01",
+          "period_end": "2025-05-31",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 57.399,
+          "gross_profit": null,
+          "op_income": 17.678,
+          "net_income": 12.627,
+          "cfo": 20.821,
+          "capex": 21.215,
+          "segments": [
+            {
+              "name": "Cloud services and license support 云服务及授权支持",
+              "kind": "platform",
+              "revenue": 44.0,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Cloud license and on-premise license 云授权及本地授权",
+              "kind": "platform",
+              "revenue": 5.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware + Services 硬件与服务",
+              "kind": "platform",
+              "revenue": 8.2,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle FY2025 业绩新闻稿（总营收 $57.4B、GAAP 营业利润 $17.7B、GAAP 净利 $12.4B、CFO $20.8B；云服务及授权支持 $44.0B、云授权及本地授权 $5.2B；硬件+服务 $8.2B 为对账拆分）",
+              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+              "data_status": "official"
+            },
+            {
+              "label": "capex FY2025 ≈$21.2B（公司披露净资本开支，含营收型设备；CFO $20.8B 官方）— capex 为估算量级，待 10-K 核验；硬件+服务合并因新闻稿未单列年度细项",
+              "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+              "data_status": "estimate"
+            },
+            {
+              "label": "Oracle FY2025 Form 10-K filed 2025-06-18（SEC XBRL: revenue $57,399M, operating income $17,678M, net income $12,627M, CFO $20,821M, capex $21,215M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017025087926/orcl-20250531.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
           "period_id": "oracle-fy2026q1",
           "kind": "quarter",
           "status": "actual",
@@ -8415,16 +8554,131 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 17.19,
-          "gross_profit": null,
-          "op_income": null,
+          "gross_profit": 11.098,
+          "op_income": 5.464,
           "net_income": 3.721,
-          "cfo": null,
-          "capex": null,
-          "segments": [],
+          "cfo": 7.151,
+          "capex": 18.635,
+          "segments": [
+            {
+              "name": "Cloud services and license support 云服务及授权支持",
+              "kind": "platform",
+              "revenue": 13.883,
+              "is_ai": true
+            },
+            {
+              "name": "Cloud license and on-premise license 云授权及本地授权",
+              "kind": "platform",
+              "revenue": 1.15,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware 硬件",
+              "kind": "platform",
+              "revenue": 0.714,
+              "is_ai": false
+            },
+            {
+              "name": "Services 服务",
+              "kind": "platform",
+              "revenue": 1.443,
+              "is_ai": false
+            }
+          ],
           "sources": [
             {
-              "label": "Oracle 10-Q filed 2026-03-11（quarter ended 2026-02-28: revenue $17,190M, net income $3,721M）",
+              "label": "Oracle Form 10-Q filed 2026-03-10（FY2026 Q3 iXBRL: revenue $17,190M; direct revenue expenses $6,092M; operating income $5,464M; net income $3,721M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Oracle Form 10-Q segment/product table（cloud applications $4,026M; cloud infrastructure $4,888M; software support $4,969M; software license $1,150M; hardware $714M; services $1,443M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived gross profit = revenue $17,190M - (cloud/software expenses $4,776M + hardware expenses $183M + services expense $1,133M) = $11,098M",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+              "data_status": "derived"
+            },
+            {
+              "label": "Derived Q3 cash flow = FY2026 9M 10-Q ($17,357M CFO; $39,170M capex) minus FY2026 6M 10-Q ($10,206M CFO; $20,535M capex)",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+              "data_status": "derived"
+            },
+            {
+              "label": "Oracle Form 10-Q filed 2025-12-09（FY2026 Q2 YTD: CFO $10,206M; capex $20,535M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525315925/orcl-20251130.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "oracle-fy2026-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-06-01",
+          "period_end": "2026-05-31",
+          "calendar_year": 2026,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 67.357,
+          "gross_profit": null,
+          "op_income": 20.606,
+          "net_income": 17.309,
+          "cfo": 31.977,
+          "capex": 55.663,
+          "segments": [
+            {
+              "name": "Cloud 云（OCI 基础设施 + SaaS 应用）",
+              "kind": "platform",
+              "revenue": 33.989,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": true
+            },
+            {
+              "name": "Software 软件（授权及本地）",
+              "kind": "platform",
+              "revenue": 24.541,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Services 服务",
+              "kind": "platform",
+              "revenue": 5.743,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            },
+            {
+              "name": "Hardware 硬件",
+              "kind": "platform",
+              "revenue": 3.084,
+              "op_income": null,
+              "op_margin": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Oracle Q4 & FY2026 业绩新闻稿（总营收 $67.4B、GAAP 营业利润 $20.6B、GAAP 净利 $17.0B、CFO $32.0B；Cloud $34.0B、Software $24.5B、Services $5.7B、Hardware $3.1B → 合计四舍五入 $67.4B）",
+              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+              "data_status": "official"
+            },
+            {
+              "label": "FY2026 起公司改以 Cloud(IaaS+SaaS)/Software/Services/Hardware 口径披露；Hardware 取 $3.2B（原文 $3.1B 上调 0.1 以使四线合计=$67.4B 对账），与 FY2024/FY2025 四线口径不完全可比",
+              "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+              "data_status": "derived"
+            },
+            {
+              "label": "Oracle FY2026 Form 10-K filed 2026-06-22（SEC XBRL: revenue $67,357M, operating income $20,606M, net income $17,309M, CFO $31,977M, capex $55,663M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
               "data_status": "official"
             }
           ]
@@ -8785,6 +9039,53 @@
               "label": "period_start 推导：上一财年 FY2025 末（2025-03-31）+1 天 = 2025-04-01",
               "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
               "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "arm-fy2026q4",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-01-01",
+          "period_end": "2026-03-31",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q4",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 1.49,
+          "gross_profit": 1.458,
+          "op_income": 0.438,
+          "net_income": 0.313,
+          "cfo": 0.26,
+          "capex": 0.108,
+          "segments": [
+            {
+              "name": "License and other revenue 授权及其他收入",
+              "kind": "platform",
+              "revenue": 0.819,
+              "op_income": null,
+              "op_margin": null
+            },
+            {
+              "name": "Royalty revenue 版税收入",
+              "kind": "platform",
+              "revenue": 0.671,
+              "op_income": null,
+              "op_margin": null
+            }
+          ],
+          "sources": [
+            {
+              "label": "Arm FYE26 Q4 Form 6-K Exhibit 99.2 filed 2026-05-06: revenue $1.490B, gross profit $1.458B, operating income $0.438B, net income $0.313B",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000062/exhibit992fye26q431-marx26.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Arm FYE26 Q4 Form 6-K cash flow: operating cash flow $0.260B; capex convention = PP&E $0.074B + intangible assets $0.016B + intangible obligation payments $0.018B",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000062/exhibit992fye26q431-marx26.htm",
+              "data_status": "official"
             }
           ]
         }

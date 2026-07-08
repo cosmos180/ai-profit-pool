@@ -1139,7 +1139,7 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 423.639013,
+    "total": 423.658939,
     "n": 13,
     "asOfSpreadDays": 63,
     "basisCount": {
@@ -1148,13 +1148,13 @@
     },
     "stages": {
       "design": {
-        "value": 160.105816,
-        "share": 0.37793,
+        "value": 160.124657,
+        "share": 0.377957,
         "companies": [
           {
             "id": "nvda",
             "name": "NVIDIA 英伟达",
-            "ttm": 143.192109,
+            "ttm": 143.21095,
             "asOf": "2026-04-26",
             "aiShare": 0.897194,
             "basis": "periods"
@@ -1171,7 +1171,7 @@
       },
       "foundry": {
         "value": 36.179328,
-        "share": 0.085401,
+        "share": 0.085397,
         "companies": [
           {
             "id": "tsmc",
@@ -1184,8 +1184,8 @@
         ]
       },
       "memory": {
-        "value": 92.14315,
-        "share": 0.217504,
+        "value": 92.144235,
+        "share": 0.217496,
         "companies": [
           {
             "id": "samsung",
@@ -1198,7 +1198,7 @@
           {
             "id": "micron",
             "name": "Micron 美光",
-            "ttm": 18.260548,
+            "ttm": 18.261633,
             "asOf": "2026-05-28",
             "aiShare": 0.361817,
             "basis": "periods"
@@ -1243,7 +1243,7 @@
       },
       "app": {
         "value": 7.296636,
-        "share": 0.017224,
+        "share": 0.017223,
         "companies": [
           {
             "id": "tencent",
@@ -1257,7 +1257,7 @@
       },
       "cloud": {
         "value": 121.222124,
-        "share": 0.286145,
+        "share": 0.286131,
         "companies": [
           {
             "id": "google",
