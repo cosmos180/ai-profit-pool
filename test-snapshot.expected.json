@@ -1143,8 +1143,8 @@
     "n": 11,
     "asOfSpreadDays": 63,
     "basisCount": {
-      "periods": 9,
-      "legacy_fallback": 2
+      "periods": 10,
+      "legacy_fallback": 1
     },
     "stages": {
       "design": {
@@ -1209,7 +1209,7 @@
             "ttm": 52.887,
             "asOf": "2026-03-31",
             "aiShare": 1,
-            "basis": "legacy_fallback"
+            "basis": "periods"
           }
         ]
       },
