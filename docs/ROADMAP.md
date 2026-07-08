@@ -25,8 +25,7 @@
   - 每家要求:actual 年(营收/毛利率/经营利润/净利/capex/CFO)+ 平台/分部拆分 + 来源标注;**整批换,不留混合**
 - [x] **D2 · TSMC FY2024 官方修正**——已按 FY2025 同口径落库:官方美元披露 rev 90.08 / ni 36.52,公司隐含均汇 32.130(=TWD 2,894.31bn÷90.08),op/cfo 按隐含均汇重算(derived),平台拆分 51/35/6/5/1/2 × 90.08 精确对账;`years[]` 与 `periods[]` 双写一致。注:本执行环境 egress 拦 SEC/tsmc.com,数字经多源检索交叉印证(TWD÷隐含均汇/官方USD/分季合计三路闭合),口径注明于 sources。
   - 同批:ARM `quote.net_debt` 补齐 = −3.601bn 净现金(FY2026 20-F @2026-03-31:现金 2.751+短投 0.850,零有息借款,租赁 0.432 按口径排除)→ EV/EV-Sales 点亮,设计环节 EV/Sales comps n=2→3 生效;已用 SEC 原文与本地 Dayu filing `fil_0001973239-26-000097` 复核并标 official。
-- [ ] **D3 · quote 快照刷新**(🧑 Tiger `get_financial_daily`;🤖 merge)
-  - 现状停在 as_of 2026-06-26;13 家市值/价格/净债务分量刷到同一交易日
+- [x] **D3 · quote 快照刷新**——11 家美股/ADR/HK 统一刷到 2026-07-07 收盘(nvda/broadcom/tsmc/asml/google/microsoft/amazon/oracle/micron/arm/tencent),micron/arm 首次补 price;net_debt 分量与来源逐字保留(质量 pass 另批)。samsung/skhynix/softbank 韩/日原股按 Tiger 边界跳过,停留 06-26。质量注记:asml 价格由全日跌幅×前收推算、tencent 收盘价多源分歧取市值恒等式最一致值——均在 source 注明待复核;数据源为公开行情检索(estimate),Tiger 精刷可随时覆盖。
 
 ## P1 · 点亮 sourced + TTM 补齐——让头牌数字站上硬数据
 

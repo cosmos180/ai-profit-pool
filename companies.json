@@ -63,15 +63,15 @@
       "lead": "营收拆到 5 个市场平台，利润只披露到 2 个报告分部 —— “分部毛利率拿不到”的活样本。",
       "fy_note": "财年截至每年 1 月末，例如 FY2026 = 2025-01 至 2026-01。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 4740.0,
-        "net_debt": -54.09,
-        "price": 195.55,
+        "as_of": "2026-07-07",
+        "market_cap": 4640,
+        "price": 191.3,
         "price_currency": "USD",
+        "net_debt": -54.09,
         "sources": [
           {
-            "label": "stockanalysis.com — NVDA market cap $4.74T and close $195.55 @ 2026-07-06",
-            "url": "https://stockanalysis.com/stocks/nvda/",
+            "label": "NVDA off ~2.2% to ~$191.30 on 7/7 (DeepSeek in-house AI chip report); price from intraday/close recap, market cap = price x ~24.24bn shares (implied from library 7/6 4740bn/195.55), cross-checked vs Yahoo/CNBC ~4.6-4.7T",
+            "url": "https://www.moomoo.com/community/feed/u-s-market-outlook-nvidia-s-stock-price-fell-following-116878953480198",
             "data_status": "estimate"
           },
           {
@@ -1316,14 +1316,14 @@
       "lead": "按 Semiconductor solutions / Infrastructure software 两个报告分部披露营收与营业利润。分部营收合计等于合并营收，分部营业利润之和高于合并营业利润，差额来自未分配费用（收购无形资产摊销、股权激励等）。",
       "fy_note": "财年截止于 10 月最后一个星期日。分部营业利润用于经营分部表现评估；合并营业利润还扣除了未分配费用。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 1780.0,
-        "net_debt": 49.6,
-        "price": 373.9,
+        "as_of": "2026-07-07",
+        "market_cap": 1765,
+        "price": 370.78,
         "price_currency": "USD",
+        "net_debt": 49.6,
         "sources": [
           {
-            "label": "stockanalysis.com — AVGO market cap $1.78T and close $373.90 @ 2026-07-06",
+            "label": "AVGO close 7/7 $370.78 (-0.83% vs 7/6 373.90) per Yahoo/stockanalysis; market cap = price x ~4.76bn shares, cross-checked vs companiesmarketcap ~1.766T",
             "url": "https://stockanalysis.com/stocks/avgo/",
             "data_status": "estimate"
           },
@@ -2405,19 +2405,16 @@
       "lead": "DRAM/NAND 存储巨头。FY2025 起按 CMBU（云/HBM）、CDBU（核心数据中心）、MCBU（移动/PC）与 AEBU（汽车/嵌入式）披露，CMBU 直接受益于 AI/HBM 需求。",
       "fy_note": "财年通常在每年 8 月底结束。FY2025 10-K 对 FY2023/FY2024 分部数据做了追溯重列，本页统一采用 FY2025 10-K 的 CMBU/CDBU/MCBU/AEBU 口径。",
       "quote": {
-        "as_of": "2026-06-26",
-        "market_cap": 1270.0,
+        "as_of": "2026-07-07",
+        "market_cap": 1060,
+        "price": 938.38,
+        "price_currency": "USD",
         "net_debt": 5.05,
         "sources": [
           {
-            "label": "companiesmarketcap.com — Micron market cap (~US$1.27T @ 2026-06-28)",
+            "label": "MU 2026-07-07 US close $938.38 (prev close 984.75, -4.71% amid semiconductor selloff); mkt cap = price x 1.1294B shares ~= 1060bn USD (sources report 1030-1112bn). Intraday/close approx.",
             "url": "https://companiesmarketcap.com/micron-technology/marketcap/",
-            "data_status": "official"
-          },
-          {
-            "label": "stockanalysis.com — MU 市值/价格历史",
-            "url": "https://stockanalysis.com/stocks/mu/market-cap/",
-            "data_status": "official"
+            "data_status": "estimate"
           },
           {
             "label": "net_debt（估算）：FY2025（截至 2025-08-28）有息债务 ≈ $15.352B，减 现金及等价物 $9.642B + 短期投资 $0.665B = $10.307B → 净负债 +$5.05B（口径：排经营租赁与长期有价投资 $1.629B；待核验 10-K）",
@@ -3600,15 +3597,15 @@
       "lead": "全球最大的半导体代工企业，AI 计算与先进芯片制程的核心制造者。HPC 平台包含 AI 加速器、服务器 CPU 与其他高性能计算芯片，并不等同于纯 AI 收入。",
       "fy_note": "TWD→USD 采用 SEC Form 20-F 披露的期末 Noon Buying Rate（2023: 30.62 / 2024: 32.79 / 2025: 31.37）。平台营收基于官方 HPC/Smartphone/IoT/Automotive/DCE/Other 占比并与合并营收对账。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 1990.0,
-        "net_debt": -69.26,
-        "price": 451.79,
+        "as_of": "2026-07-07",
+        "market_cap": 1905,
+        "price": 432.57,
         "price_currency": "USD",
+        "net_debt": -69.26,
         "sources": [
           {
-            "label": "stockanalysis.com — TSM market cap $1.99T and ADR close $451.79 @ 2026-07-06",
-            "url": "https://stockanalysis.com/stocks/tsm/",
+            "label": "TSM ADR close 7/7 $432.57 (-4.25% vs 7/6 451.79) per Yahoo/macrotrends; market cap scaled from library 7/6 (1990bn/451.79) to stay on library methodology. NOTE: companiesmarketcap full-share-count gives ~2.1-2.2T (different share base)",
+            "url": "https://finance.yahoo.com/quote/TSM/",
             "data_status": "estimate"
           },
           {
@@ -4423,15 +4420,15 @@
       "lead": "全球光刻机核心供应商，独家提供 EUV 光刻系统。EUV/High-NA EUV 是先进制程 AI 芯片制造的底层关键设备，但 ASML 是单一报告经营分部，不披露产品级利润。",
       "fy_note": "自然年，财年截至 12 月 31 日。EUR→USD 按 ECB 每日历史汇率年度平均值折算（2023: 1.081269 / 2024: 1.082380 / 2025: 1.129983）。产品平台拆分为 EUV、DUV、量测与检测、装机基地管理。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 715.48,
-        "net_debt": -11.33,
-        "price": 1825.07,
+        "as_of": "2026-07-07",
+        "market_cap": 679,
+        "price": 1732,
         "price_currency": "USD",
+        "net_debt": -11.33,
         "sources": [
           {
-            "label": "stockanalysis.com — ASML market cap $715.48B and NASDAQ close $1,825.07 @ 2026-07-06",
-            "url": "https://stockanalysis.com/stocks/asml/",
+            "label": "ASML (NASDAQ ADR) down ~5.08% on 7/7 (Samsung Q2 miss -> chip-equip selloff); price approximated from daily-move recap x library 7/6 close 1825.07 (~$1732, sources cite -3.6% EUR / -4.6% intraday / -5.08% full day). Market cap price-scaled from library 715.48bn/1825.07. Exact USD close not cleanly published as of 7/8",
+            "url": "https://www.fool.com/investing/2026/07/07/why-asml-stock-dropped-today/",
             "data_status": "estimate"
           },
           {
@@ -5057,21 +5054,16 @@
       "lead": "价值链需求侧的“应用/平台”样本：营收按三大业务线（增值服务VAS、营销服务、金融科技及企业服务）披露，但营业利润仅到合并层、不到分部级 → seg_profit='no'。归母净利含大额联营/被投公司公允价值收益，PE 失真（类软银），但经营现金流真实、FCF 口径有意义。",
       "fy_note": "财年=自然年（截至每年 12 月 31 日）。归母净利为 IFRS 口径（含投资公允价值损益），非 Non-IFRS。CNY→USD 用年均汇率换算（FY2023≈7.20、FY2024≈7.185[由腾讯官方披露的 RMB/USD 对照反推]、FY2025≈7.187[全年均值]）；分部营收同口径换算。op_income 留空：腾讯 IFRS 全年营业利润未在摘要中可靠取得（避免误用季度数）。",
       "quote": {
-        "as_of": "2026-06-26",
-        "market_cap": 481.0,
-        "net_debt": -14.9,
-        "price": 411.8,
+        "as_of": "2026-07-07",
+        "market_cap": 497,
+        "price": 431.2,
         "price_currency": "HKD",
+        "net_debt": -14.9,
         "sources": [
           {
-            "label": "stockanalysis.com — Tencent (0700.HK) 市值 ~HKD 3.78T；2026-06-29 收 420.20 HKD（前收 411.80 = 2026-06-26 收盘）",
-            "url": "https://stockanalysis.com/quote/hkg/0700/",
-            "data_status": "official"
-          },
-          {
-            "label": "派生：市值 HKD 3.78T ÷ HKD/USD 7.8488(联系汇率) ≈ USD 481B；companiesmarketcap/Yahoo 同期口径 ~$473–483B，取 $481B（as_of 2026-06-26 就近）",
-            "url": "https://companiesmarketcap.com/tencent/marketcap/",
-            "data_status": "derived"
+            "label": "0700.HK close ~431 HKD (UNCERTAIN: sources conflict 420-461; 461.20 rejected as it fails mkt-cap cross-check; anchors: Jul-2 close 430.2, Jul-3 close 431.2, Jul-8 range 429.40-447.00). Mkt cap 3.90T HKD / 7.843 (USD/HKD, 2026-07-07) = ~497bn USD.",
+            "url": "https://www.investing.com/equities/tencent-holdings-hk",
+            "data_status": "estimate"
           },
           {
             "label": "net_debt：FY2025 财报披露净现金(net cash position) RMB107.1B ÷ 7.187 = +$14.9B 净现金 → net_debt = −14.9（口径：现金及等价物+定期存款 − 有息债务，排经营租赁；腾讯长期净现金）",
@@ -5647,14 +5639,14 @@
       "lead": "需求侧超大规模厂商样本：营收按 Google Services / Google Cloud / Other Bets 三个报告分部披露，并有分部营业利润。Google Cloud 标 is_ai（含企业 AI 基础设施与 GenAI），但占合并营收仅约 15% → C 加权后云环节被显著折算，正是“整公司≠全 AI”的样本。Google Services 含对冲/抵消调节项以与合并营收对账。",
       "fy_note": "财年=自然年（截至每年 12 月 31 日），USD 原币无需换算。Google Services 分部营收已吸收官方“对冲损益(hedging gains/losses)”调节项（数亿美元级），使三分部合计=合并营收，便于平台对账；Cloud / Other Bets 为官方原值。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 4470.0,
-        "net_debt": null,
-        "price": 366.46,
+        "as_of": "2026-07-07",
+        "market_cap": 4480,
+        "price": 367.03,
         "price_currency": "USD",
+        "net_debt": null,
         "sources": [
           {
-            "label": "stockanalysis.com — GOOGL market cap $4.47T and close $366.46 @ 2026-07-06",
+            "label": "GOOGL close $367.03 (+0.16% vs 07-06 $366.46); market cap derived from library implied share count (~12.20B), cross-checked vs stockanalysis/companiesmarketcap ($4.36-4.44T range)",
             "url": "https://stockanalysis.com/stocks/googl/",
             "data_status": "estimate"
           }
@@ -6420,15 +6412,15 @@
       "lead": "需求侧超大规模厂商：按 Productivity and Business Processes / Intelligent Cloud / More Personal Computing 三个报告分部披露营收与营业利润。Intelligent Cloud（含 Azure）标 is_ai，约占合并营收 38%（FY2025 重列口径）→ C 加权后云环节被折算，体现“AI 是其中一块”。",
       "fy_note": "财年截至每年 6 月 30 日（FY2025 = 2024-07 至 2025-06）。USD 原币。FY2025 起公司重列分部口径（商业版 M365 归入 PBP），各财年分部均按其当年披露口径录入、合计=当年合并营收；FY2024/FY2023 为旧口径，FY2025 为重列口径，跨年分部不完全可比。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 2870.0,
-        "net_debt": null,
-        "price": 386.74,
+        "as_of": "2026-07-07",
+        "market_cap": 2880,
+        "price": 388.07,
         "price_currency": "USD",
+        "net_debt": null,
         "sources": [
           {
-            "label": "stockanalysis.com — MSFT market cap $2.87T and close $386.74 @ 2026-07-06",
-            "url": "https://stockanalysis.com/stocks/msft/",
+            "label": "MSFT close $388.07 (+0.34% vs 07-06 $386.74); market cap derived from library implied share count (~7.42B), cross-checked vs stockanalysis/companiesmarketcap (~$2.89T)",
+            "url": "https://stockanalysis.com/stocks/msft/market-cap/",
             "data_status": "estimate"
           }
         ]
@@ -7163,15 +7155,15 @@
       "lead": "需求侧超大规模厂商：按 North America / International / AWS 三个报告分部披露营收与营业利润，三分部合计=合并营收（平台干净对账）。AWS 标 is_ai，约占合并营收仅 18%，却贡献过半营业利润 → C 加权后云环节按营收占比折算，是“AI/云是利润核心但营收占比小”的典型。",
       "fy_note": "财年=自然年（截至每年 12 月 31 日），USD 原币。三地理/AWS 分部营收合计=合并净销售额；分部营业利润为公司披露口径。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 2630.0,
-        "net_debt": null,
-        "price": 244.16,
+        "as_of": "2026-07-07",
+        "market_cap": 2650,
+        "price": 245.98,
         "price_currency": "USD",
+        "net_debt": null,
         "sources": [
           {
-            "label": "stockanalysis.com — AMZN market cap $2.63T and close $244.16 @ 2026-07-06",
-            "url": "https://stockanalysis.com/stocks/amzn/",
+            "label": "AMZN close $245.98 (+0.75% vs 07-06 $244.16); market cap derived from library implied share count (~10.77B), cross-checked vs financecharts (~$2.6T)",
+            "url": "https://stockanalysis.com/stocks/amzn/history/",
             "data_status": "estimate"
           }
         ]
@@ -7926,15 +7918,15 @@
       "lead": "需求侧超大规模厂商：按四条营收线（云服务及授权支持 / 云授权及本地授权 / 硬件 / 服务）披露，合计=合并营收。把“云服务及授权支持”标 is_ai（含 OCI/AI 基础设施与 SaaS），约占营收 77% → 占比偏高，但分部利润不到线（seg_profit='no'）。AI 相关 RPO 积压暴增是其看点，但当期利润占比仍受传统授权拖累。",
       "fy_note": "财年截至每年 5 月 31 日（FY2026 = 2025-06 至 2026-05）。USD 原币。营收按公司损益表四条线录入、合计=合并营收（平台对账）；分部营业利润未到线，op_income 留空。CFO 为官方现金流；net_debt 留空（高杠杆 AI 资本开支期，未取可靠余额）。",
       "quote": {
-        "as_of": "2026-07-06",
-        "market_cap": 414.1,
-        "net_debt": null,
-        "price": 143.76,
+        "as_of": "2026-07-07",
+        "market_cap": 408,
+        "price": 141.6,
         "price_currency": "USD",
+        "net_debt": null,
         "sources": [
           {
-            "label": "stockanalysis.com — ORCL market cap $414.10B and close $143.76 @ 2026-07-06",
-            "url": "https://stockanalysis.com/stocks/orcl/",
+            "label": "ORCL close $141.60 (-1.50% vs 07-06 $143.76, change confirmed); market cap derived from library implied share count (~2.88B); capital.com listed $411.4B (~2.90B shares)",
+            "url": "https://stockanalysis.com/stocks/orcl/history/",
             "data_status": "estimate"
           }
         ]
@@ -8726,13 +8718,15 @@
       "lead": "AI 计算上游的芯片 IP 授权公司，收入主要来自 License and other revenue 与 Royalty revenue。Arm 只披露一个报告分部；License/Royalty 不是 AI/非 AI 拆分，因此暂不写 is_ai 或 ai_profit_share，避免把全部利润硬归因到 AI。",
       "fy_note": "财年截至每年 3 月 31 日，例如 FY2026 = 2025-04-01 至 2026-03-31。USD 原币。公司披露单一报告分部，分部利润不到 License/Royalty 线；segments 仅按收入类型拆分，非 AI 归因口径。",
       "quote": {
-        "as_of": "2026-06-26",
-        "market_cap": 355.67,
+        "as_of": "2026-07-07",
+        "market_cap": 340,
+        "price": 315.28,
+        "price_currency": "USD",
         "net_debt": -3.601,
         "sources": [
           {
-            "label": "public.com — Arm Holdings market cap ≈ $355.67B @ 2026-06-26（日内波动，取近似值）",
-            "url": "https://public.com/stocks/arm/market-cap",
+            "label": "ARM ADR 2026-07-07 US close $315.28; mkt cap ~340bn USD (price x ~1.07B sh = 337; CNBC 344; companiesmarketcap outlier 368). Intraday/close approx.",
+            "url": "https://www.macrotrends.net/stocks/charts/ARM/arm-holdings/market-cap",
             "data_status": "estimate"
           },
           {
