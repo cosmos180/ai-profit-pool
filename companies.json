@@ -5696,15 +5696,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 272.543,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 175.033},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 31.51},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 31.312},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 34.688}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 175.033
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 31.51
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 31.312
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 34.688
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 33.088},
-              {"name": "Other Bets 其他押注", "revenue": 1.527},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.236}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 33.088
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 1.527
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.236
+              }
             ],
             "sources": [
               {
@@ -5777,15 +5798,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 304.93,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 198.084},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 36.147},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 30.359},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 40.34}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 198.084
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 36.147
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 30.359
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 40.34
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 43.229},
-              {"name": "Other Bets 其他押注", "revenue": 1.648},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.211}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 43.229
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 1.648
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.211
+              }
             ],
             "sources": [
               {
@@ -5858,15 +5900,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 342.721,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 224.532},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 40.367},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 29.792},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 48.03}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 224.532
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 40.367
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 29.792
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 48.03
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 58.705},
-              {"name": "Other Bets 其他押注", "revenue": 1.537},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": -0.127}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 58.705
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 1.537
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": -0.127
+              }
             ],
             "sources": [
               {
@@ -6057,15 +6120,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 67.986,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 44.026},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 7.952},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 7.669},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 8.339}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 44.026
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 7.952
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.669
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 8.339
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 8.411},
-              {"name": "Other Bets 其他押注", "revenue": 0.297},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": -0.001}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 8.411
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.297
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": -0.001
+              }
             ],
             "sources": [
               {
@@ -6135,15 +6219,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 272.543,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 175.033},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 31.51},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 31.312},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 34.688}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 175.033
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 31.51
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 31.312
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 34.688
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 33.088},
-              {"name": "Other Bets 其他押注", "revenue": 1.527},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.236}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 33.088
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 1.527
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.236
+              }
             ],
             "sources": [
               {
@@ -6198,15 +6303,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 70.398,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 46.156},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 8.09},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 7.413},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 8.739}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 46.156
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 8.09
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.413
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 8.739
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 9.574},
-              {"name": "Other Bets 其他押注", "revenue": 0.495},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.072}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 9.574
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.495
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.072
+              }
             ],
             "sources": [
               {
@@ -6251,15 +6377,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 73.928,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 48.509},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 8.663},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 7.444},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 9.312}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 48.509
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 8.663
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.444
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 9.312
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 10.347},
-              {"name": "Other Bets 其他押注", "revenue": 0.365},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.102}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 10.347
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.365
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.102
+              }
             ],
             "sources": [
               {
@@ -6304,15 +6451,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 76.51,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 49.385},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 8.921},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 7.548},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 10.656}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 49.385
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 8.921
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.548
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 10.656
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 11.353},
-              {"name": "Other Bets 其他押注", "revenue": 0.388},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.017}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 11.353
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.388
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.017
+              }
             ],
             "sources": [
               {
@@ -6382,15 +6550,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 304.93,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 198.084},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 36.147},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 30.359},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 40.34}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 198.084
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 36.147
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 30.359
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 40.34
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 43.229},
-              {"name": "Other Bets 其他押注", "revenue": 1.648},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.211}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 43.229
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 1.648
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.211
+              }
             ],
             "sources": [
               {
@@ -6445,15 +6634,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 77.264,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 50.702},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 8.927},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 7.256},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 10.379}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 50.702
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 8.927
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.256
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 10.379
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 12.26},
-              {"name": "Other Bets 其他押注", "revenue": 0.45},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": 0.26}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 12.26
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.45
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.26
+              }
             ],
             "sources": [
               {
@@ -6498,15 +6708,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 82.543,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 54.19},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 9.796},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 7.354},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 11.203}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 54.19
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 9.796
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.354
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 11.203
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 13.624},
-              {"name": "Other Bets 其他押注", "revenue": 0.373},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": -0.112}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 13.624
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.373
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": -0.112
+              }
             ],
             "sources": [
               {
@@ -6551,15 +6782,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 87.052,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 56.567},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 10.261},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 7.354},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 12.87}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 56.567
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 10.261
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.354
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 12.87
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 15.157},
-              {"name": "Other Bets 其他押注", "revenue": 0.344},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": -0.207}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 15.157
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.344
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": -0.207
+              }
             ],
             "sources": [
               {
@@ -6629,15 +6881,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 342.721,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 224.532},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 40.367},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 29.792},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 48.03}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 224.532
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 40.367
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 29.792
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 48.03
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 58.705},
-              {"name": "Other Bets 其他押注", "revenue": 1.537},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": -0.127}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 58.705
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 1.537
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": -0.127
+              }
             ],
             "sources": [
               {
@@ -6714,15 +6987,36 @@
                 "name": "Google Services 谷歌服务",
                 "revenue": 89.637,
                 "children": [
-                  {"name": "Google Search & other 搜索及其他", "revenue": 60.399},
-                  {"name": "YouTube Ads YouTube 广告", "revenue": 9.883},
-                  {"name": "Google Network 谷歌联盟广告", "revenue": 6.971},
-                  {"name": "Subscriptions, platforms & devices 订阅、平台与设备", "revenue": 12.384}
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 60.399
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 9.883
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 6.971
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 12.384
+                  }
                 ]
               },
-              {"name": "Google Cloud 谷歌云", "revenue": 20.028},
-              {"name": "Other Bets 其他押注", "revenue": 0.411},
-              {"name": "Hedging gains (losses) 对冲损益", "revenue": -0.18}
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 20.028
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.411
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": -0.18
+              }
             ],
             "sources": [
               {
@@ -7586,7 +7880,48 @@
             }
           ],
           "cfo": 84.946,
-          "capex": 52.729
+          "capex": 52.729,
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 231.872
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 20.03
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 140.053
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 46.906
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 40.209
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 90.757
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 4.958
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon FY2023 10-K Disaggregation of Revenue — Online stores $231,872M; Physical stores $20,030M; Third-party seller services $140,053M; Advertising services $46,906M; Subscription services $40,209M; AWS $90,757M; Other $4,958M；合计 $574,785M（检索交叉印证，待 Dayu 复核）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000008/amzn-20231231.htm",
+                "data_status": "official"
+              }
+            ]
+          }
         },
         {
           "fy": "FY2024",
@@ -7691,7 +8026,48 @@
             }
           ],
           "cfo": 139.514,
-          "capex": 131.819
+          "capex": 131.819,
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 269.287
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 22.561
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 172.162
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 68.635
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 49.619
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 128.725
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 5.935
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon FY2025 10-K Disaggregation of Revenue — Online stores $269,287M; Physical stores $22,561M; Third-party seller services $172,162M; Advertising services $68,635M; Subscription services $49,619M; AWS $128,725M; Other $5,935M；合计 $716,924M（检索交叉印证，待 Dayu 复核）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+                "data_status": "official"
+              }
+            ]
+          }
         },
         {
           "fy": "FY2026E",
@@ -7914,7 +8290,48 @@
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000008/amzn-20231231.htm",
               "data_status": "official"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 231.872
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 20.03
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 140.053
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 46.906
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 40.209
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 90.757
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 4.958
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon FY2023 10-K Disaggregation of Revenue — Online stores $231,872M; Physical stores $20,030M; Third-party seller services $140,053M; Advertising services $46,906M; Subscription services $40,209M; AWS $90,757M; Other $4,958M；合计 $574,785M（检索交叉印证，待 Dayu 复核）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000008/amzn-20231231.htm",
+                "data_status": "official"
+              }
+            ]
+          }
         },
         {
           "period_id": "amazon-2024q1",
@@ -8195,7 +8612,48 @@
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
               "data_status": "official"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 269.287
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 22.561
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 172.162
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 68.635
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 49.619
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 128.725
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 5.935
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon FY2025 10-K Disaggregation of Revenue — Online stores $269,287M; Physical stores $22,561M; Third-party seller services $172,162M; Advertising services $68,635M; Subscription services $49,619M; AWS $128,725M; Other $5,935M；合计 $716,924M（检索交叉印证，待 Dayu 复核）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+                "data_status": "official"
+              }
+            ]
+          }
         },
         {
           "period_id": "amazon-2026q1",
@@ -8997,7 +9455,61 @@
               "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525315925/orcl-20251130.htm",
               "data_status": "official"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "产品与收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Cloud services and license support 云服务及授权支持",
+                "revenue": 13.883,
+                "children": [
+                  {
+                    "name": "Cloud services 云服务",
+                    "revenue": 8.914,
+                    "children": [
+                      {
+                        "name": "Cloud Application (SaaS) 云应用（SaaS）",
+                        "revenue": 4.026
+                      },
+                      {
+                        "name": "Cloud Infrastructure (OCI/IaaS) 云基础设施（OCI/IaaS）",
+                        "revenue": 4.888
+                      }
+                    ]
+                  },
+                  {
+                    "name": "License support 授权支持（filing 原文 software support）",
+                    "revenue": 4.969
+                  }
+                ]
+              },
+              {
+                "name": "Cloud license and on-premise license 云授权及本地授权（filing 原文 software license）",
+                "revenue": 1.15
+              },
+              {
+                "name": "Hardware 硬件",
+                "revenue": 0.714
+              },
+              {
+                "name": "Services 服务",
+                "revenue": 1.443
+              }
+            ],
+            "sources": [
+              {
+                "label": "Oracle Form 10-Q filed 2026-03-10（FY2026 Q3 iXBRL 产品/收入拆分表原文：cloud applications $4,026M；cloud infrastructure $4,888M；software support $4,969M；software license $1,150M；hardware $714M；services $1,443M → 合计 $17,190M）。库内 oracle-fy2026q3 已引此表为 official；本树在其上加 Cloud services=SaaS+IaaS=$8,914M、Cloud services and license support=$13,883M 两级派生节点。检索交叉印证，待 Dayu 复核。",
+                "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+                "data_status": "official"
+              },
+              {
+                "label": "Oracle FY2026 Q3 业绩新闻稿（2026-03-10）交叉印证：Q3 Cloud Infrastructure (IaaS) $4.9B、Cloud Application (SaaS) $4.0B、Cloud 合计 $8.9B、总营收 $17.2B——与 10-Q 精确表（IaaS 4.888 / SaaS 4.026 / Cloud 8.914 / total 17.190）一致。检索交叉印证，待 Dayu 复核。",
+                "url": "https://www.oracle.com/news/announcement/q3fy26-earnings-release-2026-03-10/",
+                "data_status": "official"
+              }
+            ]
+          }
         },
         {
           "period_id": "oracle-fy2026-annual",
