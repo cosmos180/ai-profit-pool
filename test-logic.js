@@ -76,6 +76,18 @@ assert.equal(productRows.find(x => x.path === "Services / YouTube Ads").share, 0
 assert.deepEqual(Selectors.revenueSorted(productHierarchy.years[1]).map(x => x.name), ["Services"]); // no double count
 assert.deepEqual(Selectors.revenueBreakdownRows(null), []);
 
+// breakdown meta drives the view's provenance copy: "official/reconciled" claims
+// must vanish for derived or incomplete hierarchies (e.g. tsmc %×revenue).
+assert.equal(Selectors.revenueBreakdownMeta(null), null);
+assert.deepEqual(Selectors.revenueBreakdownMeta({ revenue_breakdown: { label: "产品", complete: true,
+  items: [{ name: "A", revenue: 1 }], sources: [{ data_status: "official" }] } }),
+  { label: "产品", complete: true, official: true });
+assert.deepEqual(Selectors.revenueBreakdownMeta({ revenue_breakdown: { label: "制程", complete: false,
+  items: [{ name: "A", revenue: 1 }], sources: [{ data_status: "official" }, { data_status: "derived" }] } }),
+  { label: "制程", complete: false, official: false });
+// empty sources never count as official (provenance is mandatory, not assumed)
+assert.equal(Selectors.revenueBreakdownMeta(productHierarchy.years[1]).official, false);
+
 // cash & capital intensity (FCF derived, never stored)
 const cashYear = { fy: "FY1", status: "actual", revenue: 100, net_income: 20, capex: 30, cfo: 50 };
 assert.equal(Selectors.capexIntensity(cashYear), 0.3);

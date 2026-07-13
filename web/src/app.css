@@ -208,6 +208,7 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .breakdown-card{overflow:hidden}.breakrow.group{background:var(--card-2);margin:0 -18px;padding:13px 18px}.breakrow.group .pname{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
 .breakrow .branch{color:var(--ink-faint);font-family:var(--mono);font-weight:400}.breakrow .pfill{background:var(--past)}.breakrow.focus .pfill{background:var(--ai)}
 .breakrow.negative .pv{color:var(--bad)}.producttag{font-family:var(--mono);font-size:9.5px;background:var(--ai-soft);color:var(--ai);padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em}
+.rb-flag{font-family:var(--mono);font-size:9.5px;background:var(--warn-soft,rgba(200,140,0,.12));color:var(--warn,#b8860b);padding:2px 7px;border-radius:5px;margin-left:8px;letter-spacing:.05em;vertical-align:middle}
 .recon-line{font-size:12px;color:var(--ink-soft);font-family:var(--mono);padding:11px 18px;border-top:1px dashed var(--line)}
 .recon-line .ok{color:var(--ok);font-weight:600}
 .gap{padding:17px 18px;background:linear-gradient(0deg,var(--est-soft),var(--card));border:1px solid #E4CFA4;border-left:4px solid var(--est);border-radius:13px}

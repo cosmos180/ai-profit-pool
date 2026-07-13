@@ -123,6 +123,21 @@ const Selectors = {
       : null;
   },
 
+  /* 拆分的口径元信息（视图文案分流用，组件不做 provenance 判断）：
+     official = sources 非空且全部 data_status==="official"；complete 透传布尔。
+     非 official（如 tsmc %×营收 derived）或 complete=false 时，视图不得宣称
+     「官方」「已与营收对账」。 */
+  revenueBreakdownMeta(y) {
+    const breakdown = this.revenueBreakdown(y);
+    if (!breakdown) return null;
+    const statuses = (breakdown.sources || []).map(s => s && s.data_status).filter(Boolean);
+    return {
+      label: breakdown.label,
+      complete: breakdown.complete === true,
+      official: statuses.length > 0 && statuses.every(s => s === "official"),
+    };
+  },
+
   revenueBreakdownRows(y) {
     const breakdown = this.revenueBreakdown(y);
     if (!breakdown) return [];

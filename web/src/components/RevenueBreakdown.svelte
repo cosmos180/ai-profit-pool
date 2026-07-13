@@ -6,6 +6,7 @@
   let { owner, company = null, fy = null } = $props()
 
   const breakdown = $derived(Selectors.revenueBreakdown(owner))
+  const meta = $derived(Selectors.revenueBreakdownMeta(owner))
   const rows = $derived.by(() => {
     const raw = Selectors.revenueBreakdownRows(owner)
     const maxPositive = Math.max(...raw.map(row => row.revenue > 0 ? row.revenue : 0), 1)
@@ -22,7 +23,7 @@
 </script>
 
 {#if breakdown && rows.length}
-  <div class="section-h">{breakdown.label} · 官方收入拆分</div>
+  <div class="section-h">{breakdown.label} · {meta.official ? '官方收入拆分' : '收入拆分（派生口径）'}{#if !meta.complete}<span class="rb-flag">不完整拆分</span>{/if}</div>
   <div class="card breakdown-card">
     <div class="plat">
       {#each rows as row (row.path)}
@@ -43,6 +44,6 @@
         </div>
       {/each}
     </div>
-    <div class="recon-line"><b>口径：</b>这是产品/收入类型层级，完整顶层与公司营收对账；它不代表产品独立利润。对冲损益在这里按官方表格单列，下方“业务板块”继续保留报告分部及其营业利润口径。</div>
+    <div class="recon-line"><b>口径：</b>这是产品/收入类型层级{#if meta.complete}，完整顶层与公司营收对账{:else}；<b>不完整拆分（complete=false）</b>，顶层不与公司营收对账，占比仅供参考{/if}；它不代表产品独立利润。{#if !meta.official}数值为<b>派生口径</b>（如披露百分比 × 营收换算，见来源标注），非官方直接披露金额。{/if}对冲损益等调节项按官方表格单列，下方“业务板块”继续保留报告分部及其营业利润口径。</div>
   </div>
 {/if}
