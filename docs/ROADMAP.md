@@ -49,6 +49,9 @@
     - **Tiger 边界**:US/HK/ADR 顺;韩/台/日**原股不塞 Tiger**;quote 刷新按可支持标的先更新,**不阻塞** periods 数据批次。
     - Phase 6 final gate 已满足:`legacy_fallback = 0`;legacy 数据留审计。
   - **过渡期双写规则**:在年度视图/估值/AI 池/前瞻链完成广口径迁移前,年度 actual 事实同时写 `periods[]` annual 与 legacy `years[]`(按 `period_end_iso` 增量);季度事实只写 `periods[]`。
+- [~] **D8 · 产品收入层级全覆盖**(★2026-07-13 用户拍板:**后续所有公司标配** `revenue_breakdown`,方便按业务板块判断)
+  - 口径:filing 的 disaggregation of revenue / 产品收入表按**官方原始层级**录入(years+periods 双挂,季度+年度);与 `segments[]` 严格分开(产品收入 ≠ 分部利润,不重复计数);`complete=true` 两级对账硬闸;对冲损益等调节项带符号单列。规格已入 DATA-SPEC-dayu §2.A。
+  - 进展:google 试点已铺满 FY2023–25 + 11 periods(用户,8697fc1)。其余 13 家蓝图见 `docs/plans/revenue-breakdown-blueprint.md`,按蓝图分批采集:①microsoft/amazon/nvda(披露最细、价值最高)→ ②broadcom/oracle/arm/micron → ③非 SEC 4 家 + asml/tsmc(tsmc 平台拆分或即最细口径,蓝图判定)。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
   - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。

@@ -130,6 +130,28 @@
 - 分部经营利润不是公司净利润,不要混用
 - Amazon 这类公司不披露传统 gross profit 时,`gross_profit` 可以是 `null`
 
+## 6.5 产品收入层级(`revenue_breakdown`,★全公司标配 2026-07-13 拍板)
+
+与 `segments[]` 严格分开:产品收入 ≠ 分部利润口径,不重复计数。filing 有
+disaggregation of revenue / 产品收入表就录,没有就省略整键(不硬凑)。
+
+```json
+"revenue_breakdown": {
+  "label": "产品与收入类型", "complete": true,
+  "items": [
+    { "name": "Google Services 谷歌服务", "revenue": 342.721,
+      "children": [ { "name": "Google Search & other 搜索及其他", "revenue": 224.532 } ] },
+    { "name": "Hedging gains (losses) 对冲损益", "revenue": -0.127 }
+  ],
+  "sources": [ { "label": "10-K Note 2 revenue disaggregation", "url": "…", "data_status": "official" } ]
+}
+```
+
+规则:按官方表原始行名/层级录(可加中英对照),不合并不改名;`complete=true` 时顶层合计
+必须精确=revenue,带 children 的节点子项必须精确=父节点(validate 两级硬对账);对冲/
+调节项带符号单列;years 与 periods 都挂(年度+季度);各家层级照
+`docs/plans/revenue-breakdown-blueprint.md` 蓝图录。
+
 ## 7. 常见坑
 
 - 把 YTD 现金流当季度现金流:很多 10-Q 的 CFO/capex 是累计数,需要确认是三个月还是六/九个月
