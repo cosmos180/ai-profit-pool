@@ -72,6 +72,13 @@ cd web && bun run build     # 校验+测试闸门通过后产出 app.html
 
 ### 下钻会自动适配披露能力
 
+当财报同时披露“报告分部”和更细的“产品/收入类型”时，两层分开存储：
+
+- `segments[]`：报告分部营收与营业利润，例如 Google Services / Google Cloud。
+- `revenue_breakdown`：树状产品收入，例如 Google Services → YouTube Ads；父子节点及完整顶层由 `validate.py` 强制对账。
+
+两者不可混在同一个数组，否则产品收入会与其父分部重复计数。下钻页会先展示产品收入层级，再展示报告分部与分部利润。
+
 每家公司带 `seg_profit`：
 
 - `yes`（如三星、博通）：`segments[]` 里填 `op_income` / `op_margin`，下钻**自动出现真实的分部利润与利润率（降序）**。

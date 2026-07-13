@@ -7,6 +7,7 @@
   import { Fmt } from '../lib/fmt.js'
   import Sankey from '../charts/Sankey.svelte'
   import Reconcile from './Reconcile.svelte'
+  import RevenueBreakdown from './RevenueBreakdown.svelte'
   import SourcesBlock from './SourcesBlock.svelte'
 
   const c = $derived(nav.companyId ? Store.byId(nav.companyId) : null)
@@ -142,6 +143,8 @@
 
     <Sankey company={c} year={p} />
 
+    <RevenueBreakdown owner={p} />
+
     {#if periodSegRows.length}
       <div class="section-h">季度分部营收 · 降序</div>
       <div class="card">
@@ -215,6 +218,8 @@
     </div>
 
     <Sankey company={c} year={y} />
+
+    <RevenueBreakdown owner={y} company={c} fy={y.fy} />
 
     <div class="section-h">业务板块营收 · 降序</div>
     <div class="card">

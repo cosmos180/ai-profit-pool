@@ -5,11 +5,20 @@
 
   let { year } = $props()
 
-  const rows = $derived((year?.sources || []).map(s => ({
-    label: s.label,
-    status: s.data_status || '',
-    url: Safe.url(s.url),
-  })))
+  const rows = $derived.by(() => {
+    const raw = [...(year?.sources || []), ...(year?.revenue_breakdown?.sources || [])]
+    const seen = new Set()
+    return raw.filter(source => {
+      const key = `${source.url || ''}\u0000${source.label || ''}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    }).map(s => ({
+      label: s.label,
+      status: s.data_status || '',
+      url: Safe.url(s.url),
+    }))
+  })
 </script>
 
 <div class="section-h">数据来源</div>

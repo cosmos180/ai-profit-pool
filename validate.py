@@ -7,7 +7,7 @@ Run after any data change (manual entry or collector output):
 
 It enforces the invariants this whole project exists to protect:
   - schema conformance (if `jsonschema` is installed; else a structural fallback)
-  - reconciliation: platform-segment revenue must sum to company revenue
+  - reconciliation: platform-segment revenue and complete product hierarchies must sum to company revenue
   - provenance: every actual year and every source must carry a source URL + data_status
   - sanity: net_income <= revenue for operating companies, margins in [0,1], etc.
 Derived metrics are never stored, so they are never validated here — only raw facts.
@@ -41,6 +41,55 @@ def allows_net_income_above_revenue(cid):
     # SoftBank 的利润高度受投资收益/估值重估驱动；这些收益不进入 Net sales，
     # 所以单季归母净利可能超过销售收入。其他公司继续保留强校验。
     return cid in INVESTMENT_INCOME_CAN_EXCEED_REVENUE
+
+def check_revenue_breakdown(owner, revenue, tag, errors, oks):
+    """Validate a source-backed product/revenue hierarchy independently of segments[]."""
+    rb = owner.get("revenue_breakdown")
+    if not rb:
+        return
+
+    sources = rb.get("sources") or []
+    if not sources:
+        errors.append(f"ERROR {tag}/revenue_breakdown: 缺少 sources")
+    for source in sources:
+        url = source.get("url") or ""
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            errors.append(f"ERROR {tag}/revenue_breakdown: source URL 非 http(s) 绝对链接: {url or '空'}")
+        if not source.get("url") or not source.get("data_status"):
+            errors.append(f"ERROR {tag}/revenue_breakdown: source 缺少 url 或 data_status")
+
+    def walk(items, path=""):
+        sibling_names = set()
+        for item in items:
+            name = item.get("name", "?")
+            item_path = f"{path}/{name}" if path else name
+            if name in sibling_names:
+                errors.append(f"ERROR {tag}/revenue_breakdown:{path or 'root'} 同级名称重复: {name}")
+            sibling_names.add(name)
+            value = item.get("revenue")
+            if not isinstance(value, (int, float)):
+                errors.append(f"ERROR {tag}/revenue_breakdown:{item_path} revenue 必须为数值")
+                continue
+            children = item.get("children") or []
+            if children:
+                child_sum = round(sum(x.get("revenue", 0) for x in children if isinstance(x.get("revenue"), (int, float))), 4)
+                diff = round(child_sum - value, 4)
+                if abs(diff) <= TOL:
+                    oks.append(f"INFO  {tag}/revenue_breakdown:{item_path} 子项合计 {child_sum} = {value} ✓")
+                else:
+                    errors.append(f"ERROR {tag}/revenue_breakdown:{item_path} 子项合计 {child_sum} ≠ {value}（差 {diff:+}）")
+                walk(children, item_path)
+
+    items = rb.get("items") or []
+    walk(items)
+    if rb.get("complete") and revenue is not None:
+        total = round(sum(x.get("revenue", 0) for x in items if isinstance(x.get("revenue"), (int, float))), 4)
+        diff = round(total - revenue, 4)
+        if abs(diff) <= TOL:
+            oks.append(f"OK    {tag}/revenue_breakdown: 顶层合计 {total} = 营收 {revenue} ✓ 对账通过")
+        else:
+            errors.append(f"ERROR {tag}/revenue_breakdown: 顶层合计 {total} ≠ 营收 {revenue}（差 {diff:+}）")
 
 def check(data):
     errors, warns, oks = [], [], []
@@ -226,6 +275,7 @@ def check(data):
             # status=actual 却无任何金融事实 → WARN（guidance 允许缺 net_income，不告警）
             if status == "actual" and rev is None and p.get("op_income") is None and ni is None:
                 warns.append(f"WARN  {ptag}: status=actual 但无任何金融事实（revenue/op_income/net_income 全缺）")
+            check_revenue_breakdown(p, rev, ptag, errors, oks)
             # 分部：营收非负；平台分部仅在 status=actual 的（视为完整的）平台分部集时强制对账，
             # guidance / division 口径不强制（含内部交易 / 部分分部）。
             psegs = [s for s in p.get("segments", []) if s.get("revenue") is not None]
@@ -265,6 +315,7 @@ def check(data):
 
             if status == "actual":
                 rev, ni = y.get("revenue"), y.get("net_income")
+                check_revenue_breakdown(y, rev, tag, errors, oks)
                 if rev is not None and rev < 0:
                     errors.append(f"ERROR {tag}: revenue({rev}) < 0")
                 # provenance
