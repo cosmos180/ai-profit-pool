@@ -51,7 +51,12 @@
   - **过渡期双写规则**:在年度视图/估值/AI 池/前瞻链完成广口径迁移前,年度 actual 事实同时写 `periods[]` annual 与 legacy `years[]`(按 `period_end_iso` 增量);季度事实只写 `periods[]`。
 - [~] **D8 · 产品收入层级全覆盖**(★2026-07-13 用户拍板:**后续所有公司标配** `revenue_breakdown`,方便按业务板块判断)
   - 口径:filing 的 disaggregation of revenue / 产品收入表按**官方原始层级**录入(years+periods 双挂,季度+年度);与 `segments[]` 严格分开(产品收入 ≠ 分部利润,不重复计数);`complete=true` 两级对账硬闸;对冲损益等调节项带符号单列。规格已入 DATA-SPEC-dayu §2.A。
-  - 进展:google 试点已铺满 FY2023–25 + 11 periods(用户,8697fc1)。其余 13 家蓝图见 `docs/plans/revenue-breakdown-blueprint.md`,按蓝图分批采集:①microsoft/amazon/nvda(披露最细、价值最高)→ ②broadcom/oracle/arm/micron → ③非 SEC 4 家 + asml/tsmc(tsmc 平台拆分或即最细口径,蓝图判定)。
+  - 进展:google 试点已铺满 FY2023–25 + 11 periods(用户,8697fc1)。13 家蓝图已定稿(`docs/plans/revenue-breakdown-blueprint.md`,分析师逐家核披露结构):
+    - **批次①(ROI 最高,SEC 10-K 精确金额)**:microsoft/amazon/micron/oracle(oracle 前置闸:拆得出 Cloud→OCI/SaaS 才录,否则=segments 重复,暂缓);
+    - **批次②(带口径 caveat)**:nvda(仅当能挂 Data Center→Compute/Networking children)、tsmc(node 表高价值但仅%+晶圆口径→`derived`+`complete=false`,**不造轧差行**)、asml(增量有限最后做);
+    - **批次③(非 SEC PDF)**:tencent 先(HKEX 金额齐)→ samsung(注意 division 内部抵消行)/skhynix(占比区间期标 derived);
+    - **省略三家(宁缺勿噪)**:arm(=segments)、broadcom(filing 不给产品拆,**不搬电话会 non-GAAP**)、softbank(thesis 在 NAV 不在收入线,录了反而误导)。
+    - 红线:micron/skhynix 的 HBM 不在产品表、不得从电话会补录;%口径不冒充 official。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
   - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
