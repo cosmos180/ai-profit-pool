@@ -7,7 +7,7 @@ Run after any data change (manual entry or collector output):
 
 It enforces the invariants this whole project exists to protect:
   - schema conformance (if `jsonschema` is installed; else a structural fallback)
-  - reconciliation: platform-segment revenue must sum to company revenue
+  - reconciliation: platform-segment revenue and complete product hierarchies must sum to company revenue
   - provenance: every actual year and every source must carry a source URL + data_status
   - sanity: net_income <= revenue for operating companies, margins in [0,1], etc.
 Derived metrics are never stored, so they are never validated here — only raw facts.
@@ -18,6 +18,7 @@ from datetime import date
 from urllib.parse import urlparse
 
 TOL = 0.05  # USD bn tolerance for reconciliation
+RB_TOL = 0.001  # revenue_breakdown 专用容差：产品层级按 4 位小数录入，对账要求精确（≤$1M）
 TODAY = date.today()  # 取真实当日，用于快照新鲜度判断（as_of 晚于今天 / 早于 90 天 → WARN）
 INVESTMENT_INCOME_CAN_EXCEED_REVENUE = {"softbank"}
 
@@ -41,6 +42,59 @@ def allows_net_income_above_revenue(cid):
     # SoftBank 的利润高度受投资收益/估值重估驱动；这些收益不进入 Net sales，
     # 所以单季归母净利可能超过销售收入。其他公司继续保留强校验。
     return cid in INVESTMENT_INCOME_CAN_EXCEED_REVENUE
+
+def check_revenue_breakdown(owner, revenue, tag, errors, oks):
+    """Validate a source-backed product/revenue hierarchy independently of segments[]."""
+    rb = owner.get("revenue_breakdown")
+    if not rb:
+        return
+
+    sources = rb.get("sources") or []
+    if not sources:
+        errors.append(f"ERROR {tag}/revenue_breakdown: 缺少 sources")
+    for source in sources:
+        url = source.get("url") or ""
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            errors.append(f"ERROR {tag}/revenue_breakdown: source URL 非 http(s) 绝对链接: {url or '空'}")
+        if not source.get("url") or not source.get("data_status"):
+            errors.append(f"ERROR {tag}/revenue_breakdown: source 缺少 url 或 data_status")
+
+    def walk(items, path=""):
+        sibling_names = set()
+        for item in items:
+            name = item.get("name", "?")
+            item_path = f"{path}/{name}" if path else name
+            if name in sibling_names:
+                errors.append(f"ERROR {tag}/revenue_breakdown:{path or 'root'} 同级名称重复: {name}")
+            sibling_names.add(name)
+            value = item.get("revenue")
+            if not isinstance(value, (int, float)):
+                errors.append(f"ERROR {tag}/revenue_breakdown:{item_path} revenue 必须为数值")
+                continue
+            children = item.get("children") or []
+            if children:
+                child_sum = round(sum(x.get("revenue", 0) for x in children if isinstance(x.get("revenue"), (int, float))), 4)
+                diff = round(child_sum - value, 4)
+                if abs(diff) <= RB_TOL:
+                    oks.append(f"INFO  {tag}/revenue_breakdown:{item_path} 子项合计 {child_sum} = {value} ✓")
+                else:
+                    errors.append(f"ERROR {tag}/revenue_breakdown:{item_path} 子项合计 {child_sum} ≠ {value}（差 {diff:+}）")
+                walk(children, item_path)
+
+    items = rb.get("items") or []
+    walk(items)
+    if rb.get("complete"):
+        if revenue is None:
+            errors.append(f"ERROR {tag}/revenue_breakdown: complete=true 但该期 revenue 为空——"
+                          f"无从对账，要么补 revenue，要么改 complete=false")
+        else:
+            total = round(sum(x.get("revenue", 0) for x in items if isinstance(x.get("revenue"), (int, float))), 4)
+            diff = round(total - revenue, 4)
+            if abs(diff) <= RB_TOL:
+                oks.append(f"OK    {tag}/revenue_breakdown: 顶层合计 {total} = 营收 {revenue} ✓ 对账通过")
+            else:
+                errors.append(f"ERROR {tag}/revenue_breakdown: 顶层合计 {total} ≠ 营收 {revenue}（差 {diff:+}）")
 
 def check(data):
     errors, warns, oks = [], [], []
@@ -226,6 +280,7 @@ def check(data):
             # status=actual 却无任何金融事实 → WARN（guidance 允许缺 net_income，不告警）
             if status == "actual" and rev is None and p.get("op_income") is None and ni is None:
                 warns.append(f"WARN  {ptag}: status=actual 但无任何金融事实（revenue/op_income/net_income 全缺）")
+            check_revenue_breakdown(p, rev, ptag, errors, oks)
             # 分部：营收非负；平台分部仅在 status=actual 的（视为完整的）平台分部集时强制对账，
             # guidance / division 口径不强制（含内部交易 / 部分分部）。
             psegs = [s for s in p.get("segments", []) if s.get("revenue") is not None]
@@ -265,6 +320,7 @@ def check(data):
 
             if status == "actual":
                 rev, ni = y.get("revenue"), y.get("net_income")
+                check_revenue_breakdown(y, rev, tag, errors, oks)
                 if rev is not None and rev < 0:
                     errors.append(f"ERROR {tag}: revenue({rev}) < 0")
                 # provenance
@@ -394,17 +450,95 @@ def check(data):
                                   f"annual actual double-write（按 fiscal_year 或 period_end 年份对齐）")
                     continue
                 p = cand[0]
-                for field in ("revenue", "net_income"):
+                p_tag = p.get("fiscal_year") or p.get("period_end")
+
+                def num_close(a, b):
+                    return abs(a - b) <= 0.001 or (a != 0 and abs(a - b) / abs(a) <= 1e-6)
+
+                # B2(D4): headline 流量字段全纳入双写钉子（不含 gross —— periods 侧无 gross_profit 事实）。
+                for field in ("revenue", "net_income", "op_income", "cfo", "capex"):
                     yv, pv = y.get(field), p.get(field)
                     if yv is None:
                         continue
                     if pv is None:
                         errors.append(f"ERROR {cid}/{fy}: double-write 不一致 —— years.{field}={yv} 但 "
-                                      f"annual period（{p.get('fiscal_year') or p.get('period_end')}）该字段缺失")
+                                      f"annual period（{p_tag}）该字段缺失")
                         continue
-                    if abs(yv - pv) > 0.001 and (yv == 0 or abs(yv - pv) / abs(yv) > 1e-6):
+                    if not num_close(yv, pv):
                         errors.append(f"ERROR {cid}/{fy}: double-write 不一致 —— years.{field}={yv} ≠ "
                                       f"annual period.{field}={pv}（差 {round(pv - yv, 6):+}，超容差）")
+
+                # B2(D4): 逐分部（按 name 对齐）钉住 revenue/op_income/op_margin/is_ai/kind。
+                # years 分部有名字但 periods 缺同名分部 → ERROR；同名分部逐字段比对。
+                p_segs = {s.get("name"): s for s in (p.get("segments") or []) if s.get("name")}
+                for ys in (y.get("segments") or []):
+                    nm = ys.get("name")
+                    if nm is None:
+                        continue
+                    ps = p_segs.get(nm)
+                    if ps is None:
+                        errors.append(f"ERROR {cid}/{fy}: double-write 分部不一致 —— years 有分部「{nm}」，"
+                                      f"但 annual period（{p_tag}）缺同名分部")
+                        continue
+                    for field in ("revenue", "op_income", "op_margin"):
+                        yv, pv = ys.get(field), ps.get(field)
+                        if yv is None:
+                            continue
+                        if pv is None:
+                            errors.append(f"ERROR {cid}/{fy}: 分部「{nm}」double-write 不一致 —— "
+                                          f"years.{field}={yv} 但 annual period 该字段缺失")
+                            continue
+                        if not num_close(yv, pv):
+                            errors.append(f"ERROR {cid}/{fy}: 分部「{nm}」double-write 不一致 —— "
+                                          f"years.{field}={yv} ≠ annual period.{field}={pv}"
+                                          f"（差 {round(pv - yv, 6):+}，超容差）")
+                    for field in ("is_ai", "kind"):
+                        yv, pv = ys.get(field), ps.get(field)
+                        if yv is None:
+                            continue
+                        if yv != pv:
+                            errors.append(f"ERROR {cid}/{fy}: 分部「{nm}」double-write 不一致 —— "
+                                          f"years.{field}={yv!r} ≠ annual period.{field}={pv!r}")
+
+                # 反向：annual period 多出 years 没有的分部同样是双写破裂（两侧各自对得上
+                # 总营收、内部构成却不同，legacy 年度页与 periods 链会展示不同拆分）。
+                y_seg_names = {s.get("name") for s in (y.get("segments") or []) if s.get("name")}
+                for nm in p_segs:
+                    if nm not in y_seg_names:
+                        errors.append(f"ERROR {cid}/{fy}: double-write 分部不一致 —— annual period（{p_tag}）"
+                                      f"有分部「{nm}」，但 years 缺同名分部")
+
+                # revenue_breakdown 双写：年度事实两侧要么都有、要么都无；都有则整树深比较
+                # （label/complete、逐层同名集合、逐节点 revenue ≤ RB_TOL）。
+                y_rb, p_rb = y.get("revenue_breakdown"), p.get("revenue_breakdown")
+                if (y_rb is None) != (p_rb is None):
+                    side = "years" if y_rb is not None else f"annual period（{p_tag}）"
+                    other = f"annual period（{p_tag}）" if y_rb is not None else "years"
+                    errors.append(f"ERROR {cid}/{fy}: revenue_breakdown 只写了 {side} 一侧，{other} 缺失"
+                                  f"——年度事实须双写")
+                elif y_rb is not None and p_rb is not None:
+                    if y_rb.get("label") != p_rb.get("label") or bool(y_rb.get("complete")) != bool(p_rb.get("complete")):
+                        errors.append(f"ERROR {cid}/{fy}: revenue_breakdown double-write 不一致 —— "
+                                      f"label/complete 两侧不同")
+
+                    def rb_tree_diff(y_items, p_items, path):
+                        y_map = {i.get("name"): i for i in (y_items or []) if i.get("name")}
+                        p_map = {i.get("name"): i for i in (p_items or []) if i.get("name")}
+                        for nm in set(y_map) | set(p_map):
+                            node = f"{path}/{nm}" if path else nm
+                            yi, pi = y_map.get(nm), p_map.get(nm)
+                            if yi is None or pi is None:
+                                miss = "annual period" if pi is None else "years"
+                                errors.append(f"ERROR {cid}/{fy}: revenue_breakdown double-write 不一致 —— "
+                                              f"节点「{node}」在 {miss} 侧缺失")
+                                continue
+                            yv, pv = yi.get("revenue"), pi.get("revenue")
+                            if isinstance(yv, (int, float)) and isinstance(pv, (int, float)) and abs(yv - pv) > RB_TOL:
+                                errors.append(f"ERROR {cid}/{fy}: revenue_breakdown double-write 不一致 —— "
+                                              f"节点「{node}」revenue {yv} ≠ {pv}（差 {round(pv - yv, 6):+}）")
+                            rb_tree_diff(yi.get("children"), pi.get("children"), node)
+
+                    rb_tree_diff(y_rb.get("items"), p_rb.get("items"), "")
 
     return errors, warns, oks
 

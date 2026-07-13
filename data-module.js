@@ -113,6 +113,67 @@ const Selectors = {
     return a ? (b - a) / a : null;
   },
 
+  /* ---- hierarchical revenue disaggregation (product / revenue type) ----
+     Separate from segments[] on purpose: a filing can disclose product revenue at a
+     finer grain than reportable-segment operating profit (Alphabet/YouTube).  The
+     hierarchy is raw data; flattening, shares and YoY are derived here for the view. */
+  revenueBreakdown(y) {
+    return y && y.revenue_breakdown && Array.isArray(y.revenue_breakdown.items)
+      ? y.revenue_breakdown
+      : null;
+  },
+
+  /* 拆分的口径元信息（视图文案分流用，组件不做 provenance 判断）：
+     official = sources 非空且全部 data_status==="official"；complete 透传布尔。
+     非 official（如 tsmc %×营收 derived）或 complete=false 时，视图不得宣称
+     「官方」「已与营收对账」。 */
+  revenueBreakdownMeta(y) {
+    const breakdown = this.revenueBreakdown(y);
+    if (!breakdown) return null;
+    const statuses = (breakdown.sources || []).map(s => s && s.data_status).filter(Boolean);
+    return {
+      label: breakdown.label,
+      complete: breakdown.complete === true,
+      official: statuses.length > 0 && statuses.every(s => s === "official"),
+    };
+  },
+
+  revenueBreakdownRows(y) {
+    const breakdown = this.revenueBreakdown(y);
+    if (!breakdown) return [];
+    const rows = [];
+    const walk = (items, depth, parentPath) => {
+      for (const item of items) {
+        const path = parentPath ? `${parentPath} / ${item.name}` : item.name;
+        const children = Array.isArray(item.children) ? item.children : [];
+        rows.push({
+          name: item.name,
+          path,
+          depth,
+          revenue: item.revenue,
+          share: y.revenue ? item.revenue / y.revenue : null,
+          hasChildren: children.length > 0,
+        });
+        if (children.length) walk(children, depth + 1, path);
+      }
+    };
+    walk(breakdown.items, 0, "");
+    return rows;
+  },
+
+  revenueBreakdownItem(y, path) {
+    if (!path) return null;
+    return this.revenueBreakdownRows(y).find(item => item.path === path) || null;
+  },
+
+  revenueBreakdownYoY(c, fy, path) {
+    const i = this.yearIndex(c, fy);
+    if (i <= 0) return null;
+    const prev = this.revenueBreakdownItem(c.years[i - 1], path);
+    const cur = this.revenueBreakdownItem(this.yearByFy(c, fy), path);
+    return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
+  },
+
   /* ---- segments ---- */
   revenueSegs(y)   { return (y.segments || []).filter(s => s.revenue != null); },
   revenueSorted(y) { return this.revenueSegs(y).slice().sort((a, b) => b.revenue - a.revenue); },

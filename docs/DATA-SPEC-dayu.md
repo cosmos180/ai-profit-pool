@@ -74,6 +74,14 @@ filing 原文数字(禁止用训练记忆补空,拿不到留 null),为每个季�
       "revenue": <USD bn 4位>, "net_income": <归母 GAAP USD bn 4位>,
       "gross_profit": <或 null>, "op_income": <或 null>, "cfo": <或 null>, "capex": <绝对值或 null>,
       "segments": [],
+      "revenue_breakdown": {            // ★全公司标配(2026-07-13 用户拍板):filing 的 disaggregation
+        "label": "产品与收入类型",        //   of revenue / 产品收入表按原始层级录入;与 segments[] 严格分开
+        "complete": true,               //   (产品收入 ≠ 分部利润口径,不重复计数)。没有该披露的期可省略整键。
+        "items": [ { "name": "<官方行名(中英)>", "revenue": <USD bn>,
+                     "children": [ { "name": "...", "revenue": <USD bn> } ] } ],
+        "sources": [ { "label": "<10-K/10-Q Note X revenue disaggregation 表>", "url": "<filing URL>",
+                       "data_status": "official" } ]
+      },
       "sources": [ { "label": "<10-Q/6-K/8-K + 提交日期>", "url": "<EDGAR/官方 filing 索引页>",
                      "data_status": "official" } ] }
   ],
@@ -89,6 +97,9 @@ filing 原文数字(禁止用训练记忆补空,拿不到留 null),为每个季�
 缺任何字段填 null 绝不编造;calendar_quarter 按 period_end 日期落季,与 fiscal_quarter 可能不同;
 不要输出 chain_stage / ai_exposure / is_ai / seg_profit / valuation_caveat / 中文名(判断项,人工负责);
 不要输出市值/股价/预期 EPS(不在 filing);**只吐 periods 部分对象,merge 会按 period_id 增量并入**。
+revenue_breakdown 硬规则:按 filing 原始表逐行录、不合并不改名(中英对照可加);`complete=true` 时顶层
+合计必须精确=revenue、带 children 的节点子项合计必须精确=父节点(validate 两级对账硬闸);对冲损益等
+调节项按官方表带符号单列;各家层级蓝图见 `docs/plans/revenue-breakdown-blueprint.md`,照蓝图录。
 ```
 
 ### 2.B 旧模板(整对象 years/quarters,legacy——仅在需要整录一家新公司时用)

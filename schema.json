@@ -94,6 +94,7 @@
         "capex": {"type": ["number", "null"], "description": "Capital expenditures (raw, from cash-flow statement). Sign-neutral magnitude in meta.unit."},
         "cfo": {"type": ["number", "null"], "description": "Net cash from operating activities (raw, from cash-flow statement) in meta.unit."},
         "segments": {"type": "array", "items": {"$ref": "#/definitions/segment"}},
+        "revenue_breakdown": {"$ref": "#/definitions/revenue_breakdown"},
         "reportable_note": {"type": "object"},
         "framework_change": {"type": "string"},
         "consensus_rev": {"type": "string"},
@@ -149,6 +150,7 @@
         "cfo": {"type": ["number", "null"], "description": "Period net cash from operating activities in meta.unit (USD bn)."},
         "capex": {"type": ["number", "null"], "description": "Period capital expenditures (sign-neutral magnitude) in meta.unit (USD bn). FCF is derived, never stored."},
         "segments": {"type": "array", "items": {"$ref": "#/definitions/segment"}, "description": "Optional period-level segment breakdown, current segment shape. Empty [] allowed. Platform-segment reconciliation is enforced by validate.py only when the period explicitly carries a complete platform segment set (not forced for guidance / partial-quarter segments)."},
+        "revenue_breakdown": {"$ref": "#/definitions/revenue_breakdown"},
         "sources": {"type": "array", "items": {"$ref": "#/definitions/source"}, "description": "Provenance, mandatory per project invariant — each carries url + data_status."}
       }
     },
@@ -162,6 +164,29 @@
         "op_income": {"type": ["number", "null"]},
         "op_margin": {"type": ["number", "null"]},
         "is_ai": {"type": "boolean"}
+      }
+    },
+    "revenue_breakdown": {
+      "type": "object",
+      "description": "Optional source-backed hierarchical disaggregation of revenue by product / revenue type. Kept separate from segments[] because reportable-segment profit and product revenue often exist at different grains. When complete=true, top-level items must reconcile to company revenue; every item with children must reconcile to its children (enforced by validate.py).",
+      "required": ["label", "complete", "items", "sources"],
+      "additionalProperties": false,
+      "properties": {
+        "label": {"type": "string"},
+        "complete": {"type": "boolean"},
+        "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/revenue_breakdown_item"}},
+        "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/source"}}
+      }
+    },
+    "revenue_breakdown_item": {
+      "type": "object",
+      "description": "One node in a revenue hierarchy. children are a complete disaggregation of the parent node and therefore must sum to revenue. Signed revenue is allowed for reconciliation items such as hedging gains/losses.",
+      "required": ["name", "revenue"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "revenue": {"type": "number"},
+        "children": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/revenue_breakdown_item"}}
       }
     },
     "stage": {
