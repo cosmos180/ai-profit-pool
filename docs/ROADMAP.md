@@ -57,12 +57,13 @@
     - **批次③(非 SEC PDF)**:tencent 先(HKEX 金额齐)→ samsung(注意 division 内部抵消行)/skhynix(占比区间期标 derived);
     - **省略三家(宁缺勿噪)**:arm(=segments)、broadcom(filing 不给产品拆,**不搬电话会 non-GAAP**)、softbank(thesis 在 NAV 不在收入线,录了反而误导)。
     - 红线:micron/skhynix 的 HBM 不在产品表、不得从电话会补录;%口径不冒充 official。
-    - **批次①执行结果(2026-07-13)**:入库 **amazon FY2023/FY2025**(七行,official,双写两侧)+ **oracle fy2026q3**(三级 SaaS/OCI 树,official,闸门 PASS:FY2026 起单列 SaaS/OCI)。**扣下待 Dayu 精确补录**(egress 只剩检索通道,以下各项只有舍入级或有自由度,拒绝重构入库):
-      - 🧑 **microsoft**:FY2025 10-K 新口径重述表(M365 Commercial/Consumer、Windows and Devices;一张表含三年)+ FY2026 三季 10-Q(`msft-20250630.htm` 等);旧口径 FY2023/24 已采到但缺最新年无决策价值,弃;
-      - 🧑 **micron**:10-K/10-Q『Revenue by technology』精确 $M(`mu-20250828.htm` 三年 + `mu-20260226/0528.htm` 两季);检索只有整数占比且 FY2025 DRAM 源间差 ±$230M;
-      - 🧑 **amazon FY2024**:Online 247,029 / Physical 21,215 / Other 5,425 三行末位待原表确认(两自由度,恒等式不锁定)+ 可选 2025q3/2026q1 两季;
-      - 🧑 **oracle 年度三年**:FY2026 10-K 产品表(cloud application/cloud infrastructure/software support/software license/hardware/services,三年可比)+ fy2026q2 10-Q。
-    - **批次②执行结果(2026-07-14)**:入库 **tsmc 四期**(FY2024/FY2025 双写 + 2025q4/2026q1;十档节点占比双源印证 × 库内营收,derived + complete=false,基数以总营收近似晶圆收入的 ~9% 上偏已在 label 声明;FY2023 mature 档单源,弃)+ **asml 四期**(FY2023–25 official——库内已验证 USD 分部按 filing 损益表两行重新分组,零新增换算;2026q1 derived,官方 6-K EUR 两行自行换算,0.0001 尾差归系统行已注明。注:asml 年度树与 segments 信息同源,属呈现型增量,review 可裁)。**nvda 条件闸未过,弃**:检索仅 0.1B 舍入值/增长率,拿不到 DC→Compute/Networking 精确 $M;🧑 待 Dayu 取 10-K MD&A『Revenue Trends by Market』的 DC Compute/Networking 精确数。⚠ 附带发现:**NVIDIA 自 Q1 FY2027 变更报告框架**(Data Center/Edge 新口径),与库内 nvda-fy2027q1 旧分部结构冲突——补录季度前需架构师先定契约。
+    - **批次①执行结果(2026-07-13)**:入库 **amazon FY2023/FY2025**(七行,official,双写两侧)+ **oracle fy2026q3**(三级 SaaS/OCI 树,official,闸门 PASS:FY2026 起单列 SaaS/OCI)。当时检索通道只有舍入级或有自由度的四项均按「宁缺勿噪」扣下。
+    - **Dayu 精确补录完成(2026-07-14)**:四项采购单全部由本地 SEC filing 原表闭合并入库,年度 `years[]` + annual periods 双写、季度只写 periods:
+      - **microsoft**:FY2025 10-K `msft-20250630.htm` 新口径十行重述表一次补齐 FY2023–FY2025;
+      - **micron**:FY2025 10-K `mu-20250828.htm` 的 Revenue by Technology 精确补齐 FY2023–FY2025,并补 FY2026 Q2/Q3 两份 10-Q;
+      - **amazon FY2024**:`amzn-20241231.htm` 七行原表补齐,Online 247,029 / Physical 21,215 / Other 5,425 等末位已确认;
+      - **oracle FY2024–FY2026**:`orcl-20260531.htm` 以原始 Cloud→applications/infrastructure、Software→license/support、Hardware、Services 层级补齐三年;全部两级恒等式精确闭合。
+    - **批次②执行结果(2026-07-14)**:入库 **tsmc 四期**(FY2024/FY2025 双写 + 2025q4/2026q1;完整节点占比双源印证 × 库内营收,derived + complete=false,基数以总营收近似晶圆收入的 ~9% 上偏已在 label 声明;FY2023 mature 档单源,弃)+ **asml 四期**(FY2023–25 official——库内已验证 USD 分部按 filing 损益表两行重新分组,零新增换算;2026q1 derived,官方 6-K EUR 两行自行换算,0.0001 尾差归系统行已注明。年度树保留,因新增 system/service 官方父级口径)。**nvda 条件闸未过,弃**:检索仅 0.1B 舍入值/增长率,拿不到 DC→Compute/Networking 精确 $M;🧑 待 Dayu 取 10-K MD&A『Revenue Trends by Market』的 DC Compute/Networking 精确数。⚠ 附带发现:**NVIDIA 自 Q1 FY2027 变更报告框架**(Data Center/Edge 新口径),与库内 nvda-fy2027q1 旧分部结构冲突——补录季度前需架构师先定契约。
     - **批次③执行结果(2026-07-14,D8 采集收官)**:入库 **tencent 四期**(FY2023/24/25 双写 + 2026q1;顶层复用库内分部,VAS 挂本土游戏/国际游戏/社交网络三子,RMB 官方 × 隐含汇率,四期 children=parent 尾差 0.0;FY2024/2026q1 达成 complete=true,FY2023/FY2025 因库内营收 1 位小数精度 complete=false 注明)+ **samsung FY2024/FY2025**(官方 Business Report 精确披露 Memory KRW 84.463005T / 104.081179T,DS 下挂 Memory / System LSI＋Foundry 非存储残差;division 总额含内部交易,complete=false)。review 删除了把 FY2024 的 Smartphone and other 114.424862T 误认作 FY2025 MX 的无效 DX 拆分。**skhynix 全弃**:DART 被拦,检索仅相互冲突的分析师区间;副产品:库内三年隐含汇率与官方 KRW 营收逐期吻合已核。🧑 DART 清单:skhynix 품목별 매출 三行 KRW(FY2023–25 + 2025q3,报告书号已注)、samsung 사업보고서未单列的 Networks/VD/DA/System LSI/Foundry 分行与季度分部。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
