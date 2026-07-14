@@ -62,6 +62,7 @@
       - 🧑 **micron**:10-K/10-Q『Revenue by technology』精确 $M(`mu-20250828.htm` 三年 + `mu-20260226/0528.htm` 两季);检索只有整数占比且 FY2025 DRAM 源间差 ±$230M;
       - 🧑 **amazon FY2024**:Online 247,029 / Physical 21,215 / Other 5,425 三行末位待原表确认(两自由度,恒等式不锁定)+ 可选 2025q3/2026q1 两季;
       - 🧑 **oracle 年度三年**:FY2026 10-K 产品表(cloud application/cloud infrastructure/software support/software license/hardware/services,三年可比)+ fy2026q2 10-Q。
+    - **批次②执行结果(2026-07-14)**:入库 **tsmc 四期**(FY2024/FY2025 双写 + 2025q4/2026q1;十档节点占比双源印证 × 库内营收,derived + complete=false,基数以总营收近似晶圆收入的 ~9% 上偏已在 label 声明;FY2023 mature 档单源,弃)+ **asml 四期**(FY2023–25 official——库内已验证 USD 分部按 filing 损益表两行重新分组,零新增换算;2026q1 derived,官方 6-K EUR 两行自行换算,0.0001 尾差归系统行已注明。注:asml 年度树与 segments 信息同源,属呈现型增量,review 可裁)。**nvda 条件闸未过,弃**:检索仅 0.1B 舍入值/增长率,拿不到 DC→Compute/Networking 精确 $M;🧑 待 Dayu 取 10-K MD&A『Revenue Trends by Market』的 DC Compute/Networking 精确数。⚠ 附带发现:**NVIDIA 自 Q1 FY2027 变更报告框架**(Data Center/Edge 新口径),与库内 nvda-fy2027q1 旧分部结构冲突——补录季度前需架构师先定契约。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
   - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
