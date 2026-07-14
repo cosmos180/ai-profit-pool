@@ -116,8 +116,9 @@
   // 每行呈现数据（取值来自 Selectors，barW 是布局百分比非财务量）。
   const rows = $derived(ranked.map(c => {
     const la = Selectors.latestActual(c)
+    const annual = Selectors.latestActualAnnual(c)
     const fc = Selectors.forecastYear(c)
-    const ry = la ? Selectors.revYoY(c, la.fy) : null
+    const ry = annual ? Selectors.annualRevYoY(c, annual.fiscal_year) : null
     const val = Selectors.homeMetric(c, key)
     const barVal = val ?? 0   // 仅用于 bar 宽度渲染，非把 null 当业务值展示（数值列走 Fmt 渲 "—"）
     const view = Selectors.companyMetricView(c, effLens)   // 当前镜头的视图模型（口径）

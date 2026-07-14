@@ -86,6 +86,14 @@ const Selectors = {
   /* ---- year-level derivations ---- */
   netMargin(y) { return (y && y.revenue && y.net_income != null) ? y.net_income / y.revenue : null; },
   opMargin(y)  { return (y && y.revenue && y.op_income  != null) ? y.op_income  / y.revenue : null; },
+  /* Annual periods store the disclosed absolute gross profit; legacy/forecast years
+     store a gross-margin ratio. Keep the representation boundary in the selector so
+     views can consume either carrier without doing financial arithmetic. */
+  grossMargin(y) {
+    if (!y || !y.revenue) return null;
+    if (y.gross_profit != null) return y.gross_profit / y.revenue;
+    return y.gross_margin != null ? y.gross_margin : null;
+  },
 
   /* ---- cash & capital intensity (the "who burns cash on fabs vs who mints it" lens) ----
      capex is stored as a sign-neutral magnitude; FCF = operating cash flow − capex.
@@ -174,6 +182,15 @@ const Selectors = {
     return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
   },
 
+  annualRevenueBreakdownYoY(c, fy, path) {
+    const anns = this.actualAnnuals(c);
+    const i = anns.findIndex(p => p.fiscal_year === fy);
+    if (i <= 0) return null;
+    const prev = this.revenueBreakdownItem(anns[i - 1], path);
+    const cur = this.revenueBreakdownItem(anns[i], path);
+    return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
+  },
+
   /* ---- segments ---- */
   revenueSegs(y)   { return (y.segments || []).filter(s => s.revenue != null); },
   revenueSorted(y) { return this.revenueSegs(y).slice().sort((a, b) => b.revenue - a.revenue); },
@@ -233,6 +250,22 @@ const Selectors = {
     const prev = (prevYear.segments || []).find(s => s.name === name);
     const cur  = (curYear.segments || []).find(s => s.name === name);
     return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
+  },
+
+  /* periods-side annual segment YoY. Mirrors segYoY's framework fail-closed gate,
+     but never reads or falls back to years[]. */
+  annualSegYoY(c, fy, name) {
+    const anns = this.actualAnnuals(c);
+    const i = anns.findIndex(p => p.fiscal_year === fy);
+    if (i <= 0) return null;
+    const prev = anns[i - 1], cur = anns[i];
+    const prevFw = prev.segment_framework, curFw = cur.segment_framework;
+    if ((prevFw != null || curFw != null) && prevFw !== curFw) return null;
+    const prevSeg = (prev.segments || []).find(s => s.name === name);
+    const curSeg = (cur.segments || []).find(s => s.name === name);
+    return (prevSeg && curSeg && prevSeg.revenue)
+      ? (curSeg.revenue - prevSeg.revenue) / prevSeg.revenue
+      : null;
   },
 
   /* ---- AI attribution share (ADR-3, C-weighted pool; fallback = B) ----
@@ -490,13 +523,13 @@ const Selectors = {
   },
 
   /* ---- directory metric accessors (cross-company) ---- */
-  /* latest actual year that carries cash inputs (capex/cfo may lag the headline year).
-     服务 homeMetric 的 fcfMargin/capexInt (年度口径); 估值链 fcfYield 已迁 latestCashActualAnnual, 不再消费。 */
+  /* Legacy years-side cash ladder. Retained for the remaining years consumers/audit;
+     B2 directory and company views use latestCashActualAnnual exclusively. */
   latestCashYear(c) { return this.actualYears(c).reverse().find(y => y.capex != null || y.cfo != null) || null; },
 
   homeMetric(c, key) {
     if (key === "fcfMargin" || key === "capexInt") {
-      const cy = this.latestCashYear(c);
+      const cy = this.latestCashActualAnnual(c);
       if (!cy) return null;
       return key === "fcfMargin" ? this.fcfMargin(cy) : this.capexIntensity(cy);
     }
@@ -504,7 +537,7 @@ const Selectors = {
     if (key === "ps")       return this.ps(c);
     if (key === "evSales")  return this.evSales(c);
     if (key === "fcfYield") return this.fcfYield(c);
-    const y = this.latestActual(c);
+    const y = this.latestActualAnnual(c);
     if (!y) return null;
     if (key === "revenue")   return y.revenue;
     if (key === "netIncome") return y.net_income;
@@ -706,6 +739,19 @@ const Selectors = {
 
   actualPeriods(c)  { return this.periods(c).filter(p => p.status === "actual"); },
   quarterPeriods(c) { return this.periods(c).filter(p => p.kind === "quarter"); },
+  actualAnnuals(c)  { return this.periods(c).filter(p => p.kind === "annual" && p.status === "actual"); },
+
+  annualByFy(c, fy) {
+    return this.actualAnnuals(c).find(p => p.fiscal_year === fy) || null;
+  },
+
+  annualRevYoY(c, fy) {
+    const anns = this.actualAnnuals(c);
+    const i = anns.findIndex(p => p.fiscal_year === fy);
+    if (i <= 0) return null;
+    const prev = anns[i - 1].revenue, cur = anns[i].revenue;
+    return prev ? (cur - prev) / prev : null;
+  },
 
   /* a period carries a financial fact if any monetary field is non-null */
   _hasFinancialFact(p) {
@@ -725,14 +771,14 @@ const Selectors = {
      满足 kind==="annual" && status==="actual" 的 period 对象; 无此类 period → null。
      不回退 years[], 不借季度合成 —— 无 annual period 时 pe/ps/evSales 诚实留空。算不存。 */
   latestActualAnnual(c) {
-    const anns = this.periods(c).filter(p => p.kind === "annual" && p.status === "actual");
+    const anns = this.actualAnnuals(c);
     return anns.length ? anns[anns.length - 1] : null;
   },
   /* fcfYield 专用现金年 (B1-migrated: periods-only, 禁止改回 latestCashYear)。
      latestCashActualAnnual(c) → 从 annual actual periods 里自新到旧, 第一个 cfo!=null || capex!=null
      者 (现金字段常滞后 headline 年, 镜像 latestCashYear 语义); 皆无 → null。算不存。 */
   latestCashActualAnnual(c) {
-    const anns = this.periods(c).filter(p => p.kind === "annual" && p.status === "actual");
+    const anns = this.actualAnnuals(c);
     for (let i = anns.length - 1; i >= 0; i--) {
       if (anns[i].cfo != null || anns[i].capex != null) return anns[i];
     }

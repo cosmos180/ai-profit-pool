@@ -11,7 +11,7 @@
 
   const c = $derived(nav.companyId ? Store.byId(nav.companyId) : null)
 
-  const la = $derived(c ? Selectors.latestActual(c) : null)
+  const la = $derived(c ? Selectors.latestActualAnnual(c) : null)
   const fc = $derived(c ? Selectors.forecastYear(c) : null)
   const latestPeriod = $derived(c ? Selectors.latestQuarter(c) : null)
   const latestView = $derived(c ? Selectors.companyMetricView(c, 'latestQuarter') : null)
@@ -36,9 +36,9 @@
     if (!c) return []
     return la
       ? [
-          { lbl: `${la.fy} 营收`, val: Fmt.bn(la.revenue), sub: '最新实际', cls: '', sw: 'var(--past)' },
-          { lbl: `${la.fy} 净利润`, val: Fmt.bn(la.net_income), sub: '净利率 ' + Fmt.pct(Selectors.netMargin(la)), cls: 'accent', sw: 'var(--ok)' },
-          { lbl: `${la.fy} 毛利率`, val: Fmt.pct(la.gross_margin), sub: 'GAAP', cls: 'accent', sw: 'var(--ok)' },
+          { lbl: `${la.fiscal_year} 营收`, val: Fmt.bn(la.revenue), sub: '最新实际', cls: '', sw: 'var(--past)' },
+          { lbl: `${la.fiscal_year} 净利润`, val: Fmt.bn(la.net_income), sub: '净利率 ' + Fmt.pct(Selectors.netMargin(la)), cls: 'accent', sw: 'var(--ok)' },
+          { lbl: `${la.fiscal_year} 毛利率`, val: Fmt.pct(Selectors.grossMargin(la)), sub: 'GAAP', cls: 'accent', sw: 'var(--ok)' },
         ]
       : [{ lbl: '实际财年', val: '—', sub: '尚未补录 actual 年', cls: '', sw: 'var(--past)' }]
   })
@@ -63,10 +63,10 @@
   // 年份表行（原 cYears map）。点击 → goDetail。ry/netMargin 来自 Selectors。
   const yearRows = $derived.by(() => {
     if (!c) return []
-    return c.years.filter(y => y.status !== 'forecast').map(y => {
-      const ry = Selectors.revYoY(c, y.fy)
+    return Selectors.actualAnnuals(c).map(y => {
+      const ry = Selectors.annualRevYoY(c, y.fiscal_year)
       return {
-        fy: y.fy, ry,
+        fy: y.fiscal_year, ry,
         revLabel: Fmt.bn(y.revenue, 1),
         niLabel: y.net_income != null ? Fmt.bn(y.net_income, 1) : '—',
         nmLabel: Fmt.pct(Selectors.netMargin(y)),
@@ -83,9 +83,9 @@
     }))
   })
 
-  // —— 现金块（原 renderCash）：用 latestCashYear 回退（非 latestActual）——
-  const hasActual = $derived(c ? Selectors.actualYears(c).length > 0 : false)
-  const cashYear = $derived(c ? Selectors.latestCashYear(c) : null)
+  // —— 现金块：periods 侧现金年阶梯（非 headline 最新年）——
+  const hasActual = $derived(c ? Selectors.actualAnnuals(c).length > 0 : false)
+  const cashYear = $derived(c ? Selectors.latestCashActualAnnual(c) : null)
   const cashCards = $derived.by(() => {
     const cy = cashYear
     if (!cy) return []
@@ -97,7 +97,7 @@
       { lbl: '现金转化率', val: Fmt.pct(Selectors.cashConversion(cy)), sub: 'FCF / 净利润 · 利润含金量', cls: 'accent', sw: 'var(--ok)' },
     ]
   })
-  const cashHeading = $derived(cashYear ? `质量与现金 · ${cashYear.fy}` : '质量与现金')
+  const cashHeading = $derived(cashYear ? `质量与现金 · ${cashYear.fiscal_year}` : '质量与现金')
 
   // NVDA 特例 note。
   const note = $derived(

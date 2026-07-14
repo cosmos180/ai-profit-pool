@@ -11,10 +11,17 @@
   import SourcesBlock from './SourcesBlock.svelte'
 
   const c = $derived(nav.companyId ? Store.byId(nav.companyId) : null)
-  const y = $derived(c && nav.fy ? Selectors.yearByFy(c, nav.fy) : null)
+  const forecast = $derived(c && nav.fy ? Selectors.forecastYear(c) : null)
+  const y = $derived(
+    forecast?.fy === nav.fy
+      ? forecast
+      : (c && nav.fy ? Selectors.annualByFy(c, nav.fy) : null)
+  )
   const p = $derived(c && nav.periodId ? Selectors.periods(c).find(x => x.period_id === nav.periodId) : null)
   const isPeriod = $derived(!!nav.periodId)
   const isForecast = $derived(y?.status === 'forecast')
+  const yearLabel = $derived(isForecast ? y?.fy : y?.fiscal_year)
+  const annualGrossMargin = $derived(y && !isForecast ? Selectors.grossMargin(y) : null)
 
   const firstWord = s => (s || '').split(' ')[0]
   const periodTag = x => x?.calendar_year != null && x?.calendar_quarter ? `${x.calendar_year}${x.calendar_quarter}` : (x?.period_end || x?.period_id || '')
@@ -52,7 +59,7 @@
     const sorted = Selectors.revenueSorted(y)
     const maxV = sorted[0] ? sorted[0].revenue : 1
     return sorted.map(p => {
-      const yoy = Selectors.segYoY(c, y.fy, p.name)
+      const yoy = Selectors.annualSegYoY(c, y.fiscal_year, p.name)
       return {
         name: p.name, is_ai: p.is_ai,
         revLabel: Fmt.bn(p.revenue, 2),
@@ -117,7 +124,7 @@
   </div>
 {:else}
   <div class="dhead">
-    <span class="dfy">{c.name} · {isPeriod ? periodTitle : y.fy}</span>
+    <span class="dfy">{c.name} · {isPeriod ? periodTitle : yearLabel}</span>
     <span class="dperiod">{isPeriod ? (p.period_start && p.period_end ? `${p.period_start} ~ ${p.period_end}` : p.period_end || '') : (y.period_end || '')}</span>
     {#if isPeriod}
       <span class="dbadge ybadge act">实际 · 季度事实</span>
@@ -215,12 +222,12 @@
     <SourcesBlock year={y} />
   {:else}
     <!-- ============ 实际年 ============ -->
-    <div class="section-h" style="margin-top:18px">公司层面 · {y.fy}</div>
+    <div class="section-h" style="margin-top:18px">公司层面 · {yearLabel}</div>
     <div class="card csum">
       <div class="c"><div class="cl">营收</div><div class="cv num">{Fmt.bn(y.revenue, 1)}</div></div>
       <div class="c">
-        <div class="cl">毛利率{#if y.gross_margin == null}<span class="cl-flag" title="该公司未在此财年披露公司层面毛利率——诚实留空，而非缺数据">未披露</span>{/if}</div>
-        <div class="cv num">{Fmt.pct(y.gross_margin)}</div>
+        <div class="cl">毛利率{#if annualGrossMargin == null}<span class="cl-flag" title="该公司未在此财年披露公司层面毛利——诚实留空，而非估算">未披露</span>{/if}</div>
+        <div class="cv num">{Fmt.pct(annualGrossMargin)}</div>
       </div>
       <div class="c"><div class="cl">经营利润率</div><div class="cv num">{Fmt.pct(Selectors.opMargin(y))}</div></div>
       <div class="c"><div class="cl">净利润</div><div class="cv num green">{Fmt.bn(y.net_income, 1)}</div></div>
@@ -234,7 +241,7 @@
 
     <Sankey company={c} year={y} />
 
-    <RevenueBreakdown owner={y} company={c} fy={y.fy} />
+    <RevenueBreakdown owner={y} company={c} fy={y.fiscal_year} />
 
     <div class="section-h">业务板块营收 · 降序</div>
     <div class="card">

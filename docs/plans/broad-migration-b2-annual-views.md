@@ -1,6 +1,8 @@
 # 广口径迁移 · 第二批「年度视图 / 桑基链」ADR
 
-> 状态：**D1+D4 已落地**（2026-07-08，工程师）。D1（ValuationCard 展示锚迁 latestActualAnnual，零可见变化，closes #13）+ D4（validate.py 双写一致性扩到 op_income/cfo/capex + 逐分部，硬 ERROR）已实现并全绿；**D2/D3 数值行整迁门控在 annual period 的 `gross_profit` 补录**（见三），本批不做。Home L230 period_end 自由文本锚（决策点 b）本批不迁。
+> 状态：**D1–D4 已全部落地**。D1+D4 于 2026-07-08 完成；annual period `gross_profit` 于 PR #22 补齐后，D2+D3 于 2026-07-14 解锁实施：Company/Detail/Sankey 实际年及 Home 年度数值改读 periods，forecast/Trend 继续留在 years 等 B4，Home L230 自由文本锚保留 years。Amazon 三期按政策保持 `gross_profit=null`。
+>
+> 实施补充：D2 新增 `actualAnnuals/annualByFy/annualRevYoY/annualSegYoY` 及 periods 侧 revenue-breakdown YoY；毛利率由 selector 统一做 `gross_profit/revenue`。迁移预检发现 NVDA `reportable_note` 仅存 years 会导致下钻语义消失，因此已同步入 annual periods/schema，并纳入双写硬 ERROR。
 > 上游：`docs/plans/broad-migration-b1-valuation.md`（已落地先例）、`docs/plans/period-base-refactor.md`（双写规则 D5 / consumer ledger）、`docs/ROADMAP.md`。
 > 迁移顺序（用户已拍板）：估值链（B1 ✅）→ **年度视图/桑基（本批 B2）** → AI 池（B3）→ 前瞻（B4）。
 > 复用 B1 方法论：消费方普查 → 契约 → 平价硬门禁 → 回退策略 → honesty/测试/栅栏/决策点。

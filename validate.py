@@ -19,8 +19,10 @@ from urllib.parse import urlparse
 
 TOL = 0.05  # USD bn tolerance for reconciliation
 RB_TOL = 0.001  # revenue_breakdown 专用容差：产品层级按 4 位小数录入，对账要求精确（≤$1M）
+GM_TOL = 0.001  # annual gross_profit/revenue 与 legacy gross_margin 的比率容差
 TODAY = date.today()  # 取真实当日，用于快照新鲜度判断（as_of 晚于今天 / 早于 90 天 → WARN）
 INVESTMENT_INCOME_CAN_EXCEED_REVENUE = {"softbank"}
+GROSS_PROFIT_POLICY_EXEMPT = {"amazon"}  # 不披露传统公司层面毛利，B2 按政策诚实留空
 
 def load(path):
     with open(path, encoding="utf-8") as f:
@@ -277,6 +279,13 @@ def check(data):
             capex = p.get("capex")
             if capex is not None and capex < 0:
                 errors.append(f"ERROR {ptag}: capex({capex}) < 0（请存非负量级，方向由派生层处理）")
+            # B2 annual actual 视图以 gross_profit 为唯一毛利事实源。当前政策只豁免
+            # Amazon（不披露传统公司层面毛利）；其余 annual actual 缺失直接阻断。
+            if kind == "annual" and status == "actual" and p.get("gross_profit") is None:
+                if cid in GROSS_PROFIT_POLICY_EXEMPT:
+                    oks.append(f"INFO  {ptag}: gross_profit 按公司披露政策豁免，B2 毛利率诚实留空")
+                else:
+                    errors.append(f"ERROR {ptag}: annual actual 缺 gross_profit —— B2 年度毛利视图无事实源")
             # status=actual 却无任何金融事实 → WARN（guidance 允许缺 net_income，不告警）
             if status == "actual" and rev is None and p.get("op_income") is None and ni is None:
                 warns.append(f"WARN  {ptag}: status=actual 但无任何金融事实（revenue/op_income/net_income 全缺）")
@@ -507,7 +516,8 @@ def check(data):
                 def num_close(a, b):
                     return abs(a - b) <= 0.001 or (a != 0 and abs(a - b) / abs(a) <= 1e-6)
 
-                # B2(D4): headline 流量字段全纳入双写钉子（不含 gross —— periods 侧无 gross_profit 事实）。
+                # B2(D4): headline 流量字段全纳入双写钉子。gross 两侧表示不同
+                # (years=gross_margin, periods=gross_profit)，在下方按比率单独对账。
                 for field in ("revenue", "net_income", "op_income", "cfo", "capex"):
                     yv, pv = y.get(field), p.get(field)
                     if yv is None:
@@ -519,6 +529,18 @@ def check(data):
                     if not num_close(yv, pv):
                         errors.append(f"ERROR {cid}/{fy}: double-write 不一致 —— years.{field}={yv} ≠ "
                                       f"annual period.{field}={pv}（差 {round(pv - yv, 6):+}，超容差）")
+
+                y_gm, p_gp, p_rev = y.get("gross_margin"), p.get("gross_profit"), p.get("revenue")
+                if y_gm is not None:
+                    if p_gp is None or not p_rev:
+                        errors.append(f"ERROR {cid}/{fy}: gross double-write 无从对账 —— "
+                                      f"years.gross_margin={y_gm} 但 annual period 缺 gross_profit/revenue")
+                    else:
+                        p_gm = p_gp / p_rev
+                        if abs(p_gm - y_gm) > GM_TOL:
+                            errors.append(f"ERROR {cid}/{fy}: gross double-write 不一致 —— "
+                                          f"years.gross_margin={y_gm} ≠ annual gross_profit/revenue={round(p_gm, 6)}"
+                                          f"（差 {round(p_gm - y_gm, 6):+}，超 {GM_TOL}）")
 
                 # B2(D4): 逐分部（按 name 对齐）钉住 revenue/op_income/op_margin/is_ai/kind。
                 # years 分部有名字但 periods 缺同名分部 → ERROR；同名分部逐字段比对。
@@ -559,6 +581,12 @@ def check(data):
                     if nm not in y_seg_names:
                         errors.append(f"ERROR {cid}/{fy}: double-write 分部不一致 —— annual period（{p_tag}）"
                                       f"有分部「{nm}」，但 years 缺同名分部")
+
+                # B2 actual 下钻还会消费可报告分部的人话说明；两侧要么都无，
+                # 要么整个对象相等，否则迁移后会出现「数值不变、语义消失」。
+                if y.get("reportable_note") != p.get("reportable_note"):
+                    errors.append(f"ERROR {cid}/{fy}: reportable_note double-write 不一致 —— "
+                                  f"years={y.get('reportable_note')!r} ≠ annual period={p.get('reportable_note')!r}")
 
                 # revenue_breakdown 双写：年度事实两侧要么都有、要么都无；都有则整树深比较
                 # （label/complete、逐层同名集合、逐节点 revenue ≤ RB_TOL）。
