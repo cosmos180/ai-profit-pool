@@ -942,7 +942,75 @@
               "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "按部门／业务的营收树（division 总额口径，含内部交易，不与合并营收对账）",
+            "complete": false,
+            "items": [
+              {
+                "name": "DX 部门（终端体验）",
+                "revenue": 132.229,
+                "children": [
+                  {
+                    "name": "MX 移动体验（手机/平板）",
+                    "revenue": 80.4628
+                  },
+                  {
+                    "name": "Networks 网络设备",
+                    "revenue": 10.6205
+                  },
+                  {
+                    "name": "VD/DA 影像显示＋生活家电",
+                    "revenue": 41.1457
+                  }
+                ]
+              },
+              {
+                "name": "DS 部门（半导体）",
+                "revenue": 91.505,
+                "children": [
+                  {
+                    "name": "Memory 存储",
+                    "revenue": 73.2181
+                  },
+                  {
+                    "name": "System LSI ＋ Foundry 系统LSI＋代工（非存储残差）",
+                    "revenue": 18.2869
+                  }
+                ]
+              },
+              {
+                "name": "SDC 显示面板",
+                "revenue": 20.96
+              },
+              {
+                "name": "Harman 车载/音频",
+                "revenue": 11.113
+              }
+            ],
+            "sources": [
+              {
+                "label": "顶层口径：库内 FY2025 segments（division 总额，含内部交易）DX=132.229 / DS=91.505 / SDC=20.96 / Harman=11.113（USD bn）。四者合计 255.807 > 合并营收 234.636（含 inter-segment，validate 一直如此提示，正常）；官方未单列可录金额的『연결조정/부문간 제거』行，故 complete=false，顶层不与合并营收对账、不设抵消行、不自造轧差。对应官方 KRW 总额口径：DX 188.0T / DS 130.1T（= 91.505×1421.779），隐含汇率 1421.779（与库内 fx_to_usd 一致）。",
+                "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+                "data_status": "official"
+              },
+              {
+                "label": "DS 拆分（价值核心）：官方 FY2025 Memory 营收 KRW 104.1T（同比 +23%），占 DS 营收 80%；DS 总额 KRW 130.1T（同比 +17%）→ 非存储（System LSI＋Foundry）= 130.1−104.1 = KRW 26.0T（官方未单列 System LSI / Foundry 可录金额，故合并为一行『非存储残差』，二分而非三分）。换算（隐含汇率 130.1/91.505=1421.78，等同库内 fx）：Memory 104.1/130.1×91.505 = 73.2181；非存储 = 91.505−73.2181 = 18.2869；加总=91.505 ✓。data_status=derived。",
+                "url": "https://www.blocksandfiles.com/flash/2026/01/29/samsung-electronics-triples-profit-as-hbm-revenues-rocket-up/4090439",
+                "data_status": "derived"
+              },
+              {
+                "label": "DX 拆分：官方 FY2025 MX＋Networks 合计 KRW 129.5T（同比 +10%），其中 MX 单独 KRW 114.4T（同比 +11%）→ Networks = 129.5−114.4 = KRW 15.1T（两官方聚合数之差）；VD/DA = DX 188.0−129.5 = KRW 58.5T（残差；与 Q4 VD/DA 合并营收 14.8T×约4季吻合，作交叉印证）。DX inter-segment 极小，总额≈对外，口径自洽。换算（隐含汇率 188.0/132.229=1421.78）：MX 114.4→80.4628、Networks 15.1→10.6205、VD/DA 58.5→41.1457；加总=132.229 ✓。data_status=derived（Networks/VD-DA 为残差，待核验）。",
+                "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：新华社 Roundup（三星 2025 全年营收 KRW 333.6T、营业利润 43.6T；DS 130.1T、Memory 创历史新高）；Blocks & Files（Memory KRW 104.1T ≈ $72.8B，占 DS 80%）。两源与官方新闻稿一致。",
+                "url": "https://english.news.cn/20260129/fc9467f336714b3fbae6e899d4574b92/c.html",
+                "data_status": "official"
+              }
+            ]
+          }
         }
       ],
       "quarters": [
@@ -1252,7 +1320,75 @@
               "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "按部门／业务的营收树（division 总额口径，含内部交易，不与合并营收对账）",
+            "complete": false,
+            "items": [
+              {
+                "name": "DX 部门（终端体验）",
+                "revenue": 132.229,
+                "children": [
+                  {
+                    "name": "MX 移动体验（手机/平板）",
+                    "revenue": 80.4628
+                  },
+                  {
+                    "name": "Networks 网络设备",
+                    "revenue": 10.6205
+                  },
+                  {
+                    "name": "VD/DA 影像显示＋生活家电",
+                    "revenue": 41.1457
+                  }
+                ]
+              },
+              {
+                "name": "DS 部门（半导体）",
+                "revenue": 91.505,
+                "children": [
+                  {
+                    "name": "Memory 存储",
+                    "revenue": 73.2181
+                  },
+                  {
+                    "name": "System LSI ＋ Foundry 系统LSI＋代工（非存储残差）",
+                    "revenue": 18.2869
+                  }
+                ]
+              },
+              {
+                "name": "SDC 显示面板",
+                "revenue": 20.96
+              },
+              {
+                "name": "Harman 车载/音频",
+                "revenue": 11.113
+              }
+            ],
+            "sources": [
+              {
+                "label": "顶层口径：库内 FY2025 segments（division 总额，含内部交易）DX=132.229 / DS=91.505 / SDC=20.96 / Harman=11.113（USD bn）。四者合计 255.807 > 合并营收 234.636（含 inter-segment，validate 一直如此提示，正常）；官方未单列可录金额的『연결조정/부문간 제거』行，故 complete=false，顶层不与合并营收对账、不设抵消行、不自造轧差。对应官方 KRW 总额口径：DX 188.0T / DS 130.1T（= 91.505×1421.779），隐含汇率 1421.779（与库内 fx_to_usd 一致）。",
+                "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+                "data_status": "official"
+              },
+              {
+                "label": "DS 拆分（价值核心）：官方 FY2025 Memory 营收 KRW 104.1T（同比 +23%），占 DS 营收 80%；DS 总额 KRW 130.1T（同比 +17%）→ 非存储（System LSI＋Foundry）= 130.1−104.1 = KRW 26.0T（官方未单列 System LSI / Foundry 可录金额，故合并为一行『非存储残差』，二分而非三分）。换算（隐含汇率 130.1/91.505=1421.78，等同库内 fx）：Memory 104.1/130.1×91.505 = 73.2181；非存储 = 91.505−73.2181 = 18.2869；加总=91.505 ✓。data_status=derived。",
+                "url": "https://www.blocksandfiles.com/flash/2026/01/29/samsung-electronics-triples-profit-as-hbm-revenues-rocket-up/4090439",
+                "data_status": "derived"
+              },
+              {
+                "label": "DX 拆分：官方 FY2025 MX＋Networks 合计 KRW 129.5T（同比 +10%），其中 MX 单独 KRW 114.4T（同比 +11%）→ Networks = 129.5−114.4 = KRW 15.1T（两官方聚合数之差）；VD/DA = DX 188.0−129.5 = KRW 58.5T（残差；与 Q4 VD/DA 合并营收 14.8T×约4季吻合，作交叉印证）。DX inter-segment 极小，总额≈对外，口径自洽。换算（隐含汇率 188.0/132.229=1421.78）：MX 114.4→80.4628、Networks 15.1→10.6205、VD/DA 58.5→41.1457；加总=132.229 ✓。data_status=derived（Networks/VD-DA 为残差，待核验）。",
+                "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：新华社 Roundup（三星 2025 全年营收 KRW 333.6T、营业利润 43.6T；DS 130.1T、Memory 创历史新高）；Blocks & Files（Memory KRW 104.1T ≈ $72.8B，占 DS 80%）。两源与官方新闻稿一致。",
+                "url": "https://english.news.cn/20260129/fc9467f336714b3fbae6e899d4574b92/c.html",
+                "data_status": "official"
+              }
+            ]
+          }
         },
         {
           "period_id": "samsung-2026q1",
@@ -5798,7 +5934,55 @@
               "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": false,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 41.444,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 17.597
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 7.3888
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 16.4582
+                  }
+                ]
+              },
+              {
+                "name": "网络广告 Online Advertising",
+                "revenue": 14.097
+              },
+              {
+                "name": "金融科技及企业服务 FinTech and Business Services",
+                "revenue": 28.3
+              },
+              {
+                "name": "其他 Others",
+                "revenue": 0.744
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2023 全年业绩：增值服务 VAS RMB2,984亿。VAS 三子官方 RMB：本土市场游戏 1,267亿 / 国际市场游戏 532亿 / 社交网络 1,185亿（合计=2,984亿=VAS，官方自洽）。顶层四行直接复用库内 FY2023 segments（同一张 IFRS 分部表，已过对账闸）。children 用隐含汇率 = VAS库内USD 41.444 ÷ 官方RMB 298.4 = 7.20008（≈库内 fx 7.20）换算：本土 1267÷7.20008=17.597 / 国际 532÷7.20008=7.3888 / 社交 1185÷7.20008=16.4582，精确加总=41.444。顶层合计 84.585 与库内营收 84.6 的 -0.015 差异源于营收存储精度（营收 1 位小数、分部 3 位小数）。检索交叉印证，待复核。",
+                "url": "https://www.cs.com.cn/ssgs/gsxw/202403/t20240321_6396080.html",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：新浪财经转载腾讯 2023 年报——本土游戏 1,267亿、国际游戏 532亿、社交网络 1,185亿、VAS 2,984亿。检索交叉印证，待复核。",
+                "url": "https://finance.sina.cn/2024-03-20/detail-inanypzh3153172.d.html",
+                "data_status": "derived"
+              }
+            ]
+          }
         },
         {
           "fy": "FY2024",
@@ -5808,7 +5992,7 @@
           "revenue": 91.9,
           "gross_margin": 0.529,
           "op_income": null,
-          "net_income": 27.0,
+          "net_income": 27,
           "segments": [
             {
               "name": "增值服务 VAS（游戏·社交网络）",
@@ -5854,7 +6038,55 @@
               "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": true,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 44.426,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 19.4433
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 8.0724
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 16.9103
+                  }
+                ]
+              },
+              {
+                "name": "营销服务 Marketing Services",
+                "revenue": 16.896
+              },
+              {
+                "name": "金融科技及企业服务 FinTech and Business Services",
+                "revenue": 29.506
+              },
+              {
+                "name": "其他 Others",
+                "revenue": 1.072
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2024 全年业绩：增值服务 VAS RMB3,192亿（USD44.7B）。VAS 三子官方 RMB：本土市场游戏 1,397亿 / 国际市场游戏 580亿 / 社交网络 1,215亿（合计=3,192亿=VAS）。顶层四行复用库内 FY2024 segments。children 隐含汇率 = 44.426 ÷ 319.2 → 319.2/44.426=7.18498（≈库内 fx 7.185）换算：本土 1397÷7.18498=19.4433 / 国际 580÷7.18498=8.0724 / 社交 1215÷7.18498=16.9103，精确加总=44.426。顶层合计 91.900=库内营收 91.9，对账通过 → complete=true。检索交叉印证，待复核。",
+                "url": "https://static.www.tencent.com/uploads/2025/03/19/5894f24eb4ade2dea94826d62bd7b11b.pdf",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：Tencent 官方 2024 Q4/年度英文新闻稿——VAS RMB319.2B、Domestic Games RMB139.7B、International Games RMB58.0B、Social Networks RMB121.5B。检索交叉印证，待复核。",
+                "url": "https://kr-asia.com/tencent-surpasses-q4-2024-revenue-forecasts-with-gaming-and-ad-growth",
+                "data_status": "derived"
+              }
+            ]
+          }
         },
         {
           "fy": "FY2025",
@@ -5912,7 +6144,55 @@
               "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": false,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 51.384,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 22.8466
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 10.7694
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 17.768
+                  }
+                ]
+              },
+              {
+                "name": "营销服务 Marketing Services",
+                "revenue": 20.175
+              },
+              {
+                "name": "金融科技及企业服务 FinTech and Business Services",
+                "revenue": 31.919
+              },
+              {
+                "name": "其他 Others",
+                "revenue": 1.127
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2025 全年业绩：增值服务 VAS RMB3,693亿。VAS 三子官方 RMB：本土市场游戏 1,642亿 / 国际市场游戏 774亿 / 社交网络 1,277亿（合计=3,693亿=VAS）。顶层四行复用库内 FY2025 segments。children 隐含汇率 = 369.3/51.384=7.18706（≈库内 fx 7.187）换算：本土 1642÷7.18706=22.8466 / 国际 774÷7.18706=10.7694 / 社交 1277÷7.18706=17.768，精确加总=51.384。顶层合计 104.605 与库内营收 104.6 的 +0.005 差异源于营收存储精度（营收 1 位小数、分部 3 位小数）→ complete=false。检索交叉印证，待复核。",
+                "url": "https://static.www.tencent.com/uploads/2026/03/18/559e5d480a4411165e6c7367d61fefbd.pdf",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：新浪财经转载腾讯 2025 年报——本土游戏 1,642亿、国际游戏 774亿（+33%）、社交网络 1,277亿、VAS 3,693亿。检索交叉印证，待复核。",
+                "url": "https://finance.sina.com.cn/wm/2026-03-19/doc-inhrpspu1376949.shtml",
+                "data_status": "derived"
+              }
+            ]
+          }
         }
       ],
       "periods": [
@@ -5979,7 +6259,55 @@
               "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2023",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": false,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 41.444,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 17.597
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 7.3888
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 16.4582
+                  }
+                ]
+              },
+              {
+                "name": "网络广告 Online Advertising",
+                "revenue": 14.097
+              },
+              {
+                "name": "金融科技及企业服务 FinTech and Business Services",
+                "revenue": 28.3
+              },
+              {
+                "name": "其他 Others",
+                "revenue": 0.744
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2023 全年业绩：增值服务 VAS RMB2,984亿。VAS 三子官方 RMB：本土市场游戏 1,267亿 / 国际市场游戏 532亿 / 社交网络 1,185亿（合计=2,984亿=VAS，官方自洽）。顶层四行直接复用库内 FY2023 segments（同一张 IFRS 分部表，已过对账闸）。children 用隐含汇率 = VAS库内USD 41.444 ÷ 官方RMB 298.4 = 7.20008（≈库内 fx 7.20）换算：本土 1267÷7.20008=17.597 / 国际 532÷7.20008=7.3888 / 社交 1185÷7.20008=16.4582，精确加总=41.444。顶层合计 84.585 与库内营收 84.6 的 -0.015 差异源于营收存储精度（营收 1 位小数、分部 3 位小数）。检索交叉印证，待复核。",
+                "url": "https://www.cs.com.cn/ssgs/gsxw/202403/t20240321_6396080.html",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：新浪财经转载腾讯 2023 年报——本土游戏 1,267亿、国际游戏 532亿、社交网络 1,185亿、VAS 2,984亿。检索交叉印证，待复核。",
+                "url": "https://finance.sina.cn/2024-03-20/detail-inanypzh3153172.d.html",
+                "data_status": "derived"
+              }
+            ]
+          }
         },
         {
           "period_id": "tencent-fy2024-annual",
@@ -5996,7 +6324,7 @@
           "revenue": 91.9,
           "gross_profit": null,
           "op_income": null,
-          "net_income": 27.0,
+          "net_income": 27,
           "cfo": null,
           "capex": null,
           "segments": [
@@ -6044,7 +6372,55 @@
               "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": true,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 44.426,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 19.4433
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 8.0724
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 16.9103
+                  }
+                ]
+              },
+              {
+                "name": "营销服务 Marketing Services",
+                "revenue": 16.896
+              },
+              {
+                "name": "金融科技及企业服务 FinTech and Business Services",
+                "revenue": 29.506
+              },
+              {
+                "name": "其他 Others",
+                "revenue": 1.072
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2024 全年业绩：增值服务 VAS RMB3,192亿（USD44.7B）。VAS 三子官方 RMB：本土市场游戏 1,397亿 / 国际市场游戏 580亿 / 社交网络 1,215亿（合计=3,192亿=VAS）。顶层四行复用库内 FY2024 segments。children 隐含汇率 = 44.426 ÷ 319.2 → 319.2/44.426=7.18498（≈库内 fx 7.185）换算：本土 1397÷7.18498=19.4433 / 国际 580÷7.18498=8.0724 / 社交 1215÷7.18498=16.9103，精确加总=44.426。顶层合计 91.900=库内营收 91.9，对账通过 → complete=true。检索交叉印证，待复核。",
+                "url": "https://static.www.tencent.com/uploads/2025/03/19/5894f24eb4ade2dea94826d62bd7b11b.pdf",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：Tencent 官方 2024 Q4/年度英文新闻稿——VAS RMB319.2B、Domestic Games RMB139.7B、International Games RMB58.0B、Social Networks RMB121.5B。检索交叉印证，待复核。",
+                "url": "https://kr-asia.com/tencent-surpasses-q4-2024-revenue-forecasts-with-gaming-and-ad-growth",
+                "data_status": "derived"
+              }
+            ]
+          }
         },
         {
           "period_id": "tencent-2025q1",
@@ -6205,7 +6581,55 @@
               "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": false,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 51.384,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 22.8466
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 10.7694
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 17.768
+                  }
+                ]
+              },
+              {
+                "name": "营销服务 Marketing Services",
+                "revenue": 20.175
+              },
+              {
+                "name": "金融科技及企业服务 FinTech and Business Services",
+                "revenue": 31.919
+              },
+              {
+                "name": "其他 Others",
+                "revenue": 1.127
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2025 全年业绩：增值服务 VAS RMB3,693亿。VAS 三子官方 RMB：本土市场游戏 1,642亿 / 国际市场游戏 774亿 / 社交网络 1,277亿（合计=3,693亿=VAS）。顶层四行复用库内 FY2025 segments。children 隐含汇率 = 369.3/51.384=7.18706（≈库内 fx 7.187）换算：本土 1642÷7.18706=22.8466 / 国际 774÷7.18706=10.7694 / 社交 1277÷7.18706=17.768，精确加总=51.384。顶层合计 104.605 与库内营收 104.6 的 +0.005 差异源于营收存储精度（营收 1 位小数、分部 3 位小数）→ complete=false。检索交叉印证，待复核。",
+                "url": "https://static.www.tencent.com/uploads/2026/03/18/559e5d480a4411165e6c7367d61fefbd.pdf",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：新浪财经转载腾讯 2025 年报——本土游戏 1,642亿、国际游戏 774亿（+33%）、社交网络 1,277亿、VAS 3,693亿。检索交叉印证，待复核。",
+                "url": "https://finance.sina.com.cn/wm/2026-03-19/doc-inhrpspu1376949.shtml",
+                "data_status": "derived"
+              }
+            ]
+          }
         },
         {
           "period_id": "tencent-2026q1",
@@ -6275,7 +6699,55 @@
               "url": "https://www.x-rates.com/average/?amount=1&from=USD&to=CNY&year=2026",
               "data_status": "derived"
             }
-          ]
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": true,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 13.874,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 6.5544
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 2.7142
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 4.6054
+                  }
+                ]
+              },
+              {
+                "name": "营销服务 Marketing Services",
+                "revenue": 5.51
+              },
+              {
+                "name": "金融科技及企业服务 FinTech and Business Services",
+                "revenue": 8.645
+              },
+              {
+                "name": "其他 Others",
+                "revenue": 0.331
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 1Q2026 业绩：增值服务 VAS RMB96.1B。VAS 三子官方 RMB：本土市场游戏 45.4B / 国际市场游戏 18.8B / 社交网络 31.9B（合计=96.1B=VAS）。顶层四行复用库内 tencent-2026q1 segments。children 隐含汇率 = 96.1/13.874=6.92663（≈库内 fx 6.927341）换算：本土 45.4÷6.92663=6.5544 / 国际 18.8÷6.92663=2.7142 / 社交 31.9÷6.92663=4.6054，精确加总=13.874。顶层合计 28.36=库内营收 28.36，对账通过 → complete=true。检索交叉印证，待复核。",
+                "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2026-first-quarter-results-302770779.html",
+                "data_status": "derived"
+              },
+              {
+                "label": "交叉印证：Tencent 官方 2026 Q1 英文新闻稿 PDF——Domestic Games RMB45.4B、International Games RMB18.8B、Social Networks RMB31.9B、VAS RMB96.1B。检索交叉印证，待复核。",
+                "url": "https://static.www.tencent.com/uploads/2026/05/13/47382ae415a209fd161bc19a1f9b3704.pdf",
+                "data_status": "derived"
+              }
+            ]
+          }
         }
       ]
     },
