@@ -107,3 +107,15 @@ P0–P2 全部完成时,产品应满足:
 5. 全程 validate 0 ERROR · 测试绿 · lint 0 · 单文件产物可双击打开。
 
 届时重跑一次分析师评审,验收「看板 → 决策工具」是否跨线。
+
+## ★DoD 中期验收快照(2026-07-14 分析师第一人称评审,亲手渲染 + node 实算；B2 完成后正式重跑)
+
+**五条硬指标全部 PASS**:①14/14 真实口径、latestActual 主源全 official、provenance 零缺失;②AI 池 basisCount {sourced:3, proxy:10} 数据层如实(UI 未露出,见 A2);③TTM 14/14 全 periods 口径;④forward PE 8 家、与 trailing 严格分列;⑤门禁全绿、app.html 641KB file:// 双击零 console error。
+
+**中期裁决**:「诚实的晨会看板」→「**可支撑单票决策的研究工具**」——Oracle(OCI +76.9% vs SaaS +11.3%、capex 强度 82.6%、FCF −23.7B)、Samsung(DS 利润率 19.1%)这类票已能在工具内完成 buy/sell 论证;迁移图「存储环节利润占比 ≈2025 14% → TTM 22%」形成独有视角。**尚未跨到「comps 工作流原生」**——拍扳机前的横截面倍数并列仍要回外部终端；正式 DoD 结论待 B2 数值行整迁完成后在稳定数据模型上重跑。
+
+**新 backlog(分析师分级,待用户排期)**:
+- **A(拦着拍板)**:A1 横截面 comps 表(一屏并列 trailing PE/前瞻 PE/EV-Sales/FCF yield,任一列排序——唯一硬缺口);A2 AI 池 sourced/proxy 在消费点可见(迁移图环节/公司贡献打角标,数据层 basisCount 已备好);A3 EV/EBITDA(半导体重资产,EV/Sales 瘸腿)。
+- **B(用得更快)**:B4 前瞻深化(forward EV/Sales/EBITDA + 一致预期 revision 趋势);B5 micron「HBM 含于 DRAM 未单列」显式盲区标注。
+- **C(锦上添花)**:C6 结构化 catalysts 字段(财报日/产能事件可筛选)。
+- **revenue_breakdown 价值评级**:真会用 oracle/amazon/microsoft/google/tsmc;半摆设 micron(HBM 盲区)/tencent;对 AI thesis 纯摆设 asml/samsung(残差式+derived 精度不足以下重注)。
