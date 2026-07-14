@@ -404,7 +404,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 60.92,
-          "gross_profit": null,
+          "gross_profit": 44.301,
           "op_income": 32.97,
           "net_income": 29.76,
           "cfo": 28.09,
@@ -483,7 +483,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 130.5,
-          "gross_profit": null,
+          "gross_profit": 97.858,
           "op_income": 81.45,
           "net_income": 72.88,
           "cfo": 64.09,
@@ -653,7 +653,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 215.94,
-          "gross_profit": null,
+          "gross_profit": 153.463,
           "op_income": 130.39,
           "net_income": 120.1,
           "cfo": 102.7,
@@ -1094,7 +1094,7 @@
           "currency": "KRW",
           "fx_to_usd": 1364.153,
           "revenue": 220.576,
-          "gross_profit": null,
+          "gross_profit": 83.7946,
           "op_income": 23.971,
           "net_income": 24.646,
           "cfo": null,
@@ -1319,7 +1319,7 @@
           "currency": "KRW",
           "fx_to_usd": 1421.779,
           "revenue": 234.636,
-          "gross_profit": null,
+          "gross_profit": 92.3986,
           "op_income": 30.666,
           "net_income": 31.131,
           "cfo": 60.01,
@@ -1726,7 +1726,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 35.819,
-          "gross_profit": null,
+          "gross_profit": 24.69,
           "op_income": 16.207,
           "net_income": 14.082,
           "cfo": null,
@@ -1775,7 +1775,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 51.574,
-          "gross_profit": null,
+          "gross_profit": 32.509,
           "op_income": 13.463,
           "net_income": 5.895,
           "cfo": null,
@@ -1920,7 +1920,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 63.887,
-          "gross_profit": null,
+          "gross_profit": 43.294,
           "op_income": 25.484,
           "net_income": 23.126,
           "cfo": 27.537,
@@ -2287,7 +2287,7 @@
           "currency": "JPY",
           "fx_to_usd": 151.41,
           "revenue": 44.624,
-          "gross_profit": null,
+          "gross_profit": 23.396,
           "op_income": null,
           "net_income": -1.504,
           "cfo": null,
@@ -2360,7 +2360,7 @@
           "currency": "JPY",
           "fx_to_usd": 149.52,
           "revenue": 48.447,
-          "gross_profit": null,
+          "gross_profit": 25.1084,
           "op_income": null,
           "net_income": 7.714,
           "cfo": null,
@@ -2514,7 +2514,7 @@
           "currency": "JPY",
           "fx_to_usd": 159.88,
           "revenue": 48.778,
-          "gross_profit": null,
+          "gross_profit": 25.1197,
           "op_income": null,
           "net_income": 31.288,
           "cfo": null,
@@ -2976,7 +2976,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 15.54,
-          "gross_profit": null,
+          "gross_profit": -1.416,
           "op_income": -5.745,
           "net_income": -5.833,
           "cfo": 1.56,
@@ -3079,7 +3079,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 25.111,
-          "gross_profit": null,
+          "gross_profit": 5.613,
           "op_income": 1.304,
           "net_income": 0.778,
           "cfo": 8.51,
@@ -3278,7 +3278,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 37.378,
-          "gross_profit": null,
+          "gross_profit": 14.873,
           "op_income": 9.77,
           "net_income": 8.539,
           "cfo": 17.53,
@@ -3738,7 +3738,7 @@
           "currency": "KRW",
           "fx_to_usd": 1306.686,
           "revenue": 25.075,
-          "gross_profit": null,
+          "gross_profit": -0.4082,
           "op_income": -5.916,
           "net_income": -6.993,
           "cfo": null,
@@ -3754,6 +3754,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "SK hynix FY2023 audited consolidated statement（gross loss KRW 533,448M；2026 SEC registration statement comparative column）",
+              "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
+              "data_status": "official"
+            },
             {
               "label": "SK hynix FY2023 Financial Results（4Q23）",
               "url": "https://news.skhynix.com/sk-hynix-reports-fourth-quarter-2023-financial-results/",
@@ -3774,7 +3779,7 @@
           "currency": "KRW",
           "fx_to_usd": 1364.153,
           "revenue": 48.523,
-          "gross_profit": null,
+          "gross_profit": 23.3318,
           "op_income": 17.203,
           "net_income": 14.512,
           "cfo": null,
@@ -3790,6 +3795,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "SK hynix FY2024 audited consolidated statement（gross profit KRW 31,828,146M；2026 SEC registration statement comparative column）",
+              "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
+              "data_status": "official"
+            },
             {
               "label": "SK hynix FY2024 Financial Results（4Q24）",
               "url": "https://news.skhynix.com/sk-hynix-announces-4q24-financial-results/",
@@ -3906,7 +3916,7 @@
           "currency": "KRW",
           "fx_to_usd": 1421.779,
           "revenue": 68.328,
-          "gross_profit": null,
+          "gross_profit": 41.2798,
           "op_income": 33.202,
           "net_income": 30.207,
           "cfo": 37.3,
@@ -3922,6 +3932,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "SK hynix FY2025 audited consolidated statement（gross profit KRW 58,690,790M；2026 SEC registration statement）",
+              "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
+              "data_status": "official"
+            },
             {
               "label": "SK hynix FY2025 Financial Results",
               "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
@@ -4452,7 +4467,7 @@
           "currency": "TWD",
           "fx_to_usd": 30.62,
           "revenue": 70.599,
-          "gross_profit": null,
+          "gross_profit": 38.3772,
           "op_income": 30.094,
           "net_income": 27.816,
           "cfo": 40.0,
@@ -4533,7 +4548,7 @@
           "currency": "TWD",
           "fx_to_usd": 32.13,
           "revenue": 90.08,
-          "gross_profit": null,
+          "gross_profit": 50.5557,
           "op_income": 41.147,
           "net_income": 36.52,
           "cfo": 56.837,
@@ -4786,7 +4801,7 @@
           "currency": "TWD",
           "fx_to_usd": 31.115,
           "revenue": 122.42,
-          "gross_profit": null,
+          "gross_profit": 73.3181,
           "op_income": 62.224,
           "net_income": 55.21,
           "cfo": 73.116,
@@ -5565,7 +5580,7 @@
           "currency": "EUR",
           "fx_to_usd": 0.924839,
           "revenue": 29.798,
-          "gross_profit": null,
+          "gross_profit": 15.2849,
           "op_income": 9.777,
           "net_income": 8.476,
           "cfo": null,
@@ -5665,7 +5680,7 @@
           "currency": "EUR",
           "fx_to_usd": 0.92389,
           "revenue": 30.591,
-          "gross_profit": null,
+          "gross_profit": 15.6859,
           "op_income": 9.766,
           "net_income": 8.195,
           "cfo": null,
@@ -5876,7 +5891,7 @@
           "currency": "EUR",
           "fx_to_usd": 0.884969,
           "revenue": 36.913,
-          "gross_profit": null,
+          "gross_profit": 19.5012,
           "op_income": 12.77,
           "net_income": 10.858,
           "cfo": 12.659,
@@ -6424,7 +6439,7 @@
           "currency": "CNY",
           "fx_to_usd": 7.2,
           "revenue": 84.6,
-          "gross_profit": null,
+          "gross_profit": 40.7096,
           "op_income": null,
           "net_income": 21.9,
           "cfo": null,
@@ -6464,6 +6479,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "Tencent 2023 Annual Report（gross profit RMB 293,109M）",
+              "url": "https://static.www.tencent.com/uploads/2024/04/08/e95c902973fc282be3b3e285c6245281.pdf",
+              "data_status": "official"
+            },
             {
               "label": "Tencent 2023 Annual & Q4 Results（2024-03-20）— 全年营收 RMB609.015B(USD84.6B)、归母净利 RMB157.68B、毛利 RMB293.1B(毛利率48%)；分部：VAS RMB298.4B、网络广告 RMB101.5B、金融科技及企业服务 RMB203.76B",
               "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2023-annual-and-fourth-quarter-results-302094552.html",
@@ -6532,7 +6552,7 @@
           "currency": "CNY",
           "fx_to_usd": 7.185,
           "revenue": 91.9,
-          "gross_profit": null,
+          "gross_profit": 48.6077,
           "op_income": null,
           "net_income": 27,
           "cfo": null,
@@ -6572,6 +6592,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "Tencent 2024 Annual Report（gross profit RMB 349,246M）",
+              "url": "https://static.www.tencent.com/uploads/2025/04/08/1132b72b565389d1b913aea60a648d73.pdf",
+              "data_status": "official"
+            },
             {
               "label": "Tencent 2024 Annual & Q4 Results（2025-03-19）— 全年营收 RMB660.3B(USD91.9B)、归母净利 RMB194.1B(USD27.0B,+68%)、毛利 RMB349.2B(USD48.6B)；分部：VAS RMB319.2B、营销服务 RMB121.4B、金融科技及企业服务 RMB212.0B",
               "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
@@ -6736,7 +6761,7 @@
           "currency": "CNY",
           "fx_to_usd": 7.187,
           "revenue": 104.6,
-          "gross_profit": null,
+          "gross_profit": 58.7996,
           "op_income": null,
           "net_income": 36.1,
           "cfo": 36.43,
@@ -6776,6 +6801,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "Tencent 2025 Annual Report（gross profit RMB 422,593M）",
+              "url": "https://static.www.tencent.com/uploads/2026/04/09/62d786fcf3d3c8cb7e54791ee95439ac.pdf",
+              "data_status": "official"
+            },
             {
               "label": "Tencent 2025 Annual & Q4 Results（2026-03-18）— 全年营收 RMB751.8B(+14%)、归母净利(IFRS) RMB259.6B、毛利 RMB422.6B；分部：VAS RMB369.3B、营销服务 RMB145.0B、金融科技及企业服务 RMB229.4B；FCF RMB182.6B、capex RMB79.2B、净现金 RMB107.1B",
               "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
@@ -7511,7 +7541,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 307.394,
-          "gross_profit": null,
+          "gross_profit": 174.062,
           "op_income": 84.293,
           "net_income": 73.795,
           "cfo": 101.746,
@@ -7590,6 +7620,11 @@
             ]
           },
           "sources": [
+            {
+              "label": "毛利派生 = revenue $307,394M − cost of revenues $133,332M = $174,062M（Alphabet FY2025 10-K 比较列）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+              "data_status": "derived"
+            },
             {
               "label": "Alphabet FY2024 业绩新闻稿（含 FY2023 对比：总营收 $307,394M、营业利润 $84,293M、净利 $73,795M；分部 Services/Cloud/Other Bets 与对冲调节）",
               "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
@@ -7842,7 +7877,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 350.018,
-          "gross_profit": null,
+          "gross_profit": 203.712,
           "op_income": 112.39,
           "net_income": 100.118,
           "cfo": 125.299,
@@ -7921,6 +7956,11 @@
             ]
           },
           "sources": [
+            {
+              "label": "毛利派生 = revenue $350,018M − cost of revenues $146,306M = $203,712M（Alphabet FY2025 10-K 比较列）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+              "data_status": "derived"
+            },
             {
               "label": "Alphabet FY2024 业绩新闻稿（总营收 $350,018M、营业利润 $112,390M、净利 $100,118M；cost of revenues $146,306M → 毛利率 58.2%；分部 Cloud $43,229M / Other Bets $1,648M / 对冲 +$211M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
@@ -8173,7 +8213,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 402.836,
-          "gross_profit": null,
+          "gross_profit": 240.301,
           "op_income": 129.039,
           "net_income": 132.17,
           "cfo": 164.713,
@@ -8252,6 +8292,11 @@
             ]
           },
           "sources": [
+            {
+              "label": "毛利派生 = revenue $402,836M − cost of revenues $162,535M = $240,301M（Alphabet FY2025 10-K）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+              "data_status": "derived"
+            },
             {
               "label": "Alphabet Q4 & FY2025 业绩新闻稿（总营收 $402,836M、营业利润 $129,039M、净利 $132,170M；Google Cloud $58,705M、Other Bets $1,537M）",
               "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
@@ -8871,7 +8916,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 211.915,
-          "gross_profit": null,
+          "gross_profit": 146.052,
           "op_income": 88.523,
           "net_income": 72.361,
           "cfo": 87.582,
@@ -9035,7 +9080,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 245.122,
-          "gross_profit": null,
+          "gross_profit": 171.008,
           "op_income": 109.433,
           "net_income": 88.136,
           "cfo": 118.548,
@@ -9226,7 +9271,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 281.724,
-          "gross_profit": null,
+          "gross_profit": 193.893,
           "op_income": 128.528,
           "net_income": 101.832,
           "cfo": 136.162,
@@ -11014,7 +11059,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 52.961,
-          "gross_profit": null,
+          "gross_profit": 37.818,
           "op_income": 15.353,
           "net_income": 10.653,
           "cfo": 18.673,
@@ -11054,6 +11099,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "毛利派生 = total revenues $52,961M − cloud and software $9,427M − hardware $891M − services $4,825M = $37,818M（GAAP Consolidated Statements of Operations）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+              "data_status": "derived"
+            },
             {
               "label": "Oracle FY2024 业绩新闻稿（总营收 $52,961M、净利 $10,467M；云服务及授权支持 $39,383M；其余三线为合计对账拆分，Claude 录入待核验）",
               "url": "https://www.oracle.com/news/announcement/q4fy24-earnings-release-2024-06-11/",
@@ -11209,7 +11259,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 57.399,
-          "gross_profit": null,
+          "gross_profit": 40.472,
           "op_income": 17.678,
           "net_income": 12.627,
           "cfo": 20.821,
@@ -11241,6 +11291,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "毛利派生 = total revenues $57,399M − cloud and software $11,569M − hardware $782M − services $4,576M = $40,472M（GAAP Consolidated Statements of Operations）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+              "data_status": "derived"
+            },
             {
               "label": "Oracle FY2025 业绩新闻稿（总营收 $57.4B、GAAP 营业利润 $17.7B、GAAP 净利 $12.4B、CFO $20.8B；云服务及授权支持 $44.0B、云授权及本地授权 $5.2B；硬件+服务 $8.2B 为对账拆分）",
               "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
@@ -11500,7 +11555,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 67.357,
-          "gross_profit": null,
+          "gross_profit": 44.336,
           "op_income": 20.606,
           "net_income": 17.309,
           "cfo": 31.977,
@@ -11540,6 +11595,11 @@
             }
           ],
           "sources": [
+            {
+              "label": "毛利派生 = total revenues $67,357M − cloud and software $17,597M − hardware $868M − services $4,556M = $44,336M（GAAP Consolidated Statements of Operations）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+              "data_status": "derived"
+            },
             {
               "label": "Oracle Q4 & FY2026 业绩新闻稿（总营收 $67.4B、GAAP 营业利润 $20.6B、GAAP 净利 $17.0B、CFO $32.0B；Cloud $34.0B、Software $24.5B、Services $5.7B、Hardware $3.1B → 合计四舍五入 $67.4B）",
               "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
@@ -11763,7 +11823,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 3.233,
-          "gross_profit": null,
+          "gross_profit": 3.079,
           "op_income": 0.111,
           "net_income": 0.306,
           "cfo": 1.09,
@@ -11810,7 +11870,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 4.007,
-          "gross_profit": null,
+          "gross_profit": 3.886,
           "op_income": 0.831,
           "net_income": 0.792,
           "cfo": 0.397,
@@ -11938,7 +11998,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 4.92,
-          "gross_profit": null,
+          "gross_profit": 4.799,
           "op_income": 0.9,
           "net_income": 0.904,
           "cfo": 1.524,
