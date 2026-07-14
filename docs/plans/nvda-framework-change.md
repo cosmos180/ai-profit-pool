@@ -1,6 +1,6 @@
 # ADR: NVIDIA FY2027 报告框架变更的数据契约
 
-- 状态: **已落地（Implemented，2026-07-14）**——契约机制本批已实现（schema/selector/validate/UI/数据顺修/测试/文档）。三个开放拍板点（ai_profit_share、新框架平台数、recast）**本批不做**，见 §七。落地记录见文末「落地记录」。
+- 状态: **已落地（Implemented，2026-07-14）**——契约机制本批已实现（schema/selector/validate/UI/数据顺修/测试/文档）。§七三个拍板结论保持不变：不补静态 `ai_profit_share`、新框架确认为两个 market platforms、旧期默认不 recast。落地记录见文末「落地记录」。
 - 原状态: 已接受（Accepted，2026-07-14 review）——本 ADR 只定契约与边界，不动生产代码/数据；落地另启批次。
 - 日期: 2026-07-14
 - 触发: D8 批次② 发现 NVIDIA 自 Q1 FY2027 起变更报告框架（报道称市场平台口径由五平台改为 Data Center / Edge Computing），与库内既有 `segments[]` 口径冲突。
