@@ -3790,8 +3790,12 @@
                 "revenue": 15.3136
               },
               {
-                "name": "16/20nm 16/20纳米",
+                "name": "16nm 16纳米",
                 "revenue": 7.2064
+              },
+              {
+                "name": "20nm 20纳米",
+                "revenue": 0.0
               },
               {
                 "name": "28nm 28纳米",
@@ -3816,11 +3820,15 @@
               {
                 "name": "0.15/0.18μm 0.15/0.18微米",
                 "revenue": 3.6032
+              },
+              {
+                "name": "0.25μm and above 0.25微米及以上",
+                "revenue": 0.9008
               }
             ],
             "sources": [
               {
-                "label": "TSMC 4Q24 Management Report（含 FY2024 全年 Revenue by Technology，占晶圆收入比）：3nm 18% / 5nm 34% / 7nm 17% / 16-20nm 8% / 28nm 7% / 40-45nm 4% / 65nm 4% / 90nm 1% / 0.11-0.13um 2% / 0.15-0.18um 4%（先进制程 7nm 及以下 69%；官方各档四舍五入合计约 99%）。换算式：各行金额 = 该节点占比 × 库内 FY2024 营收 90.08；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+                "label": "TSMC 4Q24 Management Report（含 FY2024 全年 Revenue by Technology，占晶圆收入比）：3nm 18% / 5nm 34% / 7nm 17% / 16nm 8% / 20nm 0% / 28nm 7% / 40-45nm 4% / 65nm 4% / 90nm 1% / 0.11-0.13um 2% / 0.15-0.18um 4% / 0.25um and above 1%（先进制程 7nm 及以下 69%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2024 营收 90.08；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
                 "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2025-01/2d8b2bb6fc3b5887d24ae0635f639c1cdca834f3/4Q24ManagementReport.pdf",
                 "data_status": "derived"
               },
@@ -3958,11 +3966,15 @@
               {
                 "name": "0.15/0.18μm 0.15/0.18微米",
                 "revenue": 3.6726
+              },
+              {
+                "name": "0.25μm and above 0.25微米及以上",
+                "revenue": 0.0
               }
             ],
             "sources": [
               {
-                "label": "TSMC 4Q25 Management Report（含 FY2025 全年 Revenue by Technology，占晶圆收入比）：3nm 24% / 5nm 36% / 7nm 14% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 3%（先进制程 7nm 及以下 74%）。换算式：各行金额 = 该节点占比 × 库内 FY2025 营收 90.08→122.42（本表用 122.42）；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，故绝对金额较真实晶圆金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+                "label": "TSMC 4Q25 Management Report（含 FY2025 全年 Revenue by Technology，占晶圆收入比）：3nm 24% / 5nm 36% / 7nm 14% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 3% / 0.25um and above 0%（先进制程 7nm 及以下 74%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2025 营收 122.42；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，故绝对金额较真实晶圆金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
                 "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/00fe50f72b38d74e6b9b066398f020f337cd4e9d/4Q25%20Management%20Report.pdf",
                 "data_status": "derived"
               },
@@ -4231,8 +4243,12 @@
                 "revenue": 15.3136
               },
               {
-                "name": "16/20nm 16/20纳米",
+                "name": "16nm 16纳米",
                 "revenue": 7.2064
+              },
+              {
+                "name": "20nm 20纳米",
+                "revenue": 0.0
               },
               {
                 "name": "28nm 28纳米",
@@ -4257,11 +4273,15 @@
               {
                 "name": "0.15/0.18μm 0.15/0.18微米",
                 "revenue": 3.6032
+              },
+              {
+                "name": "0.25μm and above 0.25微米及以上",
+                "revenue": 0.9008
               }
             ],
             "sources": [
               {
-                "label": "TSMC 4Q24 Management Report（含 FY2024 全年 Revenue by Technology，占晶圆收入比）：3nm 18% / 5nm 34% / 7nm 17% / 16-20nm 8% / 28nm 7% / 40-45nm 4% / 65nm 4% / 90nm 1% / 0.11-0.13um 2% / 0.15-0.18um 4%（先进制程 7nm 及以下 69%；官方各档四舍五入合计约 99%）。换算式：各行金额 = 该节点占比 × 库内 FY2024 营收 90.08；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+                "label": "TSMC 4Q24 Management Report（含 FY2024 全年 Revenue by Technology，占晶圆收入比）：3nm 18% / 5nm 34% / 7nm 17% / 16nm 8% / 20nm 0% / 28nm 7% / 40-45nm 4% / 65nm 4% / 90nm 1% / 0.11-0.13um 2% / 0.15-0.18um 4% / 0.25um and above 1%（先进制程 7nm 及以下 69%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2024 营收 90.08；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
                 "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2025-01/2d8b2bb6fc3b5887d24ae0635f639c1cdca834f3/4Q24ManagementReport.pdf",
                 "data_status": "derived"
               },
@@ -4502,11 +4522,15 @@
               {
                 "name": "0.15/0.18μm 0.15/0.18微米",
                 "revenue": 3.6726
+              },
+              {
+                "name": "0.25μm and above 0.25微米及以上",
+                "revenue": 0.0
               }
             ],
             "sources": [
               {
-                "label": "TSMC 4Q25 Management Report（含 FY2025 全年 Revenue by Technology，占晶圆收入比）：3nm 24% / 5nm 36% / 7nm 14% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 3%（先进制程 7nm 及以下 74%）。换算式：各行金额 = 该节点占比 × 库内 FY2025 营收 90.08→122.42（本表用 122.42）；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，故绝对金额较真实晶圆金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+                "label": "TSMC 4Q25 Management Report（含 FY2025 全年 Revenue by Technology，占晶圆收入比）：3nm 24% / 5nm 36% / 7nm 14% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 3% / 0.25um and above 0%（先进制程 7nm 及以下 74%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2025 营收 122.42；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，故绝对金额较真实晶圆金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
                 "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/00fe50f72b38d74e6b9b066398f020f337cd4e9d/4Q25%20Management%20Report.pdf",
                 "data_status": "derived"
               },
@@ -4592,11 +4616,15 @@
               {
                 "name": "0.15/0.18μm 0.15/0.18微米",
                 "revenue": 0.6746
+              },
+              {
+                "name": "0.25μm and above 0.25微米及以上",
+                "revenue": 0.0
               }
             ],
             "sources": [
               {
-                "label": "TSMC 4Q25 Management Report（4Q25 单季 Revenue by Technology，占晶圆收入比）：3nm 28% / 5nm 35% / 7nm 14% / 16-20nm 6% / 28nm 6% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 2%（先进制程 7nm 及以下 77%）。换算式：各行金额 = 该节点占比 × 库内 tsmc-2025q4 营收 33.73；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+                "label": "TSMC 4Q25 Management Report（4Q25 单季 Revenue by Technology，占晶圆收入比）：3nm 28% / 5nm 35% / 7nm 14% / 16-20nm 6% / 28nm 6% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 2% / 0.25um and above 0%（先进制程 7nm 及以下 77%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 tsmc-2025q4 营收 33.73；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
                 "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/00fe50f72b38d74e6b9b066398f020f337cd4e9d/4Q25%20Management%20Report.pdf",
                 "data_status": "derived"
               },
@@ -4736,11 +4764,15 @@
               {
                 "name": "0.15/0.18μm 0.15/0.18微米",
                 "revenue": 0.718
+              },
+              {
+                "name": "0.25μm and above 0.25微米及以上",
+                "revenue": 0.359
               }
             ],
             "sources": [
               {
-                "label": "TSMC 1Q26 Management Report（1Q26 Revenue by Technology，占晶圆收入比）：3nm 25% / 5nm 36% / 7nm 13% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 2%（先进制程 7nm 及以下 74%；官方各档四舍五入合计约 99%）。换算式：各行金额 = 该节点占比 × 库内 tsmc-2026q1 营收 35.9；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+                "label": "TSMC 1Q26 Management Report（1Q26 Revenue by Technology，占晶圆收入比）：3nm 25% / 5nm 36% / 7nm 13% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 2% / 0.25um and above 1%（先进制程 7nm 及以下 74%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 tsmc-2026q1 营收 35.9；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
                 "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-04/5508a9df8981f587c73dbfaf9f577f142e22bbb1/1Q26ManagementReport.pdf",
                 "data_status": "derived"
               },
@@ -5055,7 +5087,7 @@
             ],
             "sources": [
               {
-                "label": "ASML FY2025 Form 20-F — 技术级分部;库内 USD 值精确合计=营收 36.913（diff=0）。EUR 官方披露:系统€24,474.3M / 服务€8,193.0M / 总€32,678M;技术级 EUV≈€11.6B（€11,602.8M）/ DUV≈€12.0B（€12,046.2M）/ 量测检测€825M。系统€24,474.3M×1.129983=27.6555、服务€8,193.0M×1.129983=9.258 与库内 USD 完全吻合。检索交叉印证，待 Dayu 复核",
+                "label": "ASML FY2025 Form 20-F — 技术级分部;库内 USD 值精确合计=营收 36.913（diff=0）。EUR 官方披露:系统€24,474.3M / 服务€8,193.0M / 总€32,667.3M;技术级 EUV≈€11.6B（€11,602.8M）/ DUV≈€12.0B（€12,046.2M）/ 量测检测€825M。系统€24,474.3M×1.129983=27.6555、服务€8,193.0M×1.129983=9.258 与库内 USD 完全吻合。检索交叉印证，待 Dayu 复核",
                 "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
                 "data_status": "official"
               },
@@ -5540,7 +5572,7 @@
             ],
             "sources": [
               {
-                "label": "ASML FY2025 Form 20-F — 技术级分部;库内 USD 值精确合计=营收 36.913（diff=0）。EUR 官方披露:系统€24,474.3M / 服务€8,193.0M / 总€32,678M;技术级 EUV≈€11.6B（€11,602.8M）/ DUV≈€12.0B（€12,046.2M）/ 量测检测€825M。系统€24,474.3M×1.129983=27.6555、服务€8,193.0M×1.129983=9.258 与库内 USD 完全吻合。检索交叉印证，待 Dayu 复核",
+                "label": "ASML FY2025 Form 20-F — 技术级分部;库内 USD 值精确合计=营收 36.913（diff=0）。EUR 官方披露:系统€24,474.3M / 服务€8,193.0M / 总€32,667.3M;技术级 EUV≈€11.6B（€11,602.8M）/ DUV≈€12.0B（€12,046.2M）/ 量测检测€825M。系统€24,474.3M×1.129983=27.6555、服务€8,193.0M×1.129983=9.258 与库内 USD 完全吻合。检索交叉印证，待 Dayu 复核",
                 "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
                 "data_status": "official"
               },
