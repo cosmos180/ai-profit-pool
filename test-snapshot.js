@@ -176,6 +176,57 @@ function invariants(snap) {
     assert.equal(cy.complete, true, "oracle CY2025 应 complete");
     assert.equal(cy.strict, false, "oracle CY2025 应 strict=false (月度错位, 自然年近似)");
   }
+
+  // Amazon FY2024 International 营业利润以 10-K 官方精确值为准；years/periods 双写必须同值。
+  const amazon = byId("amazon");
+  if (amazon) {
+    const annualYear = amazon.years.find((y) => y.fy === "FY2024");
+    const annualPeriod = amazon.periods.find((p) => p.period_id === "amazon-fy2024-annual");
+    const intlYear = annualYear?.segments.find((s) => s.name === "International 国际");
+    const intlPeriod = annualPeriod?.segments.find((s) => s.name === "International 国际");
+    assert.equal(intlYear?.op_income, 3.792, "amazon FY2024 International years op_income 应为官方 $3.792B");
+    assert.equal(intlPeriod?.op_income, 3.792, "amazon FY2024 International period op_income 应为官方 $3.792B");
+
+    const expectedQuarterIds = [
+      "amazon-2023q3", "amazon-2024q1", "amazon-2024q2", "amazon-2024q3",
+      "amazon-2025q1", "amazon-2025q2", "amazon-2025q3", "amazon-2026q1",
+    ];
+    const quarters = amazon.periods.filter((p) => p.kind === "quarter" && p.status === "actual");
+    assert.deepEqual(quarters.map((p) => p.period_id), expectedQuarterIds, "amazon 实际季度集合应完整且顺序稳定");
+    for (const q of quarters) {
+      const rb = q.revenue_breakdown;
+      assert.equal(rb?.complete, true, `${q.period_id} 应带 complete=true 的官方收入拆分`);
+      assert.equal(rb?.items.length, 7, `${q.period_id} 应有七类官方收入拆分`);
+      assert.ok(rb.sources.length > 0 && rb.sources.every((s) => s.data_status === "official"), `${q.period_id} 收入拆分来源应全为 official`);
+      const sum = rb.items.reduce((acc, item) => acc + item.revenue, 0);
+      assert.ok(Math.abs(sum - q.revenue) <= 0.001, `${q.period_id} 七类收入应精确对账：${sum} vs ${q.revenue}`);
+    }
+
+    const expectedQuarterSegments = {
+      "amazon-2023q3": [11.188, [["North America 北美", 87.887, 4.307], ["International 国际", 32.137, -0.095], ["AWS 亚马逊云", 23.059, 6.976]]],
+      "amazon-2024q1": [15.307, [["North America 北美", 86.341, 4.983], ["International 国际", 31.935, 0.903], ["AWS 亚马逊云", 25.037, 9.421]]],
+      "amazon-2024q2": [14.672, [["North America 北美", 90.033, 5.065], ["International 国际", 31.663, 0.273], ["AWS 亚马逊云", 26.281, 9.334]]],
+      "amazon-2024q3": [17.411, [["North America 北美", 95.537, 5.663], ["International 国际", 35.888, 1.301], ["AWS 亚马逊云", 27.452, 10.447]]],
+      "amazon-2025q1": [18.405, [["North America 北美", 92.887, 5.841], ["International 国际", 33.513, 1.017], ["AWS 亚马逊云", 29.267, 11.547]]],
+      "amazon-2025q2": [19.171, [["North America 北美", 100.068, 7.517], ["International 国际", 36.761, 1.494], ["AWS 亚马逊云", 30.873, 10.16]]],
+      "amazon-2025q3": [17.422, [["North America 北美", 106.267, 4.789], ["International 国际", 40.896, 1.199], ["AWS 亚马逊云", 33.006, 11.434]]],
+      "amazon-2026q1": [23.852, [["North America 北美", 104.143, 8.267], ["International 国际", 39.789, 1.424], ["AWS 亚马逊云", 37.587, 14.161]]],
+    };
+    for (const q of quarters) {
+      const [expectedOpIncome, expectedSegments] = expectedQuarterSegments[q.period_id];
+      assert.equal(q.op_income, expectedOpIncome, `${q.period_id} 合并营业利润应取官方精确值`);
+      assert.deepEqual(
+        q.segments.map((s) => [s.name, s.revenue, s.op_income]),
+        expectedSegments,
+        `${q.period_id} 三个报告分部应与官方表一致`,
+      );
+      assert.ok(q.segments.every((s) => s.kind === "platform"), `${q.period_id} 三个报告分部 kind 应一致`);
+      const segmentRevenue = q.segments.reduce((acc, segment) => acc + segment.revenue, 0);
+      const segmentOpIncome = q.segments.reduce((acc, segment) => acc + segment.op_income, 0);
+      assert.ok(Math.abs(segmentRevenue - q.revenue) <= 0.001, `${q.period_id} 分部收入应精确对账`);
+      assert.ok(Math.abs(segmentOpIncome - q.op_income) <= 0.001, `${q.period_id} 分部营业利润应精确对账`);
+    }
+  }
 }
 
 // ---- 递归 diff：列出所有不一致路径（expected vs actual）----

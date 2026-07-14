@@ -9575,9 +9575,9 @@
               "data_status": "official"
             },
             {
-              "label": "FY2023 分部营收/营业利润（NA $352,828M op $14,877M；International $131,200M op −$2,656M；AWS $90,757M op $24,631M，Claude 录入待核验细项）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
-              "data_status": "estimate"
+              "label": "Amazon FY2023 Form 10-K Note 8 Segment Information（NA/International/AWS 营收及营业利润官方表）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000008/amzn-20231231.htm",
+              "data_status": "official"
             },
             {
               "label": "Amazon FY2023 Form 10-K filed 2024-02-02（SEC XBRL: revenue $574,785M, operating income $36,852M, net income $30,425M, CFO $84,946M, capex $52,729M）",
@@ -9651,7 +9651,7 @@
               "name": "International 国际",
               "kind": "platform",
               "revenue": 142.906,
-              "op_income": 3.825,
+              "op_income": 3.792,
               "op_margin": 0.027,
               "is_ai": false
             },
@@ -9666,8 +9666,8 @@
           ],
           "sources": [
             {
-              "label": "Amazon FY2024 业绩新闻稿（总净销售 $637,959M、营业利润 $68,593M、净利 $59,248M；分部 NA $387,497M op $24,967M / International $142,906M op $3,825M / AWS $107,556M op $39,834M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "label": "Amazon FY2024 Form 10-K Note 10 Segment Information（NA $387,497M op $24,967M / International $142,906M op $3,792M / AWS $107,556M op $39,834M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000004/amzn-20241231.htm",
               "data_status": "official"
             },
             {
@@ -9762,9 +9762,9 @@
               "data_status": "official"
             },
             {
-              "label": "FY2025 总营业利润 ≈$80B / 净利 $77.7B 为新闻稿摘要四舍五入值，NA/International 分部营业利润未单列录入（留空），待 10-K 细项核验",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
-              "data_status": "estimate"
+              "label": "Amazon FY2025 Form 10-K Note 10 Segment Information（NA/International/AWS 营收及营业利润官方表）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+              "data_status": "official"
             },
             {
               "label": "Amazon FY2025 Form 10-K filed 2026-02-06（SEC XBRL: revenue $716,924M, operating income $79,975M, net income $77,670M, CFO $139,514M, capex $131,819M）",
@@ -9964,14 +9964,80 @@
           "fx_to_usd": 1,
           "revenue": 143.083,
           "gross_profit": null,
-          "op_income": null,
+          "op_income": 11.188,
           "net_income": 9.879,
           "cfo": null,
           "capex": null,
-          "segments": [],
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 87.887,
+              "op_income": 4.307,
+              "op_margin": 0.049,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 32.137,
+              "op_income": -0.095,
+              "op_margin": -0.003,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 23.059,
+              "op_income": 6.976,
+              "op_margin": 0.303,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 57.267
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 4.959
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 34.342
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 12.06
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 10.17
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 23.059
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.226
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q3 2023 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $143,083M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872423000018/amzn-20230930.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
-              "label": "Amazon 10-Q filed 2023-10-27（quarter ended 2023-09-30: revenue $143,083M, net income $9,879M）",
+              "label": "Amazon Q3 2023 Form 10-Q（revenue $143,083M, operating income $11,188M, net income $9,879M；NA/International/AWS 分部表）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872423000018/amzn-20230930.htm",
               "data_status": "official"
             }
@@ -10028,9 +10094,9 @@
               "data_status": "official"
             },
             {
-              "label": "FY2023 分部营收/营业利润（NA $352,828M op $14,877M；International $131,200M op −$2,656M；AWS $90,757M op $24,631M，Claude 录入待核验细项）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
-              "data_status": "estimate"
+              "label": "Amazon FY2023 Form 10-K Note 8 Segment Information（NA/International/AWS 营收及营业利润官方表）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000008/amzn-20231231.htm",
+              "data_status": "official"
             },
             {
               "label": "Amazon FY2023 Form 10-K filed 2024-02-02（SEC XBRL: revenue $574,785M, operating income $36,852M, net income $30,425M, CFO $84,946M, capex $52,729M）",
@@ -10094,14 +10160,80 @@
           "fx_to_usd": 1,
           "revenue": 143.313,
           "gross_profit": null,
-          "op_income": null,
+          "op_income": 15.307,
           "net_income": 10.431,
           "cfo": null,
           "capex": null,
-          "segments": [],
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 86.341,
+              "op_income": 4.983,
+              "op_margin": 0.058,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 31.935,
+              "op_income": 0.903,
+              "op_margin": 0.028,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 25.037,
+              "op_income": 9.421,
+              "op_margin": 0.376,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 54.67
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.202
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 34.596
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 11.824
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 10.722
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 25.037
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.262
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q1 2024 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $143,313M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000083/amzn-20240331.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
-              "label": "Amazon 10-Q filed 2024-05-01（quarter ended 2024-03-31: revenue $143,313M, net income $10,431M）",
+              "label": "Amazon Q1 2024 Form 10-Q（revenue $143,313M, operating income $15,307M, net income $10,431M；NA/International/AWS 分部表）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000083/amzn-20240331.htm",
               "data_status": "official"
             }
@@ -10121,14 +10253,80 @@
           "fx_to_usd": 1,
           "revenue": 147.977,
           "gross_profit": null,
-          "op_income": null,
+          "op_income": 14.672,
           "net_income": 13.485,
           "cfo": null,
           "capex": null,
-          "segments": [],
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 90.033,
+              "op_income": 5.065,
+              "op_margin": 0.056,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 31.663,
+              "op_income": 0.273,
+              "op_margin": 0.009,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 26.281,
+              "op_income": 9.334,
+              "op_margin": 0.355,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 55.392
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.206
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 36.201
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 12.771
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 10.866
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 26.281
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.26
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q2 2024 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $147,977M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000130/amzn-20240630.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
-              "label": "Amazon 10-Q filed 2024-08-02（quarter ended 2024-06-30: revenue $147,977M, net income $13,485M）",
+              "label": "Amazon Q2 2024 Form 10-Q（revenue $147,977M, operating income $14,672M, net income $13,485M；NA/International/AWS 分部表）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000130/amzn-20240630.htm",
               "data_status": "official"
             }
@@ -10148,14 +10346,80 @@
           "fx_to_usd": 1,
           "revenue": 158.877,
           "gross_profit": null,
-          "op_income": null,
+          "op_income": 17.411,
           "net_income": 15.328,
           "cfo": null,
           "capex": null,
-          "segments": [],
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 95.537,
+              "op_income": 5.663,
+              "op_margin": 0.059,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 35.888,
+              "op_income": 1.301,
+              "op_margin": 0.036,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 27.452,
+              "op_income": 10.447,
+              "op_margin": 0.381,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 61.411
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.228
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 37.864
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 14.331
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 11.278
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 27.452
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.313
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q3 2024 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $158,877M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000161/amzn-20240930.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
-              "label": "Amazon 10-Q filed 2024-11-01（quarter ended 2024-09-30: revenue $158,877M, net income $15,328M）",
+              "label": "Amazon Q3 2024 Form 10-Q（revenue $158,877M, operating income $17,411M, net income $15,328M；NA/International/AWS 分部表）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000161/amzn-20240930.htm",
               "data_status": "official"
             }
@@ -10192,7 +10456,7 @@
               "name": "International 国际",
               "kind": "platform",
               "revenue": 142.906,
-              "op_income": 3.825,
+              "op_income": 3.792,
               "op_margin": 0.027,
               "is_ai": false
             },
@@ -10207,8 +10471,8 @@
           ],
           "sources": [
             {
-              "label": "Amazon FY2024 业绩新闻稿（总净销售 $637,959M、营业利润 $68,593M、净利 $59,248M；分部 NA $387,497M op $24,967M / International $142,906M op $3,825M / AWS $107,556M op $39,834M）",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
+              "label": "Amazon FY2024 Form 10-K Note 10 Segment Information（NA $387,497M op $24,967M / International $142,906M op $3,792M / AWS $107,556M op $39,834M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000004/amzn-20241231.htm",
               "data_status": "official"
             },
             {
@@ -10273,14 +10537,80 @@
           "fx_to_usd": 1,
           "revenue": 155.667,
           "gross_profit": null,
-          "op_income": null,
+          "op_income": 18.405,
           "net_income": 17.127,
           "cfo": null,
           "capex": null,
-          "segments": [],
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 92.887,
+              "op_income": 5.841,
+              "op_margin": 0.063,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 33.513,
+              "op_income": 1.017,
+              "op_margin": 0.03,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 29.267,
+              "op_income": 11.547,
+              "op_margin": 0.395,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 57.407
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.533
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 36.512
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 13.921
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 11.715
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 29.267
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.312
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q1 2025 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $155,667M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000036/amzn-20250331.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
-              "label": "Amazon 10-Q filed 2025-05-02（quarter ended 2025-03-31: revenue $155,667M, net income $17,127M）",
+              "label": "Amazon Q1 2025 Form 10-Q（revenue $155,667M, operating income $18,405M, net income $17,127M；NA/International/AWS 分部表）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000036/amzn-20250331.htm",
               "data_status": "official"
             }
@@ -10300,14 +10630,80 @@
           "fx_to_usd": 1,
           "revenue": 167.702,
           "gross_profit": null,
-          "op_income": null,
+          "op_income": 19.171,
           "net_income": 18.164,
           "cfo": null,
           "capex": null,
-          "segments": [],
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 100.068,
+              "op_income": 7.517,
+              "op_margin": 0.075,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 36.761,
+              "op_income": 1.494,
+              "op_margin": 0.041,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 30.873,
+              "op_income": 10.16,
+              "op_margin": 0.329,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 61.485
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.595
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 40.348
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 15.694
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 12.208
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 30.873
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.499
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q2 2025 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $167,702M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000086/amzn-20250630.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
-              "label": "Amazon 10-Q filed 2025-08-01（quarter ended 2025-06-30: revenue $167,702M, net income $18,164M）",
+              "label": "Amazon Q2 2025 Form 10-Q（revenue $167,702M, operating income $19,171M, net income $18,164M；NA/International/AWS 分部表）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000086/amzn-20250630.htm",
               "data_status": "official"
             }
@@ -10327,14 +10723,80 @@
           "fx_to_usd": 1,
           "revenue": 180.169,
           "gross_profit": null,
-          "op_income": null,
+          "op_income": 17.422,
           "net_income": 21.187,
           "cfo": null,
           "capex": null,
-          "segments": [],
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 106.267,
+              "op_income": 4.789,
+              "op_margin": 0.045,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 40.896,
+              "op_income": 1.199,
+              "op_margin": 0.029,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 33.006,
+              "op_income": 11.434,
+              "op_margin": 0.346,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 67.407
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.578
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 42.486
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 17.703
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 12.574
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 33.006
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.415
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q3 2025 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $180,169M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000123/amzn-20250930.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
-              "label": "Amazon 10-Q filed 2025-10-31（quarter ended 2025-09-30: revenue $180,169M, net income $21,187M）",
+              "label": "Amazon Q3 2025 Form 10-Q（revenue $180,169M, operating income $17,422M, net income $21,187M；NA/International/AWS 分部表）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000123/amzn-20250930.htm",
               "data_status": "official"
             }
@@ -10391,9 +10853,9 @@
               "data_status": "official"
             },
             {
-              "label": "FY2025 总营业利润 ≈$80B / 净利 $77.7B 为新闻稿摘要四舍五入值，NA/International 分部营业利润未单列录入（留空），待 10-K 细项核验",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000002/amzn-20251231xex991.htm",
-              "data_status": "estimate"
+              "label": "Amazon FY2025 Form 10-K Note 10 Segment Information（NA/International/AWS 营收及营业利润官方表）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+              "data_status": "official"
             },
             {
               "label": "Amazon FY2025 Form 10-K filed 2026-02-06（SEC XBRL: revenue $716,924M, operating income $79,975M, net income $77,670M, CFO $139,514M, capex $131,819M）",
@@ -10487,6 +10949,47 @@
               "is_ai": true
             }
           ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 64.254
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.785
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 41.578
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 17.243
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 13.427
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 37.587
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.645
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q1 2026 Form 10-Q Segment Information — Net sales by groups of similar products and services（七行合计 $181,519M）",
+                "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
               "label": "Amazon Form 10-Q filed 2026-04-30（Q1 2026: net sales $181,519M, cost of sales $87,463M, operating income $23,852M, net income $30,255M）",
