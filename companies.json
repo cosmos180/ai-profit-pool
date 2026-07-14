@@ -135,6 +135,7 @@
               "is_ai": false
             }
           ],
+          "segment_framework": "nvda:market_platform:v1",
           "reportable_note": {
             "Compute & Networking": "≈ 78%",
             "Graphics": "≈ 22%"
@@ -205,6 +206,7 @@
               "is_ai": false
             }
           ],
+          "segment_framework": "nvda:market_platform:v1",
           "reportable_note": {
             "Compute & Networking": "≈ 88%",
             "Graphics": "≈ 12%"
@@ -280,6 +282,7 @@
               "is_ai": false
             }
           ],
+          "segment_framework": "nvda:market_platform:v1",
           "reportable_note": {
             "Compute & Networking": "≈ 90%",
             "Graphics": "≈ 10%"
@@ -448,6 +451,7 @@
               "is_ai": false
             }
           ],
+          "segment_framework": "nvda:market_platform:v1",
           "sources": [
             {
               "label": "FY2024 业绩（FY2025 新闻稿含上一年对比）",
@@ -526,6 +530,7 @@
               "is_ai": false
             }
           ],
+          "segment_framework": "nvda:market_platform:v1",
           "sources": [
             {
               "label": "FY2025 业绩新闻稿",
@@ -695,6 +700,7 @@
               "is_ai": false
             }
           ],
+          "segment_framework": "nvda:market_platform:v1",
           "sources": [
             {
               "label": "Q4 & FY2026 业绩新闻稿",
@@ -739,19 +745,21 @@
           "segments": [
             {
               "name": "Compute & Networking 计算与网络",
-              "kind": "platform",
+              "kind": "reportable",
               "revenue": 74.55,
               "op_income": 53.335,
               "is_ai": true
             },
             {
               "name": "Graphics 图形",
-              "kind": "platform",
+              "kind": "reportable",
               "revenue": 7.065,
               "op_income": 2.941,
               "is_ai": false
             }
           ],
+          "segment_framework": "nvda:reportable:v1",
+          "framework_change": "自 FY2027 Q1 起，segments[] 采用法定 reportable 分部（Compute & Networking / Graphics，含分部营业利润），与 FY2024–FY2026 年度的市场平台轴（Data Center / Gaming 等）为不同口径——两轴并存、非官方重组，跨口径分部同比不可比。",
           "sources": [
             {
               "label": "NVIDIA Form 10-Q filed 2026-05-28（FY2027 Q1 iXBRL: revenue $81,615M; gross profit $61,157M; operating income $53,536M; net income $58,321M; CFO $50,344M; capex $1,757M）",

@@ -421,6 +421,58 @@ def check(data):
         if c.get("seg_profit") == "no" and any_segment_profit:
             errors.append(f"ERROR {cid}: seg_profit='no' 但已录入分部营业利润")
 
+        # ---- segment_framework 口径身份契约（ADR nvda-framework-change D5）----
+        # segment_framework 是"这组 segments 属哪个口径版本"的 opaque token（year/period 两级）。
+        #   Rule B（完整性）: 本公司任一含 segments 的 carrier 启用了 token → 其余含 segments 的
+        #     carrier 缺 token 也 WARN。selector 按 D2 对单边缺 token 的跨期同比失败关闭（返回 null，
+        #     诚实但不完整），此处提示补齐。
+        #   Rule A（断裂需说明）: 只在 selector 可能做同比的同 cadence actual 序列内比较：years 按
+        #     财年序；annual periods 独立；quarter periods 再按同一 fiscal/calendar quarter 分组。
+        #     token 跳变 → 后一个 carrier SHOULD 带 framework_change 人话说明；缺 → WARN（非 ERROR）。
+        #     annual 与 quarter 不是同比基期，绝不硬相邻。
+        #   对账/双写语义不受 token 影响（仍按 kind：platform/reportable 强制、division 不强制）。
+        year_rows = [y for y in c.get("years", [])
+                     if any(s.get("name") for s in (y.get("segments") or []))]
+        year_carriers = [("year", y.get("fy", "?"), y.get("segment_framework"), y.get("framework_change"))
+                         for y in year_rows]
+        period_rows = sorted(
+            [p for p in (c.get("periods") or [])
+             if any(s.get("name") for s in (p.get("segments") or []))],
+            key=lambda p: p.get("period_end") or "")
+        period_carriers = [("period", p.get("period_id", "?"), p.get("segment_framework"),
+                            p.get("framework_change")) for p in period_rows]
+        all_carriers = year_carriers + period_carriers
+        if any(tok is not None for _, _, tok, _ in all_carriers):
+            # Rule B：任一 carrier 带 token → 其余含 segments 的 carrier 缺 token 报 WARN
+            for _lbl, ident, tok, _fc in all_carriers:
+                if tok is None:
+                    warns.append(f"WARN  {cid}/{ident}: 含 segments 却缺 segment_framework —— 本公司已在别处"
+                                 f"启用口径 token，缺标将使跨期分部同比失败关闭（诚实但不完整），请补齐")
+            # Rule A：仅比较同 cadence 的 actual carrier，避免 annual↔quarter 伪相邻。
+            actual_year_carriers = [k for k, y in zip(year_carriers, year_rows)
+                                    if y.get("status") == "actual"]
+            period_sequences = []
+            cadence_keys = []
+            for p in period_rows:
+                if p.get("status") != "actual":
+                    continue
+                if p.get("kind") == "annual":
+                    cadence = ("annual", None)
+                else:
+                    cadence = ("quarter", p.get("fiscal_quarter") or p.get("calendar_quarter"))
+                if cadence not in cadence_keys:
+                    cadence_keys.append(cadence)
+                    period_sequences.append([])
+                period_sequences[cadence_keys.index(cadence)].append(
+                    ("period", p.get("period_id", "?"), p.get("segment_framework"),
+                     p.get("framework_change")))
+            for seq in [actual_year_carriers, *period_sequences]:
+                toks = [k for k in seq if k[2] is not None]
+                for (_pl, _pid, ptok, _pfc), (_cl, cident, ctok, cfc) in zip(toks, toks[1:]):
+                    if ptok != ctok and not cfc:
+                        warns.append(f"WARN  {cid}/{cident}: segment_framework 由「{ptok}」跳变为「{ctok}」，"
+                                     f"却无 framework_change 说明 —— 口径断裂应给人话解释（D5）")
+
         # ---- 双写一致性（B1 估值链迁移配套兜底）----
         # 估值链分母已切到 periods[] 侧「最新实际 annual period」，运行时不再回退 years[]。
         # 双写纪律（年度 actual 事实同写 periods annual 与 legacy years）目前是人工约定，此处
