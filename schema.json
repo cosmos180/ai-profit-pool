@@ -97,6 +97,7 @@
         "revenue_breakdown": {"$ref": "#/definitions/revenue_breakdown"},
         "reportable_note": {"type": "object"},
         "framework_change": {"type": "string"},
+        "segment_framework": {"type": "string", "description": "Opaque per-period口径身份 token identifying WHICH segment framework version this carrier's segments[] belong to (ADR nvda-framework-change D1). Same token across periods ⇒ segments are cross-period comparable; a different token ⇒ 口径断裂 (segYoY returns null, D2). Optional + non-breaking: absent on both compared periods ⇒ legacy name-match behavior unchanged. Convention: '<company>:<axis>:<version>' e.g. 'nvda:market_platform:v1' / 'nvda:reportable:v1'. Parallel to segments[] (not per-segment). Orthogonal to segment.kind, which alone drives reconciliation semantics."},
         "consensus_rev": {"type": "string"},
         "consensus_eps": {"type": "string"},
         "consensus_eps_value": {"type": ["number", "null"], "description": "Numeric consensus/forward EPS (per share, in consensus_eps_currency). Powers forward-PE derivation. Coexists with (does NOT replace) the free-text consensus_eps; only meaningful on status:'forecast' years. null = not fetched. Additive + optional — legacy data passes unchanged."},
@@ -150,6 +151,8 @@
         "cfo": {"type": ["number", "null"], "description": "Period net cash from operating activities in meta.unit (USD bn)."},
         "capex": {"type": ["number", "null"], "description": "Period capital expenditures (sign-neutral magnitude) in meta.unit (USD bn). FCF is derived, never stored."},
         "segments": {"type": "array", "items": {"$ref": "#/definitions/segment"}, "description": "Optional period-level segment breakdown, current segment shape. Empty [] allowed. Platform-segment reconciliation is enforced by validate.py only when the period explicitly carries a complete platform segment set (not forced for guidance / partial-quarter segments)."},
+        "segment_framework": {"type": "string", "description": "Period-level口径身份 token for this period's segments[] — see the year-level segment_framework (ADR nvda-framework-change D1). Same token ⇒ cross-period comparable; different token ⇒ 口径断裂 (D2). Optional + non-breaking. Convention '<company>:<axis>:<version>'."},
+        "framework_change": {"type": "string", "description": "Human-readable explanation of a segment-口径 break at this period (ADR nvda-framework-change D5). Machine signal = segment_framework token jump; this string is the人话 explanation shown at the break point. Optional + non-breaking; validate.py WARNs (not ERROR) when a segment_framework token changes between adjacent segment-carrying periods without a framework_change note."},
         "revenue_breakdown": {"$ref": "#/definitions/revenue_breakdown"},
         "sources": {"type": "array", "items": {"$ref": "#/definitions/source"}, "description": "Provenance, mandatory per project invariant — each carries url + data_status."}
       }

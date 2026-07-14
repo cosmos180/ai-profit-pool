@@ -421,6 +421,41 @@ def check(data):
         if c.get("seg_profit") == "no" and any_segment_profit:
             errors.append(f"ERROR {cid}: seg_profit='no' 但已录入分部营业利润")
 
+        # ---- segment_framework 口径身份契约（ADR nvda-framework-change D5）----
+        # segment_framework 是"这组 segments 属哪个口径版本"的 opaque token（year/period 两级）。
+        #   Rule B（完整性）: 本公司任一含 segments 的 carrier 启用了 token → 其余含 segments 的
+        #     carrier 缺 token 也 WARN。selector 按 D2 对单边缺 token 的跨期同比失败关闭（返回 null，
+        #     诚实但不完整），此处提示补齐。
+        #   Rule A（断裂需说明）: 带 token 的 carrier 按时序相邻两两比较（years 按财年序、periods 按
+        #     period_end 序，两序列各自独立），token 跳变 → 后一个 carrier SHOULD 带 framework_change
+        #     人话说明；缺 → WARN（非 ERROR）。token 本身即口径信号，故只在真实跳变处咬人，正常同口径
+        #     的连续期不受影响。
+        #   对账/双写语义不受 token 影响（仍按 kind：platform/reportable 强制、division 不强制）。
+        year_carriers = [("year", y.get("fy", "?"), y.get("segment_framework"), y.get("framework_change"))
+                         for y in c.get("years", [])
+                         if any(s.get("name") for s in (y.get("segments") or []))]
+        period_rows = sorted(
+            [(p.get("period_end") or "", p.get("period_id", "?"),
+              p.get("segment_framework"), p.get("framework_change"))
+             for p in (c.get("periods") or [])
+             if any(s.get("name") for s in (p.get("segments") or []))],
+            key=lambda r: r[0])
+        period_carriers = [("period", r[1], r[2], r[3]) for r in period_rows]
+        all_carriers = year_carriers + period_carriers
+        if any(tok is not None for _, _, tok, _ in all_carriers):
+            # Rule B：任一 carrier 带 token → 其余含 segments 的 carrier 缺 token 报 WARN
+            for _lbl, ident, tok, _fc in all_carriers:
+                if tok is None:
+                    warns.append(f"WARN  {cid}/{ident}: 含 segments 却缺 segment_framework —— 本公司已在别处"
+                                 f"启用口径 token，缺标将使跨期分部同比失败关闭（诚实但不完整），请补齐")
+            # Rule A：years 序列 / periods 序列内，相邻带 token carrier 的 token 跳变缺 framework_change → WARN
+            for seq in (year_carriers, period_carriers):
+                toks = [k for k in seq if k[2] is not None]
+                for (_pl, _pid, ptok, _pfc), (_cl, cident, ctok, cfc) in zip(toks, toks[1:]):
+                    if ptok != ctok and not cfc:
+                        warns.append(f"WARN  {cid}/{cident}: segment_framework 由「{ptok}」跳变为「{ctok}」，"
+                                     f"却无 framework_change 说明 —— 口径断裂应给人话解释（D5）")
+
         # ---- 双写一致性（B1 估值链迁移配套兜底）----
         # 估值链分母已切到 periods[] 侧「最新实际 annual period」，运行时不再回退 years[]。
         # 双写纪律（年度 actual 事实同写 periods annual 与 legacy years）目前是人工约定，此处

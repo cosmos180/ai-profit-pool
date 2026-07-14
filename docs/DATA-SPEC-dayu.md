@@ -74,6 +74,10 @@ filing 原文数字(禁止用训练记忆补空,拿不到留 null),为每个季�
       "revenue": <USD bn 4位>, "net_income": <归母 GAAP USD bn 4位>,
       "gross_profit": <或 null>, "op_income": <或 null>, "cfo": <或 null>, "capex": <绝对值或 null>,
       "segments": [],
+      // "segment_framework": "<公司:轴:版本>",  // ★仅当本期 segments[] 非空:口径身份 opaque token
+      //   (ADR nvda-framework-change D1)。同 token=跨期可比;filing 换报告框架/换分部轴时用**新** token
+      //   (如 nvda 年度 "nvda:market_platform:v1" → fy2027q1 起 "nvda:reportable:v1"),并在换轴首期加
+      //   "framework_change": "<人话说明口径断裂>"。segments 为 [] 或公司未启用口径契约时省略此键。
       "revenue_breakdown": {            // ★全公司标配(2026-07-13 用户拍板):filing 的 disaggregation
         "label": "产品与收入类型",        //   of revenue / 产品收入表按原始层级录入;与 segments[] 严格分开
         "complete": true,               //   (产品收入 ≠ 分部利润口径,不重复计数)。没有该披露的期可省略整键。

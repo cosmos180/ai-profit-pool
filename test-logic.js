@@ -48,6 +48,36 @@ const changedSegments = {
 };
 assert.equal(Selectors.segYoY(changedSegments, "FY2", "B"), null);
 
+// ---- segYoY framework 门（ADR nvda-framework-change D2，失败关闭）----
+// 同一分部名 "DC"：两期 revenue 10→15。是否可比完全由 segment_framework token 决定。
+const fwSeg = (fy, rev, fw) => {
+  const y = { fy, status: "actual", revenue: rev, net_income: 1,
+    segments: [{ name: "DC", kind: "platform", revenue: rev }] };
+  if (fw !== undefined) y.segment_framework = fw;
+  return y;
+};
+// (1) 两期同 token → 照算 (+50%)
+const fwSame = { years: [fwSeg("FY1", 10, "v1"), fwSeg("FY2", 15, "v1")] };
+assert.equal(Selectors.segYoY(fwSame, "FY2", "DC"), 0.5);
+// (2) 两期 token 不同 → null（口径断裂，即便分部重名也不误算）
+const fwDiff = { years: [fwSeg("FY1", 10, "v1"), fwSeg("FY2", 15, "v2")] };
+assert.equal(Selectors.segYoY(fwDiff, "FY2", "DC"), null);
+// (3) 只有当期带 token（上一期缺）→ null（标注不完整，失败关闭）
+const fwCurOnly = { years: [fwSeg("FY1", 10, undefined), fwSeg("FY2", 15, "v2")] };
+assert.equal(Selectors.segYoY(fwCurOnly, "FY2", "DC"), null);
+// (4) 只有上一期带 token（当期缺）→ null
+const fwPrevOnly = { years: [fwSeg("FY1", 10, "v1"), fwSeg("FY2", 15, undefined)] };
+assert.equal(Selectors.segYoY(fwPrevOnly, "FY2", "DC"), null);
+// (5) 两期都无 token → 回退 legacy name-match（非破坏）：同名照算
+const fwNone = { years: [fwSeg("FY1", 10, undefined), fwSeg("FY2", 15, undefined)] };
+assert.equal(Selectors.segYoY(fwNone, "FY2", "DC"), 0.5);
+// (6) 两期同 token 但上一期无该分部 → null（缺基期，token 门不改此边界）
+const fwMissingPrev = { years: [
+  { fy: "FY1", status: "actual", revenue: 10, net_income: 1, segment_framework: "v1",
+    segments: [{ name: "Other", kind: "platform", revenue: 10 }] },
+  fwSeg("FY2", 15, "v1") ] };
+assert.equal(Selectors.segYoY(fwMissingPrev, "FY2", "DC"), null);
+
 // Product/revenue-type hierarchy is independent from reportable segments.
 const productHierarchy = {
   years: [

@@ -97,6 +97,11 @@
     return Object.entries(rn).map(([k, v]) => ({ name: k, value: v }))
   })
 
+  // —— 口径断裂提示（ADR nvda-framework-change D5）——
+  // 当前 carrier（period 或 year）带 framework_change 说明 → 显式呈现「口径断裂·不可比」，
+  // 而非画误导连线（配合 D2 的 segYoY=null）。组件零算术，只透传 as-reported 文案。
+  const frameworkChange = $derived((isPeriod ? p : y)?.framework_change || null)
+
   // —— forecast：锚点 ——
   const anchors = $derived.by(() => {
     if (!y || !isForecast) return []
@@ -122,6 +127,17 @@
       <span class="dbadge ybadge act">实际 · GAAP</span>
     {/if}
   </div>
+
+  {#snippet frameworkBreak()}
+    {#if frameworkChange}
+      <div class="section-h">板块口径 · 断裂提示</div>
+      <div class="gap">
+        <h3>口径断裂 · 不可比<span class="dbadge ybadge fc" style="margin-left:8px">跨口径</span></h3>
+        <p>{frameworkChange}</p>
+        <p style="margin-bottom:0;font-size:12px;color:var(--ink-faint)">口径切换处的分部同比按契约诚实留空（不画误导连线）。</p>
+      </div>
+    {/if}
+  {/snippet}
 
   {#if isPeriod}
     <!-- ============ 实际报告期 ============ -->
@@ -182,6 +198,8 @@
       </div>
     {/if}
 
+    {@render frameworkBreak()}
+
     <SourcesBlock year={p} />
   {:else if isForecast}
     <!-- ============ 预测年 ============ -->
@@ -193,10 +211,7 @@
         <div class="card fcc {a.big ? 'big' : ''}"><div class="fl">{a.label}</div><div class="fv num">{a.value}</div><div class="fs">{a.note || ''}</div></div>
       {/each}
     </div>
-    {#if y.framework_change}
-      <div class="section-h">板块口径 · 重要变化</div>
-      <div class="gap"><h3>本财年起板块划分有变</h3><p>{y.framework_change}</p></div>
-    {/if}
+    {@render frameworkBreak()}
     <SourcesBlock year={y} />
   {:else}
     <!-- ============ 实际年 ============ -->
@@ -275,6 +290,8 @@
           <span><b>平台级毛利率 / 净利润：未披露。</b>诚实做法是留空并标注，而不是估一个数填进去。</span></div>
       </div>
     {/if}
+
+    {@render frameworkBreak()}
 
     <SourcesBlock year={y} />
   {/if}

@@ -1,6 +1,7 @@
 # ADR: NVIDIA FY2027 报告框架变更的数据契约
 
-- 状态: 已接受（Accepted，2026-07-14 review）——本 ADR 只定契约与边界，不动生产代码/数据；落地另启批次。
+- 状态: **已落地（Implemented，2026-07-14）**——契约机制本批已实现（schema/selector/validate/UI/数据顺修/测试/文档）。三个开放拍板点（ai_profit_share、新框架平台数、recast）**本批不做**，见 §七。落地记录见文末「落地记录」。
+- 原状态: 已接受（Accepted，2026-07-14 review）——本 ADR 只定契约与边界，不动生产代码/数据；落地另启批次。
 - 日期: 2026-07-14
 - 触发: D8 批次② 发现 NVIDIA 自 Q1 FY2027 起变更报告框架（报道称市场平台口径由五平台改为 Data Center / Edge Computing），与库内既有 `segments[]` 口径冲突。
 - 作用域: 仅 `nvda`，但确立"同一公司跨期口径变更"的通用契约，其它公司复用。
@@ -197,3 +198,23 @@
 1. **不补静态 `ai_profit_share`**：当前 company-level 常量不能表达跨年变化，不以假连续遮蔽断点。
 2. **新框架确认是两个 market platforms**：Data Center / Edge Computing；Data Center 当前 sub-markets 为 Hyperscale / ACIE，均以 NVIDIA Q1 FY2027 官方 release 为准。
 3. **旧期默认不 recast**：保留 as-reported；只有拿到官方精确 recast 且存在明确产品需求时，才另启容器 ADR，绝不覆盖旧值或塞进同一 `segments[]`。
+
+---
+
+## 八、落地记录（2026-07-14 实施批次）
+
+**改动面**（对应 §四表）：
+
+1. `schema.json`：`year` 与 `period` 上新增可选 `segment_framework`(string, opaque token)；`period` 新增 `framework_change`(string)。均可选、非破坏，缺字段的旧数据零行为变化。
+2. `data-module.js` `segYoY`：加 framework 门（D2 失败关闭）——两期 token 皆存在且相等→照算；两期皆缺→legacy name-match（非破坏）；token 不同或单边缺→null。这是唯一的 seg 级跨期比较路径（`revenueBreakdownYoY` 是独立的产品/收入轴、不受 `segment_framework` 约束，未改）。
+3. `validate.py`：新增 segment_framework 契约两条 WARN（非 ERROR）——**Rule A**（断裂需说明）：带 token 的 carrier 按时序相邻两两比较，token 跳变而无 `framework_change` → WARN；**Rule B**（完整性）：本公司任一含 segments 的 carrier 启用 token 后，其余含 segments 的 carrier 缺 token → WARN。对账/双写语义**不受 token 影响**，仍按 `kind`。
+4. `web/src/components/Detail.svelte`：`framework_change` 展示升级为统一的「口径断裂·不可比」提示（复用 `.gap` amber caveat + `跨口径` badge），period / 实际年 / 预测年三分支共用一个 `{#snippet frameworkBreak()}`。
+5. 数据顺修（`companies.json`）：nvda `fy2027q1` 两分部 `kind: platform → reportable`；年度（years FY2024–26 + annual periods）补 `segment_framework="nvda:market_platform:v1"`，`fy2027q1` 补 `"nvda:reportable:v1"` 并在断裂点加 `framework_change`。**未**写入 market-platform `revenue_breakdown`（待 Dayo 精确 $M，§5）。
+6. 测试：`test-logic.js` 加 segYoY framework 门 6 例（同 token 正常/异 token null/单边缺 null/双缺 legacy/缺基期 null）；`test-snapshot.js` **零漂移**（无 --update）。
+
+**两点实施解读（需主导者/架构师知悉）**：
+
+- **Rule A 采用「token 驱动」而非「严格同 kind 相邻」**：D5 line 123 有「不把 annual 与 quarter 硬相邻」的告诫（针对 YoY cadence）。实施时 Rule A 只在**带 token 的 carrier 之间、且 token 真实跳变时**咬人，跨 annual↔quarter 也检测。对 nvda 现库，这使 `fy2026-annual`(market_platform) → `fy2027q1`(reportable) 的轴切换被识别为断裂点，从而**要求** `fy2027q1` 带 `framework_change`（与本批任务的预期一致）。因只在 token 变化处触发，正常同口径的连续期不会误报。
+- **reportable 仍触发对账（依 D5，非任务括注）**：任务描述括注「reportable 不触发平台对账」与 ADR D5 line 127（「platform/reportable 都强制、division 不强制」）冲突。实施**遵从 ADR D5**：`validate.py` 对账分支只排除 `division`，故 `reportable` 与 `platform` 一样强制对账。`fy2027q1` 两分部合计 81.615 = 营收 81.615 → **对账通过**，行为与改 kind 前一致（kind 改动对对账闸零净效果，因两者同落「非 division」分支）。
+
+**门禁结果**：`validate.py` 279 OK/INFO · 0 WARN · 0 ERROR；`test-data-module.js` 全过（logic + snapshot 零漂移）；`bun run build` 通过；dev + build 双验 nvda `fy2027q1` / `FY2027E` 详情页断裂提示均正确渲染（桌面 + 390px），无 pageerror。

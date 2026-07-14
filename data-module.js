@@ -208,11 +208,30 @@ const Selectors = {
     return { sum, revenue: rev, diff: sum - rev, kind, partition, ok: partition && Math.abs(sum - rev) < 0.05 };
   },
 
+  /* segment-level YoY, framework-gated (ADR nvda-framework-change D2 — fail-closed
+     across口径 breaks). segment_framework is a per-carrier opaque token identifying
+     which segment口径 the segments[] belong to; comparing revenue across DIFFERENT
+     frameworks is meaningless (worse: name collisions produce misleading non-null
+     values, e.g. a recycled "Data Center" name). Gate:
+       · both carriers carry a token AND tokens are EQUAL → compute (comparable);
+       · NEITHER carrier carries a token → legacy name-match behavior (non-breaking
+         for companies not yet on the contract);
+       · tokens DIFFER, or only ONE side carries a token → null (口径断裂 or
+         incomplete tagging — both unsafe to compare).
+     Null-safe throughout; missing segment/zero base → null (unchanged). 算不存。 */
   segYoY(c, fy, name) {
     const i = this.yearIndex(c, fy);
     if (i <= 0) return null;
-    const prev = (c.years[i - 1].segments || []).find(s => s.name === name);
-    const cur  = (this.yearByFy(c, fy).segments || []).find(s => s.name === name);
+    const prevYear = c.years[i - 1];
+    const curYear  = this.yearByFy(c, fy);
+    const prevFw = prevYear.segment_framework;
+    const curFw  = curYear.segment_framework;
+    const prevHas = prevFw != null, curHas = curFw != null;
+    // framework 门：单边有 token / 双边 token 不同 → 口径断裂或标注不完整 → null（失败关闭）。
+    // 双边都无 token → 回退 legacy name-match（非破坏）；双边 token 相同 → 照算。
+    if ((prevHas || curHas) && prevFw !== curFw) return null;
+    const prev = (prevYear.segments || []).find(s => s.name === name);
+    const cur  = (curYear.segments || []).find(s => s.name === name);
     return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
   },
 
