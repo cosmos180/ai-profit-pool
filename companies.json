@@ -7916,7 +7916,7 @@
             ],
             "sources": [
               {
-                "label": "Amazon FY2023 10-K Disaggregation of Revenue — Online stores $231,872M; Physical stores $20,030M; Third-party seller services $140,053M; Advertising services $46,906M; Subscription services $40,209M; AWS $90,757M; Other $4,958M；合计 $574,785M（检索交叉印证，待 Dayu 复核）",
+                "label": "Amazon FY2023 10-K Disaggregation of Revenue — Online stores $231,872M; Physical stores $20,030M; Third-party seller services $140,053M; Advertising services $46,906M; Subscription services $40,209M; AWS $90,757M; Other $4,958M；合计 $574,785M（已按 SEC 10-K 原文逐行复核）",
                 "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000008/amzn-20231231.htm",
                 "data_status": "official"
               }
@@ -8062,7 +8062,7 @@
             ],
             "sources": [
               {
-                "label": "Amazon FY2025 10-K Disaggregation of Revenue — Online stores $269,287M; Physical stores $22,561M; Third-party seller services $172,162M; Advertising services $68,635M; Subscription services $49,619M; AWS $128,725M; Other $5,935M；合计 $716,924M（检索交叉印证，待 Dayu 复核）",
+                "label": "Amazon FY2025 10-K Disaggregation of Revenue — Online stores $269,287M; Physical stores $22,561M; Third-party seller services $172,162M; Advertising services $68,635M; Subscription services $49,619M; AWS $128,725M; Other $5,935M；合计 $716,924M（已按 SEC 10-K 原文逐行复核）",
                 "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
                 "data_status": "official"
               }
@@ -8326,7 +8326,7 @@
             ],
             "sources": [
               {
-                "label": "Amazon FY2023 10-K Disaggregation of Revenue — Online stores $231,872M; Physical stores $20,030M; Third-party seller services $140,053M; Advertising services $46,906M; Subscription services $40,209M; AWS $90,757M; Other $4,958M；合计 $574,785M（检索交叉印证，待 Dayu 复核）",
+                "label": "Amazon FY2023 10-K Disaggregation of Revenue — Online stores $231,872M; Physical stores $20,030M; Third-party seller services $140,053M; Advertising services $46,906M; Subscription services $40,209M; AWS $90,757M; Other $4,958M；合计 $574,785M（已按 SEC 10-K 原文逐行复核）",
                 "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872424000008/amzn-20231231.htm",
                 "data_status": "official"
               }
@@ -8648,7 +8648,7 @@
             ],
             "sources": [
               {
-                "label": "Amazon FY2025 10-K Disaggregation of Revenue — Online stores $269,287M; Physical stores $22,561M; Third-party seller services $172,162M; Advertising services $68,635M; Subscription services $49,619M; AWS $128,725M; Other $5,935M；合计 $716,924M（检索交叉印证，待 Dayu 复核）",
+                "label": "Amazon FY2025 10-K Disaggregation of Revenue — Online stores $269,287M; Physical stores $22,561M; Third-party seller services $172,162M; Advertising services $68,635M; Subscription services $49,619M; AWS $128,725M; Other $5,935M；合计 $716,924M（已按 SEC 10-K 原文逐行复核）",
                 "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
                 "data_status": "official"
               }
@@ -9431,7 +9431,7 @@
           ],
           "sources": [
             {
-              "label": "Oracle Form 10-Q filed 2026-03-10（FY2026 Q3 iXBRL: revenue $17,190M; direct revenue expenses $6,092M; operating income $5,464M; net income $3,721M）",
+              "label": "Oracle Form 10-Q filed 2026-03-11（FY2026 Q3 iXBRL: revenue $17,190M; direct revenue expenses $6,092M; operating income $5,464M; net income $3,721M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
               "data_status": "official"
             },
@@ -9461,32 +9461,32 @@
             "complete": true,
             "items": [
               {
-                "name": "Cloud services and license support 云服务及授权支持",
-                "revenue": 13.883,
+                "name": "Cloud 云业务",
+                "revenue": 8.914,
                 "children": [
                   {
-                    "name": "Cloud services 云服务",
-                    "revenue": 8.914,
-                    "children": [
-                      {
-                        "name": "Cloud Application (SaaS) 云应用（SaaS）",
-                        "revenue": 4.026
-                      },
-                      {
-                        "name": "Cloud Infrastructure (OCI/IaaS) 云基础设施（OCI/IaaS）",
-                        "revenue": 4.888
-                      }
-                    ]
+                    "name": "Cloud applications 云应用（SaaS）",
+                    "revenue": 4.026
                   },
                   {
-                    "name": "License support 授权支持（filing 原文 software support）",
-                    "revenue": 4.969
+                    "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                    "revenue": 4.888
                   }
                 ]
               },
               {
-                "name": "Cloud license and on-premise license 云授权及本地授权（filing 原文 software license）",
-                "revenue": 1.15
+                "name": "Software 软件",
+                "revenue": 6.119,
+                "children": [
+                  {
+                    "name": "Software license 软件授权",
+                    "revenue": 1.15
+                  },
+                  {
+                    "name": "Software support 软件支持",
+                    "revenue": 4.969
+                  }
+                ]
               },
               {
                 "name": "Hardware 硬件",
@@ -9499,12 +9499,12 @@
             ],
             "sources": [
               {
-                "label": "Oracle Form 10-Q filed 2026-03-10（FY2026 Q3 iXBRL 产品/收入拆分表原文：cloud applications $4,026M；cloud infrastructure $4,888M；software support $4,969M；software license $1,150M；hardware $714M；services $1,443M → 合计 $17,190M）。库内 oracle-fy2026q3 已引此表为 official；本树在其上加 Cloud services=SaaS+IaaS=$8,914M、Cloud services and license support=$13,883M 两级派生节点。检索交叉印证，待 Dayu 复核。",
+                "label": "Oracle Form 10-Q filed 2026-03-11（FY2026 Q3 原始收入层级：Cloud $8,914M → cloud applications $4,026M + cloud infrastructure $4,888M；Software $6,119M → software license $1,150M + software support $4,969M；Hardware $714M；Services $1,443M；合计 $17,190M；已按 SEC 10-Q 原文逐行复核）。",
                 "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
                 "data_status": "official"
               },
               {
-                "label": "Oracle FY2026 Q3 业绩新闻稿（2026-03-10）交叉印证：Q3 Cloud Infrastructure (IaaS) $4.9B、Cloud Application (SaaS) $4.0B、Cloud 合计 $8.9B、总营收 $17.2B——与 10-Q 精确表（IaaS 4.888 / SaaS 4.026 / Cloud 8.914 / total 17.190）一致。检索交叉印证，待 Dayu 复核。",
+                "label": "Oracle FY2026 Q3 业绩新闻稿（2026-03-10）交叉印证：Q3 Cloud Infrastructure (IaaS) $4.9B、Cloud Application (SaaS) $4.0B、Cloud 合计 $8.9B、总营收 $17.2B——与 10-Q 精确表（IaaS 4.888 / SaaS 4.026 / Cloud 8.914 / total 17.190）一致。",
                 "url": "https://www.oracle.com/news/announcement/q3fy26-earnings-release-2026-03-10/",
                 "data_status": "official"
               }
