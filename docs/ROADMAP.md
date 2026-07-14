@@ -57,6 +57,11 @@
     - **批次③(非 SEC PDF)**:tencent 先(HKEX 金额齐)→ samsung(注意 division 内部抵消行)/skhynix(占比区间期标 derived);
     - **省略三家(宁缺勿噪)**:arm(=segments)、broadcom(filing 不给产品拆,**不搬电话会 non-GAAP**)、softbank(thesis 在 NAV 不在收入线,录了反而误导)。
     - 红线:micron/skhynix 的 HBM 不在产品表、不得从电话会补录;%口径不冒充 official。
+    - **批次①执行结果(2026-07-13)**:入库 **amazon FY2023/FY2025**(七行,official,双写两侧)+ **oracle fy2026q3**(三级 SaaS/OCI 树,official,闸门 PASS:FY2026 起单列 SaaS/OCI)。**扣下待 Dayu 精确补录**(egress 只剩检索通道,以下各项只有舍入级或有自由度,拒绝重构入库):
+      - 🧑 **microsoft**:FY2025 10-K 新口径重述表(M365 Commercial/Consumer、Windows and Devices;一张表含三年)+ FY2026 三季 10-Q(`msft-20250630.htm` 等);旧口径 FY2023/24 已采到但缺最新年无决策价值,弃;
+      - 🧑 **micron**:10-K/10-Q『Revenue by technology』精确 $M(`mu-20250828.htm` 三年 + `mu-20260226/0528.htm` 两季);检索只有整数占比且 FY2025 DRAM 源间差 ±$230M;
+      - 🧑 **amazon FY2024**:Online 247,029 / Physical 21,215 / Other 5,425 三行末位待原表确认(两自由度,恒等式不锁定)+ 可选 2025q3/2026q1 两季;
+      - 🧑 **oracle 年度三年**:FY2026 10-K 产品表(cloud application/cloud infrastructure/software support/software license/hardware/services,三年可比)+ fy2026q2 10-Q。
 - [ ] **D7 · 自然年口径视图**(🤖 selector 派生 + UI 切换;🧑 确认展示优先级)
   - 结论:可行,但不应把 `years[]` 原始事实改成自然年。`years[]` 继续保存公司披露财年/自然年事实;`calendarYear(company, 2025)` 由季度原子派生 `2025-01-01~2025-12-31`。
   - 边界:只有四个自然年内季度的 revenue/net_income 都齐全才出自然年值;缺季度、只有 guidance 或缺净利时诚实留空。分部自然年拆分需季度分部披露,否则仅公司级自然年。
