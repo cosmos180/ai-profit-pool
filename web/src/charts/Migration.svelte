@@ -14,10 +14,19 @@
   const columns = $derived(
     enough
       ? positions.map(p => ({ ...p, isTTM: false })).concat([
-          { label: 'TTM', sub: '截至各家最近季报', total: ttm.total, n: ttm.n, N: null, stages: ttm.stages, isTTM: true },
+          { label: 'TTM', sub: '截至各家最近季报', total: ttm.total, n: ttm.n, N: null, stages: ttm.stages, basisCount: ttm.aiBasisCount, isTTM: true },
         ])
       : []
   )
+
+  // AI 归因口径角标（A2）——判定/计数全在 Selectors 备好的字段上，组件零财务算术。
+  // sourced=公司级真实利润归因；proxy=用 is_ai 营收占比代理利润占比（可能高估，鼓起时宜打折）。
+  const BASIS_TITLE = {
+    sourced: 'sourced（官方归因）：公司级 AI 利润归因，云分部真实经营利润，非营收代理',
+    proxy: 'proxy（营收代理）：用 is_ai 营收占比代理利润占比，可能高估——这根/这家鼓起来时宜打折看',
+  }
+  const basisTitle = b => BASIS_TITLE[b] || ''
+  const basisShort = b => (b === 'sourced' ? '官方' : b === 'proxy' ? '代理' : '')
 
   const first = $derived(enough ? positions[0] : null)
   const last = $derived(enough ? positions[positions.length - 1] : null)
@@ -26,7 +35,7 @@
     return x ? x.share : null
   })
   // --- 布局常量（纯视觉几何，非财务）---
-  const colW = 92, gap = 110, padL = 14, padT = 62, barH = 300, padB = 44
+  const colW = 92, gap = 110, padL = 14, padT = 84, barH = 300, padB = 44
   const W = $derived(padL * 2 + columns.length * colW + (columns.length - 1) * (gap - colW))
   const H = padT + barH + padB
   const xOf = i => padL + i * gap
@@ -66,6 +75,7 @@
       x, tt, topShift, colW,
       total: p.total, n: p.n, N: p.N, label: p.label,
       segs, investGap,
+      basisCount: p.basisCount || null,
     }
   }))
 
@@ -86,7 +96,7 @@
       const investEmpty = st.stage === 'invest' && !st.companies.length
       const members = investEmpty
         ? null
-        : st.companies.map(m => ({ name: m.name.split(' ')[0], ttm: m.ttm, neg: m.ttm < 0 }))
+        : st.companies.map(m => ({ name: m.name.split(' ')[0], ttm: m.ttm, neg: m.ttm < 0, basis: ttm.basisByMember[m.id] || null }))
       return {
         stage: st.stage,
         label: st.label,
@@ -123,13 +133,22 @@
           </defs>
 
           {#each cols as c (c.label)}
-            <!-- 柱顶绝对总量 + 覆盖家数 -->
-            <text x={c.x + c.colW / 2} y={padT - 25 - c.topShift} text-anchor="middle"
+            <!-- 柱顶绝对总量 + 覆盖家数 + AI 归因口径构成（sourced/proxy）-->
+            <text x={c.x + c.colW / 2} y={padT - 46 - c.topShift} text-anchor="middle"
                   font-family="var(--mono)" font-size="14" font-weight="600"
                   fill={c.tt ? '#5b4d86' : 'var(--ink)'}>{Fmt.bn(c.total, 0)}</text>
-            <text x={c.x + c.colW / 2} y={padT - 11 - c.topShift} text-anchor="middle"
+            <text x={c.x + c.colW / 2} y={padT - 32 - c.topShift} text-anchor="middle"
                   font-family="var(--mono)" font-size="9.5" font-weight="500" fill="var(--ink-faint)"
             >{c.tt ? `对应 ${c.n} 家` : `覆盖 ${c.n}/${c.N} 家`}</text>
+            {#if c.basisCount}
+              <g role="img" aria-label={`AI 归因口径：官方 ${c.basisCount.sourced} 家、营收代理 ${c.basisCount.proxy} 家`}>
+                <title>AI 归因口径构成：官方(sourced)={c.basisCount.sourced} 家真实利润归因；营收代理(proxy)={c.basisCount.proxy} 家用 is_ai 营收占比代理利润占比，可能高估 → 看这根柱鼓起时宜按 proxy 占比打折。</title>
+                <text x={c.x + c.colW / 2} y={padT - 15 - c.topShift} text-anchor="middle"
+                      font-family="var(--mono)" font-size="9.5" font-weight="600">
+                  <tspan fill="var(--ok-deep)">官方 {c.basisCount.sourced}</tspan><tspan fill="var(--ink-faint)"> · </tspan><tspan fill="#8a5a0f">代理 {c.basisCount.proxy}</tspan>
+                </text>
+              </g>
+            {/if}
 
             <!-- 列名 -->
             {#if c.tt}
@@ -191,7 +210,7 @@
                   {#if li.investEmpty}
                     <span class="gap-note">软银季度净利受投资损益主导，未纳入 TTM（覆盖缺口，非真实归零）</span>
                   {:else if li.members && li.members.length}
-                    {#each li.members as m, mi (m.name)}{#if mi}、{/if}<span class:neg={m.neg} title="periods 口径（含 implied Q4）">{m.name} {Fmt.bn(m.ttm, 1)}</span>{/each}
+                    {#each li.members as m, mi (m.name)}{#if mi}、{/if}<span class:neg={m.neg} title="periods 口径（含 implied Q4）">{m.name} {Fmt.bn(m.ttm, 1)}</span>{#if m.basis}<span class="mig-btag {m.basis}" title={basisTitle(m.basis)}>{basisShort(m.basis)}</span>{/if}{/each}
                   {:else}—{/if}
                 </span>
                 <span class="lar">TTM 占比　较 {last.label}
@@ -212,6 +231,7 @@
       <span class="n">②</span>混业公司按主营归桶：三星（存储+代工+消费）计入<b>存储</b>，博通（含软件）计入<b>设计</b>。
       <span class="n">③</span>投资环节（软银）为<b>投资损益口径、非经营利润</b>，与其余经营利润性质不同，同图并列仅为看结构。
       <span class="n">④</span><span class="ttm-tag">TTM</span> 为<b>滚动 12 个月估算、非已完成财年</b>（故用斜纹虚线区分）；各家截止日不一（跨度 {ttm.asOfSpreadDays} 天，美光季末 5-28、其余多为 3-31），横截面<b>非精确同期</b>。TTM 仅 {ttm.n} 家：软银季度净利受投资损益主导未录季度，<b>TTM 投资环节为覆盖缺口、非利润归零</b>，故 TTM 合计（{ttm.n} 家）<b>不可与年度柱（{last.n} 家）直接比高低</b>。
+      <span class="n">⑤</span><b>AI 归因口径角标</b>：柱顶「<span class="bt-ok">官方 N</span> · <span class="bt-px">代理 M</span>」与图例每家公司后缀标注该贡献的归因方式——<span class="bt-ok">官方(sourced)</span>=公司级真实利润归因（如云分部经营利润）；<span class="bt-px">代理(proxy)</span>=用 <b>is_ai 营收占比代理利润占比，可能高估</b>。<b>看某环节/柱鼓起时，代理占比越高越该打折。</b>（不入池的公司 basis 为空、只计入覆盖 N 分母、不计入官方/代理，保持诚实。）
     </div>
   {/if}
 </div>
