@@ -14,7 +14,11 @@
       ...row,
       revenueLabel: Fmt.bn(row.revenue, 2),
       shareLabel: Fmt.pct(row.share, 1),
-      yoy: company && fy ? Selectors.revenueBreakdownYoY(company, fy, row.path) : null,
+      yoy: company && fy
+        ? (owner?.kind === 'annual'
+            ? Selectors.annualRevenueBreakdownYoY(company, fy, row.path)
+            : Selectors.revenueBreakdownYoY(company, fy, row.path))
+        : null,
       barW: row.revenue > 0 ? (row.revenue / maxPositive * 100).toFixed(1) : '0',
       indent: `${row.depth * 22}px`,
       focus: /youtube/i.test(row.name),

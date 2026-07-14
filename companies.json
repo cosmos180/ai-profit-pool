@@ -452,6 +452,10 @@
             }
           ],
           "segment_framework": "nvda:market_platform:v1",
+          "reportable_note": {
+            "Compute & Networking": "≈ 78%",
+            "Graphics": "≈ 22%"
+          },
           "sources": [
             {
               "label": "FY2024 业绩（FY2025 新闻稿含上一年对比）",
@@ -531,6 +535,10 @@
             }
           ],
           "segment_framework": "nvda:market_platform:v1",
+          "reportable_note": {
+            "Compute & Networking": "≈ 88%",
+            "Graphics": "≈ 12%"
+          },
           "sources": [
             {
               "label": "FY2025 业绩新闻稿",
@@ -701,6 +709,10 @@
             }
           ],
           "segment_framework": "nvda:market_platform:v1",
+          "reportable_note": {
+            "Compute & Networking": "≈ 90%",
+            "Graphics": "≈ 10%"
+          },
           "sources": [
             {
               "label": "Q4 & FY2026 业绩新闻稿",

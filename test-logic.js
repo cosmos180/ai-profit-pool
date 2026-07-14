@@ -135,8 +135,12 @@ assert.equal(Selectors.cashConversion(noCash), null);
 const halfCash = { fy: "FY3", status: "actual", revenue: 100, net_income: 20, capex: 30 }; // cfo missing
 assert.equal(Selectors.fcf(halfCash), null);        // both inputs required
 assert.equal(Selectors.capexIntensity(halfCash), 0.3); // capex intensity needs only capex
-assert.equal(Selectors.homeMetric({ years: [cashYear] }, "fcfMargin"), 0.2);
-assert.equal(Selectors.homeMetric({ years: [cashYear] }, "capexInt"), 0.3);
+const cashPeriodCompany = { periods: [{ ...cashYear, kind: "annual", fiscal_year: "FY1",
+  period_end: "2025-12-31" }] };
+assert.equal(Selectors.homeMetric(cashPeriodCompany, "fcfMargin"), 0.2);
+assert.equal(Selectors.homeMetric(cashPeriodCompany, "capexInt"), 0.3);
+// B2: annual directory metrics are periods-only; legacy years are not a runtime fallback.
+assert.equal(Selectors.homeMetric({ years: [cashYear] }, "fcfMargin"), null);
 
 // =====================================================================
 // incomeFlow: P&L left→right money flow for the FY-drill-down Sankey
@@ -295,6 +299,49 @@ function withAnnualPeriods(c) {
   const ays = (c.years || []).filter(y => y.status === "actual");
   return { ...c, periods: ays.map((y, i) => _annualPeriod(y.fy, i, y)) };
 }
+
+// =====================================================================
+// B2 迁移: actual annual sequence / drill-down / Sankey 均以 periods 为唯一数值脊
+// =====================================================================
+const b2Annual = {
+  id: "b2-annual",
+  // Deliberately conflicting legacy values: selectors below must never borrow them.
+  years: [{ fy: "FY2", status: "actual", revenue: 999, net_income: 999, segments: [] }],
+  periods: [
+    { period_id: "fy3", kind: "annual", status: "actual", fiscal_year: "FY3",
+      period_end: "2025-12-31", revenue: 150, gross_profit: null, net_income: 30,
+      segment_framework: "v2", segments: [{ name: "DC", revenue: 90, kind: "platform" }] },
+    { period_id: "q", kind: "quarter", status: "actual", fiscal_year: "FY2",
+      period_end: "2024-06-30", revenue: 30, net_income: 6, segments: [] },
+    { period_id: "fy1", kind: "annual", status: "actual", fiscal_year: "FY1",
+      period_end: "2023-12-31", revenue: 100, gross_profit: 55, net_income: 20,
+      segment_framework: "v1", segments: [{ name: "DC", revenue: 40, kind: "platform" }],
+      revenue_breakdown: { label: "Product", complete: true, sources: [{ data_status: "official" }],
+        items: [{ name: "Compute", revenue: 40 }] } },
+    { period_id: "fy2", kind: "annual", status: "actual", fiscal_year: "FY2",
+      period_end: "2024-12-31", revenue: 120, gross_profit: 72, net_income: 24, cfo: 40, capex: 10,
+      segment_framework: "v1", segments: [{ name: "DC", revenue: 60, kind: "platform" }],
+      revenue_breakdown: { label: "Product", complete: true, sources: [{ data_status: "official" }],
+        items: [{ name: "Compute", revenue: 60 }] } },
+    { period_id: "fc", kind: "annual", status: "forecast", fiscal_year: "FY4",
+      period_end: "2026-12-31", revenue: 200, net_income: 40, segments: [] },
+  ],
+};
+assert.deepEqual(Selectors.actualAnnuals(b2Annual).map(p => p.fiscal_year), ["FY1", "FY2", "FY3"]);
+assert.equal(Selectors.annualByFy(b2Annual, "FY2").revenue, 120);
+assert.equal(Selectors.annualByFy(b2Annual, "missing"), null);
+assert.equal(Selectors.latestActualAnnual(b2Annual).fiscal_year, "FY3");
+assert.equal(Selectors.annualRevYoY(b2Annual, "FY1"), null);
+assert.equal(Selectors.annualRevYoY(b2Annual, "FY2"), 0.2);
+assert.equal(Selectors.annualSegYoY(b2Annual, "FY2", "DC"), 0.5);
+assert.equal(Selectors.annualSegYoY(b2Annual, "FY3", "DC"), null); // framework break
+assert.equal(Selectors.annualRevenueBreakdownYoY(b2Annual, "FY2", "Compute"), 0.5);
+assert.equal(Selectors.homeMetric(b2Annual, "revenue"), 150);       // not years' 999
+assert.equal(Selectors.homeMetric(b2Annual, "fcfMargin"), 0.25);    // FY2 cash ladder: (40-10)/120
+assert.equal(Selectors.grossMargin(Selectors.annualByFy(b2Annual, "FY2")), 0.6);
+assert.equal(Selectors.grossMargin(Selectors.annualByFy(b2Annual, "FY3")), null);
+assert.equal(Selectors.grossMargin({ revenue: 100, gross_margin: 0.4 }), 0.4); // forecast/legacy carrier
+assert.equal(Selectors.grossMargin({ revenue: 100, gross_profit: null }), null); // Amazon policy blank
 
 const vCompany = withAnnualPeriods({
   id: "v-co", status: "populated",

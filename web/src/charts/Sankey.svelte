@@ -12,6 +12,7 @@
   const periodLabel = y => {
     if (!y) return ''
     if (y.fy) return y.fy
+    if (y.fiscal_year) return y.fiscal_year
     if (y.calendar_year != null && y.calendar_quarter) return `${y.calendar_year}${y.calendar_quarter}`
     return y.period_end || y.period_id || ''
   }
@@ -25,7 +26,7 @@
     const COL = { rev: 'var(--past)', profit: 'var(--ok)', out: 'var(--bad)', ai: 'var(--ai)', seg: '#9AA8A0', inflow: 'var(--ok-soft)' }
     const negProfit = (f.opProfit != null && f.opProfit < 0) || (f.netIncome != null && f.netIncome < 0)
 
-    const gm = y.gross_margin
+    const gm = Selectors.grossMargin(y)
     const om = Selectors.opMargin(y)
     const nm = Selectors.netMargin(y)
 
