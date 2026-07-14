@@ -1429,17 +1429,25 @@ const Selectors = {
     const list = companies || [];
     const rows = [];
     const basisCount = { periods: 0 };
+    // A2: AI 归因口径构成 (sourced/proxy) —— 与 TTM roll 口径 (basisCount={periods}) 正交:
+    // aiBasisCount 答"这份贡献是真实利润归因(sourced)还是 is_ai 营收占比代理(proxy,可能高估)";
+    // basisCount 答"这份 TTM 净利怎么滚出来的(periods)"。只计入池的贡献者 (aiShare.value!=null →
+    // basis 必为 sourced/proxy); basis=none 的公司本就 DROP, 不进分母 (item 5 诚实)。
+    const aiBasisCount = { sourced: 0, proxy: 0 };
+    const basisByMember = {};                           // id → 'sourced'|'proxy', 供图例逐公司角标
     let spreadMin = Infinity, spreadMax = -Infinity;
     for (const c of list) {
       const u = this.ttmNetIncomeUnified(c);            // final口径: periods > null
       if (u.value == null) continue;                    // honest gap: skip, never impute
-      const share = this.aiShare(c).value;              // company-level, latestActual is_ai proxy
-      if (share == null) continue;                      // no aiShare → drop (ADR-3, same as annual)
+      const ai = this.aiShare(c);                       // company-level, latestActual is_ai proxy
+      if (ai.value == null) continue;                   // no aiShare → drop (ADR-3, same as annual)
       basisCount[u.basis] = (basisCount[u.basis] || 0) + 1;
+      if (ai.basis === "sourced" || ai.basis === "proxy") aiBasisCount[ai.basis]++;
+      basisByMember[c.id] = ai.basis;
       const asOf = u.asOf;
       const t = this._parseDate(asOf);
       if (t != null) { if (t < spreadMin) spreadMin = t; if (t > spreadMax) spreadMax = t; }
-      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: u.value * share, asOf, aiShare: share, basis: u.basis });
+      rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: u.value * ai.value, asOf, aiShare: ai.value, basis: u.basis });
     }
     const total = rows.reduce((s, r) => s + r.ni, 0);
     const stages = this._aggregateStages(rows, total).map(s => ({
@@ -1458,7 +1466,9 @@ const Selectors = {
       n: rows.length,
       asOfSpreadDays,
       stages,
-      basisCount,   // {periods:n} — final口径构成 (legacy fallback 已退役)
+      basisCount,     // {periods:n} — TTM roll 口径构成 (legacy fallback 已退役)
+      aiBasisCount,   // {sourced,proxy} — AI 归因口径构成 (供柱顶/图例摘要, 打折判断)
+      basisByMember,  // id → 'sourced'|'proxy' (供图例逐公司角标; 非贡献者/none 不入表)
     };
   },
 
@@ -1522,14 +1532,19 @@ const Selectors = {
         const y = ys[pos];
         if (!y || y.net_income == null) continue;       // no comparable year here → not in coverage
         N++;
-        const share = this.aiShare(c, y).value;
-        if (share == null) continue;                    // valid year but no aiShare → drop (not imputed)
-        rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: y.net_income * share, year: this._yearOf(y) });
+        const ai = this.aiShare(c, y);
+        if (ai.value == null) continue;                 // valid year but no aiShare → drop (not imputed)
+        rows.push({ id: c.id, name: c.name, stage: stageOf(c), ni: y.net_income * ai.value, year: this._yearOf(y), basis: ai.basis });
       }
       if (!rows.length) continue;                         // nothing to show at this position
 
       const total = rows.reduce((s, r) => s + r.ni, 0);
       const stages = this._aggregateStages(rows, total);
+      // A2: 该柱 AI 归因口径构成 (sourced/proxy) —— 让"这根柱多少是 is_ai 营收占比代理鼓起来的"
+      // 一眼可判。只计贡献者 (ai.value!=null → basis 必为 sourced/proxy); basis=none 已 DROP,
+      // 不进分母 (item 5: arm 型 none 公司在 N 里、不在 basisCount 里, 保持诚实)。
+      const basisCount = { sourced: 0, proxy: 0 };
+      for (const r of rows) if (r.basis === "sourced" || r.basis === "proxy") basisCount[r.basis]++;
 
       positions.push({
         pos,
@@ -1538,6 +1553,7 @@ const Selectors = {
         stages,
         n: rows.length,
         N,
+        basisCount,
       });
     }
     return positions.reverse(); // chronological: old → new

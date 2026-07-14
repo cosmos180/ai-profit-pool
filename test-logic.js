@@ -843,6 +843,29 @@ const ob = Object.fromEntries(oldest.stages.map(s => [s.stage, s]));
 assert.equal(ob.memory.value, -10);                // skhynix only, negative, no crash
 assert.equal(ob.equipment.value, 0);              // asml dropped → empty
 assert.equal(ob.equipment.companies.length, 0);
+// A2: 每根柱携带 AI 归因口径构成 basisCount {sourced,proxy}。synCos 全走 Ap(is_ai 分部) → 全 proxy。
+// newest 5 贡献者全 proxy; oldest 3 贡献者(nvda/tsmc/skhynix)全 proxy; asml(none) 不进分母。
+assert.deepEqual(newest.basisCount, { sourced: 0, proxy: 5 });
+assert.deepEqual(oldest.basisCount, { sourced: 0, proxy: 3 });
+assert.equal(newest.basisCount.sourced + newest.basisCount.proxy, newest.n); // 贡献者全部有 basis
+
+// ---- A2: 混合口径柱 (sourced + proxy + none-dropped) ----
+// sourced(ai_profit_share) + proxy(is_ai 营收占比) + none(无 is_ai/无 share → DROP)。
+{
+  const cos = [
+    syn("nvda", [Ap("FY25", "2025-01-01", 100, 90, 10)]),        // proxy .9
+    syn("tsmc", [Ap("FY25", "2025-01-01", 50, 30, 20)]),         // proxy .6
+    { id: "x-src", name: "SRC", chain_stage: "app", status: "populated", ai_profit_share: 0.5,
+      years: [Ap("FY25", "2025-01-01", 40, 40, 0)] },            // sourced
+    // none: 有可比净利但无 is_ai/无 ai_profit_share → aiShare none → DROP, 不进 basisCount 分母
+    syn("asml", [{ fy: "FY25", period_end_iso: "2025-01-01", status: "actual", revenue: 20, net_income: 8, segments: [] }]),
+  ];
+  const p = Selectors.profitPoolMigration(cos)[0];
+  assert.equal(p.N, 4);                               // 4 家有可比净利
+  assert.equal(p.n, 3);                               // asml(none) 掉出贡献者
+  assert.deepEqual(p.basisCount, { sourced: 1, proxy: 2 });  // none 不进分母 (item 5)
+  assert.equal(p.basisCount.sourced + p.basisCount.proxy, p.n);
+}
 
 // ---- synthetic: a position where ALL drop (no is_ai anywhere) → position omitted ----
 const synAllDrop = [
@@ -1050,6 +1073,34 @@ assert.deepEqual(tb.memory.companies.map(c => c.id), ["samsung", "skhynix"]);
 assert.deepEqual(tb.memory.companies.map(c => c.aiShare), [0.5, 1.0]);
 assert.deepEqual(ttmPool.basisCount, { periods: 5 });  // 5 contributors, all periods
 assert.ok(ttmPool.stages.flatMap(s => s.companies).every(c => c.basis === "periods"));
+// A2: aiBasisCount(AI 归因口径, 与 TTM roll basisCount 正交)。synPeriodAI 全注入 ai_profit_share → 全 sourced。
+assert.deepEqual(ttmPool.aiBasisCount, { sourced: 5, proxy: 0 });
+assert.equal(ttmPool.basisByMember.nvda, "sourced");
+assert.equal("micron" in ttmPool.basisByMember, false);   // 无 periods → 掉出池, 不进 basisByMember
+assert.equal("softbank" in ttmPool.basisByMember, false);
+
+// ---- A2: TTM 混合 AI 口径 (sourced ai_profit_share + proxy is_ai 营收占比) ----
+{
+  const ends = [["2025-06-30", 2025, "Q2"], ["2025-09-30", 2025, "Q3"], ["2025-12-31", 2025, "Q4"], ["2026-03-31", 2026, "Q1"]];
+  const mkPeriods = (id, vals) => vals.map((v, i) => ttmPeriod(`${id}-q${i + 1}`, ends[i][0], ends[i][1], ends[i][2], v));
+  // sourced head: 公司级 ai_profit_share → aiShare basis 'sourced'
+  const srcHead = { id: "nvda", name: "NVDA", status: "populated", ai_profit_share: 1.0,
+    years: [FY("FY2026", 100)], periods: mkPeriods("nvda", [20, 30, 40, 30]) };  // TTM 120
+  // proxy head: 无 ai_profit_share, 最新实际年带 is_ai 分部 → aiShare basis 'proxy' (.6)
+  const pxHead = { id: "tsmc", name: "TSMC", status: "populated",
+    years: [{ fy: "FY2026", period_end_iso: "2026-03-31", status: "actual", revenue: 100, net_income: 58,
+      segments: [seg("AI", "platform", 60, true), seg("其他", "platform", 40, false)] }],
+    periods: mkPeriods("tsmc", [10, 12, 18, 18]) };  // TTM 58
+  const pool = Selectors.profitPoolTTM([srcHead, pxHead]);
+  assert.equal(pool.n, 2);
+  assert.deepEqual(pool.aiBasisCount, { sourced: 1, proxy: 1 });
+  assert.equal(pool.basisByMember.nvda, "sourced");
+  assert.equal(pool.basisByMember.tsmc, "proxy");
+  // 掉出池的公司 (无 TTM) 既不进 aiBasisCount 也不进 basisByMember
+  const withDrop = Selectors.profitPoolTTM([srcHead, synAI("micron", 0.5, [FY("FY2025", 8)], [])]);
+  assert.deepEqual(withDrop.aiBasisCount, { sourced: 1, proxy: 0 });
+  assert.equal("micron" in withDrop.basisByMember, false);
+}
 
 // ---- AI-weighting drops a company whose aiShare is null (has TTM but no share) ----
 // synQ (no ai_profit_share, no is_ai segments) → aiShare.value null → DROP, never counted as 0.
