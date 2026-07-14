@@ -10456,7 +10456,7 @@
           "currency": "USD",
           "fx_to_usd": 1,
           "revenue": 181.519,
-          "gross_profit": 94.056,
+          "gross_profit": null,
           "op_income": 23.852,
           "net_income": 30.255,
           "cfo": 26.032,
@@ -10502,11 +10502,6 @@
               "label": "Amazon Form 10-Q segment table — North America $104,143M / op income $8,267M; International $39,789M / $1,424M; AWS $37,587M / $14,161M",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
               "data_status": "official"
-            },
-            {
-              "label": "Derived gross profit = net sales $181,519M - cost of sales $87,463M = $94,056M",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
-              "data_status": "derived"
             }
           ]
         }

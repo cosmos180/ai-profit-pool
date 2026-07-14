@@ -335,6 +335,20 @@ assert.equal(Selectors.annualRevYoY(b2Annual, "FY1"), null);
 assert.equal(Selectors.annualRevYoY(b2Annual, "FY2"), 0.2);
 assert.equal(Selectors.annualSegYoY(b2Annual, "FY2", "DC"), 0.5);
 assert.equal(Selectors.annualSegYoY(b2Annual, "FY3", "DC"), null); // framework break
+
+// null YoY has distinct honest reasons — the view must not conflate them (正式验收 P2)
+assert.equal(Selectors.annualSegYoYInfo(b2Annual, "FY1", "DC").reason, "earliest");
+assert.equal(Selectors.annualSegYoYInfo(b2Annual, "FY3", "DC").reason, "framework_break");
+assert.equal(Selectors.annualSegYoYInfo(b2Annual, "FY2", "Renamed").reason, "name_mismatch");
+assert.deepEqual(Selectors.annualSegYoYInfo(b2Annual, "FY2", "DC"), { value: 0.5, reason: "ok" });
+// no_base: 同框架、同名分部两期都在,但基期 revenue 缺失/为 0 → 不硬算
+const noBase = { years: [], periods: [
+  { period_id: "n1", kind: "annual", status: "actual", fiscal_year: "FY1", period_end: "2023-12-31",
+    revenue: 100, segment_framework: "v1", segments: [{ name: "Seg", revenue: null, kind: "platform" }] },
+  { period_id: "n2", kind: "annual", status: "actual", fiscal_year: "FY2", period_end: "2024-12-31",
+    revenue: 120, segment_framework: "v1", segments: [{ name: "Seg", revenue: 5, kind: "platform" }] },
+] };
+assert.deepEqual(Selectors.annualSegYoYInfo(noBase, "FY2", "Seg"), { value: null, reason: "no_base" });
 assert.equal(Selectors.annualRevenueBreakdownYoY(b2Annual, "FY2", "Compute"), 0.5);
 assert.equal(Selectors.homeMetric(b2Annual, "revenue"), 150);       // not years' 999
 assert.equal(Selectors.homeMetric(b2Annual, "fcfMargin"), 0.25);    // FY2 cash ladder: (40-10)/120

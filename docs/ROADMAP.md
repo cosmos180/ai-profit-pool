@@ -120,3 +120,13 @@ P0–P2 全部完成时,产品应满足:
 - **B(用得更快)**:B4 前瞻深化(forward EV/Sales/EBITDA + 一致预期 revision 趋势);B5 micron「HBM 含于 DRAM 未单列」显式盲区标注。
 - **C(锦上添花)**:C6 结构化 catalysts 字段(财报日/产能事件可筛选)。
 - **revenue_breakdown 价值评级**:真会用 oracle/amazon/microsoft/google/tsmc;半摆设 micron(HBM 盲区)/tencent;对 AI thesis 纯摆设 asml/samsung(残差式+derived 精度不足以下重注)。
+
+## ★★DoD 正式验收(2026-07-14,稳定数据模型重跑,归档结论)
+
+**总裁决:维持「可支撑单票决策的研究工具」,不升不降——如实,非保守。** B2/gross_profit/nvda 契约干净落地、**零回归**(nvda/microsoft/oracle/samsung 四家逐年人工对拍:rev/op/ni 逐位相等;grossMargin 从官方绝对值派生比旧四舍五入比率**更准**,oracle/samsung 毛利列首次点亮=能力单向扩张);快照 56/56 parity 闸未破。仍未跨「comps 工作流原生」——A1 未做,拍扳机仍需外部终端。
+
+**五条重测**(node 实算):①14/14+38/41 毛利+google/oracle 显式 derived 标注 ✓;②basisCount {sourced:3, proxy:10, none:1(arm)} ✓;③TTM 14/14 ✓;④forward PE 8 家严格分列 ✓;⑤282 OK·0 WARN·0 ERROR、单文件 609KB file:// 可开(离线 console 仅 Google Fonts 外链失败,联网正常,非数据错误)✓。
+
+**本轮亲验发现(验收即修)**:P1 amazon 2026Q1 越权 derived 毛利 $94.1B(违反自家 C 级豁免政策,faa1038 漏网早于政策形式化)→ **已 rev 回 null 并删来源行**;P2 年度分部 YoY 的 null 成因被统一误标「最早财年无基期」(microsoft FY2025 重列分部实为 name_mismatch)→ **已修**:`annualSegYoYInfo` 按 earliest/framework_break/name_mismatch/no_base 四因分流,Detail 文案随因显示。
+
+**优先级裁决(分析师,给 PM)**:**A1 > A3 ≈ A2 > B4 > B3**。A1 是唯一还把用户赶出工具的硬缺口;A2 极便宜且防 proxy 误导;A3 补半导体估值的腿;B4(前瞻深化)是「用得更快」不插队;B3(AI 池链迁 periods)纯架构卫生,years/periods 已逐位等价,用户可见数字零变化,随缘排。

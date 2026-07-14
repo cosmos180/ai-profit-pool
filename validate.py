@@ -286,6 +286,12 @@ def check(data):
                     oks.append(f"INFO  {ptag}: gross_profit 按公司披露政策豁免，B2 毛利率诚实留空")
                 else:
                     errors.append(f"ERROR {ptag}: annual actual 缺 gross_profit —— B2 年度毛利视图无事实源")
+            # 政策豁免是双向禁令：豁免公司**任何 period**（annual/quarter，任何 status）都不得
+            # 携带非 null gross_profit——revenue − cost of sales 的重构毛利不可比且误导
+            # （正式 DoD 验收 P1：amazon 2026Q1 曾漏网 $94.1B derived 毛利，此处制度化封死）。
+            if cid in GROSS_PROFIT_POLICY_EXEMPT and p.get("gross_profit") is not None:
+                errors.append(f"ERROR {ptag}: gross_profit={p.get('gross_profit')} 违反公司披露政策豁免"
+                              f"（{cid} 不披露传统毛利，重构值不可比）—— 必须为 null")
             # status=actual 却无任何金融事实 → WARN（guidance 允许缺 net_income，不告警）
             if status == "actual" and rev is None and p.get("op_income") is None and ni is None:
                 warns.append(f"WARN  {ptag}: status=actual 但无任何金融事实（revenue/op_income/net_income 全缺）")
