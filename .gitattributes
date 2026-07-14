@@ -1,0 +1,5 @@
+# app.html is a generated single-file build artifact (vite + inlined dataset).
+# Its minified bundle contains template literals whose CONTENT legitimately ends
+# lines with whitespace (e.g. a spread of the whitespace-characters string), so
+# trailing-whitespace checks are meaningless here and stripping would corrupt it.
+app.html -whitespace
