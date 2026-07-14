@@ -534,6 +534,130 @@ const Selectors = {
              lowerCheaper: meta.lowerCheaper, insufficient: false };
   },
 
+  /* ---- A1: cross-sectional comps table (估值横截面) ----
+     一次性备好「14 行 × (公司+环节+4估值列[+PS]) 」的可排序真表，供 Comps.svelte 只做
+     取值/排序/渲染（组件零财务算术）。纯派生，零新增数据，复用现有
+     pe/forwardPE/evSales/fcfYield/ps/valuationCaveat/stageValuationRel/stageOf。
+
+     契约（见 docs/plans/a1-comps-table.md §6）：
+       columns[]  列元（含 covered 覆盖度 / accent 前瞻PE蓝 / optional PS）
+       rows[]     每行 {id,name,shortName,logo_*,stage,cells{colKey:cell}}
+       cell = { value, kind, state∈{ok,distorted,na,blank}, sortKey, note, rel }
+       defaultSort / caveatNote
+
+     state 唯一驱动视觉分支，判定：
+       caveat==='na'        → na（value 强制 null，sortKey null 沉底）
+       caveat==='distorted' → 值非空 distorted（出值+⚠ 参排）；值空退 blank
+       否则 值非空 ok；值空 blank（缺分母/缺输入，补录后自动点亮）
+     sortKey = (ok||distorted)? value : null —— 组件比较器只读它，null 恒沉底。
+     全 null 安全，绝不伪造 0/估算。算不存。 */
+  COMPS_COLS: [
+    { key: "trailingPE", sel: "pe",        caveat: "pe",        rel: "pe",       label: "Trailing PE", kind: "mult", accent: false },
+    { key: "forwardPE",  sel: "forwardPE", caveat: "pe",        rel: null,       label: "前瞻 PE",     kind: "mult", accent: true, sub: "NTM · 一致预期" },
+    { key: "evSales",    sel: "evSales",   caveat: "ev_sales",  rel: "evSales",  label: "EV/Sales",    kind: "mult", accent: false },
+    { key: "fcfYield",   sel: "fcfYield",  caveat: "fcf_yield", rel: "fcfYield", label: "FCF yield",   kind: "pct",  accent: false },
+    { key: "ps",         sel: "ps",        caveat: "ps",        rel: "ps",       label: "PS",          kind: "mult", accent: false, optional: true },
+  ],
+  COMPS_NA_REASON: {
+    pe:        "投资控股，净利润含投资公允价值损益，PE 无经营含义 → 诚实留空。",
+    ev_sales:  "合并净负债含电信子公司债务 → EV/Sales 失真，不适用。",
+    fcf_yield: "投资控股，FCF 不反映经营现金创造 → 不适用。",
+    ps:        "营收主要来自电信子公司，非 AI 价值载体 → 不适用。",
+  },
+  COMPS_DISTORT_REASON: {
+    pe:        "净利润含投资公允价值损益，非经营盈利，倍数失真仅供参考。",
+    ev_sales:  "合并净负债含电信子公司债务 → EV/Sales 失真，显示但降级。",
+    ps:        "营收主要来自电信子公司，非 AI 价值载体，PS 仅供参考。",
+    fcf_yield: "该指标口径受影响，仅供参考。",
+  },
+  COMPS_BLANK_NOTE: {
+    trailingPE: "缺市值或最新实际财年净利润 → 无法计算，诚实留空。",
+    forwardPE:  "待补一致预期 EPS（consensus_eps_value），补录后自动点亮。",
+    evSales:    "缺净负债（net_debt）→ EV 无法计算，诚实留空。",
+    fcfYield:   "缺自由现金流或市值 → 无法计算，诚实留空。",
+    ps:         "缺市值或最新实际财年营收 → 无法计算，诚实留空。",
+  },
+  COMPS_BLANK_REL: { key: null, value: null, cohortN: 0, median: null, relative: null, lowerCheaper: null, insufficient: true },
+
+  compsTable() {
+    const pop = (Store._data && Store.populated()) || [];
+
+    const rows = pop.map(c => {
+      const cells = {};
+      for (const col of this.COMPS_COLS) {
+        const cav = this.valuationCaveat(c, col.caveat);
+        const val = this[col.sel](c);
+        let state, value, note;
+        if (cav === "na") {
+          state = "na"; value = null;
+          note = this.COMPS_NA_REASON[col.caveat] || "该指标对此公司无经营含义，诚实留空。";
+        } else if (cav === "distorted") {
+          if (val != null) {
+            state = "distorted"; value = val;
+            note = this.COMPS_DISTORT_REASON[col.caveat] || "该倍数受口径影响，仅供参考。";
+          } else {
+            state = "blank"; value = null;
+            note = this.COMPS_BLANK_NOTE[col.key] || "数据待补。";
+          }
+        } else if (val != null) {
+          state = "ok"; value = val; note = "";
+        } else {
+          state = "blank"; value = null;
+          note = this.COMPS_BLANK_NOTE[col.key] || "数据待补。";
+        }
+        const sortKey = (state === "ok" || state === "distorted") ? value : null;
+        const rel = col.rel ? this.stageValuationRel(c, col.rel) : Object.assign({}, this.COMPS_BLANK_REL);
+        cells[col.key] = { value, kind: col.kind, state, sortKey, note, rel };
+      }
+      const st = stageOf(c);
+      const stIdx = STAGE_ORDER.indexOf(st);
+      return {
+        id: c.id,
+        name: c.name,
+        shortName: (c.name || "").split(" ")[0],
+        logo_text: c.logo_text || (c.name || "").slice(0, 2),
+        logo_class: c.logo_class || "",
+        stage: {
+          key: st,
+          label: (st && STAGE_LABEL[st]) || st || "—",
+          color: (st && STAGE_COLOR[st]) || "var(--ink-faint)",
+          sortKey: stIdx < 0 ? STAGE_ORDER.length : stIdx,
+        },
+        cells,
+      };
+    });
+
+    const columns = [
+      { key: "name",  label: "公司", kind: "text",  sortable: false },
+      { key: "stage", label: "环节", kind: "stage", sortable: true },
+      ...this.COMPS_COLS.map(col => ({
+        key: col.key,
+        label: col.label,
+        kind: col.kind,
+        sortable: true,
+        accent: !!col.accent,
+        sub: col.sub || null,
+        optional: !!col.optional,
+        total: rows.length,
+        covered: rows.filter(r => {
+          const s = r.cells[col.key].state;
+          return s === "ok" || s === "distorted";
+        }).length,
+      })),
+    ];
+
+    return {
+      columns,
+      rows,
+      defaultSort: { col: "forwardPE", dir: "asc" },
+      caveatNote:
+        "口径错位：价格截至市场快照日，倍数分母用各公司最新实际财年业绩（两者时点不同，属正常）。" +
+        "单元格四态：正常出值；⚠ 失真（净利含投资公允价值损益等，出值但仅供参考、仍参与排序）；" +
+        "— 不适用（结构上无经营含义，如投资控股公司的 PE）；— 待补（缺一致预期 EPS / 净负债等输入，" +
+        "补录后自动点亮）。排序时所有 — 恒沉底，不伪造 0 或估算填坑。",
+    };
+  },
+
   /* ---- directory metric accessors (cross-company) ---- */
   /* Legacy years-side cash ladder. Retained for the remaining years consumers/audit;
      B2 directory and company views use latestCashActualAnnual exclusively. */

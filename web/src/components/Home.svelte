@@ -166,12 +166,17 @@
   </div>
 </div>
 
-<div class="analysis-entry">
-  <div>
-    <div class="ae-k">高级分析</div>
-    <div class="ae-t">AI 归因、利润池迁移、结构判断</div>
+<div class="entry-grid">
+  <div class="entry-card primary">
+    <div class="ec-head"><span class="ec-star">★</span><span class="ec-k">估值横截面</span></div>
+    <div class="ec-t">一屏并列四倍数 · 任列排序</div>
+    <button class="ec-btn primary" onclick={() => nav.goComps()}>打开对比表 →</button>
   </div>
-  <button class="ae-btn" onclick={() => nav.goAnalysis()}>利润池迁移 →</button>
+  <div class="entry-card">
+    <div class="ec-head"><span class="ec-k">高级分析</span></div>
+    <div class="ec-t">AI 归因、利润池迁移、结构判断</div>
+    <button class="ec-btn" onclick={() => nav.goAnalysis()}>利润池迁移 →</button>
+  </div>
 </div>
 
 <div class="section-h">已补录公司 <span class="count">{pop.length} 家</span></div>

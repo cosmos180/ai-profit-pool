@@ -291,3 +291,107 @@ footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:cent
   .mig-side{flex:1 1 100%;min-width:0}
   .sankey-card{padding:15px 13px 12px}
 }
+
+/* ============================================================
+   A1 · 估值横截面 comps（Comps.svelte）——沿用现有 token / 类形制。
+   ============================================================ */
+
+/* 首页双入口卡（替代旧 .analysis-entry；估值横截面卡 .primary 主色描边+★，视觉权重更高） */
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 4px}
+.entry-card{display:flex;flex-direction:column;gap:7px;padding:13px 15px;border:1px solid var(--line-soft);background:var(--card);border-radius:12px}
+.entry-card.primary{border:1.5px solid var(--ok);background:linear-gradient(0deg,var(--ok-soft),var(--card))}
+.entry-card .ec-head{display:flex;align-items:center;gap:7px}
+.entry-card .ec-star{color:var(--ok);font-size:13px}
+.entry-card .ec-k{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint)}
+.entry-card.primary .ec-k{color:var(--ok-deep)}
+.entry-card .ec-t{font-size:12.5px;color:var(--ink-soft);flex:1}
+.entry-card .ec-btn{appearance:none;align-self:flex-start;border:1px solid var(--ai-soft);background:var(--ai-soft);color:var(--ai);border-radius:7px;padding:7px 12px;font-family:var(--mono);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.entry-card .ec-btn:hover{border-color:var(--ai);background:var(--card)}
+.entry-card .ec-btn.primary{border-color:var(--ok);background:var(--ok);color:#fff}
+.entry-card .ec-btn.primary:hover{background:var(--ok-deep);border-color:var(--ok-deep)}
+
+/* 口径说明行 + 密度开关工具条 */
+.comps-caption{font-size:12px;color:var(--ink-faint);line-height:1.55;margin:-4px 0 12px}
+.comps-toolbar{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 10px}
+.comps-switch{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);font-family:var(--mono);cursor:pointer;user-select:none}
+.comps-switch input{accent-color:var(--ok);cursor:pointer}
+
+/* 排序控件条（桌面辅助 / 窄屏主控，两者同一 sortCol/sortDir 状态） */
+.sort-ctl{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 12px;padding:9px 11px;background:var(--card-2);border:1px solid var(--line);border-radius:9px}
+.sort-ctl .sc-lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint)}
+.sc-chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:20px;padding:4px 11px;font-family:var(--mono);font-size:11.5px;cursor:pointer}
+.sc-chip:hover{border-color:var(--ink-soft)}
+.sc-chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sc-dir{appearance:none;margin-left:auto;border:1px solid var(--ok);background:var(--card);color:var(--ok);border-radius:7px;padding:4px 11px;font-family:var(--mono);font-size:11.5px;font-weight:600;cursor:pointer}
+.sc-dir:hover{background:var(--ok-soft)}
+
+/* 真表：语义 <table>，横向滚动兜住窄屏，公司列 sticky 冻结 */
+.comps-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.comps-table{border-collapse:separate;border-spacing:0;width:100%;min-width:640px;font-size:13px}
+.comps-table thead th{position:sticky;top:0;z-index:2;background:var(--card-2);border-bottom:1px solid var(--line);padding:0;text-align:right;vertical-align:bottom;white-space:nowrap}
+.comps-table th.accent{background:var(--ai-soft)}
+.comps-table th.ch-static,.comps-table th.cc-col,.comps-table th:nth-child(-n+2){text-align:left}
+.ch-btn{appearance:none;width:100%;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 13px;font-family:inherit;color:var(--ink-soft)}
+.ch-btn.num-h{align-items:flex-end}
+.ch-btn:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.ch .ch-lbl{font-size:12px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:5px}
+.ch.accent .ch-lbl{color:var(--ai)}
+.ch .ch-lbl.static{padding:9px 13px;display:block}
+.ch-arrow{font-size:10px;color:var(--ok)}
+.ch.accent .ch-arrow{color:var(--ai)}
+.ch-idle{font-size:11px;color:var(--ink-faint)}
+.ch-sub{font-family:var(--mono);font-size:9px;letter-spacing:.03em;text-transform:uppercase;color:var(--ai)}
+.col-cover{font-family:var(--mono);font-size:9.5px;color:var(--ink-faint)}
+.ch.sorted .ch-lbl{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--ok)}
+.ch.accent.sorted .ch-lbl{text-decoration-color:var(--ai)}
+
+.comps-table tbody td{padding:10px 13px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+.comps-table tbody tr:last-child td{border-bottom:none}
+.comps-table tbody tr:hover td{background:var(--card-2)}
+.comps-table tbody tr:hover .cc-name{background:var(--card-2)}
+
+/* 公司列 sticky 冻结 */
+.cc-name,.comps-table th.cc-col{position:sticky;left:0;z-index:1;background:var(--card);box-shadow:6px 0 8px -8px rgba(24,33,29,.35)}
+.comps-table th.cc-col{z-index:3}
+.cc-link{appearance:none;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;padding:0}
+.cc-name .logo{width:30px;height:30px;border-radius:8px}
+.cc-name .logo span{font-size:11px}
+.cc-txt{display:flex;flex-direction:column;line-height:1.2}
+.cc-cn{font-weight:600;font-size:13px;color:var(--ink)}
+.cc-sn{font-family:var(--mono);font-size:10px;color:var(--ink-faint)}
+.cc-link:hover .cc-cn{color:var(--ok)}
+
+/* 环节彩色 tag */
+.segtag2{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;color:var(--tag);background:color-mix(in srgb,var(--tag) 14%,transparent);border:1px solid color-mix(in srgb,var(--tag) 34%,transparent);white-space:nowrap}
+
+/* 数值单元格 + 四态微标 */
+.comps-table td.cv{text-align:right}
+.comps-table td.cv.accent .cv-val{color:var(--ai)}
+.cv-val{font-weight:600}
+.cv-dash{color:var(--ink-faint)}
+.cv-flag{font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:4px;margin-left:5px;letter-spacing:.03em;cursor:help;vertical-align:middle}
+.cv-flag.distort{background:var(--est-soft);color:#8a5a0f}
+.cv-flag.na{background:var(--card-2);color:var(--ink-faint);border:1px solid var(--line)}
+.cv-flag.todo{background:var(--card-2);color:var(--ink-faint);border:1px dashed var(--line)}
+/* 同环节相对位角标（开关开时）：圆点，绿=更便宜 灰=居中 红=更贵；不参与排序 */
+.cv-rel{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;cursor:help}
+.cv-rel.cheap{background:var(--ok)}
+.cv-rel.mid{background:var(--past)}
+.cv-rel.pricey{background:var(--est)}
+
+.comps-caveat{margin-top:14px}
+
+@media (max-width:720px){
+  .entry-grid{grid-template-columns:1fr}
+  .comps-table{min-width:520px}
+  .sort-ctl{position:sticky;top:0;z-index:4}
+  /* 收窄冻结公司列，让至少 2 个数字列露出（长名换行、隐藏短名） */
+  .cc-name,.comps-table th.cc-col{width:128px;min-width:128px;max-width:128px}
+  .cc-name .logo{width:24px;height:24px;border-radius:6px}
+  .cc-name .logo span{font-size:9px}
+  .cc-link{gap:7px}
+  .cc-cn{white-space:normal;font-size:11.5px;line-height:1.25}
+  .cc-sn{display:none}
+  .comps-table tbody td,.ch-btn{padding-left:9px;padding-right:9px}
+  .comps-table thead th:nth-child(2),.comps-table td.cst{padding-left:7px;padding-right:7px}
+}

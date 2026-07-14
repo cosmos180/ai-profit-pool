@@ -2047,4 +2047,114 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(vbad.coverage.reason, "unknown_mode");
 }
 
+// =====================================================================
+// A1 · Selectors.compsTable()（估值横截面）——合成池覆盖四态 / 排序键 null 语义 /
+// distorted 参排 / rel 透传。用合成 populated 池，独立于真实 companies.json。
+// =====================================================================
+{
+  // 合成公司工厂：annual actual period（latestActualAnnual 分母源）+ forecast year（前瞻 EPS）+ quote。
+  const mk = (id, name, stage, quote, ann, fcEps, caveat) => ({
+    id, name, status: "populated", chain_stage: stage, logo_text: id.slice(0, 2),
+    valuation_caveat: caveat || undefined,
+    quote,
+    years: [{ fy: "FY26E", status: "forecast",
+      consensus_eps_value: fcEps == null ? undefined : fcEps,
+      consensus_eps_currency: fcEps == null ? undefined : "USD" }],
+    periods: [Object.assign({ kind: "annual", status: "actual", period_end: "2025-12-31", fiscal_year: "FY2025" }, ann)],
+  });
+
+  // A 全 ok；B forwardPE/evSales blank（缺 EPS / 缺 net_debt）；C pe distorted（出值参排）；
+  // D 投资控股：pe/forwardPE/fcfYield=na、ps/evSales=distorted。A/B/C 同环节 design（ps 满 3 家可比）。
+  const A = mk("aa", "AlphaCo A", "design", { market_cap: 100, price: 50, price_currency: "USD", net_debt: 10 },
+    { revenue: 50, net_income: 5, cfo: 12, capex: 2 }, 5);
+  const B = mk("bb", "BetaCo B", "design", { market_cap: 200, price: 80, price_currency: "USD", net_debt: null },
+    { revenue: 40, net_income: 4, cfo: 8, capex: 1 }, null);
+  const C = mk("cc", "GammaCo C", "design", { market_cap: 90, price: 30, price_currency: "USD", net_debt: 5 },
+    { revenue: 30, net_income: 3, cfo: 6, capex: 1 }, 3, { pe: "distorted" });
+  const D = mk("dd", "DeltaCo D", "invest", { market_cap: 60, price: 40, price_currency: "USD", net_debt: 20 },
+    { revenue: 25, net_income: 2, cfo: 4, capex: 1 }, 2,
+    { pe: "na", fcf_yield: "na", ps: "distorted", ev_sales: "distorted" });
+
+  Store._data = { meta: CANON_META, companies: [A, B, C, D] };
+  _refreshStages(CANON_META);
+  const t = Selectors.compsTable();
+
+  // ---- 结构：列（公司/环节 + 4 核心 + PS 可选）、行数、defaultSort ----
+  assert.equal(t.rows.length, 4);
+  assert.deepEqual(t.columns.map(c => c.key), ["name", "stage", "trailingPE", "forwardPE", "evSales", "fcfYield", "ps"]);
+  assert.deepEqual(t.defaultSort, { col: "forwardPE", dir: "asc" });
+  assert.equal(t.columns.find(c => c.key === "forwardPE").accent, true);   // 前瞻 PE 蓝色特权
+  assert.equal(t.columns.find(c => c.key === "ps").optional, true);         // PS 可选
+
+  const cellOf = (id, key) => t.rows.find(r => r.id === id).cells[key];
+
+  // ---- 四态分明 ----
+  assert.equal(cellOf("aa", "trailingPE").state, "ok");
+  assert.equal(cellOf("aa", "trailingPE").value, 20);            // 100/5
+  assert.equal(cellOf("bb", "forwardPE").state, "blank");        // 缺 consensus EPS → 待补
+  assert.equal(cellOf("bb", "evSales").state, "blank");          // 缺 net_debt → EV 无法算 → 待补
+  assert.ok(/net_debt|净负债/.test(cellOf("bb", "evSales").note));
+  assert.equal(cellOf("cc", "trailingPE").state, "distorted");   // pe caveat distorted，出值
+  assert.equal(cellOf("dd", "trailingPE").state, "na");          // 投资控股 pe=na
+  assert.equal(cellOf("dd", "forwardPE").state, "na");           // 前瞻 PE 复用 pe caveat → na
+  assert.equal(cellOf("dd", "fcfYield").state, "na");
+  assert.equal(cellOf("dd", "ps").state, "distorted");
+  assert.equal(cellOf("dd", "evSales").state, "distorted");
+
+  // ---- sortKey：ok/distorted = value；na/blank = null ----
+  assert.equal(cellOf("aa", "trailingPE").sortKey, 20);
+  assert.equal(cellOf("cc", "trailingPE").sortKey, 30);         // distorted 仍带真实值，参排
+  assert.equal(cellOf("bb", "forwardPE").sortKey, null);        // blank → null 沉底
+  assert.equal(cellOf("dd", "trailingPE").sortKey, null);       // na → null 沉底
+  assert.equal(cellOf("dd", "ps").sortKey, cellOf("dd", "ps").value);   // distorted ps 参排
+
+  // ---- 排序键 null 语义：null 恒沉底（升/降都不冒头）----
+  const sortBy = (key, dir) => {
+    const d = dir === "asc" ? 1 : -1;
+    return t.rows.slice().sort((a, b) => {
+      const ka = a.cells[key].sortKey, kb = b.cells[key].sortKey;
+      if (ka == null && kb == null) return 0;
+      if (ka == null) return 1;
+      if (kb == null) return -1;
+      return ka < kb ? -d : ka > kb ? d : 0;
+    }).map(r => r.id);
+  };
+  // forwardPE：A=10, C=10 有值在上；B(blank)/D(na) 恒沉底（升序）
+  const fAsc = sortBy("forwardPE", "asc");
+  assert.deepEqual(fAsc.slice(2).sort(), ["bb", "dd"]);         // 末两位是 null 行
+  assert.ok(fAsc.slice(0, 2).every(id => id === "aa" || id === "cc"));
+  // 降序：null 仍沉底（不因 desc 冒到顶）
+  const fDesc = sortBy("forwardPE", "desc");
+  assert.deepEqual(fDesc.slice(2).sort(), ["bb", "dd"]);
+  // trailingPE 降序：B(50) 最大在最上、C(30 distorted) 参排居中，D(na) 沉底
+  const tDesc = sortBy("trailingPE", "desc");
+  assert.deepEqual(tDesc, ["bb", "cc", "aa", "dd"]);   // 50 > 30(distorted) > 20 > null
+
+  // ---- 覆盖度 covered = ok+distorted 行数 ----
+  const cov = k => t.columns.find(c => c.key === k).covered;
+  assert.equal(cov("trailingPE"), 3);   // A,B ok + C distorted（D na）
+  assert.equal(cov("forwardPE"), 2);    // A ok + C distorted（B blank, D na）
+  assert.equal(cov("evSales"), 3);      // A,C ok + D distorted（B blank）
+  assert.equal(cov("fcfYield"), 3);     // A,B,C ok（D na）
+  assert.equal(cov("ps"), 4);           // A,B,C ok + D distorted
+
+  // ---- rel 透传：ps 列 design 三家可比 → 非 insufficient；forwardPE 列无 rel（BLANK_REL）----
+  const relA = cellOf("aa", "ps").rel;
+  assert.equal(relA.insufficient, false);
+  assert.equal(relA.cohortN, 3);        // A,B,C 同环节 ps 皆可比
+  assert.equal(relA.relative, "low");   // A ps=2 < 中位 3 → 数值偏低（lowerCheaper=更便宜）
+  assert.equal(relA.lowerCheaper, true);
+  assert.equal(cellOf("aa", "forwardPE").rel.key, null);        // forwardPE 无同环节 rel
+  assert.equal(cellOf("aa", "forwardPE").rel.insufficient, true);
+
+  // ---- stage 元：label/color/sortKey（按 STAGE_ORDER 索引）----
+  const aRow = t.rows.find(r => r.id === "aa");
+  assert.equal(aRow.stage.label, "设计");
+  assert.equal(aRow.stage.sortKey, STAGE_ORDER.indexOf("design"));
+  assert.equal(t.rows.find(r => r.id === "dd").stage.label, "投资");
+
+  // ---- caveatNote 存在（表底共享口径注）----
+  assert.ok(typeof t.caveatNote === "string" && t.caveatNote.length > 20);
+}
+
 console.log("logic tests passed");
