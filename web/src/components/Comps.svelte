@@ -9,11 +9,20 @@
 
   const table = $derived(Selectors.compsTable())
 
-  // UI 状态：从 defaultSort 初始化（前瞻 PE 升序），两个密度开关默认关。
-  let sortCol = $state('forwardPE')
-  let sortDir = $state('asc')
+  // UI 状态：从 selector 的 defaultSort 初始化（契约单写），两个密度开关默认关。
+  let sortCol = $state(table.defaultSort.col)
+  let sortDir = $state(table.defaultSort.dir)
   let showRel = $state(false)   // 同环节相对位角标
   let showPS = $state(false)    // + PS 列
+
+  // 关闭 PS 开关时，若当前正按（即将隐藏的）PS 列排序，恢复默认排序——
+  // 否则表格会被一个不可见的列排序且无激活列提示。
+  $effect(() => {
+    if (!showPS && sortCol === 'ps') {
+      sortCol = table.defaultSort.col
+      sortDir = table.defaultSort.dir
+    }
+  })
 
   // 可见列：optional 的 PS 仅当开关开时出现；数值列（排序 chip / 单元格）= 去掉公司/环节。
   const columns = $derived(table.columns.filter(col => !col.optional || (col.key === 'ps' && showPS)))

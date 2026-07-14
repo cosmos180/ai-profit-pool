@@ -1,7 +1,7 @@
 // 轻量路由 store（ADR 决策 4）：等价于原 state 对象，用 Svelte 5 runes。
 // 无 URL（功能对等阶段，深链留作后续 ADR）。承载 view/companyId/fy/homeMetric。
 class Nav {
-  view = $state('home')        // 'home' | 'comps' | 'company' | 'detail' | 'analysis'
+  view = $state('comps')       // 'home' | 'comps' | 'company' | 'detail' | 'analysis'；默认落地页=估值横截面（2026-07-14 用户拍板：最高频决策入口；home 经「公司对比」面包屑可达）
   companyId = $state(null)
   fy = $state(null)
   periodId = $state(null)
