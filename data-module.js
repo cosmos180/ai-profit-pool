@@ -255,17 +255,29 @@ const Selectors = {
   /* periods-side annual segment YoY. Mirrors segYoY's framework fail-closed gate,
      but never reads or falls back to years[]. */
   annualSegYoY(c, fy, name) {
+    return this.annualSegYoYInfo(c, fy, name).value;
+  },
+
+  /* Reason-aware variant: a null YoY has DIFFERENT honest explanations and the view
+     must not conflate them (正式 DoD 验收 P2 finding — a segment renamed in a
+     restatement was mislabeled as「最早财年无基期」). reason ∈
+       'ok'              value computed;
+       'earliest'        真·最早财年,无上一年基期;
+       'framework_break' segment_framework token 断裂(与 segYoY 同一失败关闭门);
+       'name_mismatch'   两期同框架但找不到同名分部(重列/改名/新增);
+       'no_base'         同名分部存在但基期 revenue 缺失或为 0。 */
+  annualSegYoYInfo(c, fy, name) {
     const anns = this.actualAnnuals(c);
     const i = anns.findIndex(p => p.fiscal_year === fy);
-    if (i <= 0) return null;
+    if (i <= 0) return { value: null, reason: "earliest" };
     const prev = anns[i - 1], cur = anns[i];
     const prevFw = prev.segment_framework, curFw = cur.segment_framework;
-    if ((prevFw != null || curFw != null) && prevFw !== curFw) return null;
+    if ((prevFw != null || curFw != null) && prevFw !== curFw) return { value: null, reason: "framework_break" };
     const prevSeg = (prev.segments || []).find(s => s.name === name);
     const curSeg = (cur.segments || []).find(s => s.name === name);
-    return (prevSeg && curSeg && prevSeg.revenue)
-      ? (curSeg.revenue - prevSeg.revenue) / prevSeg.revenue
-      : null;
+    if (!prevSeg || !curSeg) return { value: null, reason: "name_mismatch" };
+    if (!prevSeg.revenue) return { value: null, reason: "no_base" };
+    return { value: (curSeg.revenue - prevSeg.revenue) / prevSeg.revenue, reason: "ok" };
   },
 
   /* ---- AI attribution share (ADR-3, C-weighted pool; fallback = B) ----

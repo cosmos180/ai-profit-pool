@@ -335,6 +335,12 @@ assert.equal(Selectors.annualRevYoY(b2Annual, "FY1"), null);
 assert.equal(Selectors.annualRevYoY(b2Annual, "FY2"), 0.2);
 assert.equal(Selectors.annualSegYoY(b2Annual, "FY2", "DC"), 0.5);
 assert.equal(Selectors.annualSegYoY(b2Annual, "FY3", "DC"), null); // framework break
+
+// null YoY has distinct honest reasons — the view must not conflate them (正式验收 P2)
+assert.equal(Selectors.annualSegYoYInfo(b2Annual, "FY1", "DC").reason, "earliest");
+assert.equal(Selectors.annualSegYoYInfo(b2Annual, "FY3", "DC").reason, "framework_break");
+assert.equal(Selectors.annualSegYoYInfo(b2Annual, "FY2", "Renamed").reason, "name_mismatch");
+assert.deepEqual(Selectors.annualSegYoYInfo(b2Annual, "FY2", "DC"), { value: 0.5, reason: "ok" });
 assert.equal(Selectors.annualRevenueBreakdownYoY(b2Annual, "FY2", "Compute"), 0.5);
 assert.equal(Selectors.homeMetric(b2Annual, "revenue"), 150);       // not years' 999
 assert.equal(Selectors.homeMetric(b2Annual, "fcfMargin"), 0.25);    // FY2 cash ladder: (40-10)/120
