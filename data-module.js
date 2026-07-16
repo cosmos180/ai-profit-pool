@@ -249,9 +249,11 @@ const Selectors = {
        'undisclosed'    无任何候选, 或映射成立但公司不按分部披露营业利润
                         (seg_profit !== "yes"; "partial" 不默认推断为待补录);
        'basis_mismatch' 有相近候选但安全映射不成立 (名称不精确相等——含装饰名差异 /
-                        营收差超阈——如分部含收入对冲调节 / 候选数 >1) → 口径不明,
+                        营收差超阈——如分部含收入对冲调节 / 分部营收缺失 null——
+                        营收相等无法验证, 映射不可验证 / 候选数 >1) → 口径不明,
                         失败关闭不硬算; 装饰名对齐属数据批, selector 不做模糊归一化;
-       'no_base'        唯一映射成立但分部营收缺失/为 0, 比率无意义;
+       'no_base'        唯一映射成立但分部营收为 0 → 零分母比率无意义, 优先于
+                        pending_entry 判定, 已存 op_margin 也不得绕过;
      framework_change / segment_framework 只约束跨期变化率 (segYoY 一侧),
      不压同一 carrier 内可验证的当期利润率——本 selector 有意不读框架 token。
      返回 {op_margin, op_income, revenue, segment_name, basis:"mapped_segment", reason},
@@ -274,10 +276,12 @@ const Selectors = {
       && Math.abs(s.revenue - row.revenue) <= RB_MAP_TOL);
     if (safe.length === 1) {
       const seg = safe[0];
+      // 零分母最优先: 比率无意义, 不进 pending_entry 门, 已存 op_margin 也不得绕过
+      if (!seg.revenue) return res("no_base", seg, null);
       if (seg.op_income == null && seg.op_margin == null)
         return res(c && c.seg_profit === "yes" ? "pending_entry" : "undisclosed", seg, null);
-      const m = this.segOpMargin(seg);
-      return m == null ? res("no_base", seg, null) : res("ok", seg, m);
+      // 至此 revenue 非零且利润事实存在 → segOpMargin 必非 null
+      return res("ok", seg, this.segOpMargin(seg));
     }
     // 失败关闭分支:同名但营收不合/多候选,或仅装饰名近似 → 口径不明。
     // 候选唯一时透出其名供 tooltip 说明; 多候选不点名 (不静默取首项)。

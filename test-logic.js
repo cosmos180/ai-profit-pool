@@ -433,6 +433,9 @@ const rpQ = { period_id: "rp-2026q1", kind: "quarter", status: "actual",
     { name: "TolX", revenue: 5.431 },
     { name: "PendX", revenue: 7.0 },
     { name: "ZeroX", revenue: 0 },
+    { name: "ZeroPendX", revenue: 0 },
+    { name: "ZeroMarginX", revenue: 0 },
+    { name: "NullRevX", revenue: 4.0 },
     { name: "DupX", revenue: 3.0 },
   ] },
   segments: [
@@ -443,6 +446,9 @@ const rpQ = { period_id: "rp-2026q1", kind: "quarter", status: "actual",
     { name: "TolX", revenue: 5.432, op_income: 1.086, segment_framework: "fw-2026" },    // 差恰 0.001 → 接受 (epsilon 只吸浮点噪声)
     { name: "PendX", revenue: 7.0, op_income: null, segment_framework: "fw-2026" },
     { name: "ZeroX", revenue: 0, op_income: 0, segment_framework: "fw-2026" },
+    { name: "ZeroPendX", revenue: 0, op_income: null, segment_framework: "fw-2026" },      // 零分母 + 利润 null: no_base 优先于 pending 门
+    { name: "ZeroMarginX", revenue: 0, op_margin: 0.25, segment_framework: "fw-2026" },    // 零分母 + 已存 op_margin: 不得绕过 no_base
+    { name: "NullRevX", revenue: null, op_income: 1.0, segment_framework: "fw-2026" },     // 分部营收缺失: 映射不可验证 → basis_mismatch
     { name: "DupX", revenue: 3.0, op_income: 1.0, segment_framework: "fw-2026" },        // 同名同营收双候选
     { name: "DupX", revenue: 3.0, op_income: 1.2, segment_framework: "fw-2026" },
   ] };
@@ -470,8 +476,16 @@ const rpCo = { id: "rp", seg_profit: "yes", years: [], periods: [rpQ] };
   assert.equal(Selectors.rowProfitability(rpCo, rpQ, "TolX").reason, "ok");
   // pending_entry: 唯一映射 + op_income 未录 + seg_profit==="yes"
   assert.equal(Selectors.rowProfitability(rpCo, rpQ, "PendX").reason, "pending_entry");
-  // no_base: 唯一映射但分部营收为 0, 比率无意义
+  // no_base: 唯一映射但分部营收为 0 → 零分母比率无意义
   assert.equal(Selectors.rowProfitability(rpCo, rpQ, "ZeroX").reason, "no_base");
+  // no_base 优先级: 零分母 + 利润 null + seg_profit="yes" 也不得进 pending_entry 门
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "ZeroPendX").reason, "no_base");
+  // no_base 优先级: 零分母 + 已存 op_margin 不得绕过 → 绝不返回 ok
+  const zm = Selectors.rowProfitability(rpCo, rpQ, "ZeroMarginX");
+  assert.equal(zm.reason, "no_base");
+  assert.equal(zm.op_margin, null);
+  // 分部营收缺失(null): 营收相等无法验证, 映射不可验证 → basis_mismatch (文档=实现)
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "NullRevX").reason, "basis_mismatch");
   // 多候选失败关闭: 同名同营收双候选, 禁止静默取首项; 不点名
   const dup = Selectors.rowProfitability(rpCo, rpQ, "DupX");
   assert.equal(dup.reason, "basis_mismatch");
