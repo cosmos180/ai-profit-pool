@@ -255,7 +255,7 @@
             </div>
             <div class="ptrack"><div class="pfill" style="width:{p.barW}%"></div></div>
             <div class="pyoy">
-              {#if p.yoy == null}<span class="na" title={p.yoyReason === 'earliest' ? '这是本公司已录入的最早财年，没有上一年同分部数据作基期，故无法算同比——属数据边界，不是缺失' : p.yoyReason === 'framework_break' ? '两个财年的分部口径（segment_framework）不同——口径断裂，跨口径同比无意义，诚实留空' : p.yoyReason === 'name_mismatch' ? '上一财年找不到同名分部——公司重列/改名/新增了分部，名称对不上时不硬算同比' : '上一财年该分部无营收基数，无法算同比'}>同比 n/a · {p.yoyReason === 'earliest' ? '最早财年无基期' : p.yoyReason === 'framework_break' ? '口径断裂不可比' : p.yoyReason === 'name_mismatch' ? '分部重列无基期' : '基期缺失'}</span>{:else}<span class={p.yoy >= 0 ? 'up' : 'dn'}>同比 {Fmt.yoy(p.yoy)}</span>{/if}
+              {#if p.yoy == null}<span class="na" title={p.yoyReason === 'earliest' ? '这是本公司已录入的最早财年，没有上一年同分部数据作基期，故无法算同比——属数据边界，不是缺失' : p.yoyReason === 'framework_break' ? '两个财年的分部口径（segment_framework）不同——口径断裂，跨口径同比无意义，诚实留空' : p.yoyReason === 'name_mismatch' ? '上一财年找不到同名分部——可能是本期新增、公司改名/重列、或上期未完整录入，名称对不上时不硬算同比' : '上一财年该分部无营收基数，无法算同比'}>同比 n/a · {p.yoyReason === 'earliest' ? '最早财年无基期' : p.yoyReason === 'framework_break' ? '口径断裂不可比' : p.yoyReason === 'name_mismatch' ? '行名不一致' : '基期缺失'}</span>{:else}<span class={p.yoy >= 0 ? 'up' : 'dn'}>同比 {Fmt.yoy(p.yoy)}</span>{/if}
             </div>
           </div>
         {/each}
