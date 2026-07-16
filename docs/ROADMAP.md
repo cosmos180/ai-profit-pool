@@ -130,3 +130,11 @@ P0–P2 全部完成时,产品应满足:
 **本轮亲验发现(验收即修)**:P1 amazon 2026Q1 越权 derived 毛利 $94.1B(违反自家 C 级豁免政策,faa1038 漏网早于政策形式化)→ **已 rev 回 null 并删来源行**;P2 年度分部 YoY 的 null 成因被统一误标「最早财年无基期」(microsoft FY2025 重列分部实为 name_mismatch)→ **已修**:`annualSegYoYInfo` 按 earliest/framework_break/name_mismatch/no_base 四因分流,Detail 文案随因显示。
 
 **优先级裁决(分析师,给 PM)**:**A1 > A3 ≈ A2 > B4 > B3**。A1 是唯一还把用户赶出工具的硬缺口;A2 极便宜且防 proxy 误导;A3 补半导体估值的腿;B4(前瞻深化)是「用得更快」不插队;B3(AI 池链迁 periods)纯架构卫生,years/periods 已逐位等价,用户可见数字零变化,随缘排。
+
+## Issue #28 Phase 1:业务行营业利润率(2026-07-16 交付)
+
+**契约**(用户两轮复核锁定,见 Issue #28):`rowProfitability(c, y, path)` 把已披露报告分部营业利润率并入 revenue_breakdown 业务行——**安全 1:1 映射**(同 carrier + 名称精确相等 + 营收差 ≤0.001+1e-9 浮点噪声 + **候选唯一**)成立才出值,其余失败关闭。reason 五分流:ok(派生 margin,负值照实)/ pending_entry(**由 `seg_profit:"yes"` 门控**,不由 op_income=null 推出;"partial" 不推断)/ undisclosed / basis_mismatch(装饰名差异一律失败关闭,不做模糊归一化)/ no_base。framework token 只约束跨期变化率,不压同 carrier 当期利润率。margin 是派生值绝不标 official;分子/分母透传 tooltip。零 schema 变更。
+
+**全库计数**(修正矩阵):ok 32(google Cloud 2026Q1=32.9% ✓/Other Bets 负值照实/amazon AWS×14/samsung FY2025)· pending_entry 4(仅 samsung FY2024)· basis_mismatch 37(google Services 含对冲 = 验收样本;oracle FY2024 Hardware 真口径差)· undisclosed 450(YouTube/Search/SaaS/OCI/DRAM/NAND/tsmc 节点全部诚实留空)。分部营收行并入 segOpMargin。**装饰名 4 组**(tencent×2/asml×2/oracle Software)留数据命名对齐批。
+
+**Phase 2**(另批):schema 增业务节点披露利润字段 + 采购,只录真实披露,需 ADR。

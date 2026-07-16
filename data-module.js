@@ -233,6 +233,61 @@ const Selectors = {
     };
   },
 
+  /* ---- 业务行营业利润率 (Issue #28 Phase 1) ----
+     把已披露的报告分部营业利润率并入 revenue_breakdown 业务行——只在「安全 1:1 映射」
+     成立时出值, 其余一律失败关闭 (诚实留空, 绝不继承公司毛利率/按营收摊派/估算):
+       安全映射 = 同一 carrier 内, segments[] 中「名称精确相等 且 营收差 ≤ 阈值」的
+                  候选**恰好一个** (0 个或 >1 个均失败关闭, 禁止静默取首项);
+       阈值 = 0.001 + 1e-9 —— epsilon 只吸收浮点表示噪声 (恰好 0.001 接受),
+                  不扩大业务容差;
+     reason ∈
+       'ok'             唯一映射成立且分部利润事实非空 → 派生营业利润率
+                        (segOpMargin: op_income/revenue, 算不存; 负利润率照实出值,
+                        margin 是派生值, 绝不标 official——official 的是分子/分母事实);
+       'pending_entry'  唯一映射成立、分部 op_income 未录, 且公司 seg_profit==="yes"
+                        (分部利润可得是库内明确事实) → 利润待补录, 补录后自动点亮;
+       'undisclosed'    无任何候选, 或映射成立但公司不按分部披露营业利润
+                        (seg_profit !== "yes"; "partial" 不默认推断为待补录);
+       'basis_mismatch' 有相近候选但安全映射不成立 (名称不精确相等——含装饰名差异 /
+                        营收差超阈——如分部含收入对冲调节 / 候选数 >1) → 口径不明,
+                        失败关闭不硬算; 装饰名对齐属数据批, selector 不做模糊归一化;
+       'no_base'        唯一映射成立但分部营收缺失/为 0, 比率无意义;
+     framework_change / segment_framework 只约束跨期变化率 (segYoY 一侧),
+     不压同一 carrier 内可验证的当期利润率——本 selector 有意不读框架 token。
+     返回 {op_margin, op_income, revenue, segment_name, basis:"mapped_segment", reason},
+     分子/分母透传给视图 tooltip (组件零算术); 行不存在 → null。 */
+  rowProfitability(c, y, path) {
+    const row = this.revenueBreakdownItem(y, path);
+    if (!row) return null;
+    const RB_MAP_TOL = 0.001 + 1e-9;
+    const segs = (y && Array.isArray(y.segments)) ? y.segments : [];
+    const res = (reason, seg, margin) => ({
+      op_margin: margin != null ? margin : null,
+      op_income: seg && seg.op_income != null ? seg.op_income : null,
+      revenue: seg && seg.revenue != null ? seg.revenue : null,
+      segment_name: seg ? seg.name : null,
+      basis: "mapped_segment",
+      reason,
+    });
+    const named = segs.filter(s => s.name === row.name);
+    const safe = named.filter(s => s.revenue != null && row.revenue != null
+      && Math.abs(s.revenue - row.revenue) <= RB_MAP_TOL);
+    if (safe.length === 1) {
+      const seg = safe[0];
+      if (seg.op_income == null && seg.op_margin == null)
+        return res(c && c.seg_profit === "yes" ? "pending_entry" : "undisclosed", seg, null);
+      const m = this.segOpMargin(seg);
+      return m == null ? res("no_base", seg, null) : res("ok", seg, m);
+    }
+    // 失败关闭分支:同名但营收不合/多候选,或仅装饰名近似 → 口径不明。
+    // 候选唯一时透出其名供 tooltip 说明; 多候选不点名 (不静默取首项)。
+    const fuzzy = named.length ? [] : segs.filter(s => s.name && row.name && s.name !== row.name
+      && (s.name.includes(row.name) || row.name.includes(s.name)));
+    const cands = named.length ? named : fuzzy;
+    if (cands.length) return res("basis_mismatch", cands.length === 1 ? cands[0] : null, null);
+    return res("undisclosed", null, null);
+  },
+
   /* ---- segments ---- */
   revenueSegs(y)   { return (y.segments || []).filter(s => s.revenue != null); },
   revenueSorted(y) { return this.revenueSegs(y).slice().sort((a, b) => b.revenue - a.revenue); },
