@@ -202,7 +202,8 @@ const Selectors = {
        reason ∈
          'ok'            value 已算出;
          'no_prior'      找不到对齐的对比季原子 (缺上年同季 / 缺上季);
-         'name_mismatch' 对比季存在但找不到同名拆分行 (重列 / 改名);
+         'no_breakdown'  对比季原子存在但整期未录拆分 (可补数据缺口, 补录后自动点亮);
+         'name_mismatch' 对比季有拆分但找不到同路径行 (只证明行名对不上——可能新增/改名/重列/缺录, 不断言原因);
          'no_base'       同名行存在但基期 revenue 缺失或为 0。
      null-safe throughout, 算不存。 */
   _quarterActualBreakdownPeriods(c) {
