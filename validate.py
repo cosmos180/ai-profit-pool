@@ -279,6 +279,12 @@ def check(data):
             capex = p.get("capex")
             if capex is not None and capex < 0:
                 errors.append(f"ERROR {ptag}: capex({capex}) < 0（请存非负量级，方向由派生层处理）")
+            # A3: d_and_a 复用 capex 同款非负量级守卫（现金流量表加回行本就为正）。
+            # 缺失不报——EV/EBITDA 是加性列，blank 是诚实态（google/microsoft 按契约留空）。
+            # periods-only：不入 years/periods 双写字段列表（year schema 无此字段）。
+            d_and_a = p.get("d_and_a")
+            if d_and_a is not None and d_and_a < 0:
+                errors.append(f"ERROR {ptag}: d_and_a({d_and_a}) < 0（请存非负量级，方向由派生层处理）")
             # B2 annual actual 视图以 gross_profit 为唯一毛利事实源。当前政策只豁免
             # Amazon（不披露传统公司层面毛利）；其余 annual actual 缺失直接阻断。
             if kind == "annual" and status == "actual" and p.get("gross_profit") is None:

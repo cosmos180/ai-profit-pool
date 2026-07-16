@@ -138,3 +138,7 @@ P0–P2 全部完成时,产品应满足:
 **全库计数**(修正矩阵):ok 32(google Cloud 2026Q1=32.9% ✓/Other Bets 负值照实/amazon AWS×14/samsung FY2025)· pending_entry 4(仅 samsung FY2024)· basis_mismatch 37(google Services 含对冲 = 验收样本;oracle FY2024 Hardware 真口径差)· undisclosed 450(YouTube/Search/SaaS/OCI/DRAM/NAND/tsmc 节点全部诚实留空)。分部营收行并入 segOpMargin。**装饰名对齐已完成**(Issue #30,2026-07-16):5 组 34 个物理位置统一为 segments 规范名,basis_mismatch 37→9 · undisclosed 450→478(其余矩阵不变);Oracle FY2026 Software 同比连续性保留(-0.74%),FY2024 Hardware 真实口径差反向锁定;剩余 basis_mismatch 仅 google Services(对冲)与 oracle FY2024 Hardware 两处真实口径差。
 
 **Phase 2**(另批):schema 增业务节点披露利润字段 + 采购,只录真实披露,需 ADR。
+
+## A3 EV/EBITDA 落地(Issue #32,2026-07-16 交付)
+
+**Phase A 采购**(用户 Dayu 逐 filing 审核 + 我方独立复算):12 家最新实际年全审,**10 条入库**(official 4 + derived 6,label 保留原始行/公式/fx)、**2 条契约性留空**——google FY2025 现金流量表仅折旧行、microsoft "and other" 并列加项不可隔离(红线 3b「and other 两种语法」实例,数据锚点锁死不得误填)。**Phase B 落地**:schema `d_and_a`(periods-only,非负)+ `ev_ebitda` caveat 枚举;`ebitda`/`evEbitda` 算不存(EBITDA≤0 → null);comps **EV/EBITDA 默认列**(EV/Sales 后、FCF yield 前),四态/排序/rel 全复用列驱动机器。**覆盖 9/14 一次点亮**(nvda 34.4×/samsung 19.8×/broadcom 53.0×/micron 58.8×/skhynix 28.2×/tsmc 21.7×/asml 48.3×/oracle 16.9×/arm 292.8×)——分析师点名的设计/代工/存储/设备一线全部可比,EV/EBITDA 成第二高覆盖估值列。tencent distorted-blank、softbank na、google/microsoft/amazon blank(缺 net_debt)。分析师 A 级 backlog(A1/A2/A3)全部收官。

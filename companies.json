@@ -666,6 +666,7 @@
           "net_income": 120.1,
           "cfo": 102.7,
           "capex": 6.1,
+          "d_and_a": 2.843,
           "segments": [
             {
               "name": "Data Center 数据中心",
@@ -733,6 +734,11 @@
               "label": "period_start 推导：上一财年 FY2025 末（2025-01-26）+1 天 = 2025-01-27",
               "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
               "data_status": "derived"
+            },
+            {
+              "label": "D&A：FY2026 10-K 合并现金流量表「Depreciation and amortization」USD 2,843M 单行直取",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+              "data_status": "official"
             }
           ]
         },
@@ -1336,6 +1342,7 @@
           "net_income": 31.131,
           "cfo": 60.01,
           "capex": 37.07,
+          "d_and_a": 33.006,
           "segments": [
             {
               "name": "DX 终端体验（手机/家电/网络）",
@@ -1384,6 +1391,11 @@
             {
               "label": "capex/CFO（FY2025 合并现金流：CFO KRW 85.32T ÷ 1421.779 = $60.01B；capex KRW 52.7T ÷ 1421.779 = $37.07B，KRW 换算待核验）",
               "url": "https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results",
+              "data_status": "derived"
+            },
+            {
+              "label": "D&A：2025 사업보고서 现金流量表调整项 depreciation KRW 43,605,740M + amortization KRW 3,320,852M = 46,926,592M；46,926.592bn ÷ fx 1421.779 = 33.006（含 IFRS-16 使用权折旧，照报表不剥离）",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_4Q_Interim_Report.pdf",
               "data_status": "derived"
             }
           ],
@@ -1937,6 +1949,7 @@
           "net_income": 23.126,
           "cfo": 27.537,
           "capex": 0.623,
+          "d_and_a": 8.775,
           "segments": [
             {
               "name": "Semiconductor solutions 半导体解决方案",
@@ -1969,6 +1982,11 @@
             {
               "label": "period_start 推导：上一财年 FY2024 末（2024-11-03）+1 天 = 2024-11-04",
               "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm",
+              "data_status": "derived"
+            },
+            {
+              "label": "D&A：FY2025 10-K 合并现金流量表「Amortization of intangible and right-of-use assets」USD 8,201M +「Depreciation」USD 574M = 8,775M（照报表含 ROU 摊销，不剥离）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/0001730168-25-000121-index.html",
               "data_status": "derived"
             }
           ]
@@ -2104,7 +2122,8 @@
         "fcf_yield": "na",
         "ps": "distorted",
         "ev_sales": "distorted",
-        "note": "投资控股公司，净利润含愿景基金投资公允价值损益，PE/FCF yield 不反映经营盈利能力；PS / EV/Sales 仅供参考（营收主要来自电信子公司，非其 AI 投资价值载体；合并净负债含电信子公司债务，EV/Sales 失真，显示但降级）"
+        "note": "投资控股公司，净利润含愿景基金投资公允价值损益，PE/FCF yield 不反映经营盈利能力；PS / EV/Sales 仅供参考（营收主要来自电信子公司，非其 AI 投资价值载体；合并净负债含电信子公司债务，EV/Sales 失真，显示但降级）；投资控股无经营 EBITDA 含义，EV/EBITDA 不适用",
+        "ev_ebitda": "na"
       },
       "years": [
         {
@@ -3295,6 +3314,7 @@
           "net_income": 8.539,
           "cfo": 17.53,
           "capex": 13.8,
+          "d_and_a": 8.352,
           "segments": [
             {
               "name": "CMBU 云存储",
@@ -3352,6 +3372,11 @@
               "label": "period_start 推导：上一财年 FY2024 止 2024-08-29 → 起 2024-08-30（与 micron-fy2025q1 起日一致）",
               "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
               "data_status": "derived"
+            },
+            {
+              "label": "D&A：FY2025 10-K 合并现金流量表「Depreciation expense and amortization of intangible assets」USD 8,352M 单行直取",
+              "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/0000723125-25-000028-index.html",
+              "data_status": "official"
             }
           ],
           "revenue_breakdown": {
@@ -3933,6 +3958,7 @@
           "net_income": 30.207,
           "cfo": 37.3,
           "capex": 19.36,
+          "d_and_a": 9.798,
           "segments": [
             {
               "name": "Memory 存储器",
@@ -3957,6 +3983,11 @@
             {
               "label": "capex/CFO（FY2025 연결 현금흐름표 / 사업보고서：CFO KRW 53.04T ÷ 1421.779 = $37.30B；capex（유형자산 취득）KRW 27.52T ÷ 1421.779 = $19.36B。CFO > 净利 42.95T、FCF≈+25.5T 与 2025 上行周期一致；KRW 换算待核验）",
               "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+              "data_status": "derived"
+            },
+            {
+              "label": "D&A：FY2025 经审计报表（2026-07-06 F-1/A）Note 33 现金流量表 depreciation KRW 13,099,311M + amortization KRW 830,819M = 13,930,130M；13,930.130bn ÷ fx 1421.779 = 9.798（含 IFRS-16 使用权折旧）",
+              "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
               "data_status": "derived"
             }
           ]
@@ -4818,6 +4849,7 @@
           "net_income": 55.21,
           "cfo": 73.116,
           "capex": 40.388,
+          "d_and_a": 22.115,
           "segments": [
             {
               "name": "HPC 高性能计算",
@@ -4888,6 +4920,11 @@
               "label": "分部:年报「依產品平台區分」HPC 58%/智能手机 29%/IoT 5%/车用 5%/DCE 1%/其他 2% × 官方美元营收",
               "url": "https://investor.tsmc.com/chinese/annual-reports",
               "data_status": "official"
+            },
+            {
+              "label": "D&A：FY2025 20-F 合并现金流量表 depreciation TWD 679.684bn + amortization TWD 8.4124bn = 688.0964bn；÷ fx 31.115 = 22.115（含 IFRS-16 使用权折旧）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm",
+              "data_status": "derived"
             }
           ],
           "revenue_breakdown": {
@@ -5908,6 +5945,7 @@
           "net_income": 10.858,
           "cfo": 12.659,
           "capex": 1.574,
+          "d_and_a": 1.159,
           "segments": [
             {
               "name": "EUV 先进光刻系统",
@@ -5952,6 +5990,11 @@
               "label": "capex/CFO（FY2025 现金流，EUR 口径与营收一致：CFO €12.659B / capex（购建固定资产）€1.574B，待核验）",
               "url": "https://ourbrand.asml.com/m/419103cb23dfeaa4/original/asml-2025-annual-report-financial-performance-section.pdf",
               "data_status": "estimate"
+            },
+            {
+              "label": "D&A：FY2025 20-F Consolidated Statements of Cash Flows「Depreciation and amortization」EUR 1.0259bn ÷ fx 0.884969 = 1.159（含 IFRS-16 使用权折旧）",
+              "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026011378/0001628280-26-011378-index.html",
+              "data_status": "derived"
             }
           ],
           "revenue_breakdown": {
@@ -6134,7 +6177,8 @@
         "ps": "ok",
         "fcf_yield": "ok",
         "ev_sales": "ok",
-        "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。"
+        "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。；IFRS 营业利润含其他收益净额公允价值变动 → EBITDA 失真，EV/EBITDA 若出值仅供参考（当前 annual op_income 未录，诚实 blank）",
+        "ev_ebitda": "distorted"
       },
       "years": [
         {
@@ -10820,6 +10864,7 @@
           "net_income": 77.67,
           "cfo": 139.514,
           "capex": 131.819,
+          "d_and_a": 65.756,
           "segments": [
             {
               "name": "North America 北美",
@@ -10859,6 +10904,11 @@
             },
             {
               "label": "Amazon FY2025 Form 10-K filed 2026-02-06（SEC XBRL: revenue $716,924M, operating income $79,975M, net income $77,670M, CFO $139,514M, capex $131,819M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "D&A：FY2025 10-K 合并现金流量表「Depreciation and amortization of property and equipment and capitalized content costs, operating lease assets, and other」USD 65,756M 单行直取（整行 XBRL concept 即 D&A，and other 为资产类别修饰、非并列加项）",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
               "data_status": "official"
             }
@@ -12070,6 +12120,7 @@
           "net_income": 17.309,
           "cfo": 31.977,
           "capex": 55.663,
+          "d_and_a": 9.294,
           "segments": [
             {
               "name": "Cloud 云（OCI 基础设施 + SaaS 应用）",
@@ -12124,6 +12175,11 @@
               "label": "Oracle FY2026 Form 10-K filed 2026-06-22（SEC XBRL: revenue $67,357M, operating income $20,606M, net income $17,309M, CFO $31,977M, capex $55,663M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
               "data_status": "official"
+            },
+            {
+              "label": "D&A：FY2026 10-K 合并现金流量表「Depreciation」USD 7,623M +「Amortization of intangible assets」USD 1,671M = 9,294M",
+              "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/0001193125-26-277521-index.html",
+              "data_status": "derived"
             }
           ],
           "revenue_breakdown": {
@@ -12513,6 +12569,7 @@
           "net_income": 0.904,
           "cfo": 1.524,
           "capex": 0.545,
+          "d_and_a": 0.249,
           "segments": [
             {
               "name": "License and other revenue 授权及其他收入",
@@ -12539,6 +12596,11 @@
               "label": "period_start 推导：上一财年 FY2025 末（2025-03-31）+1 天 = 2025-04-01",
               "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/arm-20260331.htm",
               "data_status": "derived"
+            },
+            {
+              "label": "D&A：FY2026 20-F 合并现金流量表「Depreciation and amortization」USD 249M 单行直取",
+              "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000097/0001973239-26-000097-index.html",
+              "data_status": "official"
             }
           ]
         },

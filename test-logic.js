@@ -559,6 +559,29 @@ assert.equal(Selectors.valuationCaveat(naCaveat, "fcf_yield"), "na");
 assert.equal(Selectors.homeMetric(naCaveat, "pe"), null);
 assert.equal(Selectors.homeMetric(naCaveat, "fcfYield"), null);
 
+// ---- A3: EBITDA / EV/EBITDA (Issue #32; ADR docs/plans/a3-ev-ebitda.md) ----
+// EBITDA = op_income + d_and_a 算不存; EV/EBITDA 在任一输入缺失或 EBITDA≤0 时 null。
+const ebP = (over) => ({ period_id: "eb-fy1", kind: "annual", status: "actual", fiscal_year: "FY1",
+  period_end: "2025-12-31", currency: "USD", fx_to_usd: 1, revenue: 100, net_income: 20,
+  op_income: 30, d_and_a: 10, segments: [], sources: [{ label: "syn", url: "https://example.com/x", data_status: "official" }], ...over });
+const ebCo = (pOver, cOver) => ({ id: "eb", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, net_debt: 40, sources: [] },
+  years: [], periods: [ebP(pOver)], ...cOver });
+assert.equal(Selectors.ebitda(ebP({})), 40);                       // 30 + 10
+assert.equal(Selectors.evEbitda(ebCo({})), 6);                     // EV 240 / EBITDA 40
+assert.equal(Selectors.ebitda(ebP({ d_and_a: null })), null);      // D&A 缺失 → EBITDA null
+assert.equal(Selectors.evEbitda(ebCo({ d_and_a: null })), null);   //   → EV/EBITDA blank(诚实待补)
+assert.equal(Selectors.ebitda(ebP({ op_income: null })), null);    // op_income 缺失 → null
+assert.equal(Selectors.evEbitda(ebCo({ op_income: null })), null);
+assert.equal(Selectors.evEbitda(ebCo({}, { quote: { as_of: "2026-06-26", market_cap: 200, sources: [] } })), null); // net_debt 缺失 → EV null → null
+assert.equal(Selectors.ebitda(ebP({ op_income: -10 })), 0);        // EBITDA=0: 事实可派生…
+assert.equal(Selectors.evEbitda(ebCo({ op_income: -10 })), null);  //   …但倍数无意义 → null
+assert.equal(Selectors.ebitda(ebP({ op_income: -25 })), -15);      // EBITDA<0(周期底部年)…
+assert.equal(Selectors.evEbitda(ebCo({ op_income: -25 })), null);  //   …负倍数禁出值 → null
+assert.equal(Selectors.evEbitda(ebCo({}, { valuation_caveat: { ev_ebitda: "na" } })), null);  // na → 整项留空
+assert.equal(Selectors.evEbitda(ebCo({}, { valuation_caveat: { ev_ebitda: "distorted" } })), 6); // distorted → 出值(视图降级警示)
+assert.equal(Selectors.valuationCaveat(ebCo({}), "ev_ebitda"), "ok");  // 缺省 → ok
+
 // caveat="distorted" → 仍返回数值（供视图警示），并能查到三态
 const distorted = withAnnualPeriods({ id: "ds", status: "populated", quote: { as_of: "2026-06-26", market_cap: 300, sources: [] },
   valuation_caveat: { ps: "distorted" },
@@ -2266,17 +2289,18 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
     periods: [Object.assign({ kind: "annual", status: "actual", period_end: "2025-12-31", fiscal_year: "FY2025" }, ann)],
   });
 
-  // A 全 ok；B forwardPE/evSales blank（缺 EPS / 缺 net_debt）；C pe distorted（出值参排）；
-  // D 投资控股：pe/forwardPE/fcfYield=na、ps/evSales=distorted。A/B/C 同环节 design（ps 满 3 家可比）。
+  // A 全 ok（含 evEbitda：op_income+d_and_a 齐）；B forwardPE/evSales/evEbitda blank（缺 EPS / 缺
+  // net_debt）；C pe/ev_ebitda distorted（出值参排）；D 投资控股：pe/forwardPE/fcfYield/ev_ebitda=na、
+  // ps/evSales=distorted。A/B/C 同环节 design（ps 满 3 家可比）。
   const A = mk("aa", "AlphaCo A", "design", { market_cap: 100, price: 50, price_currency: "USD", net_debt: 10 },
-    { revenue: 50, net_income: 5, cfo: 12, capex: 2 }, 5);
+    { revenue: 50, net_income: 5, cfo: 12, capex: 2, op_income: 8, d_and_a: 2 }, 5);   // EBITDA 10 → EV 110/10 = 11
   const B = mk("bb", "BetaCo B", "design", { market_cap: 200, price: 80, price_currency: "USD", net_debt: null },
     { revenue: 40, net_income: 4, cfo: 8, capex: 1 }, null);
   const C = mk("cc", "GammaCo C", "design", { market_cap: 90, price: 30, price_currency: "USD", net_debt: 5 },
-    { revenue: 30, net_income: 3, cfo: 6, capex: 1 }, 3, { pe: "distorted" });
+    { revenue: 30, net_income: 3, cfo: 6, capex: 1, op_income: 5, d_and_a: 5 }, 3, { pe: "distorted", ev_ebitda: "distorted" });  // EBITDA 10 → 95/10 = 9.5
   const D = mk("dd", "DeltaCo D", "invest", { market_cap: 60, price: 40, price_currency: "USD", net_debt: 20 },
     { revenue: 25, net_income: 2, cfo: 4, capex: 1 }, 2,
-    { pe: "na", fcf_yield: "na", ps: "distorted", ev_sales: "distorted" });
+    { pe: "na", fcf_yield: "na", ps: "distorted", ev_sales: "distorted", ev_ebitda: "na" });
 
   Store._data = { meta: CANON_META, companies: [A, B, C, D] };
   _refreshStages(CANON_META);
@@ -2284,7 +2308,7 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
 
   // ---- 结构：列（公司/环节 + 4 核心 + PS 可选）、行数、defaultSort ----
   assert.equal(t.rows.length, 4);
-  assert.deepEqual(t.columns.map(c => c.key), ["name", "stage", "trailingPE", "forwardPE", "evSales", "fcfYield", "ps"]);
+  assert.deepEqual(t.columns.map(c => c.key), ["name", "stage", "trailingPE", "forwardPE", "evSales", "evEbitda", "fcfYield", "ps"]);  // A3 拍板列序：EV/Sales 后、FCF yield 前
   assert.deepEqual(t.defaultSort, { col: "forwardPE", dir: "asc" });
   assert.equal(t.columns.find(c => c.key === "forwardPE").accent, true);   // 前瞻 PE 蓝色特权
   assert.equal(t.columns.find(c => c.key === "ps").optional, true);         // PS 可选
@@ -2303,6 +2327,15 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(cellOf("dd", "fcfYield").state, "na");
   assert.equal(cellOf("dd", "ps").state, "distorted");
   assert.equal(cellOf("dd", "evSales").state, "distorted");
+  // ---- A3 evEbitda 列四态 ----
+  assert.equal(cellOf("aa", "evEbitda").state, "ok");
+  assert.ok(Math.abs(cellOf("aa", "evEbitda").value - 11) < 1e-12);       // (100+10)/(8+2)
+  assert.equal(cellOf("bb", "evEbitda").state, "blank");                  // 缺 net_debt+D&A → 待补
+  assert.ok(/D&A|净负债|net_debt/.test(cellOf("bb", "evEbitda").note));
+  assert.equal(cellOf("cc", "evEbitda").state, "distorted");              // 出值参排
+  assert.ok(Math.abs(cellOf("cc", "evEbitda").value - 9.5) < 1e-12);      // (90+5)/(5+5)
+  assert.equal(cellOf("dd", "evEbitda").state, "na");                     // 投资控股不适用
+  assert.equal(cellOf("dd", "evEbitda").sortKey, null);
 
   // ---- sortKey：ok/distorted = value；na/blank = null ----
   assert.equal(cellOf("aa", "trailingPE").sortKey, 20);
@@ -2333,9 +2366,16 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const tDesc = sortBy("trailingPE", "desc");
   assert.deepEqual(tDesc, ["bb", "cc", "aa", "dd"]);   // 50 > 30(distorted) > 20 > null
 
+  // ---- A3 evEbitda 排序沉底：升/降 blank(B)/na(D) 恒末两位，distorted(C) 参排 ----
+  const eAsc = sortBy("evEbitda", "asc");
+  assert.deepEqual(eAsc.slice(0, 2), ["cc", "aa"]);             // 9.5(distorted 参排) < 11
+  assert.deepEqual(eAsc.slice(2).sort(), ["bb", "dd"]);
+  assert.deepEqual(sortBy("evEbitda", "desc").slice(2).sort(), ["bb", "dd"]);  // desc 仍沉底
+
   // ---- 覆盖度 covered = ok+distorted 行数 ----
   const cov = k => t.columns.find(c => c.key === k).covered;
   assert.equal(cov("trailingPE"), 3);   // A,B ok + C distorted（D na）
+  assert.equal(cov("evEbitda"), 2);     // A ok + C distorted（B blank / D na）
   assert.equal(cov("forwardPE"), 2);    // A ok + C distorted（B blank, D na）
   assert.equal(cov("evSales"), 3);      // A,C ok + D distorted（B blank）
   assert.equal(cov("fcfYield"), 3);     // A,B,C ok（D na）

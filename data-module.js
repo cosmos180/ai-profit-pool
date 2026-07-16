@@ -527,6 +527,20 @@ const Selectors = {
     return (mc != null && f != null && mc) ? f / mc : null;
   },
 
+  /* ---- A3: EBITDA / EV/EBITDA (ADR docs/plans/a3-ev-ebitda.md) ----
+     EBITDA = op_income + d_and_a, 一律算不存; d_and_a 是现金流量表加回行原始事实
+     (periods-only, google/microsoft 按契约留空——现金流行无法隔离纯 D&A)。
+     EV/EBITDA: caveat 'na'(softbank 投资控股) → null; EBITDA ≤ 0 → null(负倍数无意义,
+     诚实留空); 分母与其他倍数同锚 latestActualAnnual, EV 与 evSales 同源(跨指标口径一致)。 */
+  ebitda(y) {
+    return (y && y.op_income != null && y.d_and_a != null) ? y.op_income + y.d_and_a : null;
+  },
+  evEbitda(c) {
+    if (this.valuationCaveat(c, "ev_ebitda") === "na") return null;
+    const e = this.ev(c), eb = this.ebitda(this.latestActualAnnual(c));
+    return (e != null && eb != null && eb > 0) ? e / eb : null;
+  },
+
   /* 前瞻 PE (NTM · consensus)：price ÷ consensus_eps_value，两者同币才算（不跨币相乘）。
      price 取 quote.price（本币原值），consensus_eps_value 取 forecast 年的数值型一致预期 EPS，
      币种须 = quote.price_currency。与 trailing pe() 复用同一 caveat：pe='na' → 前瞻 PE 也 na(null)。
@@ -571,6 +585,7 @@ const Selectors = {
     pe:       { caveat: "pe",        lowerCheaper: true  },
     ps:       { caveat: "ps",        lowerCheaper: true  },
     evSales:  { caveat: "ev_sales",  lowerCheaper: true  },
+    evEbitda: { caveat: "ev_ebitda", lowerCheaper: true  },
     fcfYield: { caveat: "fcf_yield", lowerCheaper: false },
   },
   VAL_REL_BAND: 0.15,   // ±15% 带宽:偏离中位数超此比例才判 low/high,否则 mid(居中)
@@ -580,6 +595,7 @@ const Selectors = {
     if (key === "pe")       return this.pe(c);
     if (key === "ps")       return this.ps(c);
     if (key === "evSales")  return this.evSales(c);
+    if (key === "evEbitda") return this.evEbitda(c);
     if (key === "fcfYield") return this.fcfYield(c);
     return null;
   },
@@ -656,18 +672,22 @@ const Selectors = {
     { key: "trailingPE", sel: "pe",        caveat: "pe",        rel: "pe",       label: "Trailing PE", kind: "mult", accent: false },
     { key: "forwardPE",  sel: "forwardPE", caveat: "pe",        rel: null,       label: "前瞻 PE",     kind: "mult", accent: true, sub: "NTM · 一致预期" },
     { key: "evSales",    sel: "evSales",   caveat: "ev_sales",  rel: "evSales",  label: "EV/Sales",    kind: "mult", accent: false },
+    // A3 拍板(#27/#32):默认可见,列序 EV/Sales 后、FCF yield 前
+    { key: "evEbitda",   sel: "evEbitda",  caveat: "ev_ebitda", rel: "evEbitda", label: "EV/EBITDA",   kind: "mult", accent: false },
     { key: "fcfYield",   sel: "fcfYield",  caveat: "fcf_yield", rel: "fcfYield", label: "FCF yield",   kind: "pct",  accent: false },
     { key: "ps",         sel: "ps",        caveat: "ps",        rel: "ps",       label: "PS",          kind: "mult", accent: false, optional: true },
   ],
   COMPS_NA_REASON: {
     pe:        "投资控股，净利润含投资公允价值损益，PE 无经营含义 → 诚实留空。",
     ev_sales:  "合并净负债含电信子公司债务 → EV/Sales 失真，不适用。",
+    ev_ebitda: "投资控股，无经营 EBITDA 含义 → 诚实留空。",
     fcf_yield: "投资控股，FCF 不反映经营现金创造 → 不适用。",
     ps:        "营收主要来自电信子公司，非 AI 价值载体 → 不适用。",
   },
   COMPS_DISTORT_REASON: {
     pe:        "净利润含投资公允价值损益，非经营盈利，倍数失真仅供参考。",
     ev_sales:  "合并净负债含电信子公司债务 → EV/Sales 失真，显示但降级。",
+    ev_ebitda: "营业利润含公允价值变动 → EBITDA 失真，出值仅供参考。",
     ps:        "营收主要来自电信子公司，非 AI 价值载体，PS 仅供参考。",
     fcf_yield: "该指标口径受影响，仅供参考。",
   },
@@ -675,6 +695,7 @@ const Selectors = {
     trailingPE: "缺市值或最新实际财年净利润 → 无法计算，诚实留空。",
     forwardPE:  "待补一致预期 EPS（consensus_eps_value），补录后自动点亮。",
     evSales:    "缺净负债（net_debt）→ EV 无法计算，诚实留空。",
+    evEbitda:   "缺现金流量表 D&A、营业利润或净负债 → EBITDA/EV 无法计算，诚实留空（google/microsoft 现金流行无法隔离纯 D&A，按契约留空）。",
     fcfYield:   "缺自由现金流或市值 → 无法计算，诚实留空。",
     ps:         "缺市值或最新实际财年营收 → 无法计算，诚实留空。",
   },
