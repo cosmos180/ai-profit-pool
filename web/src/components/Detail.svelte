@@ -36,6 +36,7 @@
       is_ai: s.is_ai,
       revLabel: Fmt.bn(s.revenue, 2),
       shareLabel: Fmt.pct(Selectors.segRevShare(p, s.name), 1),
+      margin: Selectors.segOpMargin(s),  // 营业利润率并入营收行（#28 Phase 1；同分部同层级，天然安全）
       barW: (s.revenue / maxV * 100).toFixed(1),
     }))
   })
@@ -64,6 +65,7 @@
         name: p.name, is_ai: p.is_ai,
         revLabel: Fmt.bn(p.revenue, 2),
         shareLabel: Fmt.pct(Selectors.segRevShare(y, p.name), 1),  // 占分部合计比（Selector 派生，null 透传）
+        margin: Selectors.segOpMargin(p),  // 营业利润率并入营收行（#28 Phase 1；同分部同层级，天然安全）
         barW: (p.revenue / maxV * 100).toFixed(1),  // 布局宽度百分比（非财务量）
         yoy: yoyInfo.value,
         yoyReason: yoyInfo.reason,
@@ -177,7 +179,7 @@
             <div class="platrow {s.is_ai ? 'ai' : ''}">
               <div class="pt">
                 <span class="pname">{s.name}{#if s.is_ai}<span class="aitag">AI 主战场</span>{/if}</span>
-                <span class="pv num">{s.revLabel}<span class="sh">{s.shareLabel}</span></span>
+                <span class="pv num">{s.revLabel}<span class="sh">{s.shareLabel}</span>{#if s.margin != null}<span class="sh {s.margin < 0 ? 'dn' : ''}" title="派生营业利润率（分部营业利润 ÷ 分部营收，同分部同期，算不存）；比率为派生值，非官方直接披露">营业利润率 {Fmt.pct(s.margin, 1)}</span>{/if}</span>
               </div>
               <div class="ptrack"><div class="pfill" style="width:{s.barW}%"></div></div>
             </div>
@@ -251,7 +253,7 @@
           <div class="platrow {p.is_ai ? 'ai' : ''}">
             <div class="pt">
               <span class="pname">{p.name}{#if p.is_ai}<span class="aitag">AI 主战场</span>{/if}</span>
-              <span class="pv num">{p.revLabel}<span class="sh">{p.shareLabel}</span></span>
+              <span class="pv num">{p.revLabel}<span class="sh">{p.shareLabel}</span>{#if p.margin != null}<span class="sh {p.margin < 0 ? 'dn' : ''}" title="派生营业利润率（分部营业利润 ÷ 分部营收，同分部同期，算不存）；比率为派生值，非官方直接披露">营业利润率 {Fmt.pct(p.margin, 1)}</span>{/if}</span>
             </div>
             <div class="ptrack"><div class="pfill" style="width:{p.barW}%"></div></div>
             <div class="pyoy">

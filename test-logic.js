@@ -417,6 +417,77 @@ const qdNB = { id: "qnb", years: [], periods: [
 ] };
 assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdNB, "qnb-2026q1", "3nm").qoq,
   { value: null, reason: "no_breakdown" });
+
+// ---- rowProfitability: 业务行营业利润率 (Issue #28 Phase 1) ----
+// 安全 1:1 映射 = 同 carrier + 名称精确相等 + 营收差 ≤ 0.001(+1e-9 浮点噪声) + 候选唯一;
+// 任一不满足失败关闭。pending_entry 由 seg_profit==="yes" 门控, 不由 op_income=null 推出。
+const rpQ = { period_id: "rp-2026q1", kind: "quarter", status: "actual",
+  calendar_year: 2026, calendar_quarter: "Q1", period_end: "2026-03-31", revenue: 117,
+  // framework token + framework_change 在场: 只约束跨期变化率, 不得压掉当期利润率
+  segment_framework: "fw-2026", framework_change: "重列说明(合成)",
+  revenue_breakdown: { label: "Product", complete: false, sources: [{ data_status: "official" }], items: [
+    { name: "CloudX", revenue: 20.028 },
+    { name: "BetsX", revenue: 1.537 },
+    { name: "ServicesX", revenue: 89.637, children: [{ name: "SearchY", revenue: 60 }] },
+    { name: "DriftX", revenue: 10.0 },
+    { name: "TolX", revenue: 5.431 },
+    { name: "PendX", revenue: 7.0 },
+    { name: "ZeroX", revenue: 0 },
+    { name: "DupX", revenue: 3.0 },
+  ] },
+  segments: [
+    { name: "CloudX", revenue: 20.028, op_income: 6.598, segment_framework: "fw-2026" },
+    { name: "BetsX", revenue: 1.537, op_income: -7.515, segment_framework: "fw-2026" },  // 真实负样本形状 (Other Bets)
+    { name: "ServicesX（含收入对冲调节）", revenue: 89.457, op_income: 40.589, segment_framework: "fw-2026" },
+    { name: "DriftX", revenue: 10.5, op_income: 2.0, segment_framework: "fw-2026" },     // 营收差 0.5 ≫ 阈值
+    { name: "TolX", revenue: 5.432, op_income: 1.086, segment_framework: "fw-2026" },    // 差恰 0.001 → 接受 (epsilon 只吸浮点噪声)
+    { name: "PendX", revenue: 7.0, op_income: null, segment_framework: "fw-2026" },
+    { name: "ZeroX", revenue: 0, op_income: 0, segment_framework: "fw-2026" },
+    { name: "DupX", revenue: 3.0, op_income: 1.0, segment_framework: "fw-2026" },        // 同名同营收双候选
+    { name: "DupX", revenue: 3.0, op_income: 1.2, segment_framework: "fw-2026" },
+  ] };
+const rpCo = { id: "rp", seg_profit: "yes", years: [], periods: [rpQ] };
+{
+  // ok 正值: 名称+营收双精确一致, 派生 margin = 6.598/20.028 (framework token 不阻断)
+  const ok = Selectors.rowProfitability(rpCo, rpQ, "CloudX");
+  assert.equal(ok.reason, "ok");
+  assert.ok(Math.abs(ok.op_margin - 6.598 / 20.028) < 1e-12);
+  assert.equal(ok.segment_name, "CloudX");
+  assert.equal(ok.op_income, 6.598);       // 分子/分母透传给 tooltip
+  assert.equal(ok.revenue, 20.028);
+  // ok 负值: 负利润率照实出值, 不截断不隐藏
+  const neg = Selectors.rowProfitability(rpCo, rpQ, "BetsX");
+  assert.equal(neg.reason, "ok");
+  assert.ok(neg.op_margin < -4 && Math.abs(neg.op_margin - (-7.515 / 1.537)) < 1e-12);
+  // basis_mismatch 装饰名/口径差: 无同名行, 近似候选(含对冲调节)存在 → 失败关闭并透出候选名
+  const svc = Selectors.rowProfitability(rpCo, rpQ, "ServicesX");
+  assert.equal(svc.reason, "basis_mismatch");
+  assert.equal(svc.op_margin, null);
+  assert.equal(svc.segment_name, "ServicesX（含收入对冲调节）");
+  // basis_mismatch 营收超阈: 同名但 10.0 vs 10.5
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "DriftX").reason, "basis_mismatch");
+  // 容差边界: 差恰好 0.001 → 接受 (epsilon 只补浮点表示噪声, 不扩大业务容差)
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "TolX").reason, "ok");
+  // pending_entry: 唯一映射 + op_income 未录 + seg_profit==="yes"
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "PendX").reason, "pending_entry");
+  // no_base: 唯一映射但分部营收为 0, 比率无意义
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "ZeroX").reason, "no_base");
+  // 多候选失败关闭: 同名同营收双候选, 禁止静默取首项; 不点名
+  const dup = Selectors.rowProfitability(rpCo, rpQ, "DupX");
+  assert.equal(dup.reason, "basis_mismatch");
+  assert.equal(dup.segment_name, null);
+  // undisclosed: children 行无任何分部候选
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "ServicesX / SearchY").reason, "undisclosed");
+  // 行不存在 → null
+  assert.equal(Selectors.rowProfitability(rpCo, rpQ, "NoSuchRow"), null);
+}
+// seg_profit 门控: "no"/"partial" 时映射成立 + op_income=null 不得称"待补录" → undisclosed
+for (const flag of ["no", "partial"]) {
+  const co = { id: "rp-" + flag, seg_profit: flag, years: [], periods: [rpQ] };
+  assert.equal(Selectors.rowProfitability(co, rpQ, "PendX").reason, "undisclosed");
+  // 且不影响已披露利润的 ok 行 (oracle/asml 形状: 个别行仍可直接披露)
+  assert.equal(Selectors.rowProfitability(co, rpQ, "CloudX").reason, "ok");
+}
 assert.equal(Selectors.homeMetric(b2Annual, "revenue"), 150);       // not years' 999
 assert.equal(Selectors.homeMetric(b2Annual, "fcfMargin"), 0.25);    // FY2 cash ladder: (40-10)/120
 assert.equal(Selectors.grossMargin(Selectors.annualByFy(b2Annual, "FY2")), 0.6);
