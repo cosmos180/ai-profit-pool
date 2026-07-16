@@ -10,7 +10,7 @@
 
 ## 0. 一句话架构判断
 
-**D&A 是现金流量表口径的原始事实，只挂 `periods[].d_and_a`（可空，annual 必采、quarter 顺手），不进 `year` schema，走 gross_profit 同款「只进 periods、years 不加」先例。EBITDA 与 EV/EBITDA 一律算不存——`ebitda = op_income + d_and_a` 由 selector 现算，EV/EBITDA 挂 comps 表第 5 个数值列，caveat 复用现有四态机器。**
+**D&A 是现金流量表口径的原始事实，只挂 `periods[].d_and_a`（可空，**本批 annual-only**；季度须先立「累计 YTD → 单季原子」契约后另批做，见 §4 红线 8），不进 `year` schema，走 gross_profit 同款「只进 periods、years 不加」先例。EBITDA 与 EV/EBITDA 一律算不存——`ebitda = op_income + d_and_a` 由 selector 现算，EV/EBITDA 挂 comps 表第 5 个数值列，caveat 复用现有四态机器。**
 
 关键约束（决定采购单边界）：**EBITDA 需要 `op_income` 与 `d_and_a` 两个输入都非空**。库内实跑发现 softbank / tencent 的 annual `op_income` 全为 null——所以补 D&A 也点不亮它俩，采购单对这两家分别「省略 / 缓」。而分析师真正要的代工/存储/设计一线（TSMC、Samsung、SK、Micron、NVIDIA、Broadcom、ASML、Arm、Oracle）op_income 与 net_debt 均已齐，**只差 D&A 一个字段即可全部点亮**——采集回报率极高。
 
@@ -37,7 +37,7 @@
 ```jsonc
 "d_and_a": {
   "type": ["number", "null"],
-  "description": "Period depreciation & amortization (折旧摊销) from the CASH-FLOW STATEMENT add-back line, in meta.unit (USD bn), sign-neutral non-negative magnitude. Source caliber redline: the CF-statement 'Depreciation and amortization' line — OR the arithmetic sum of its explicitly-disclosed CF sub-lines (D&A of PP&E + amortization of intangibles), with the label naming both. NEVER a non-GAAP adjusted-EBITDA add-back, NEVER an earnings-call figure. Absent/undisclosed ⇒ null (comps cell shows 待补). EBITDA is DERIVED, never stored: Selectors.ebitda = op_income + d_and_a (算不存). IFRS filers (TSMC/ASML/Samsung/SK/Tencent) include IFRS-16 right-of-use asset depreciation here — kept as-reported, NOT stripped (stripping = forbidden non-GAAP adjustment); the cross-GAAP wrinkle is disclosed in the derived-layer caveat note, not adjusted away."
+  "description": "Period depreciation & amortization (折旧摊销) from the CASH-FLOW STATEMENT add-back line, in meta.unit (USD bn), sign-neutral non-negative magnitude. Source caliber redline: the CF-statement 'Depreciation and amortization' line — OR the arithmetic sum of its explicitly-disclosed CF sub-lines (D&A of PP&E + amortization of intangibles), with the label naming both. NEVER a non-GAAP adjusted-EBITDA add-back, NEVER an earnings-call figure. Absent/undisclosed ⇒ null (comps cell shows 待补). data_status: official ONLY for a USD single-line direct take; summing disclosed sub-lines or converting non-USD via fx_to_usd stores a computed value ⇒ data_status=derived (arithmetic is never upgraded to official), label keeping the original line values, the formula, and the fx used. Quarter atoms MUST be true single-quarter magnitudes — 10-Q/IFRS interim cash-flow statements report cumulative YTD figures, and writing a 6M/9M cumulative into a quarter period is a data error; quarterly collection is deferred until the YTD→single-quarter derivation contract lands (same-FY same-basis adjacent cumulative diff, Q1 direct, result derived with both cumulative sources in the label; unmet ⇒ do not collect). EBITDA is DERIVED, never stored: Selectors.ebitda = op_income + d_and_a (算不存). IFRS filers (TSMC/ASML/Samsung/SK/Tencent) include IFRS-16 right-of-use asset depreciation here — kept as-reported, NOT stripped (stripping = forbidden non-GAAP adjustment); the cross-GAAP wrinkle is disclosed in the derived-layer caveat note, not adjusted away."
 }
 ```
 
@@ -68,13 +68,13 @@
 | nvda | 设计 | **ok** | US-GAAP，op_income 实、D&A 干净 | 采 |
 | broadcom | 设计 | **ok** | 并购密集、无形摊销巨大 → EBITDA 加回正是其可比价值所在（feature 非 bug） | 采 |
 | arm | 设计 | **ok** | US-GAAP（20-F 报 US-GAAP），轻资产但 D&A 存在 | 采 |
-| tsmc | 代工 | **ok** | IFRS，重资产折旧巨大——**分析师头号诉求命中点**；EBITDA 剥离折旧后代工/存储直接可比 | 采 |
+| tsmc | 代工 | **ok** | IFRS，重资产折旧巨大——**分析师头号诉求命中点**；EBITDA 剥离折旧后代工/存储**可比性显著改善，但非精确同期/同口径可比**（IFRS-16 租赁折旧、并购摊销、混业结构差异仍在，见 §4 红线 4；caveat note 保留披露） | 采 |
 | micron | 存储 | **ok** | US-GAAP。周期底部年 EBITDA 可趋零，comps 用最新实际年（FY2025 已盈利）→ ok | 采 |
 | skhynix | 存储 | **ok** | IFRS。同 micron，最新实际年（FY2025）盈利 → ok | 采 |
 | samsung | 存储 | **ok** | IFRS。含非存储业务但合并 EBITDA 口径成立 | 采 |
 | asml | 设备 | **ok** | IFRS，重资产设备商，EBITDA 口径干净 | 采 |
 | oracle | 云 | **ok** | US-GAAP，数据中心资本开支/折旧大，EBITDA 有意义 | 采 |
-| google | 云 | **ok**（但暂 blank） | caveat ok，但 net_debt 未录 → EV 无法算 → EV/EBITDA **待补**（待 net_debt，非 caveat 问题） | 采（顺手，为将来 net_debt 补录预置） |
+| google | 云 | **ok**（但暂 blank） | caveat ok，但 net_debt 未录 → EV 无法算 → EV/EBITDA **待补**（待 net_debt，非 caveat 问题） | 采（暂不点亮，为将来 net_debt 补录预置） |
 | microsoft | 云 | **ok**（但暂 blank） | 同 google：net_debt 缺 → 待补 | 采 |
 | amazon | 云 | **ok**（但暂 blank） | 同 google：net_debt 缺 → 待补 | 采 |
 | tencent | 应用 | **distorted** | IFRS 营业利润含公允价值变动 → EBITDA 失真；且 op_income 当前全 null，**双重阻塞**（补 D&A 也点不亮，需先补 op_income，属另一采集批次） | **缓**（B 级，依赖 op_income） |
@@ -89,12 +89,13 @@
 | # | 红线 | 说明 |
 |---|---|---|
 | 1 | **只取现金流量表 D&A 行** | 「Depreciation and amortization」经营活动加回行。**不用**损益表分散的折旧、**不用** MD&A/分部附注里的口径 |
-| 2 | **分列求和须 label 写明** | 若无单一 D&A 行，但现金流量表分列「Depreciation of PP&E」+「Amortization of intangibles」→ 求和，label 写明两行原文值。这是同一张表的分解求和，仍属 official，**非** gross_profit 那种跨表重构（后者才降级 derived） |
+| 2 | **分列求和须 label 写明** | 若无单一 D&A 行，但现金流量表分列「Depreciation of PP&E」+「Amortization of intangibles」→ 求和，label 写明两行原文值与求和式。**求和结果 data_status=`derived`**——库内惯例：任何算术（求和/相减/换汇）的存储值都是 derived，「同一张表求和」不构成升格 official 的理由 |
 | 3 | **禁 non-GAAP adjusted EBITDA** | 不从公司自报的 adjusted EBITDA 反推 D&A；不从电话会/IR PPT 取。只认 filing 现金流量表 |
 | 4 | **IFRS-16 租赁折旧不剥离** | IFRS 报表（TSMC/ASML/Samsung/SK）的 D&A 含使用权资产折旧，US-GAAP 同业不含——**照现状存**，剥离即违禁的 non-GAAP 调整。跨 GAAP 差异在派生层 caveat note 披露，不在数据层调 |
 | 5 | **符号与量级** | 存**非负量级**（现金流量表加回本就为正），与 capex 同约定；方向由派生层处理 |
 | 6 | **非美元按各期库内 fx** | 源币 raw D&A ÷ 该期 `fx_to_usd`（4 位）得 USD bn；label 注明源币值与所用 fx，须与该期库内 fx 一致 |
-| 7 | **data_status** | 单行或分列求和均 `official`；缺就 null（**留空比填错好**），comps 该格「待补」 |
+| 7 | **data_status** | **USD 单行直取 → `official`**；分列求和或非美元经 fx 换算 → **`derived`**（换汇、相减、求和后的存储值一律 derived，算术结果不因底层行来自官方 filing 而升格），label 保留原始行、公式与 fx；缺就 null（**留空比填错好**），comps 该格「待补」 |
+| 8 | **quarter 本批不采（累计 YTD 陷阱）** | 多数 10-Q / IFRS 中期现金流量表披露的是**累计值**（6M/9M），而 `periods[] kind=quarter` 是单季原子——把累计数写进 Q2/Q3 = 数据错误。季度 D&A 须先另批立契约：**同财年、同口径相邻累计值作差**得单季（Q1 直取首季累计），结果标 `derived` 且 label 写明两个累计源值与作差式；条件不满足（缺相邻累计、口径重述）则不采 |
 
 ---
 
@@ -109,16 +110,18 @@ ebitda(y)     { return (y && y.op_income != null && y.d_and_a != null)
 evEbitda(c)   {
   if (this.valuationCaveat(c, "ev_ebitda") === "na") return null;
   const e = this.ev(c), eb = this.ebitda(this.latestActualAnnual(c));
-  return (e != null && eb != null && eb !== 0) ? e / eb : null;   // EBITDA≤0 年→null(诚实)
+  return (e != null && eb != null && eb > 0) ? e / eb : null;    // EBITDA≤0 → null(负倍数无意义,诚实留空)
 }
 ```
+
+落地批合成测试须**分别**覆盖 EBITDA<0（周期底部年，负倍数禁出值）与 EBITDA=0 两个用例，断言均返回 null。
 
 ### 5.2 comps 表加 EV/EBITDA 列（列驱动，零组件算术）
 
 comps 表已是**列驱动**（`COMPS_COLS` 数组 + 统一四态判定循环，见 data-module.js:596-701）。加列 = 往数组塞一条 + 补三本文案词典，**无新增分支逻辑**：
 
 ```js
-// COMPS_COLS 追加（放在 evSales 后、fcfYield 前，或按 UX 排布）：
+// COMPS_COLS 追加（已拍板：EV/Sales 后、FCF yield 前，默认可见）：
 { key:"evEbitda", sel:"evEbitda", caveat:"ev_ebitda", rel:"evEbitda",
   label:"EV/EBITDA", kind:"mult", accent:false },
 
@@ -140,7 +143,7 @@ COMPS_BLANK_NOTE.evEbitda      = "待补现金流量表 D&A（或缺 net_debt / 
 - `lowerCheaper:true`（低=便宜），同 pe/ps/evSales 方向。
 - 默认排序仍锚 forwardPE 升序不变；EV/EBITDA 作为可点排序列之一。
 
-UX 侧列位/是否默认显示/移动端横滚归位，交设计师在 A1 comps 框架内定，非本 ADR 范围。
+UX 侧已拍板：EV/EBITDA **默认可见**，列序 `EV/Sales` 后、`FCF yield` 前；PS 继续作为可选列；移动端沿用现有横向滚动 + sticky 公司列；落地批实测 1280/390。
 
 ### 5.3 validate.py 校验增量
 
@@ -158,20 +161,21 @@ UX 侧列位/是否默认显示/移动端横滚归位，交设计师在 A1 comps
 
 ## 6. 采购单：逐家 D&A 清单（🧑 Dayu/PDF 通道）
 
-规则：现金流量表真实披露值；USD bn（非美元按该期库内 `fx_to_usd` 换算并注明）；走 merge.py **仅含 periods 的部分对象**增量并入，**不改 `years[]`**（year schema 无 d_and_a）。annual 必采、quarter 顺手不阻塞。
+规则：现金流量表真实披露值；USD bn（非美元按该期库内 `fx_to_usd` 换算并注明，data_status=derived）；走 merge.py **仅含 periods 的部分对象**增量并入，**不改 `years[]`**（year schema 无 d_and_a）。**本批 annual-only**——quarter 一律不采（累计 YTD 陷阱，见 §4 红线 8）。
 
 ### 口径分级
 
 | 级 | 判定 | data_status |
 |---|---|---|
-| A | 现金流量表**单行 Depreciation and amortization** | official |
-| B | 无单行，但现金流量表**分列** D&A of PP&E + amortization of intangibles → 求和 | official，label 写明两行原文值与求和式 |
+| A | 现金流量表**单行 Depreciation and amortization**，USD 直取 | official |
+| A-fx | 单行但非美元 → ÷ 该期库内 `fx_to_usd` | **derived**（换汇即算术，不升格），label 注源币原值与所用 fx |
+| B | 无单行，但现金流量表**分列** D&A of PP&E + amortization of intangibles → 求和 | **derived**，label 写明各行原文值与求和式（非美元再叠 fx 说明） |
 | 缓 | op_income 当前为 null，补 D&A 也点不亮（需先补 op_income，属另一批次） | tencent |
 | 省略 | op_income 全 null 且 EBITDA 语义不成立 | softbank（不采） |
 
 ### 逐家清单
 
-| 公司 | 级 | 来源表 | annual 缺口（必采） | quarter（顺手） |
+| 公司 | 级 | 来源表 | annual 缺口（**最新一期必采**，余期独立回补） | quarter（**本批不采**，仅列另批候选） |
 |---|---|---|---|---|
 | nvda | A | 10-K 现金流量表 | fy2024/25/26-annual (3) | fy2026q1 |
 | samsung | A/B | 사업보고서 현금흐름표（KRW，按各期 fx） | fy2024/25-annual (2) | 2026q1 |
@@ -188,17 +192,13 @@ UX 侧列位/是否默认显示/移动端横滚归位，交设计师在 A1 comps
 | **tencent** | **缓** | HKEX 年报现金流量表（RMB）——需与 op_income 同批采，否则 EV/EBITDA 仍 blank | (fy2023/24/25, 3，依赖 op_income) | — |
 | **softbank** | **省略** | —（投资控股，EBITDA 无经营含义，ev_ebitda=na） | 不采 | 不采 |
 
-### 采购单摘要
+### 采购单摘要（已拍板：12 期最小集先落地）
 
-- **必采：12 家 · 35 个 annual actual periods**（nvda3 + samsung2 + broadcom3 + micron3 + skhynix3 + tsmc3 + asml3 + google3 + microsoft3 + amazon3 + oracle3 + arm3）。
-- **缓：tencent 3 期**（须与 op_income 同批，否则点不亮）。
+- **本批必采：12 期最小集**——12 家各**最新实际年** 1 期（分母走 `latestActualAnnual`），端到端点亮 EV/EBITDA 列（9 家出值）。
+- **独立回补：剩余 23 个历史 annual periods**（全量视野 35 期 = nvda3 + samsung2 + broadcom3 + micron3 + skhynix3 + tsmc3 + asml3 + google3 + microsoft3 + amazon3 + oracle3 + arm3），不阻塞当前 A3，补齐后额外解锁未来「EBITDA 利润率趋势」年度视图（重资产折旧的历史轨迹，半导体尤有价值）。
+- **缓：tencent 3 期**（须与 op_income 同批，否则点不亮；已拍板延后至专项采集批）。
 - **省略：softbank 3 期**（na）。
-- 合计覆盖库内全部 41 个 annual actual periods（35 采 + 3 缓 + 3 省略）。
-
-### comps 解锁最小集 vs 完整集
-
-- **comps EV/EBITDA 列解锁最小集**：每家**最新实际年**一期即可（分母走 `latestActualAnnual`）——即 12 家各补最新 1 期 = 12 期，EV/EBITDA 列立即点亮 9 家（见下）。
-- **完整集（35 期）**：补齐所有 annual actual，额外解锁未来「EBITDA 利润率趋势」年度视图（重资产折旧的历史轨迹，半导体尤有价值）。建议**最新年优先、逐年回补**。
+- 合计视野覆盖库内全部 41 个 annual actual periods（12 必采 + 23 回补 + 3 缓 + 3 省略）。
 
 ### 补齐后预期 EV/EBITDA 覆盖（本波即可达）
 
@@ -213,8 +213,9 @@ UX 侧列位/是否默认显示/移动端横滚归位，交设计师在 A1 comps
 
 ### 自检（产物 _selfcheck）
 
-- A 级：源币 raw D&A 与 filing 现金流量表呈列值逐字一致；存储 USD D&A = raw ÷ fx_to_usd（4 位），fx 与库内该期一致；
-- B 级：两条 D&A 分列原文值 + 求和式写进 label；不得混入损益表折旧或分部口径；
+- A 级（USD 单行直取）：存储值与 filing 现金流量表呈列值逐字一致，data_status=official；
+- A-fx 级：源币 raw D&A 与 filing 呈列值逐字一致；存储 USD = raw ÷ fx_to_usd（4 位），fx 与库内该期一致；data_status=**derived**，label 注源币原值与 fx；
+- B 级：两条 D&A 分列原文值 + 求和式写进 label，data_status=**derived**；不得混入损益表折旧或分部口径；
 - 交叉校验（采集端自检，validate 不强制）：`d_and_a` 与同期 `capex` 量级合理（重资产年 D&A 常与 capex 同数量级）；`op_income + d_and_a` 得出的隐含 EBITDA margin 落在行业常识区间；
 - IFRS 家（tsmc/asml/samsung/skhynix）注明 D&A 含 IFRS-16 使用权折旧，**不剥离**。
 
@@ -226,21 +227,21 @@ UX 侧列位/是否默认显示/移动端横滚归位，交设计师在 A1 comps
 |---|---|---|---|
 | 契约 | `schema.json` | period 加 `d_and_a`（可空）；valuation_caveat 加 `ev_ebitda` 枚举 | 本 ADR 附带（可先落 schema） |
 | 校验 | `validate.py` | 加 `d_and_a>=0` ERROR；（可选）D&A>revenue WARN、EBITDA 可派生 INFO；**不**入双写列表 | 随 schema |
-| 数据 | `companies.json` | 35 期补 `d_and_a`（merge.py periods 增量），years 不动 | 采集批（🧑 Dayu/PDF） |
+| 数据 | `companies.json` | **12 期最小集**先补 `d_and_a`（各家最新实际年；merge.py periods 增量），years 不动；23 期历史独立回补 | 采集批（🧑 Dayu/PDF） |
 | 派生 | `data-module.js` | 加 `ebitda`/`evEbitda`；COMPS_COLS 加列 + 三本文案词典 + VAL_KEY_META + _valMetric 分派 | selector 批 |
 | 呈现 | `web/` Comps.svelte | 列驱动零算术，随 compsTable 自动多一列；列位/移动端归位 | UI 批 |
 
 ---
 
-## 8. 需用户/上层拍板的点
+## 8. 拍板结果（2026-07-16 用户复核落定，PR #27）
 
-1. **d_and_a 采集范围**：本 ADR 建议「35 期全采（最新年优先回补）」；若只求最快点亮 comps，可先采「12 家各最新 1 期 = 12 期」，趋势年度视图延后。请 PM/分析师定深度。
-2. **tencent 是否本批一并补 op_income**：EV/EBITDA 要点亮 tencent，须 op_income + d_and_a 同批采（op_income 不在本采购单范围）。建议**缓**——tencent 属应用环节、非分析师核心诉求，可延到 op_income 专项批。请确认是否延后。
-3. **quarter 顺手做的深度**：quarter D&A 顺手采不阻塞本波；是否要求采集端同批做，还是纯机会主义补，请定。
-4. **EV/EBITDA 列在 comps 表的默认可见性 / 列序**：属 A1 comps UX 范畴，建议交设计师在 A1 框架内定（本 ADR 只保证 selector 契约就绪）。
+1. **采集深度：12 期最小集先落地**——12 家各最新实际年 1 期，端到端点亮 EV/EBITDA 列；剩余 23 个历史 annual periods **独立回补**，不阻塞当前 A3。
+2. **tencent op_income：延后**——非本批核心环节，且即使出值仍为 distorted；交给专项采集批。
+3. **quarter D&A：本批不采**——禁止机会主义写入累计值；等「累计 YTD → 单季」契约与测试（§4 红线 8）另批再做。
+4. **EV/EBITDA 列：默认可见**，列序 `EV/Sales` 后、`FCF yield` 前；PS 继续作为可选列；移动端沿用现有横向滚动 + sticky 公司列，落地批实测 1280/390。
 
 ---
 
 ## 9. 范围栅栏
 
-本 ADR **只定契约与采购单**。数据采集（🧑 Dayu/PDF，35 期）与 selector/UI 落地（`ebitda`/`evEbitda` + comps 加列 + Comps.svelte）是后续两批，各自独立可验收。schema 若先落，须即跑 `validate.py` 确认库内旧数据 0 破再开采集。
+本 ADR **只定契约与采购单**。数据采集（🧑 Dayu/PDF，**12 期最小集先行**，23 期历史独立回补）与 selector/UI 落地（`ebitda`/`evEbitda` + comps 加列 + Comps.svelte）是后续两批，各自独立可验收。schema 若先落，须即跑 `validate.py` 确认库内旧数据 0 破再开采集。
