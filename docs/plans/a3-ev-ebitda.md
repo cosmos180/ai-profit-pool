@@ -74,8 +74,8 @@
 | samsung | 存储 | **ok** | IFRS。含非存储业务但合并 EBITDA 口径成立 | 采 |
 | asml | 设备 | **ok** | IFRS，重资产设备商，EBITDA 口径干净 | 采 |
 | oracle | 云 | **ok** | US-GAAP，数据中心资本开支/折旧大，EBITDA 有意义 | 采 |
-| google | 云 | **ok**（但暂 blank） | caveat ok，但 net_debt 未录 → EV 无法算 → EV/EBITDA **待补**（待 net_debt，非 caveat 问题） | 采（暂不点亮，为将来 net_debt 补录预置） |
-| microsoft | 云 | **ok**（但暂 blank） | 同 google：net_debt 缺 → 待补 | 采 |
+| google | 云 | **ok**（但暂 blank） | caveat ok，但 net_debt 未录 → EV 无法算 → EV/EBITDA **待补**（待 net_debt，非 caveat 问题） | **留空**（FY2025 现金流量表仅折旧行，无法取纯 D&A，见红线 3b） |
+| microsoft | 云 | **ok**（但暂 blank） | 同 google：net_debt 缺 → 待补 | **留空**（"and other" 并列加项不可隔离，见红线 3b） |
 | amazon | 云 | **ok**（但暂 blank） | 同 google：net_debt 缺 → 待补 | 采 |
 | tencent | 应用 | **distorted** | IFRS 营业利润含公允价值变动 → EBITDA 失真；且 op_income 当前全 null，**双重阻塞**（补 D&A 也点不亮，需先补 op_income，属另一采集批次） | **缓**（B 级，依赖 op_income） |
 | softbank | 投资 | **na** | 投资控股，op_income 全 null 且无经营含义，EBITDA 语义不成立 | **省略**（不采） |
@@ -91,6 +91,7 @@
 | 1 | **只取现金流量表 D&A 行** | 「Depreciation and amortization」经营活动加回行。**不用**损益表分散的折旧、**不用** MD&A/分部附注里的口径 |
 | 2 | **分列求和须 label 写明** | 若无单一 D&A 行，但现金流量表分列「Depreciation of PP&E」+「Amortization of intangibles」→ 求和，label 写明两行原文值与求和式。**求和结果 data_status=`derived`**——库内惯例：任何算术（求和/相减/换汇）的存储值都是 derived，「同一张表求和」不构成升格 official 的理由 |
 | 3 | **禁 non-GAAP adjusted EBITDA** | 不从公司自报的 adjusted EBITDA 反推 D&A；不从电话会/IR PPT 取。只认 filing 现金流量表 |
+| 3b | **"and other" 两种语法**（2026-07-16 采购实例） | 行名含 "and other" 须区分语法：**资产类别修饰**（amazon「D&A of PP&E and capitalized content costs, operating lease assets, and other」——整行 XBRL concept 即 D&A，other 是被折旧/摊销的资产）→ 可取；**并列加项**（microsoft「Depreciation, amortization, and other」——other 是与 D&A 并列的第三类调整）→ 不可隔离，**留空**。同理 google FY2025 只呈列折旧无摊销行 → 折旧≠D&A，留空 |
 | 4 | **IFRS-16 租赁折旧不剥离** | IFRS 报表（TSMC/ASML/Samsung/SK）的 D&A 含使用权资产折旧，US-GAAP 同业不含——**照现状存**，剥离即违禁的 non-GAAP 调整。跨 GAAP 差异在派生层 caveat note 披露，不在数据层调 |
 | 5 | **符号与量级** | 存**非负量级**（现金流量表加回本就为正），与 capex 同约定；方向由派生层处理 |
 | 6 | **非美元按各期库内 fx** | 源币 raw D&A ÷ 该期 `fx_to_usd`（4 位）得 USD bn；label 注明源币值与所用 fx，须与该期库内 fx 一致 |
@@ -192,8 +193,12 @@ UX 侧已拍板：EV/EBITDA **默认可见**，列序 `EV/Sales` 后、`FCF yiel
 | **tencent** | **缓** | HKEX 年报现金流量表（RMB）——需与 op_income 同批采，否则 EV/EBITDA 仍 blank | (fy2023/24/25, 3，依赖 op_income) | — |
 | **softbank** | **省略** | —（投资控股，EBITDA 无经营含义，ev_ebitda=na） | 不采 | 不采 |
 
-### 采购单摘要（已拍板：12 期最小集先落地）
+### 采购单摘要（已拍板：12 期最小集先落地；**2026-07-16 采购结果：12 家已审、10 条入库、2 条按契约留空**）
 
+- **采购结果（Issue #32 Phase A，逐 filing 审核）**：12 家最新实际年全部完成审核，**10 条入库**（official 4：nvda/micron/amazon/arm；derived 6：samsung/broadcom/skhynix/tsmc/asml/oracle），**2 条契约性留空**——
+  - **google FY2025**：现金流量表只呈列 `Depreciation of property and equipment 21,136M`，无摊销行、`Other 2,108M` 不可拆——填折旧会让字段失真，从附注补违反红线 1 → **留空**；
+  - **microsoft FY2025**：`Depreciation, amortization, and other 34,153M` 的 "and other" 是**并列加项**不可隔离 → **留空**。
+  - 两家 net_debt 本就缺失（EV 不可算），留空对覆盖零影响；数据锚点（test-snapshot.js）锁死这两条不得误填。
 - **本批必采：12 期最小集**——12 家各**最新实际年** 1 期（分母走 `latestActualAnnual`），端到端点亮 EV/EBITDA 列（9 家出值）。
 - **独立回补：剩余 23 个历史 annual periods**（全量视野 35 期 = nvda3 + samsung2 + broadcom3 + micron3 + skhynix3 + tsmc3 + asml3 + google3 + microsoft3 + amazon3 + oracle3 + arm3），不阻塞当前 A3，补齐后额外解锁未来「EBITDA 利润率趋势」年度视图（重资产折旧的历史轨迹，半导体尤有价值）。
 - **缓：tencent 3 期**（须与 op_income 同批，否则点不亮；已拍板延后至专项采集批）。

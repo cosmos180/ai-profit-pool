@@ -64,7 +64,8 @@ function companySnapshot(c) {
     ps: safe(() => Selectors.ps(c)),
     fcfYield: safe(() => Selectors.fcfYield(c)),
     forwardPE: safe(() => Selectors.forwardPE(c)),
-    valuationCaveat: { pe: cav("pe"), ps: cav("ps"), fcf_yield: cav("fcf_yield"), ev_sales: cav("ev_sales") },
+    evEbitda: safe(() => Selectors.evEbitda(c)),   // A3 (Issue #32)
+    valuationCaveat: { pe: cav("pe"), ps: cav("ps"), fcf_yield: cav("fcf_yield"), ev_sales: cav("ev_sales"), ev_ebitda: cav("ev_ebitda") },
     ttmNetIncome: safe(() => Selectors.ttmNetIncome(c)),
     ttmAsOf: safe(() => Selectors.ttmAsOf(c)),
     incomeFlowHas: flow.has || null,
@@ -92,7 +93,7 @@ function build() {
   const ttmPool = Selectors.profitPoolTTM(populated);
 
   // 同环节相对估值：每家 × 每个可比指标（覆盖 cohortN/median/relative/lowerCheaper/insufficient）
-  const relMetrics = ["pe", "ps", "fcfYield", "evSales"];
+  const relMetrics = ["pe", "ps", "fcfYield", "evSales", "evEbitda"];
   const stageValuationRel = {};
   for (const c of populated) {
     const row = {};
@@ -239,6 +240,32 @@ function invariants(snap) {
     const tct30 = byId("tencent");
     const ftYoY = Selectors.annualRevenueBreakdownYoY(tct30, "FY2025", "金融科技及企业服务");
     assert.ok(ftYoY != null && ftYoY > 0.08 && ftYoY < 0.085, "tencent FY2025 金融科技同比应保持 ≈8.18%: " + ftYoY);
+  }
+
+  // ---- Issue #32 A3 D&A 采购锚点 (2026-07-16): 10 期入库 + 2 期契约性留空 ----
+  // google FY2025 现金流量表只有 Depreciation of PP&E(无摊销行)、microsoft FY2025 是
+  // "Depreciation, amortization, and other"(and other 为并列加项不可隔离)——两家按契约
+  // 失败关闭, 任何后续把这两条填上的行为都必须先推翻 Issue #32 的采购裁定。
+  {
+    const DA_FACTS = {
+      nvda: ["nvda-fy2026-annual", 2.843], samsung: ["samsung-fy2025-annual", 33.006],
+      broadcom: ["broadcom-fy2025-annual", 8.775], micron: ["micron-fy2025-annual", 8.352],
+      skhynix: ["skhynix-fy2025-annual", 9.798], tsmc: ["tsmc-fy2025-annual", 22.115],
+      asml: ["asml-fy2025-annual", 1.159], amazon: ["amazon-fy2025-annual", 65.756],
+      oracle: ["oracle-fy2026-annual", 9.294], arm: ["arm-fy2026-annual", 0.249],
+    };
+    for (const [cid, [pid, v]] of Object.entries(DA_FACTS)) {
+      const p = byId(cid).periods.find((x) => x.period_id === pid);
+      assert.equal(p?.d_and_a, v, `${pid} d_and_a 应为采购审核值 ${v}`);
+    }
+    for (const [cid, pid] of [["google", "google-fy2025-annual"], ["microsoft", "microsoft-fy2025-annual"]]) {
+      const p = byId(cid).periods.find((x) => x.period_id === pid);
+      assert.equal(p?.d_and_a ?? null, null, `${pid} 按 Issue #32 契约裁定必须留空（现金流行无法隔离纯 D&A）`);
+    }
+    // d_and_a 是 periods-only 事实：years 侧任何 carrier 都不得携带
+    for (const c of Store.companies()) {
+      for (const y of c.years || []) assert.ok(!("d_and_a" in y), `${c.id} years 不得携带 d_and_a（periods-only）`);
+    }
   }
 
   // Amazon FY2024 International 营业利润以 10-K 官方精确值为准；years/periods 双写必须同值。

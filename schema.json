@@ -76,6 +76,7 @@
         "ps": {"enum": ["ok", "distorted", "na"]},
         "fcf_yield": {"enum": ["ok", "distorted", "na"]},
         "ev_sales": {"enum": ["ok", "distorted", "na"]},
+        "ev_ebitda": {"enum": ["ok", "distorted", "na"]},
         "note": {"type": "string"}
       }
     },
@@ -150,6 +151,7 @@
         "net_income": {"type": ["number", "null"], "description": "Period net income in meta.unit (USD bn). May be null on guidance periods."},
         "cfo": {"type": ["number", "null"], "description": "Period net cash from operating activities in meta.unit (USD bn)."},
         "capex": {"type": ["number", "null"], "description": "Period capital expenditures (sign-neutral magnitude) in meta.unit (USD bn). FCF is derived, never stored."},
+        "d_and_a": {"type": ["number", "null"], "minimum": 0, "description": "Period depreciation & amortization from the CASH-FLOW STATEMENT operating add-back line(s), in meta.unit (USD bn), non-negative magnitude. Source redline: the CF-statement D&A line, or the sum of its explicitly-disclosed CF sub-lines — NEVER non-GAAP adjusted-EBITDA add-backs, earnings calls, or note-level reconstructions (Alphabet FY2025 lists depreciation only, Microsoft FY2025 bundles \"and other\" — both stay null by contract). data_status: official only for a USD single-line direct take; sub-line sums / non-USD fx conversions are derived with the original lines, formula and fx in the source label. IFRS filers keep IFRS-16 right-of-use depreciation as reported. Annual-only for now (interim CF statements are cumulative YTD). EBITDA is DERIVED, never stored: Selectors.ebitda = op_income + d_and_a."},
         "segments": {"type": "array", "items": {"$ref": "#/definitions/segment"}, "description": "Optional period-level segment breakdown, current segment shape. Empty [] allowed. Platform-segment reconciliation is enforced by validate.py only when the period explicitly carries a complete platform segment set (not forced for guidance / partial-quarter segments)."},
         "segment_framework": {"type": "string", "description": "Period-level口径身份 token for this period's segments[] — see the year-level segment_framework (ADR nvda-framework-change D1). Same token ⇒ cross-period comparable; different token ⇒ 口径断裂 (D2). Optional + non-breaking. Convention '<company>:<axis>:<version>'."},
         "framework_change": {"type": "string", "description": "Human-readable explanation of a segment-口径 break at this period (ADR nvda-framework-change D5). Machine signal = segment_framework token jump; this string is the人话 explanation shown at the break point. Optional + non-breaking; validate.py WARNs (not ERROR) when a segment_framework token changes between comparable same-cadence actual periods without a framework_change note (annual and quarter are never treated as adjacent)."},

@@ -70,11 +70,13 @@
       "ps": 21.48745,
       "fcfYield": 0.020819,
       "forwardPE": 21.326644,
+      "evEbitda": 34.420226,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 159.6,
       "ttmAsOf": "2026-04-26",
@@ -112,11 +114,13 @@
       "ps": 5.710974,
       "fcfYield": 0.017119,
       "forwardPE": null,
+      "evEbitda": 19.827083,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 58.561,
       "ttmAsOf": "2026-03-31",
@@ -154,11 +158,13 @@
       "ps": 27.626904,
       "fcfYield": 0.015249,
       "forwardPE": 31.908778,
+      "evEbitda": 52.967104,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 29.317,
       "ttmAsOf": "2026-05-03",
@@ -196,11 +202,13 @@
       "ps": 4.223215,
       "fcfYield": null,
       "forwardPE": null,
+      "evEbitda": null,
       "valuationCaveat": {
         "pe": "na",
         "ps": "distorted",
         "fcf_yield": "na",
-        "ev_sales": "distorted"
+        "ev_sales": "distorted",
+        "ev_ebitda": "na"
       },
       "ttmNetIncome": null,
       "ttmAsOf": null,
@@ -238,11 +246,13 @@
       "ps": 28.358928,
       "fcfYield": 0.003519,
       "forwardPE": null,
+      "evEbitda": 58.771107,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 50.469,
       "ttmAsOf": "2026-05-28",
@@ -280,11 +290,13 @@
       "ps": 18.089217,
       "fcfYield": 0.014515,
       "forwardPE": null,
+      "evEbitda": 28.214651,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 52.887,
       "ttmAsOf": "2026-03-31",
@@ -322,11 +334,13 @@
       "ps": 15.561183,
       "fcfYield": 0.01718,
       "forwardPE": 27.967352,
+      "evEbitda": 21.667556,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 62.33,
       "ttmAsOf": "2026-03-31",
@@ -364,11 +378,13 @@
       "ps": 18.394604,
       "fcfYield": 0.016325,
       "forwardPE": 47.564116,
+      "evEbitda": 48.27913,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 11.408,
       "ttmAsOf": "2026-03-31",
@@ -406,11 +422,13 @@
       "ps": 4.751434,
       "fcfYield": 0.051127,
       "forwardPE": null,
+      "evEbitda": null,
       "valuationCaveat": {
         "pe": "distorted",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "distorted"
       },
       "ttmNetIncome": null,
       "ttmAsOf": null,
@@ -448,11 +466,13 @@
       "ps": 11.121151,
       "fcfYield": 0.016354,
       "forwardPE": 25.81083,
+      "evEbitda": null,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 160.208,
       "ttmAsOf": "2026-03-31",
@@ -490,11 +510,13 @@
       "ps": 10.222771,
       "fcfYield": 0.024865,
       "forwardPE": 23.071938,
+      "evEbitda": null,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 125.216,
       "ttmAsOf": "2026-03-31",
@@ -532,11 +554,13 @@
       "ps": 3.696347,
       "fcfYield": 0.002904,
       "forwardPE": 28.273563,
+      "evEbitda": null,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": 90.798,
       "ttmAsOf": "2026-03-31",
@@ -574,11 +598,13 @@
       "ps": 6.057277,
       "fcfYield": -0.058054,
       "forwardPE": 17.590062,
+      "evEbitda": 16.911271,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": null,
       "ttmAsOf": "2026-02-28",
@@ -616,11 +642,13 @@
       "ps": 69.105691,
       "fcfYield": 0.002879,
       "forwardPE": null,
+      "evEbitda": 292.775457,
       "valuationCaveat": {
         "pe": "ok",
         "ps": "ok",
         "fcf_yield": "ok",
-        "ev_sales": "ok"
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
       },
       "ttmNetIncome": null,
       "ttmAsOf": null,
@@ -1327,6 +1355,14 @@
         "cohortN": 3,
         "lowerCheaper": true,
         "insufficient": false
+      },
+      "evEbitda": {
+        "value": 34.420226,
+        "median": 52.967104,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
       }
     },
     "samsung": {
@@ -1357,6 +1393,14 @@
       "evSales": {
         "value": 5.380376,
         "median": 17.755971,
+        "relative": "low",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "evEbitda": {
+        "value": 19.827083,
+        "median": 28.214651,
         "relative": "low",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1395,6 +1439,14 @@
         "cohortN": 3,
         "lowerCheaper": true,
         "insufficient": false
+      },
+      "evEbitda": {
+        "value": 52.967104,
+        "median": 52.967104,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
       }
     },
     "softbank": {
@@ -1423,6 +1475,14 @@
         "insufficient": true
       },
       "evSales": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "evEbitda": {
         "value": null,
         "median": null,
         "relative": null,
@@ -1463,6 +1523,14 @@
         "cohortN": 3,
         "lowerCheaper": true,
         "insufficient": false
+      },
+      "evEbitda": {
+        "value": 58.771107,
+        "median": 28.214651,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
       }
     },
     "skhynix": {
@@ -1493,6 +1561,14 @@
       "evSales": {
         "value": 17.755971,
         "median": 17.755971,
+        "relative": "mid",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "evEbitda": {
+        "value": 28.214651,
+        "median": 28.214651,
         "relative": "mid",
         "cohortN": 3,
         "lowerCheaper": true,
@@ -1531,6 +1607,14 @@
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
+      },
+      "evEbitda": {
+        "value": 21.667556,
+        "median": 21.667556,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
       }
     },
     "asml": {
@@ -1561,6 +1645,14 @@
       "evSales": {
         "value": 18.217972,
         "median": 18.217972,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "evEbitda": {
+        "value": 48.27913,
+        "median": 48.27913,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
@@ -1599,6 +1691,14 @@
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
+      },
+      "evEbitda": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
+        "lowerCheaper": true,
+        "insufficient": true
       }
     },
     "google": {
@@ -1629,6 +1729,14 @@
       "evSales": {
         "value": null,
         "median": 7.50697,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "evEbitda": {
+        "value": null,
+        "median": 16.911271,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
@@ -1667,6 +1775,14 @@
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
+      },
+      "evEbitda": {
+        "value": null,
+        "median": 16.911271,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
       }
     },
     "amazon": {
@@ -1697,6 +1813,14 @@
       "evSales": {
         "value": null,
         "median": 7.50697,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "evEbitda": {
+        "value": null,
+        "median": 16.911271,
         "relative": null,
         "cohortN": 1,
         "lowerCheaper": true,
@@ -1735,6 +1859,14 @@
         "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
+      },
+      "evEbitda": {
+        "value": 16.911271,
+        "median": 16.911271,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
       }
     },
     "arm": {
@@ -1765,6 +1897,14 @@
       "evSales": {
         "value": 68.37378,
         "median": 28.403275,
+        "relative": "high",
+        "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": false
+      },
+      "evEbitda": {
+        "value": 292.775457,
+        "median": 52.967104,
         "relative": "high",
         "cohortN": 3,
         "lowerCheaper": true,
