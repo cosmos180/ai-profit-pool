@@ -145,10 +145,11 @@
             {#if c.basisCount}
               <g role="img" aria-label={`AI 归因口径：利润派生 ${c.basisCount.sourced} 家、营收代理 ${c.basisCount.proxy} 家`}>
                 <title>AI 归因口径构成（两者都是代理，锚点质量不同）：利润派生(sourced)={c.basisCount.sourced} 家以云分部真实经营利润推算（derived，非公司披露 AI-only 利润）；营收代理(proxy)={c.basisCount.proxy} 家用 is_ai 营收占比直接冒充利润占比，最弱锚 → 看这根柱鼓起时宜按代理占比打折。</title>
-                <text x={c.x + c.colW / 2} y={padT - 15 - c.topShift} text-anchor="middle"
-                      font-family="var(--mono)" font-size="9.5" font-weight="600">
-                  <tspan fill="var(--ok-deep)">利润派生 {c.basisCount.sourced}</tspan><tspan fill="var(--ink-faint)"> · </tspan><tspan fill="#8a5a0f">营收代理 {c.basisCount.proxy}</tspan>
-                </text>
+                <!-- 两行呈现：单行「利润派生 N · 营收代理 M」宽约 112px，超过 110px 柱心距会与相邻柱标签重叠 -->
+                <text x={c.x + c.colW / 2} y={padT - 21 - c.topShift} text-anchor="middle"
+                      font-family="var(--mono)" font-size="9.5" font-weight="600" fill="var(--ok-deep)">利润派生 {c.basisCount.sourced}</text>
+                <text x={c.x + c.colW / 2} y={padT - 10 - c.topShift} text-anchor="middle"
+                      font-family="var(--mono)" font-size="9.5" font-weight="600" fill="#8a5a0f">营收代理 {c.basisCount.proxy}</text>
               </g>
             {/if}
 
