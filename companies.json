@@ -5293,7 +5293,7 @@
                     "revenue": 9.865
                   },
                   {
-                    "name": "DUV 成熟光刻系统（ArFi/ArF dry/KrF/i-line）",
+                    "name": "DUV 成熟光刻系统",
                     "revenue": 13.276
                   },
                   {
@@ -5303,7 +5303,7 @@
                 ]
               },
               {
-                "name": "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+                "name": "Installed Base Management 装机基地管理",
                 "revenue": 6.077
               }
             ],
@@ -5384,7 +5384,7 @@
                     "revenue": 9.007
                   },
                   {
-                    "name": "DUV 成熟光刻系统（ArFi/ArF dry/KrF/i-line）",
+                    "name": "DUV 成熟光刻系统",
                     "revenue": 13.856
                   },
                   {
@@ -5394,7 +5394,7 @@
                 ]
               },
               {
-                "name": "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+                "name": "Installed Base Management 装机基地管理",
                 "revenue": 7.029
               }
             ],
@@ -5482,7 +5482,7 @@
                     "revenue": 13.111
                   },
                   {
-                    "name": "DUV 成熟光刻系统（ArFi/ArF dry/KrF/i-line）",
+                    "name": "DUV 成熟光刻系统",
                     "revenue": 13.612
                   },
                   {
@@ -5492,7 +5492,7 @@
                 ]
               },
               {
-                "name": "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+                "name": "Installed Base Management 装机基地管理",
                 "revenue": 9.258
               }
             ],
@@ -5651,7 +5651,7 @@
                     "revenue": 9.865
                   },
                   {
-                    "name": "DUV 成熟光刻系统（ArFi/ArF dry/KrF/i-line）",
+                    "name": "DUV 成熟光刻系统",
                     "revenue": 13.276
                   },
                   {
@@ -5661,7 +5661,7 @@
                 ]
               },
               {
-                "name": "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+                "name": "Installed Base Management 装机基地管理",
                 "revenue": 6.077
               }
             ],
@@ -5751,7 +5751,7 @@
                     "revenue": 9.007
                   },
                   {
-                    "name": "DUV 成熟光刻系统（ArFi/ArF dry/KrF/i-line）",
+                    "name": "DUV 成熟光刻系统",
                     "revenue": 13.856
                   },
                   {
@@ -5761,7 +5761,7 @@
                 ]
               },
               {
-                "name": "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+                "name": "Installed Base Management 装机基地管理",
                 "revenue": 7.029
               }
             ],
@@ -5967,7 +5967,7 @@
                     "revenue": 13.111
                   },
                   {
-                    "name": "DUV 成熟光刻系统（ArFi/ArF dry/KrF/i-line）",
+                    "name": "DUV 成熟光刻系统",
                     "revenue": 13.612
                   },
                   {
@@ -5977,7 +5977,7 @@
                 ]
               },
               {
-                "name": "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+                "name": "Installed Base Management 装机基地管理",
                 "revenue": 9.258
               }
             ],
@@ -6077,7 +6077,7 @@
                 "revenue": 7.3486
               },
               {
-                "name": "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+                "name": "Installed Base Management 装机基地管理",
                 "revenue": 2.911
               }
             ],
@@ -6219,11 +6219,11 @@
                 "revenue": 14.097
               },
               {
-                "name": "金融科技及企业服务 FinTech and Business Services",
+                "name": "金融科技及企业服务",
                 "revenue": 28.3
               },
               {
-                "name": "其他 Others",
+                "name": "其他",
                 "revenue": 0.744
               }
             ],
@@ -6318,11 +6318,11 @@
                 "revenue": 16.896
               },
               {
-                "name": "金融科技及企业服务 FinTech and Business Services",
+                "name": "金融科技及企业服务",
                 "revenue": 29.506
               },
               {
-                "name": "其他 Others",
+                "name": "其他",
                 "revenue": 1.072
               }
             ],
@@ -6419,11 +6419,11 @@
                 "revenue": 20.175
               },
               {
-                "name": "金融科技及企业服务 FinTech and Business Services",
+                "name": "金融科技及企业服务",
                 "revenue": 31.919
               },
               {
-                "name": "其他 Others",
+                "name": "其他",
                 "revenue": 1.127
               }
             ],
@@ -6534,11 +6534,11 @@
                 "revenue": 14.097
               },
               {
-                "name": "金融科技及企业服务 FinTech and Business Services",
+                "name": "金融科技及企业服务",
                 "revenue": 28.3
               },
               {
-                "name": "其他 Others",
+                "name": "其他",
                 "revenue": 0.744
               }
             ],
@@ -6647,11 +6647,11 @@
                 "revenue": 16.896
               },
               {
-                "name": "金融科技及企业服务 FinTech and Business Services",
+                "name": "金融科技及企业服务",
                 "revenue": 29.506
               },
               {
-                "name": "其他 Others",
+                "name": "其他",
                 "revenue": 1.072
               }
             ],
@@ -6856,11 +6856,11 @@
                 "revenue": 20.175
               },
               {
-                "name": "金融科技及企业服务 FinTech and Business Services",
+                "name": "金融科技及企业服务",
                 "revenue": 31.919
               },
               {
-                "name": "其他 Others",
+                "name": "其他",
                 "revenue": 1.127
               }
             ],
@@ -6969,11 +6969,11 @@
                 "revenue": 5.51
               },
               {
-                "name": "金融科技及企业服务 FinTech and Business Services",
+                "name": "金融科技及企业服务",
                 "revenue": 8.645
               },
               {
-                "name": "其他 Others",
+                "name": "其他",
                 "revenue": 0.331
               }
             ],
@@ -11121,7 +11121,7 @@
                 ]
               },
               {
-                "name": "Software 软件",
+                "name": "Software 软件（授权及本地）",
                 "revenue": 24.69,
                 "children": [
                   {
@@ -11225,7 +11225,7 @@
                 ]
               },
               {
-                "name": "Software 软件",
+                "name": "Software 软件（授权及本地）",
                 "revenue": 24.724,
                 "children": [
                   {
@@ -11337,7 +11337,7 @@
                 ]
               },
               {
-                "name": "Software 软件",
+                "name": "Software 软件（授权及本地）",
                 "revenue": 24.541,
                 "children": [
                   {
@@ -11644,7 +11644,7 @@
                 ]
               },
               {
-                "name": "Software 软件",
+                "name": "Software 软件（授权及本地）",
                 "revenue": 24.69,
                 "children": [
                   {
@@ -11841,7 +11841,7 @@
                 ]
               },
               {
-                "name": "Software 软件",
+                "name": "Software 软件（授权及本地）",
                 "revenue": 24.724,
                 "children": [
                   {
@@ -12016,7 +12016,7 @@
                 ]
               },
               {
-                "name": "Software 软件",
+                "name": "Software 软件（授权及本地）",
                 "revenue": 6.119,
                 "children": [
                   {
@@ -12145,7 +12145,7 @@
                 ]
               },
               {
-                "name": "Software 软件",
+                "name": "Software 软件（授权及本地）",
                 "revenue": 24.541,
                 "children": [
                   {
