@@ -167,7 +167,7 @@
 
     <Sankey company={c} year={p} />
 
-    <RevenueBreakdown owner={p} />
+    <RevenueBreakdown owner={p} company={c} periodId={p.period_id} />
 
     {#if periodSegRows.length}
       <div class="section-h">季度分部营收 · 降序</div>

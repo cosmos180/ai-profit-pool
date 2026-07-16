@@ -350,6 +350,73 @@ const noBase = { years: [], periods: [
 ] };
 assert.deepEqual(Selectors.annualSegYoYInfo(noBase, "FY2", "Seg"), { value: null, reason: "no_base" });
 assert.equal(Selectors.annualRevenueBreakdownYoY(b2Annual, "FY2", "Compute"), 0.5);
+
+// ---- quarterly revenue_breakdown 同比/环比 (用户直接需求) ----
+// 日历季索引对齐: YoY = 索引差4 (上年同季), QoQ = 索引差1 (相邻季)。绝不用 implied Q4 凑;
+// 只比较 status=actual 的 quarter periods。null 原因分流: no_prior/name_mismatch/no_base/ok。
+const qdCo = { id: "qd", years: [], periods: [
+  { period_id: "qd-2024q4", kind: "quarter", status: "actual", calendar_year: 2024, calendar_quarter: "Q4",
+    period_end: "2024-12-31", revenue: 74,
+    revenue_breakdown: { label: "Product", complete: true, sources: [{ data_status: "official" }], items: [
+      { name: "Google Services", revenue: 65, children: [{ name: "Search", revenue: 45 }, { name: "YouTube", revenue: 7 }] },
+      { name: "Cloud", revenue: 9 },
+    ] } },
+  { period_id: "qd-2025q1", kind: "quarter", status: "actual", calendar_year: 2025, calendar_quarter: "Q1",
+    period_end: "2025-03-31", revenue: 82,
+    revenue_breakdown: { label: "Product", complete: true, sources: [{ data_status: "official" }], items: [
+      { name: "Google Services", revenue: 70, children: [{ name: "Search", revenue: 50 }, { name: "YouTube", revenue: 8 }] },
+      { name: "Cloud", revenue: 12 },
+      { name: "ZeroBase", revenue: 0 },
+    ] } },
+  // guidance 季带 breakdown: 绝不参与比较 (只比 actual) → 2026q1 QoQ 仍 no_prior
+  { period_id: "qd-2025q4g", kind: "quarter", status: "guidance", calendar_year: 2025, calendar_quarter: "Q4",
+    period_end: "2025-12-31", revenue: 100,
+    revenue_breakdown: { label: "Product", complete: true, sources: [{ data_status: "official" }], items: [
+      { name: "Google Services", revenue: 80, children: [{ name: "Search", revenue: 55 }, { name: "YouTube", revenue: 9 }] },
+    ] } },
+  { period_id: "qd-2026q1", kind: "quarter", status: "actual", calendar_year: 2026, calendar_quarter: "Q1",
+    period_end: "2026-03-31", revenue: 117,
+    revenue_breakdown: { label: "Product", complete: true, sources: [{ data_status: "official" }], items: [
+      { name: "Google Services", revenue: 89, children: [{ name: "Search", revenue: 60 }, { name: "YouTube", revenue: 9.9 }] },
+      { name: "Cloud", revenue: 20 },
+      { name: "ZeroBase", revenue: 3 },
+      { name: "NewSeg", revenue: 5 },
+    ] } },
+] };
+// YoY ok — 顶层行 (2026q1 vs 2025q1: 70→89)
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2026q1", "Google Services").yoy,
+  { value: (89 - 70) / 70, reason: "ok" });
+// YoY ok — children 行 (path 语义, 8→9.9)
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2026q1", "Google Services / YouTube").yoy,
+  { value: (9.9 - 8) / 8, reason: "ok" });
+// QoQ no_prior — 缺 2025q4 actual 原子 (google 同形; guidance 2025q4 不算)
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2026q1", "Google Services").qoq,
+  { value: null, reason: "no_prior" });
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2026q1", "Google Services / YouTube").qoq,
+  { value: null, reason: "no_prior" });
+// name_mismatch — NewSeg 仅存在于 2026q1, 上年同季找不到同名行
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2026q1", "NewSeg").yoy,
+  { value: null, reason: "name_mismatch" });
+// no_base — ZeroBase 两期都在, 但基期 (2025q1) revenue = 0
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2026q1", "ZeroBase").yoy,
+  { value: null, reason: "no_base" });
+// QoQ 出值 — 2025q1 vs 2024q4 相邻季 (65→70); 该期 YoY 无 2024q1 → no_prior
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2025q1", "Google Services").qoq,
+  { value: (70 - 65) / 65, reason: "ok" });
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdCo, "qd-2025q1", "Google Services").yoy,
+  { value: null, reason: "no_prior" });
+// no_breakdown — 对比季原子存在但整期未录拆分（可补缺口），区别于 name_mismatch（重列）
+const qdNB = { id: "qnb", years: [], periods: [
+  { period_id: "qnb-2025q4", kind: "quarter", status: "actual", calendar_year: 2025, calendar_quarter: "Q4",
+    period_end: "2025-12-31", revenue: 30 },
+  { period_id: "qnb-2026q1", kind: "quarter", status: "actual", calendar_year: 2026, calendar_quarter: "Q1",
+    period_end: "2026-03-31", revenue: 33,
+    revenue_breakdown: { label: "Node", complete: false, sources: [{ data_status: "derived" }], items: [
+      { name: "3nm", revenue: 8 },
+    ] } },
+] };
+assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdNB, "qnb-2026q1", "3nm").qoq,
+  { value: null, reason: "no_breakdown" });
 assert.equal(Selectors.homeMetric(b2Annual, "revenue"), 150);       // not years' 999
 assert.equal(Selectors.homeMetric(b2Annual, "fcfMargin"), 0.25);    // FY2 cash ladder: (40-10)/120
 assert.equal(Selectors.grossMargin(Selectors.annualByFy(b2Annual, "FY2")), 0.6);
