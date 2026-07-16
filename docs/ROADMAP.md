@@ -135,6 +135,6 @@ P0–P2 全部完成时,产品应满足:
 
 **契约**(用户两轮复核锁定,见 Issue #28):`rowProfitability(c, y, path)` 把已披露报告分部营业利润率并入 revenue_breakdown 业务行——**安全 1:1 映射**(同 carrier + 名称精确相等 + 营收差 ≤0.001+1e-9 浮点噪声 + **候选唯一**)成立才出值,其余失败关闭。reason 五分流:ok(派生 margin,负值照实)/ pending_entry(**由 `seg_profit:"yes"` 门控**,不由 op_income=null 推出;"partial" 不推断)/ undisclosed / basis_mismatch(装饰名差异一律失败关闭,不做模糊归一化)/ no_base。framework token 只约束跨期变化率,不压同 carrier 当期利润率。margin 是派生值绝不标 official;分子/分母透传 tooltip。零 schema 变更。
 
-**全库计数**(修正矩阵):ok 32(google Cloud 2026Q1=32.9% ✓/Other Bets 负值照实/amazon AWS×14/samsung FY2025)· pending_entry 4(仅 samsung FY2024)· basis_mismatch 37(google Services 含对冲 = 验收样本;oracle FY2024 Hardware 真口径差)· undisclosed 450(YouTube/Search/SaaS/OCI/DRAM/NAND/tsmc 节点全部诚实留空)。分部营收行并入 segOpMargin。**装饰名 4 组**(tencent×2/asml×2/oracle Software)留数据命名对齐批。
+**全库计数**(修正矩阵):ok 32(google Cloud 2026Q1=32.9% ✓/Other Bets 负值照实/amazon AWS×14/samsung FY2025)· pending_entry 4(仅 samsung FY2024)· basis_mismatch 37(google Services 含对冲 = 验收样本;oracle FY2024 Hardware 真口径差)· undisclosed 450(YouTube/Search/SaaS/OCI/DRAM/NAND/tsmc 节点全部诚实留空)。分部营收行并入 segOpMargin。**装饰名对齐已完成**(Issue #30,2026-07-16):5 组 34 个物理位置统一为 segments 规范名,basis_mismatch 37→9 · undisclosed 450→478(其余矩阵不变);Oracle FY2026 Software 同比连续性保留(-0.74%),FY2024 Hardware 真实口径差反向锁定;剩余 basis_mismatch 仅 google Services(对冲)与 oracle FY2024 Hardware 两处真实口径差。
 
 **Phase 2**(另批):schema 增业务节点披露利润字段 + 采购,只录真实披露,需 ADR。

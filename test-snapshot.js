@@ -177,6 +177,70 @@ function invariants(snap) {
     assert.equal(cy.strict, false, "oracle CY2025 应 strict=false (月度错位, 自然年近似)");
   }
 
+  // ---- Issue #30 装饰名对齐 (2026-07-16 真实数据锚点): 5 组 revenue_breakdown 行名统一为
+  //      segments 规范名。锁定: ①34 个物理位置全部对齐(旧装饰名全库绝迹); ②对齐后分类为
+  //      undisclosed(三家 seg_profit="no", 不得点亮利润率); ③Oracle FY2024 Hardware 真实
+  //      营收口径差反向锁定 basis_mismatch; ④Oracle FY2026 Software 行级年度同比在全历史
+  //      统一命名下保持原值(改名不得制造 null 断裂)。 ----
+  {
+    const OLD_DECORATED = [
+      "金融科技及企业服务 FinTech and Business Services",
+      "其他 Others",
+      "DUV 成熟光刻系统（ArFi/ArF dry/KrF/i-line）",
+      "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
+      "Software 软件",
+    ];
+    const CANONICAL = [
+      ["tencent", "金融科技及企业服务", 7],
+      ["tencent", "其他", 7],
+      ["asml", "DUV 成熟光刻系统", 6],
+      ["asml", "Installed Base Management 装机基地管理", 7],
+      ["oracle", "Software 软件（授权及本地）", 7],
+    ];
+    const carriersOf = (co) => [...(co.periods || []), ...(co.years || [])];
+    // ① 旧装饰名全库绝迹(任何公司的任何 breakdown 行)
+    for (const c of Store.companies()) {
+      for (const carrier of carriersOf(c)) {
+        if (!Selectors.revenueBreakdown(carrier)) continue;
+        for (const row of Selectors.revenueBreakdownRows(carrier)) {
+          assert.ok(!OLD_DECORATED.includes(row.name), `${c.id} 残留装饰名: ${row.name}`);
+        }
+      }
+    }
+    // ①b 34 个物理位置完整 + ② 分类 undisclosed 且不点亮
+    let physical = 0;
+    for (const [cid, name, expectCount] of CANONICAL) {
+      const co = byId(cid);
+      let n = 0;
+      for (const carrier of carriersOf(co)) {
+        if (!Selectors.revenueBreakdown(carrier)) continue;
+        const row = Selectors.revenueBreakdownRows(carrier).find((r) => r.name === name);
+        if (!row) continue;
+        n++;
+        const r = Selectors.rowProfitability(co, carrier, row.path);
+        assert.equal(r.reason, "undisclosed", `${cid}「${name}」应 undisclosed(seg_profit="no"), 实际 ${r.reason}`);
+        assert.equal(r.op_margin, null, `${cid}「${name}」不得点亮利润率`);
+      }
+      assert.equal(n, expectCount, `${cid}「${name}」物理位置应 ${expectCount}, 实际 ${n}`);
+      physical += n;
+    }
+    assert.equal(physical, 34, "装饰名对齐物理位置总数应 34");
+    // ③ Oracle FY2024 Hardware: 真实营收口径差(3.066 vs 3.062), 继续失败关闭
+    const ora30 = byId("oracle");
+    for (const carrier of carriersOf(ora30).filter((x) => (x.period_id === "oracle-fy2024-annual") || x.fy === "FY2024")) {
+      const r = Selectors.rowProfitability(ora30, carrier, "Hardware 硬件");
+      assert.equal(r.reason, "basis_mismatch", "oracle FY2024 Hardware 应保持 basis_mismatch");
+    }
+    // ④ 同比连续性: Oracle FY2026 Software 年度同比保持原值 −0.74%, 不得因改名变 null
+    const softYoY = Selectors.annualRevenueBreakdownYoY(ora30, "FY2026", "Software 软件（授权及本地）");
+    assert.ok(softYoY != null, "oracle FY2026 Software 同比不得为 null(改名不得制造断裂)");
+    assert.ok(Math.abs(softYoY - (24.541 - 24.724) / 24.724) < 1e-9, "oracle FY2026 Software 同比应为官方营收推出的 −0.74%: " + softYoY);
+    // 腾讯金融科技 FY2025 同比同样保持有值(组内全历史同改)
+    const tct30 = byId("tencent");
+    const ftYoY = Selectors.annualRevenueBreakdownYoY(tct30, "FY2025", "金融科技及企业服务");
+    assert.ok(ftYoY != null && ftYoY > 0.08 && ftYoY < 0.085, "tencent FY2025 金融科技同比应保持 ≈8.18%: " + ftYoY);
+  }
+
   // Amazon FY2024 International 营业利润以 10-K 官方精确值为准；years/periods 双写必须同值。
   const amazon = byId("amazon");
   if (amazon) {
