@@ -191,6 +191,47 @@ const Selectors = {
     return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
   },
 
+  /* ---- quarterly revenue_breakdown 行的 同比 / 环比 (用户直接需求) ----
+     一行(按 path)的季度增量, reason-aware (沿 annualSegYoYInfo 先例, null 有别):
+       口径:
+         · 只比较 status=actual 的 quarter periods (guidance / implied Q4 一律排除);
+         · 用日历季索引 _quarterIndex (calendar_year*4 + Qn-1) 对齐自然季 ——
+           YoY = 索引差 4 (上一年同一自然季); QoQ = 索引差 1 (相邻自然季);
+         · 绝不用 implied Q4 凑 (合成期无 breakdown): 美股 filer 缺财年 Q4 原子时 QoQ 诚实 null;
+         · 比较库内 USD 存储值 (全站 YoY 同口径);
+       reason ∈
+         'ok'            value 已算出;
+         'no_prior'      找不到对齐的对比季原子 (缺上年同季 / 缺上季);
+         'name_mismatch' 对比季存在但找不到同名拆分行 (重列 / 改名);
+         'no_base'       同名行存在但基期 revenue 缺失或为 0。
+     null-safe throughout, 算不存。 */
+  _quarterActualBreakdownPeriods(c) {
+    return this.actualPeriods(c).filter(p => p.kind === "quarter");
+  },
+  _quarterBreakdownDelta(c, periodId, path, step) {
+    if (!c || !periodId) return { value: null, reason: "no_prior" };
+    const qs = this._quarterActualBreakdownPeriods(c);
+    const cur = qs.find(p => p.period_id === periodId);
+    const curIdx = cur ? this._quarterIndex(cur) : null;
+    if (curIdx == null) return { value: null, reason: "no_prior" };
+    const prior = qs.find(p => this._quarterIndex(p) === curIdx - step);
+    if (!prior) return { value: null, reason: "no_prior" };
+    // 对比季存在但整期未录拆分 → 可补数据缺口（no_breakdown，补录后自动点亮），
+    // 与「有拆分但行名对不上」（name_mismatch，重列/改名）是不同的诚实原因，不可混。
+    if (!this.revenueBreakdown(prior)) return { value: null, reason: "no_breakdown" };
+    const curItem = this.revenueBreakdownItem(cur, path);
+    const priorItem = this.revenueBreakdownItem(prior, path);
+    if (!curItem || !priorItem) return { value: null, reason: "name_mismatch" };
+    if (!priorItem.revenue) return { value: null, reason: "no_base" };
+    return { value: (curItem.revenue - priorItem.revenue) / priorItem.revenue, reason: "ok" };
+  },
+  quarterRevenueBreakdownDelta(c, periodId, path) {
+    return {
+      yoy: this._quarterBreakdownDelta(c, periodId, path, 4),
+      qoq: this._quarterBreakdownDelta(c, periodId, path, 1),
+    };
+  },
+
   /* ---- segments ---- */
   revenueSegs(y)   { return (y.segments || []).filter(s => s.revenue != null); },
   revenueSorted(y) { return this.revenueSegs(y).slice().sort((a, b) => b.revenue - a.revenue); },
