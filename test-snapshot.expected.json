@@ -1167,16 +1167,16 @@
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 423.658939,
+    "total": 429.471658,
     "n": 13,
-    "asOfSpreadDays": 63,
+    "asOfSpreadDays": 91,
     "basisCount": {
       "periods": 13
     },
     "stages": {
       "design": {
         "value": 160.124657,
-        "share": 0.377957,
+        "share": 0.372841,
         "companies": [
           {
             "id": "nvda",
@@ -1197,14 +1197,14 @@
         ]
       },
       "foundry": {
-        "value": 36.179328,
-        "share": 0.085397,
+        "value": 41.708963,
+        "share": 0.097117,
         "companies": [
           {
             "id": "tsmc",
             "name": "TSMC 台积电",
-            "ttm": 36.179328,
-            "asOf": "2026-03-31",
+            "ttm": 41.708963,
+            "asOf": "2026-06-30",
             "aiShare": 0.580003,
             "basis": "periods"
           }
@@ -1212,7 +1212,7 @@
       },
       "memory": {
         "value": 92.144235,
-        "share": 0.217496,
+        "share": 0.214553,
         "companies": [
           {
             "id": "samsung",
@@ -1241,14 +1241,14 @@
         ]
       },
       "equipment": {
-        "value": 4.123005,
-        "share": 0.009732,
+        "value": 4.406089,
+        "share": 0.010259,
         "companies": [
           {
             "id": "asml",
             "name": "ASML",
-            "ttm": 4.123005,
-            "asOf": "2026-03-29",
+            "ttm": 4.406089,
+            "asOf": "2026-06-28",
             "aiShare": 0.355187,
             "basis": "periods"
           }
@@ -1256,7 +1256,7 @@
       },
       "invest": {
         "value": 2.568954,
-        "share": 0.006064,
+        "share": 0.005982,
         "companies": [
           {
             "id": "softbank",
@@ -1270,7 +1270,7 @@
       },
       "app": {
         "value": 7.296636,
-        "share": 0.017223,
+        "share": 0.01699,
         "companies": [
           {
             "id": "tencent",
@@ -1284,7 +1284,7 @@
       },
       "cloud": {
         "value": 121.222124,
-        "share": 0.286131,
+        "share": 0.282259,
         "companies": [
           {
             "id": "google",
