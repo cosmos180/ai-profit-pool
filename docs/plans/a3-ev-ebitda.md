@@ -193,7 +193,7 @@ UX 侧已拍板：EV/EBITDA **默认可见**，列序 `EV/Sales` 后、`FCF yiel
 | **tencent** | **缓** | HKEX 年报现金流量表（RMB）——需与 op_income 同批采，否则 EV/EBITDA 仍 blank | (fy2023/24/25, 3，依赖 op_income) | — |
 | **softbank** | **省略** | —（投资控股，EBITDA 无经营含义，ev_ebitda=na） | 不采 | 不采 |
 
-### 采购单摘要（已拍板：12 期最小集先落地；**2026-07-16 采购结果：12 家已审、10 条入库、2 条按契约留空**）
+### 采购单摘要（原计划拍板「12 期最小集」；**2026-07-16 最终采购结果：12 家已审、10 期入库、2 期契约留空**）
 
 - **采购结果（Issue #32 Phase A，逐 filing 审核）**：12 家最新实际年全部完成审核，**10 条入库**（official 4：nvda/micron/amazon/arm；derived 6：samsung/broadcom/skhynix/tsmc/asml/oracle），**2 条契约性留空**——
   - **google FY2025**：现金流量表只呈列 `Depreciation of property and equipment 21,136M`，无摊销行、`Other 2,108M` 不可拆——填折旧会让字段失真，从附注补违反红线 1 → **留空**；
@@ -232,7 +232,7 @@ UX 侧已拍板：EV/EBITDA **默认可见**，列序 `EV/Sales` 后、`FCF yiel
 |---|---|---|---|
 | 契约 | `schema.json` | period 加 `d_and_a`（可空）；valuation_caveat 加 `ev_ebitda` 枚举 | 本 ADR 附带（可先落 schema） |
 | 校验 | `validate.py` | 加 `d_and_a>=0` ERROR；（可选）D&A>revenue WARN、EBITDA 可派生 INFO；**不**入双写列表 | 随 schema |
-| 数据 | `companies.json` | **12 期最小集**先补 `d_and_a`（各家最新实际年；merge.py periods 增量），years 不动；23 期历史独立回补 | 采集批（🧑 Dayu/PDF） |
+| 数据 | `companies.json` | 12 家最新实际年完成审核，**10 期入库 + 2 期契约留空（非待采）**（merge.py periods 增量），years 不动；23 期历史独立回补 | 采集批（🧑 Dayu/PDF） |
 | 派生 | `data-module.js` | 加 `ebitda`/`evEbitda`；COMPS_COLS 加列 + 三本文案词典 + VAL_KEY_META + _valMetric 分派 | selector 批 |
 | 呈现 | `web/` Comps.svelte | 列驱动零算术，随 compsTable 自动多一列；列位/移动端归位 | UI 批 |
 
@@ -240,7 +240,7 @@ UX 侧已拍板：EV/EBITDA **默认可见**，列序 `EV/Sales` 后、`FCF yiel
 
 ## 8. 拍板结果（2026-07-16 用户复核落定，PR #27）
 
-1. **采集深度：12 期最小集先落地**——12 家各最新实际年 1 期，端到端点亮 EV/EBITDA 列；剩余 23 个历史 annual periods **独立回补**，不阻塞当前 A3。
+1. **采集深度**：原计划「12 期最小集先落地」；**最终采购裁定（Issue #32）：12 家最新实际年完成审核，10 期入库 + 2 期契约留空（google/microsoft 现金流行口径不可隔离，非待采）**，端到端点亮 EV/EBITDA 列；剩余 23 个历史 annual periods **独立回补**，不阻塞当前 A3。
 2. **tencent op_income：延后**——非本批核心环节，且即使出值仍为 distorted；交给专项采集批。
 3. **quarter D&A：本批不采**——禁止机会主义写入累计值；等「累计 YTD → 单季」契约与测试（§4 红线 8）另批再做。
 4. **EV/EBITDA 列：默认可见**，列序 `EV/Sales` 后、`FCF yield` 前；PS 继续作为可选列；移动端沿用现有横向滚动 + sticky 公司列，落地批实测 1280/390。
@@ -249,4 +249,4 @@ UX 侧已拍板：EV/EBITDA **默认可见**，列序 `EV/Sales` 后、`FCF yiel
 
 ## 9. 范围栅栏
 
-本 ADR **只定契约与采购单**。数据采集（🧑 Dayu/PDF，**12 期最小集先行**，23 期历史独立回补）与 selector/UI 落地（`ebitda`/`evEbitda` + comps 加列 + Comps.svelte）是后续两批，各自独立可验收。schema 若先落，须即跑 `validate.py` 确认库内旧数据 0 破再开采集。
+本 ADR **只定契约与采购单**。数据采集（🧑 Dayu/PDF，**12 家最新实际年完成审核：10 期入库 + 2 期契约留空（非待采）**，23 期历史独立回补）与 selector/UI 落地（`ebitda`/`evEbitda` + comps 加列 + Comps.svelte）是后续两批，各自独立可验收。schema 若先落，须即跑 `validate.py` 确认库内旧数据 0 破再开采集。
