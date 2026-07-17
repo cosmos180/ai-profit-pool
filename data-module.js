@@ -559,6 +559,21 @@ const Selectors = {
     return price / eps;
   },
 
+  /* ---- C2 (Issue #35): consensus EPS 基准披露——标注而非删除 ----
+     trailing PE 用实际 GAAP 净利, 前瞻 PE 用外部 consensus EPS——后者可能是 GAAP 或
+     Non-GAAP(如 oracle consensus 8.05 隐含 ~$23B vs GAAP 19.02)。basis 只做披露:
+       · 仅当 forecast 年 consensus_eps_value 非空才产生 basis 状态, 否则 null;
+       · 字段缺失按 'unlabeled' 回退(旧数据兼容), 显示「基准未标注」警示;
+       · 绝不门控/改变 forwardPE 的数值、sortKey、state、covered——真实一致预期不因
+         缺披露而被清空, 也绝不猜测基准填充(Issue B 取证后消除警示)。 */
+  CONSENSUS_BASIS_LABEL: { gaap: "GAAP", non_gaap: "Non-GAAP", unlabeled: "基准未标注" },
+  consensusEpsBasis(c) {
+    const fy = this.forecastYear(c);
+    if (!fy || fy.consensus_eps_value == null) return null;
+    const b = fy.consensus_eps_basis;
+    return (b === "gaap" || b === "non_gaap") ? b : "unlabeled";
+  },
+
   /* ---- B1: same-stage relative valuation (comps) ----
      同价值链环节的相对估值 —— 纯派生, 零新增数据。回答"这个倍数在同环节里是贵是便宜",
      把跨环节混排的孤立绝对数字带上同环节语境。
@@ -729,7 +744,22 @@ const Selectors = {
         }
         const sortKey = (state === "ok" || state === "distorted") ? value : null;
         const rel = col.rel ? this.stageValuationRel(c, col.rel) : Object.assign({}, this.COMPS_BLANK_REL);
-        cells[col.key] = { value, kind: col.kind, state, sortKey, note, rel };
+        const cell = { value, kind: col.kind, state, sortKey, note, rel };
+        // C2: 前瞻 PE 格携带 consensus 基准披露(仅出值行; blank/na 行不带, 保持原 note)。
+        // 只并入 tooltip 文案, 不碰 value/sortKey/state —— 组件零口径判断。
+        if (col.key === "forwardPE" && (state === "ok" || state === "distorted")) {
+          const basis = this.consensusEpsBasis(c);
+          if (basis) {
+            cell.basis = basis;
+            cell.basisLabel = this.CONSENSUS_BASIS_LABEL[basis];
+            cell.basisWarn = basis === "unlabeled";
+            const btext = basis === "unlabeled"
+              ? "一致预期 EPS 基准未标注（GAAP/Non-GAAP 未取证）——与 trailing 的 GAAP 口径比较前请注意，取证后此警示自动消除。"
+              : `一致预期 EPS 基准：${cell.basisLabel}${basis === "non_gaap" ? "（调整后口径，与 trailing 的 GAAP 存在基准差异，跨列比较请注意）" : "（与 trailing 同为 GAAP 基准）"}。`;
+            cell.note = cell.note ? `${cell.note} ${btext}` : btext;
+          }
+        }
+        cells[col.key] = cell;
       }
       const st = stageOf(c);
       const stIdx = STAGE_ORDER.indexOf(st);
@@ -776,7 +806,9 @@ const Selectors = {
         "口径错位：价格截至市场快照日，倍数分母用各公司最新实际财年业绩（两者时点不同，属正常）。" +
         "单元格四态：正常出值；⚠ 失真（净利含投资公允价值损益等，出值但仅供参考、仍参与排序）；" +
         "— 不适用（结构上无经营含义，如投资控股公司的 PE）；— 待补（缺一致预期 EPS / 净负债等输入，" +
-        "补录后自动点亮）。排序时所有 — 恒沉底，不伪造 0 或估算填坑。",
+        "补录后自动点亮）。排序时所有 — 恒沉底，不伪造 0 或估算填坑。" +
+        "基准差异：trailing 列基于最新实际财年 GAAP 净利，前瞻 PE 基于外部一致预期 EPS——" +
+        "后者可能为 GAAP 或 Non-GAAP，跨列比较前请查看各格基准标注（「基准未标注」= 尚未取证，出值照常但口径待核）。",
     };
   },
 

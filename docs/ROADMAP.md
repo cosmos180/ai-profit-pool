@@ -142,3 +142,7 @@ P0–P2 全部完成时,产品应满足:
 ## A3 EV/EBITDA 落地(Issue #32,2026-07-16 交付)
 
 **Phase A 采购**(用户 Dayu 逐 filing 审核 + 我方独立复算):12 家最新实际年全审,**10 条入库**(official 4 + derived 6,label 保留原始行/公式/fx)、**2 条契约性留空**——google FY2025 现金流量表仅折旧行、microsoft "and other" 并列加项不可隔离(红线 3b「and other 两种语法」实例,数据锚点锁死不得误填)。**Phase B 落地**:schema `d_and_a`(periods-only,非负)+ `ev_ebitda` caveat 枚举;`ebitda`/`evEbitda` 算不存(EBITDA≤0 → null);comps **EV/EBITDA 默认列**(EV/Sales 后、FCF yield 前),四态/排序/rel 全复用列驱动机器。**覆盖 9/14 一次点亮**(nvda 34.4×/samsung 19.8×/broadcom 53.0×/micron 58.8×/skhynix 28.2×/tsmc 21.7×/asml 48.3×/oracle 16.9×/arm 292.8×)——分析师点名的设计/代工/存储/设备一线全部可比,EV/EBITDA 成第二高覆盖估值列。tencent distorted-blank、softbank na、google/microsoft/amazon blank(缺 net_debt)。分析师 A 级 backlog(A1/A2/A3)全部收官。
+
+## C2 consensus EPS 基准披露(Issue #35,2026-07-17 交付)
+
+源自 Discussion #34 DoD 复评(边界结论正式降级为「comps 工作流已原生」)+ 维护者拍板 C2 → C1 → C3、C2 门控 C1。**标注而非删除**:schema 增可选 `consensus_eps_basis ∈ {gaap, non_gaap, unlabeled}`(缺失回退 unlabeled,零门控 forwardPE 数值);公司页前瞻 PE 卡 basis chip + comps 前瞻 PE 格 tooltip 披露 + caveatNote 基准差异提示;validate Phase 1 对未取证 consensus 打 WARN(当前 8 条=诚实状态),Issue B 取证后另批升 ERROR。ADR:docs/plans/c2-consensus-eps-basis.md。**后续**:Issue B = 13 家 consensus 质量 pass(新采 samsung/micron/skhynix/arm/tencent + 回补 8 家 basis 取证;币种同轴 + 来源可溯),C3 前瞻相对位(≥3 家门控)搭其落地批。

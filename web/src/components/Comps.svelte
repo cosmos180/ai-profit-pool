@@ -133,7 +133,8 @@
                 <span class="cv-rel {relCls(cell.rel)}" title={relTitle(cell.rel, col.kind)}></span>
               {/if}
               {#if cell.state === 'ok'}
-                <span class="cv-val">{fmtCell(cell)}</span>
+                <!-- note 非空时挂 tooltip（C2：前瞻 PE 格披露 consensus 基准；其余 ok 格 note 为空不受影响） -->
+                <span class="cv-val" title={cell.note || null}>{fmtCell(cell)}</span>
               {:else if cell.state === 'distorted'}
                 <span class="cv-val">{fmtCell(cell)}</span><span class="cv-flag distort" title={cell.note}>⚠</span>
               {:else if cell.state === 'na'}
