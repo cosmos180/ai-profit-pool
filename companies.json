@@ -6177,7 +6177,7 @@
         "ps": "ok",
         "fcf_yield": "ok",
         "ev_sales": "ok",
-        "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。；IFRS 营业利润含其他收益净额公允价值变动 → EBITDA 失真，EV/EBITDA 若出值仅供参考（当前 annual op_income 未录，诚实 blank）",
+        "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。IFRS 营业利润含其他收益净额公允价值变动 → EBITDA 失真，EV/EBITDA 若出值仅供参考（当前 annual op_income 未录，诚实 blank）",
         "ev_ebitda": "distorted"
       },
       "years": [

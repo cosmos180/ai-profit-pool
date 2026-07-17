@@ -2376,6 +2376,19 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const cov = k => t.columns.find(c => c.key === k).covered;
   assert.equal(cov("trailingPE"), 3);   // A,B ok + C distorted（D na）
   assert.equal(cov("evEbitda"), 2);     // A ok + C distorted（B blank / D na）
+
+  // ---- 通用文案词典必须公司中立（#33 复验 finding：blank note 曾泄漏 google/microsoft
+  //      专属原因到所有 blank 行的 tooltip）。公司专属裁定只许留在 ADR / 数据锚点。 ----
+  {
+    const LIB_IDS = /google|alphabet|microsoft|amazon|nvda|nvidia|tsmc|台积电|samsung|三星|micron|美光|skhynix|海力士|broadcom|博通|asml|oracle|甲骨文|tencent|腾讯|softbank|软银|arm\b/i;
+    for (const [dictName, dict] of [["COMPS_BLANK_NOTE", Selectors.COMPS_BLANK_NOTE],
+                                    ["COMPS_NA_REASON", Selectors.COMPS_NA_REASON],
+                                    ["COMPS_DISTORT_REASON", Selectors.COMPS_DISTORT_REASON]]) {
+      for (const [k, text] of Object.entries(dict)) {
+        assert.ok(!LIB_IDS.test(text), `${dictName}.${k} 泄漏公司专属文案: ${text}`);
+      }
+    }
+  }
   assert.equal(cov("forwardPE"), 2);    // A ok + C distorted（B blank, D na）
   assert.equal(cov("evSales"), 3);      // A,C ok + D distorted（B blank）
   assert.equal(cov("fcfYield"), 3);     // A,B,C ok（D na）
