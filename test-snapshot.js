@@ -191,11 +191,13 @@ function invariants(snap) {
       "Net service and field option sales 服务与升级（Installed Base Management 装机基地管理）",
       "Software 软件",
     ];
+    // 计数跟踪库内当前物理位置数(新报告期携带规范名属合法增长, 需同步计数并注明来源);
+    // 真正的回归锁是上面的「旧装饰名绝迹」与下面的逐行分类/不点亮断言, 新行同样被覆盖。
     const CANONICAL = [
       ["tencent", "金融科技及企业服务", 7],
       ["tencent", "其他", 7],
       ["asml", "DUV 成熟光刻系统", 6],
-      ["asml", "Installed Base Management 装机基地管理", 7],
+      ["asml", "Installed Base Management 装机基地管理", 8],   // #30 对齐时 7 + asml-2026q2 新增(#37)
       ["oracle", "Software 软件（授权及本地）", 7],
     ];
     const carriersOf = (co) => [...(co.periods || []), ...(co.years || [])];
@@ -225,7 +227,7 @@ function invariants(snap) {
       assert.equal(n, expectCount, `${cid}「${name}」物理位置应 ${expectCount}, 实际 ${n}`);
       physical += n;
     }
-    assert.equal(physical, 34, "装饰名对齐物理位置总数应 34");
+    assert.equal(physical, 35, "装饰名规范名物理位置总数应 35（#30 对齐 34 + asml-2026q2 新增 1）");
     // ③ Oracle FY2024 Hardware: 真实营收口径差(3.066 vs 3.062), 继续失败关闭
     const ora30 = byId("oracle");
     for (const carrier of carriersOf(ora30).filter((x) => (x.period_id === "oracle-fy2024-annual") || x.fy === "FY2024")) {
