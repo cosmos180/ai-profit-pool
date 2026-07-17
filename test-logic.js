@@ -582,6 +582,24 @@ assert.equal(Selectors.evEbitda(ebCo({}, { valuation_caveat: { ev_ebitda: "na" }
 assert.equal(Selectors.evEbitda(ebCo({}, { valuation_caveat: { ev_ebitda: "distorted" } })), 6); // distorted → 出值(视图降级警示)
 assert.equal(Selectors.valuationCaveat(ebCo({}), "ev_ebitda"), "ok");  // 缺省 → ok
 
+// ---- C2 (Issue #35): consensus EPS 基准披露——标注而非删除 ----
+// basis 仅当 consensus_eps_value 非空才产生; 字段缺失回退 unlabeled; 绝不门控 forwardPE 数值。
+const cbCo = (basis, over) => ({ id: "cb", status: "populated",
+  quote: { as_of: "2026-06-26", market_cap: 200, price: 50, price_currency: "USD", sources: [] },
+  years: [{ fy: "FY27E", status: "forecast", consensus_eps_value: 5, consensus_eps_currency: "USD",
+            ...(basis !== undefined ? { consensus_eps_basis: basis } : {}), ...(over || {}) }],
+  periods: [] });
+assert.equal(Selectors.consensusEpsBasis(cbCo("gaap")), "gaap");
+assert.equal(Selectors.consensusEpsBasis(cbCo("non_gaap")), "non_gaap");
+assert.equal(Selectors.consensusEpsBasis(cbCo("unlabeled")), "unlabeled");
+assert.equal(Selectors.consensusEpsBasis(cbCo(undefined)), "unlabeled");   // 字段缺失 → unlabeled 回退(旧数据兼容)
+assert.equal(Selectors.consensusEpsBasis(cbCo("gaap", { consensus_eps_value: null })), null); // 无 consensus 值 → 无 basis 状态
+assert.equal(Selectors.consensusEpsBasis({ id: "nofc", years: [], periods: [] }), null);      // 无 forecast 年 → null
+// 披露不门控: 无论 basis 如何, forwardPE 数值恒 = price/eps = 50/5
+assert.equal(Selectors.forwardPE(cbCo(undefined)), 10);
+assert.equal(Selectors.forwardPE(cbCo("non_gaap")), 10);
+assert.equal(Selectors.forwardPE(cbCo("gaap")), 10);
+
 // caveat="distorted" → 仍返回数值（供视图警示），并能查到三态
 const distorted = withAnnualPeriods({ id: "ds", status: "populated", quote: { as_of: "2026-06-26", market_cap: 300, sources: [] },
   valuation_caveat: { ps: "distorted" },
@@ -2301,6 +2319,8 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const D = mk("dd", "DeltaCo D", "invest", { market_cap: 60, price: 40, price_currency: "USD", net_debt: 20 },
     { revenue: 25, net_income: 2, cfo: 4, capex: 1 }, 2,
     { pe: "na", fcf_yield: "na", ps: "distorted", ev_sales: "distorted", ev_ebitda: "na" });
+  // C2: C 显式标注 Non-GAAP；A 保持字段缺失（→ unlabeled 警示）；D 有 consensus 但 pe=na（na 行不带 basis）
+  C.years[0].consensus_eps_basis = "non_gaap";
 
   Store._data = { meta: CANON_META, companies: [A, B, C, D] };
   _refreshStages(CANON_META);
@@ -2376,6 +2396,29 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   const cov = k => t.columns.find(c => c.key === k).covered;
   assert.equal(cov("trailingPE"), 3);   // A,B ok + C distorted（D na）
   assert.equal(cov("evEbitda"), 2);     // A ok + C distorted（B blank / D na）
+
+  // ---- C2 前瞻 PE 基准披露：只加 tooltip 披露，不碰 value/sortKey/state/covered ----
+  {
+    const fA = cellOf("aa", "forwardPE");
+    assert.equal(fA.basis, "unlabeled");             // 字段缺失 → unlabeled 回退 + 警示
+    assert.equal(fA.basisWarn, true);
+    assert.ok(/基准未标注/.test(fA.note));
+    assert.equal(fA.value, 10);                      // 数值/排序键/状态零变化（50/5）
+    assert.equal(fA.sortKey, 10);
+    assert.equal(fA.state, "ok");
+    const fC = cellOf("cc", "forwardPE");
+    assert.equal(fC.basis, "non_gaap");              // 显式标注 → 不警示，tooltip 讲清基准差异
+    assert.equal(fC.basisWarn, false);
+    assert.ok(/Non-GAAP/.test(fC.note));
+    assert.equal(fC.state, "distorted");             // pe caveat 复用不受 basis 影响
+    assert.equal(fC.sortKey, 10);                    // 30/3，distorted 照常参排
+    const fD = cellOf("dd", "forwardPE");
+    assert.equal(fD.basis, undefined);               // na 行不带 basis，原 na note 不被改写
+    assert.ok(!/基准/.test(fD.note));
+    assert.equal(cellOf("bb", "forwardPE").basis, undefined);  // blank（无 consensus）不带
+    assert.equal(cov("forwardPE"), 2);               // covered 不因 basis 变化（A ok + C distorted）
+    assert.ok(/基准差异/.test(t.caveatNote));        // 共享口径注明示 trailing GAAP vs forward consensus
+  }
 
   // ---- 通用文案词典必须公司中立（#33 复验 finding：blank note 曾泄漏 google/microsoft
   //      专属原因到所有 blank 行的 tooltip）。公司专属裁定只许留在 ADR / 数据锚点。 ----

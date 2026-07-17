@@ -429,6 +429,14 @@ def check(data):
                     price_cur = (c.get("quote") or {}).get("price_currency")
                     if cev_cur and price_cur and cev_cur != price_cur:
                         warns.append(f"WARN  {tag}: consensus_eps_currency({cev_cur}) ≠ quote.price_currency({price_cur})，前瞻 PE 将因跨币留空")
+                    # C2 Phase 1（Issue #35）：consensus EPS 基准披露。缺失/unlabeled 仅 WARN
+                    # （标注而非删除——数值照常参与前瞻 PE）；Issue B 取证完成后另批升 ERROR。
+                    # 禁止为清零 WARN 伪填 basis；非法枚举由 schema 拒绝。
+                    basis = y.get("consensus_eps_basis")
+                    if basis in ("gaap", "non_gaap"):
+                        oks.append(f"INFO  {tag}: consensus EPS 基准已标注（{basis}）")
+                    else:
+                        warns.append(f"WARN  {tag}: consensus_eps_value 非 null 但基准未标注（consensus_eps_basis {'缺失' if basis is None else basis}）——Phase 1 仅警示，Issue B 取证后升 ERROR，不得猜测填充")
                 oks.append(f"INFO  {tag}: 预测年，已与实际分流标注")
 
         nums = [n for _, n in fy_nums]

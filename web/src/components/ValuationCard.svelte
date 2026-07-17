@@ -61,6 +61,10 @@
   // 口径 = price ÷ 一致预期 EPS（同币），来源 data_status=consensus；null → 诚实留空「待补」。
   const fwdPE = $derived(Selectors.forwardPE(company))
   const fwdYear = $derived(Selectors.forecastYear(company))
+  // C2（Issue #35）：consensus EPS 基准披露——标注而非删除。仅出值时显示 chip；
+  // unlabeled/缺失 → 警示「基准未标注」。文案由 Selector 词典供给，组件零口径判断。
+  const fwdBasis = $derived(fwdPE != null ? Selectors.consensusEpsBasis(company) : null)
+  const fwdBasisLabel = $derived(fwdBasis ? Selectors.CONSENSUS_BASIS_LABEL[fwdBasis] : null)
   // 是否存在任一失真/不适用的指标 → 才展示卡组下方那条共享口径说明（完整 note）。
   const hasCaveat = $derived(!!note && cards.some(d => d.caveat === 'na' || d.caveat === 'distorted'))
 
@@ -113,6 +117,13 @@
     <div class="fwd-lbl">
       <span class="swatch" style="background:var(--ai)"></span>前瞻 PE
       <span class="fwd-tag">NTM · 一致预期</span>
+      {#if fwdBasis}
+        <span class="fwd-basis {fwdBasis === 'unlabeled' ? 'warn' : ''}" title={fwdBasis === 'unlabeled'
+          ? '一致预期 EPS 的 GAAP/Non-GAAP 基准尚未取证——数值照常呈现（真实一致预期，缺陷在披露不在数值），与上方 trailing 的 GAAP 口径比较前请注意；取证后此警示自动消除'
+          : fwdBasis === 'non_gaap'
+            ? '一致预期 EPS 为 Non-GAAP（调整后）口径，与上方 trailing PE 的 GAAP 净利存在基准差异，跨卡比较请注意'
+            : '一致预期 EPS 为 GAAP 口径，与上方 trailing PE 同基准'}>{fwdBasisLabel}</span>
+      {/if}
     </div>
     <div class="fwd-body">
       <div class="fwd-val num">{Fmt.mult(fwdPE)}</div>
@@ -182,6 +193,24 @@
     background: var(--card);
     color: var(--ink-faint);
     border: 1px solid var(--line);
+  }
+  /* C2 基准 chip：gaap/non_gaap 中性灰；unlabeled 用 est 警示色系（与 proxy/guide 同族） */
+  .fwd-basis {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    letter-spacing: .04em;
+    background: var(--card);
+    color: var(--ink-faint);
+    border: 1px solid var(--line);
+    margin-left: 2px;
+    cursor: help;
+  }
+  .fwd-basis.warn {
+    background: var(--est-soft);
+    color: #8a5a0f;
+    border-color: #E4CFA4;
   }
   .fwd-body {
     display: flex;
