@@ -199,11 +199,11 @@ UX 侧已拍板：EV/EBITDA **默认可见**，列序 `EV/Sales` 后、`FCF yiel
   - **google FY2025**：现金流量表只呈列 `Depreciation of property and equipment 21,136M`，无摊销行、`Other 2,108M` 不可拆——填折旧会让字段失真，从附注补违反红线 1 → **留空**；
   - **microsoft FY2025**：`Depreciation, amortization, and other 34,153M` 的 "and other" 是**并列加项**不可隔离 → **留空**。
   - 两家 net_debt 本就缺失（EV 不可算），留空对覆盖零影响；数据锚点（test-snapshot.js）锁死这两条不得误填。
-- **本批必采：12 期最小集**——12 家各**最新实际年** 1 期（分母走 `latestActualAnnual`），端到端点亮 EV/EBITDA 列（9 家出值）。
-- **独立回补：剩余 23 个历史 annual periods**（全量视野 35 期 = nvda3 + samsung2 + broadcom3 + micron3 + skhynix3 + tsmc3 + asml3 + google3 + microsoft3 + amazon3 + oracle3 + arm3），不阻塞当前 A3，补齐后额外解锁未来「EBITDA 利润率趋势」年度视图（重资产折旧的历史轨迹，半导体尤有价值）。
+- **本批入库：10 期**（12 家最新实际年全部审核后的可入库集，分母走 `latestActualAnnual`），端到端点亮 EV/EBITDA 列（9 家出值）；**google/microsoft 2 期为契约性留空，不是待采**——重新填入须先推翻 Issue #32 的采购裁定。
+- **独立回补：剩余 23 个历史 annual periods**（全量视野 35 期 = nvda3 + samsung2 + broadcom3 + micron3 + skhynix3 + tsmc3 + asml3 + google3 + microsoft3 + amazon3 + oracle3 + arm3；其中 google/microsoft 的历史期须逐份复核同款现金流行口径问题，大概率同样留空），不阻塞当前 A3，补齐后额外解锁未来「EBITDA 利润率趋势」年度视图（重资产折旧的历史轨迹，半导体尤有价值）。
 - **缓：tencent 3 期**（须与 op_income 同批，否则点不亮；已拍板延后至专项采集批）。
 - **省略：softbank 3 期**（na）。
-- 合计视野覆盖库内全部 41 个 annual actual periods（12 必采 + 23 回补 + 3 缓 + 3 省略）。
+- 合计视野覆盖库内全部 41 个 annual actual periods（**12 审核（10 入库 + 2 契约留空）** + 23 回补 + 3 缓 + 3 省略）。
 
 ### 补齐后预期 EV/EBITDA 覆盖（本波即可达）
 

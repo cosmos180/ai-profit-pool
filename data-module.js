@@ -695,7 +695,7 @@ const Selectors = {
     trailingPE: "缺市值或最新实际财年净利润 → 无法计算，诚实留空。",
     forwardPE:  "待补一致预期 EPS（consensus_eps_value），补录后自动点亮。",
     evSales:    "缺净负债（net_debt）→ EV 无法计算，诚实留空。",
-    evEbitda:   "缺现金流量表 D&A、营业利润或净负债 → EBITDA/EV 无法计算，诚实留空（google/microsoft 现金流行无法隔离纯 D&A，按契约留空）。",
+    evEbitda:   "缺现金流量表 D&A、营业利润或净负债 → EBITDA/EV 无法计算，诚实留空。",
     fcfYield:   "缺自由现金流或市值 → 无法计算，诚实留空。",
     ps:         "缺市值或最新实际财年营收 → 无法计算，诚实留空。",
   },
