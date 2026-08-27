@@ -910,6 +910,43 @@
               "data_status": "official"
             }
           ]
+        },
+        {
+          "period_id": "nvda-fy2027q3-guidance",
+          "kind": "quarter",
+          "status": "guidance",
+          "period_start": "2026-07-27",
+          "period_end": "2026-10-25",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q4",
+          "fiscal_year": "FY2027",
+          "fiscal_quarter": "Q3",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 108.0,
+          "gross_profit": null,
+          "op_income": null,
+          "net_income": null,
+          "cfo": null,
+          "capex": null,
+          "segments": [],
+          "sources": [
+            {
+              "label": "NVIDIA Q2 FY2027 earnings release (Form 8-K Ex-99.1, filed 2026-08-26) — Outlook: revenue expected to be $108.0 billion, plus or minus 2%; NVIDIA is not assuming any Data Center compute revenue from China in its outlook",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/q2fy27pr.htm",
+              "data_status": "guidance"
+            },
+            {
+              "label": "同一 Outlook 中公司还给出但本 schema 无对应字段、故不入库的指引项（仅存证）：GAAP 与 non-GAAP 毛利率均 74.0% ±50bp；GAAP 运营费用约 $9.2B、non-GAAP 约 $9.0B；FY2027 全年 GAAP 与 non-GAAP 税率 16.0%–18.0%（不含离散项）。毛利/营业利润未按绝对额披露，故 gross_profit / op_income 留 null，不用比率回乘编造",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/q2fy27pr.htm",
+              "data_status": "guidance"
+            },
+            {
+              "label": "报告期起止日取自 NVIDIA Form 10-Q filed 2026-08-26「Fiscal Year」注：FY2027 为 53 周年度、结束于一月最后一个周日，FY2027 Q2 为 13 周季度且 FY2027 Q4 将为 14 周季度 —— 据此 FY2027 Q3 为 13 周，自 Q2 期末 2026-07-26 次日起算至 2026-10-25。公司未在 Outlook 中明示该季起止日",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+              "data_status": "official"
+            }
+          ]
         }
       ]
     },
