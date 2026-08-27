@@ -778,6 +778,37 @@
           ],
           "segment_framework": "nvda:reportable:v1",
           "framework_change": "自 FY2027 Q1 起，segments[] 采用法定 reportable 分部（Compute & Networking / Graphics，含分部营业利润），与 FY2024–FY2026 年度的市场平台轴（Data Center / Gaming 等）为不同口径——两轴并存、非官方重组，跨口径分部同比不可比。",
+          "revenue_breakdown": {
+            "label": "按市场平台划分的收入",
+            "complete": true,
+            "items": [
+              {
+                "name": "Data Center 数据中心",
+                "revenue": 75.246,
+                "children": [
+                  {
+                    "name": "Hyperscale 超大规模云厂商",
+                    "revenue": 37.869
+                  },
+                  {
+                    "name": "AI Clouds, Industrial, & Enterprise AI 云·工业与企业",
+                    "revenue": 37.377
+                  }
+                ]
+              },
+              {
+                "name": "Edge Computing 边缘计算",
+                "revenue": 6.369
+              }
+            ],
+            "sources": [
+              {
+                "label": "NVIDIA Form 10-Q filed 2026-05-28，Segment Information — Schedule of Revenue by Market Platform（3 months ended 2026-04-26, USD millions）：Data Center 75,246（Hyperscale 37,869；AI Clouds, Industrial, & Enterprise 37,377）；Edge Computing 6,369；合计 81,615",
+                "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+                "data_status": "official"
+              }
+            ]
+          },
           "sources": [
             {
               "label": "NVIDIA Form 10-Q filed 2026-05-28（FY2027 Q1 iXBRL: revenue $81,615M; gross profit $61,157M; operating income $53,536M; net income $58,321M; CFO $50,344M; capex $1,757M）",
@@ -786,6 +817,95 @@
             },
             {
               "label": "NVIDIA Form 10-Q reportable segments（Compute & Networking $74,550M / op income $53,335M; Graphics $7,065M / $2,941M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "nvda-fy2027q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-27",
+          "period_end": "2026-07-26",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q3",
+          "fiscal_year": "FY2027",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 96.221,
+          "gross_profit": 72.142,
+          "op_income": 63.734,
+          "net_income": 59.688,
+          "cfo": 24.077,
+          "capex": 2.677,
+          "segments": [
+            {
+              "name": "Compute & Networking 计算与网络",
+              "kind": "reportable",
+              "revenue": 88.299,
+              "op_income": 62.696,
+              "is_ai": true
+            },
+            {
+              "name": "Graphics 图形",
+              "kind": "reportable",
+              "revenue": 7.922,
+              "op_income": 3.899,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "nvda:reportable:v1",
+          "revenue_breakdown": {
+            "label": "按市场平台划分的收入",
+            "complete": true,
+            "items": [
+              {
+                "name": "Data Center 数据中心",
+                "revenue": 89.023,
+                "children": [
+                  {
+                    "name": "Hyperscale 超大规模云厂商",
+                    "revenue": 48.71
+                  },
+                  {
+                    "name": "AI Clouds, Industrial, & Enterprise AI 云·工业与企业",
+                    "revenue": 40.313
+                  }
+                ]
+              },
+              {
+                "name": "Edge Computing 边缘计算",
+                "revenue": 7.198
+              }
+            ],
+            "sources": [
+              {
+                "label": "NVIDIA Form 10-Q filed 2026-08-26，Segment Information — Schedule of Revenue by Market Platform（3 months ended 2026-07-26, USD millions）：Data Center 89,023（Hyperscale 48,710；AI Clouds, Industrial, & Enterprise 40,313）；Edge Computing 7,198；合计 96,221",
+                "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+                "data_status": "official"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "label": "NVIDIA Form 10-Q filed 2026-08-26（FY2027 Q2 iXBRL: revenue $96,221M; gross profit $72,142M; operating income $63,734M; net income $59,688M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "NVIDIA Form 10-Q reportable segments（Compute & Networking $88,299M / op income $62,696M; Graphics $7,922M / $3,899M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived Q2 cash flow = FY2027 6M 10-Q ($74,421M CFO; $4,434M payments to acquire productive assets) minus FY2027 Q1 10-Q ($50,344M CFO; $1,757M)",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "NVIDIA Form 10-Q filed 2026-05-28（FY2027 Q1: CFO $50,344M; capex $1,757M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
               "data_status": "official"
             }
