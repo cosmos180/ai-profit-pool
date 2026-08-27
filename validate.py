@@ -98,6 +98,70 @@ def check_revenue_breakdown(owner, revenue, tag, errors, oks):
             else:
                 errors.append(f"ERROR {tag}/revenue_breakdown: 顶层合计 {total} ≠ 营收 {revenue}（差 {diff:+}）")
 
+def check_consensus(p, tag, errors, warns, oks):
+    """periods[].consensus —— 全库唯一允许非 filing 来源的地方，规矩因此要更紧。
+
+    结构隔离已由 schema 保证（嵌套对象，任何遍历 period 财务键的 selector 都碰不到它）；
+    这里管的是「这条第三方观测本身是否够格当事实」：必须有日期、有出处、出处必须自陈为
+    consensus、EPS 必须带基准。
+    """
+    c = p.get("consensus")
+    if not c:
+        return
+
+    srcs = c.get("sources") or []
+    if not srcs:
+        errors.append(f"ERROR {tag}/consensus: 缺 sources（第三方数字没有出处就是传闻）")
+    for s in srcs:
+        if s.get("data_status") != "consensus":
+            errors.append(f"ERROR {tag}/consensus: source data_status 须为 'consensus'"
+                          f"（当前 {s.get('data_status')!r}）——不得把第三方预期伪装成 official")
+        url = s.get("url")
+        if not url or not str(url).startswith(("http://", "https://")):
+            errors.append(f"ERROR {tag}/consensus: source URL 非 http(s) 绝对链接: {url or '空'}")
+
+    as_of = c.get("as_of")
+    if as_of:
+        try:
+            if date.fromisoformat(as_of) > TODAY:
+                warns.append(f"WARN  {tag}/consensus: as_of({as_of}) 晚于今天（{TODAY}）")
+        except ValueError:
+            errors.append(f"ERROR {tag}/consensus: as_of({as_of!r}) 不是 ISO 日期")
+
+    crev, clo, chi = c.get("revenue"), c.get("revenue_low"), c.get("revenue_high")
+    if crev is not None and crev < 0:
+        errors.append(f"ERROR {tag}/consensus: revenue({crev}) < 0")
+    if clo is not None and chi is not None and clo > chi:
+        errors.append(f"ERROR {tag}/consensus: revenue_low({clo}) > revenue_high({chi})")
+    for bound, name, ok in ((clo, "revenue_low", lambda a, b: a <= b),
+                            (chi, "revenue_high", lambda a, b: a >= b)):
+        if bound is not None and crev is not None and not ok(bound, crev):
+            errors.append(f"ERROR {tag}/consensus: {name}({bound}) 与 revenue({crev}) 不自洽"
+                          f"——区间必须包住均值，且只在来源公布区间时才录")
+
+    ceps, cbasis = c.get("eps"), c.get("eps_basis")
+    if ceps is not None and cbasis is None:
+        errors.append(f"ERROR {tag}/consensus: eps({ceps}) 非 null 但缺 eps_basis"
+                      f"——街面共识多为 non-GAAP，不标注即不可比")
+    if ceps is not None and abs(ceps) > 1000:
+        warns.append(f"WARN  {tag}/consensus: eps({ceps}) 量级异常——单位是「每股 USD」而非 USD bn")
+
+    # 实际 vs 共识：只有在口径可比时才报「超/不及预期」，否则明确拒绝比较。
+    # 这是本字段存在的目的，也是最容易被误用的地方（GAAP 实际 × non-GAAP 共识 = 假超预期）。
+    if p.get("status") == "actual":
+        rev = p.get("revenue")
+        if rev is not None and crev:
+            oks.append(f"INFO  {tag}/consensus: 营收实际 {rev} vs 共识 {crev}"
+                       f"（{(rev / crev - 1) * 100:+.1f}%，as_of {as_of}）")
+        eps, ebasis = p.get("eps_diluted"), p.get("eps_diluted_basis")
+        if eps is not None and ceps:
+            if ebasis and cbasis and ebasis != cbasis:
+                warns.append(f"WARN  {tag}/consensus: eps_diluted 为 {ebasis}、共识 eps 为 {cbasis}，"
+                             f"口径不同不得相减——EPS 超预期幅度按契约不予派生")
+            elif ebasis and cbasis:
+                oks.append(f"INFO  {tag}/consensus: EPS 实际 {eps} vs 共识 {ceps}"
+                           f"（{(eps / ceps - 1) * 100:+.1f}%，同为 {ebasis} 口径）")
+
 def check(data):
     errors, warns, oks = [], [], []
     seen_ids = set()
@@ -285,6 +349,28 @@ def check(data):
             d_and_a = p.get("d_and_a")
             if d_and_a is not None and d_and_a < 0:
                 errors.append(f"ERROR {ptag}: d_and_a({d_and_a}) < 0（请存非负量级，方向由派生层处理）")
+            # 股东回报两项（buyback/dividends）复用 capex 同款非负量级守卫：现金流量表筹资段
+            # 本就是流出，方向留给派生层。缺失不报——不是每家每期都披露/都有。
+            for _k in ("buyback", "dividends"):
+                _v = p.get(_k)
+                if _v is not None and _v < 0:
+                    errors.append(f"ERROR {ptag}: {_k}({_v}) < 0（请存非负量级，方向由派生层处理）")
+            # EPS 基准强制标注。年度侧 consensus_eps_basis 因存量未标注数据只能停在 WARN
+            # （Issue #35 label-not-delete）；periods 的 eps_diluted 是新字段、无存量包袱，
+            # 从第一条数据起就按 ERROR 执行，不再积同一笔债。GAAP 与 non-GAAP 常差两位数百分比，
+            # 不带基准的 EPS 不构成事实。
+            eps = p.get("eps_diluted")
+            eps_basis = p.get("eps_diluted_basis")
+            if eps is not None and eps_basis is None:
+                errors.append(f"ERROR {ptag}: eps_diluted({eps}) 非 null 但缺 eps_diluted_basis"
+                              f"——GAAP / non-GAAP 必须标注，不得留白")
+            if eps is None and eps_basis is not None:
+                warns.append(f"WARN  {ptag}: 有 eps_diluted_basis='{eps_basis}' 却无 eps_diluted（孤立标签）")
+            # 单位护栏：periods 唯一的「非 USD bn」字段，最常见的错法是把源币每股值直接塞进来
+            # （如 KRW 每股数千）。这里只警不拦，留给确有极端股价的公司。
+            if eps is not None and abs(eps) > 1000:
+                warns.append(f"WARN  {ptag}: eps_diluted({eps}) 量级异常——该字段单位是「每股 USD」而非 USD bn，"
+                             f"请确认非美元源已按 fx_to_usd 换算")
             # B2 annual actual 视图以 gross_profit 为唯一毛利事实源。当前政策只豁免
             # Amazon（不披露传统公司层面毛利）；其余 annual actual 缺失直接阻断。
             if kind == "annual" and status == "actual" and p.get("gross_profit") is None:
@@ -302,6 +388,7 @@ def check(data):
             if status == "actual" and rev is None and p.get("op_income") is None and ni is None:
                 warns.append(f"WARN  {ptag}: status=actual 但无任何金融事实（revenue/op_income/net_income 全缺）")
             check_revenue_breakdown(p, rev, ptag, errors, oks)
+            check_consensus(p, ptag, errors, warns, oks)
             # 分部：营收非负；平台分部仅在 status=actual 的（视为完整的）平台分部集时强制对账，
             # guidance / division 口径不强制（含内部交易 / 部分分部）。
             psegs = [s for s in p.get("segments", []) if s.get("revenue") is not None]

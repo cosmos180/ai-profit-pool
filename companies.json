@@ -760,6 +760,10 @@
           "net_income": 58.321,
           "cfo": 50.344,
           "capex": 1.757,
+          "eps_diluted": 2.39,
+          "eps_diluted_basis": "gaap",
+          "buyback": 19.312,
+          "dividends": 0.243,
           "segments": [
             {
               "name": "Compute & Networking 计算与网络",
@@ -819,6 +823,16 @@
               "label": "NVIDIA Form 10-Q reportable segments（Compute & Networking $74,550M / op income $53,335M; Graphics $7,065M / $2,941M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
               "data_status": "official"
+            },
+            {
+              "label": "NVIDIA Form 10-Q filed 2026-05-28，利润表摊薄每股收益（GAAP）$2.39（three months ended 2026-04-26，公司直接披露，非由净利/股数回算）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "NVIDIA Form 10-Q filed 2026-05-28 现金流量表筹资段（three months ended 2026-04-26，Q1 的 YTD 即单季）：Payments related to repurchases of common stock $19,312M；Dividends paid $243M",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "data_status": "official"
             }
           ]
         },
@@ -840,6 +854,10 @@
           "net_income": 59.688,
           "cfo": 24.077,
           "capex": 2.677,
+          "eps_diluted": 2.46,
+          "eps_diluted_basis": "gaap",
+          "buyback": 19.732,
+          "dividends": 6.047,
           "segments": [
             {
               "name": "Compute & Networking 计算与网络",
@@ -888,6 +906,22 @@
               }
             ]
           },
+          "consensus": {
+            "as_of": "2026-08-26",
+            "provider": "LSEG",
+            "estimate_count": null,
+            "revenue": 92.17,
+            "revenue_low": null,
+            "revenue_high": null,
+            "eps": null,
+            "sources": [
+              {
+                "label": "LSEG 分析师民调（经 CNBC 财报直播页转述，2026-08-26 发布前口径）：FY2027 Q2 营收共识 $92.17B。同一民调的每股收益共识为 adjusted（non-GAAP）$2.10，对应公司 non-GAAP 实际 $2.22——本库 eps_diluted 存的是 GAAP $2.46，与 non-GAAP 共识口径不同，按 schema 契约 consensus.eps 留 null、不构造不可比的配对；该数字仅在此存证",
+                "url": "https://www.cnbc.com/2026/08/26/nvidia-nvda-earnings-report-q2-2027-live-updates.html",
+                "data_status": "consensus"
+              }
+            ]
+          },
           "sources": [
             {
               "label": "NVIDIA Form 10-Q filed 2026-08-26（FY2027 Q2 iXBRL: revenue $96,221M; gross profit $72,142M; operating income $63,734M; net income $59,688M）",
@@ -907,6 +941,16 @@
             {
               "label": "NVIDIA Form 10-Q filed 2026-05-28（FY2027 Q1: CFO $50,344M; capex $1,757M）",
               "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "NVIDIA Form 10-Q filed 2026-08-26，利润表摊薄每股收益（GAAP）$2.46（three months ended 2026-07-26）。同日 8-K Ex-99.1 的 non-GAAP 表另给 $2.22——本字段按 eps_diluted_basis='gaap' 存 GAAP 口径，两者不可混用",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived Q2 股东回报 = FY2027 6M 10-Q 现金流量表筹资段（repurchases of common stock $39,044M；dividends paid $6,290M）减 FY2027 Q1 10-Q 同口径同标签（$19,312M；$243M）= 回购 $19,732M / 股息 $6,047M。注：本次 filing 另有一条 three-month 期间的 PaymentsOfDividends $6,000M（非现金流量表口径，现金流量表本期只出半年列），与上式差 $47M——按 schema 契约以现金流量表行为准，差异存证于此",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
               "data_status": "official"
             }
           ]
@@ -930,6 +974,22 @@
           "cfo": null,
           "capex": null,
           "segments": [],
+          "consensus": {
+            "as_of": "2026-08-26",
+            "provider": "LSEG",
+            "estimate_count": null,
+            "revenue": 104.19,
+            "revenue_low": null,
+            "revenue_high": null,
+            "eps": null,
+            "sources": [
+              {
+                "label": "LSEG 汇编数据（经路透报道转述，2026-08-26）：FY2027 Q3 营收分析师平均预期 $104.19B，对应公司指引中值 $108.0B",
+                "url": "https://www.investing.com/news/stock-market-news/nvidia-forecasts-quarterly-revenue-above-estimates-4877887",
+                "data_status": "consensus"
+              }
+            ]
+          },
           "sources": [
             {
               "label": "NVIDIA Q2 FY2027 earnings release (Form 8-K Ex-99.1, filed 2026-08-26) — Outlook: revenue expected to be $108.0 billion, plus or minus 2%; NVIDIA is not assuming any Data Center compute revenue from China in its outlook",
