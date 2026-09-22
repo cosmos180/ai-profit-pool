@@ -18,7 +18,10 @@
   }
 
   // 返回 { svg, notes[], showInflowLegend } —— 供模板声明式渲染 legend/foot，svg 走 {@html}。
-  export function buildSankey(c, y) {
+  // money(v, d)：金额标签格式化（默认 Fmt.bn USD）。报告币种模式下由 Detail 注入原币档——
+  // 单一载体期 → 整图一个标量汇率，几何比例不变，只有标签换币（组件零汇率知识）。
+  export function buildSankey(c, y, money) {
+    const mn = money || ((v, d = 1) => Fmt.bn(v, d))
     const f = Selectors.incomeFlow(y)
     if (f.revenue == null) return null // 无营收 → 整图不可用
     const rev = f.revenue
@@ -55,7 +58,7 @@
     // A1：不再写死 width/height 属性——viewBox 定内部坐标，外层 CSS（.sankey-svg
     // width:100% + max-width:--sankeyW）等比缩放，窄屏完整可见无横向滚动、桌面不过拉。
     let s = `<svg class="sankey-svg" viewBox="0 0 ${W} ${H}" role="img" `
-      + `aria-label="${Safe.attr(c.name + ' ' + label + ' 利润表资金流：营收 ' + Fmt.bn(rev) + ' 至净利润 ' + Fmt.bn(f.netIncome) + '，按金额宽度的桑基图')}">`
+      + `aria-label="${Safe.attr(c.name + ' ' + label + ' 利润表资金流：营收 ' + mn(rev) + ' 至净利润 ' + mn(f.netIncome) + '，按金额宽度的桑基图')}">`
 
     const band = (x0, yT0, yB0, x1, yT1, yB1, fill, op) => {
       const mx = (x0 + x1) / 2
@@ -87,13 +90,13 @@
         s += band(segX + segColW, srcT, srcB, revX, dstT, dstB, fill, sg.is_ai ? 0.5 : 0.4)
         const shareTxt = Fmt.pctCompact(sg.share)  // 占营收比（Selector 已给 share，分母=y.revenue）
         s += `<text x="${segX}" y="${srcCy - 2}" font-size="10.5" font-family="var(--mono)" font-weight="600" fill="${sg.is_ai ? 'var(--ai)' : 'var(--ink-soft)'}">${Safe.text(sg.name.split(' ')[0])}${sg.is_ai ? ' ●' : ''}</text>`
-        s += `<text x="${segX}" y="${srcCy + 11}" font-size="9.5" font-family="var(--mono)" fill="var(--ink-faint)">${Safe.text(Fmt.bn(sg.revenue, 1))} · ${Safe.text(shareTxt)}</text>`
+        s += `<text x="${segX}" y="${srcCy + 11}" font-size="9.5" font-family="var(--mono)" fill="var(--ink-faint)">${Safe.text(mn(sg.revenue, 1))} · ${Safe.text(shareTxt)}</text>`
       })
     }
 
     // —— 营收节点 ——
     s += node(revX, topY, px(rev), COL.rev, 0.9)
-    s += nlabel(revX, topY, px(rev), '营收', Fmt.bn(rev, 1), null, null, false)
+    s += nlabel(revX, topY, px(rev), '营收', mn(rev, 1), null, null, false)
 
     let curX = revX, curVal = rev, curTop = topY
 
@@ -129,35 +132,35 @@
       const eatenY0 = topY, eatenY1 = topY + px(rev)
       s += `<path d="M${revX + nodeW} ${eatenY0} C${revX + nodeW + 40} ${eatenY0} ${revX + nodeW + 40} ${floorY} ${revX + nodeW + gapW * 0.6} ${floorY} `
         + `L${revX + nodeW + gapW * 0.6} ${floorY + px(rev)} C${revX + nodeW + 40} ${floorY + px(rev)} ${revX + nodeW + 40} ${eatenY1} ${revX + nodeW} ${eatenY1} Z" fill="${COL.out}" fill-opacity="0.32"/>`
-      s += `<text x="${revX + nodeW + gapW * 0.6 + 6}" y="${floorY + 16}" font-size="10" font-family="var(--mono)" fill="${COL.out}">总成本+费用 ${Safe.text(Fmt.bn(rev - f.netIncome, 1))}</text>`
+      s += `<text x="${revX + nodeW + gapW * 0.6 + 6}" y="${floorY + 16}" font-size="10" font-family="var(--mono)" fill="${COL.out}">总成本+费用 ${Safe.text(mn(rev - f.netIncome, 1))}</text>`
       s += `<text x="${revX + nodeW + gapW * 0.6 + 6}" y="${floorY + 30}" font-size="9" font-family="var(--mono)" fill="var(--ink-faint)">本年营收无法覆盖，转为亏损</text>`
       const lh = Math.max(px(Math.abs(f.netIncome)), 18)
       s += `<path d="M${revX + nodeW + gapW * 0.6 + 150} ${floorY + 8} C${netX - 30} ${floorY + 8} ${netX - 30} ${topY + lh / 2} ${netX} ${topY + lh / 2}" fill="none" stroke="${COL.out}" stroke-width="1.3" stroke-dasharray="4 3" stroke-opacity="0.5"/>`
       s += `<rect x="${netX}" y="${topY}" width="${nodeW}" height="${lh}" rx="3" fill="${COL.out}" fill-opacity="0.16" stroke="${COL.out}" stroke-width="1.5"/>`
       s += `<text class="nlabel" x="${netX + nodeW / 2}" y="${topY - 21}" text-anchor="middle" font-size="11.5" fill="var(--bad)">净亏损</text>`
-      s += `<text class="nlabel" x="${netX + nodeW / 2}" y="${topY - 7}" text-anchor="middle" font-size="12.5" fill="var(--bad)">${Safe.text(Fmt.bn(f.netIncome, 1))}</text>`
+      s += `<text class="nlabel" x="${netX + nodeW / 2}" y="${topY - 7}" text-anchor="middle" font-size="12.5" fill="var(--bad)">${Safe.text(mn(f.netIncome, 1))}</text>`
       s += `<text class="nsub" x="${netX + nodeW / 2}" y="${topY + lh + 14}" text-anchor="middle" font-size="9.5" fill="var(--bad)">净利率 ${Safe.text(Fmt.pct(nm))}</text>`
       if (f.opProfit != null) {
-        s += `<text class="nsub" x="${netX + nodeW / 2}" y="${topY + lh + 27}" text-anchor="middle" font-size="9" fill="var(--ink-faint)">经营利润 ${Safe.text(Fmt.bn(f.opProfit, 1))}（亦为负）</text>`
+        s += `<text class="nsub" x="${netX + nodeW / 2}" y="${topY + lh + 27}" text-anchor="middle" font-size="9" fill="var(--ink-faint)">经营利润 ${Safe.text(mn(f.opProfit, 1))}（亦为负）</text>`
       }
     } else {
       if (hasGross) {
-        advance(grossX, f.cogs, '成本 COGS', Fmt.bn(f.cogs, 1), COL.out, 0.45,
-          f.grossProfit, COL.profit, '毛利', Fmt.bn(f.grossProfit, 1), Fmt.pct(gm), '毛利率')
+        advance(grossX, f.cogs, '成本 COGS', mn(f.cogs, 1), COL.out, 0.45,
+          f.grossProfit, COL.profit, '毛利', mn(f.grossProfit, 1), Fmt.pct(gm), '毛利率')
       }
       if (hasOpex) {
-        advance(opX, f.opex, '经营费用 Opex', Fmt.bn(f.opex, 1), COL.out, 0.5,
-          f.opProfit, COL.profit, '经营利润', Fmt.bn(f.opProfit, 1), Fmt.pct(om), '经营利润率')
+        advance(opX, f.opex, '经营费用 Opex', mn(f.opex, 1), COL.out, 0.5,
+          f.opProfit, COL.profit, '经营利润', mn(f.opProfit, 1), Fmt.pct(om), '经营利润率')
       }
       if (f.netIncome != null) {
         if (hasOpex && f.taxOther != null) {
           if (f.taxOther >= 0) {
-            advance(netX, f.taxOther, '税+其他', Fmt.bn(f.taxOther, 1), COL.out, 0.5,
-              f.netIncome, COL.profit, '净利润', Fmt.bn(f.netIncome, 1), Fmt.pct(nm), '净利率')
+            advance(netX, f.taxOther, '税+其他', mn(f.taxOther, 1), COL.out, 0.5,
+              f.netIncome, COL.profit, '净利润', mn(f.netIncome, 1), Fmt.pct(nm), '净利率')
           } else {
             // taxOther<0：净利>经营利润 → 非经营收益流入（方向正确，不取绝对值展示原符号）
-            advance(netX, -f.taxOther, '非经营收益', Fmt.bn(-f.taxOther, 1), COL.inflow, 0.7,
-              f.netIncome, COL.profit, '净利润', Fmt.bn(f.netIncome, 1), Fmt.pct(nm), '净利率', true)
+            advance(netX, -f.taxOther, '非经营收益', mn(-f.taxOther, 1), COL.inflow, 0.7,
+              f.netIncome, COL.profit, '净利润', mn(f.netIncome, 1), Fmt.pct(nm), '净利率', true)
           }
         } else {
           // 降级直流（如软银：营收→净利，中间未拆分）
@@ -169,11 +172,11 @@
             const oT = curTop + niH, oB = curTop + px(rev)
             s += `<path d="M${curX + nodeW} ${oT} C${curX + nodeW + 30} ${oT} ${curX + nodeW + 30} ${floorY} ${curX + nodeW + gapW * 0.5} ${floorY} `
               + `L${curX + nodeW + gapW * 0.5} ${floorY + px(gapVal)} C${curX + nodeW + 30} ${floorY + px(gapVal)} ${curX + nodeW + 30} ${oB} ${curX + nodeW} ${oB} Z" fill="${COL.out}" fill-opacity="0.30"/>`
-            s += `<text x="${curX + nodeW + gapW * 0.5 + 6}" y="${floorY + 16}" font-size="9.5" font-family="var(--mono)" fill="${COL.out}">成本+费用+税 ${Safe.text(Fmt.bn(gapVal, 1))}</text>`
+            s += `<text x="${curX + nodeW + gapW * 0.5 + 6}" y="${floorY + 16}" font-size="9.5" font-family="var(--mono)" fill="${COL.out}">成本+费用+税 ${Safe.text(mn(gapVal, 1))}</text>`
             s += `<text x="${curX + nodeW + gapW * 0.5 + 6}" y="${floorY + 29}" font-size="9" font-family="var(--mono)" fill="var(--ink-faint)">未披露毛利率，明细略</text>`
           }
           s += node(netX, topY, niH, COL.profit, 0.9)
-          s += nlabel(netX, topY, niH, '净利润', Fmt.bn(f.netIncome, 1), Fmt.pct(nm), '净利率', false)
+          s += nlabel(netX, topY, niH, '净利润', mn(f.netIncome, 1), Fmt.pct(nm), '净利率', false)
         }
       }
     }
@@ -185,7 +188,7 @@
     if (!hasOpex && hasGross) notes.push(`未披露经营利润，<b>略去费用/经营利润段</b>。`)
     if (!hasOpex && !hasGross) notes.push(`仅披露营收与净利，中间环节为<b>未拆分的成本+费用+税</b>，按真实约束留作单一流出、不强行编造各段。`)
     if (negProfit) notes.push(`本财年<b>经营亏损</b>：成本与费用超过营收，利润链为负，故不画"向右流出利润"的流带（负宽度无意义），改以亏损节点标注。`)
-    if (f.taxOther != null && f.taxOther < 0 && hasOpex) notes.push(`"非经营收益"为<b>流入</b>（净利 ${Fmt.bn(f.netIncome, 1)} > 经营利润 ${Fmt.bn(f.opProfit, 1)}），如利息/股权投资收益，按 GAAP 计入但非经营性。`)
+    if (f.taxOther != null && f.taxOther < 0 && hasOpex) notes.push(`"非经营收益"为<b>流入</b>（净利 ${mn(f.netIncome, 1)} > 经营利润 ${mn(f.opProfit, 1)}），如利息/股权投资收益，按 GAAP 计入但非经营性。`)
     if (f.has.segments && f.segments.some(sg => sg.revenue <= 0)) notes.push(`营收为 0 的分部（如投资/基金口径）<b>不画支流</b>。`)
 
     return {
@@ -201,9 +204,9 @@
 <script>
   import { buildSankey as _build } from './Sankey.svelte'
 
-  let { company, year } = $props()
+  let { company, year, money = null } = $props()
 
-  const model = $derived(_build(company, year))
+  const model = $derived(_build(company, year, money))
 </script>
 
 {#if model}

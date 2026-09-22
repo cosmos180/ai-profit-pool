@@ -195,6 +195,8 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .dhead .dfy{font-size:29px;font-weight:700;letter-spacing:-.015em}
 .dhead .dperiod{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
 .dbadge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.06em}
+/* 下钻页标题行的报告币种徽标（公司页切换后下钻继承模式，页头亮明当前口径） */
+.ccy-badge{margin-left:10px;background:var(--card-2);color:var(--ink-soft);border:1px solid var(--line);cursor:help}
 .csum{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));overflow:hidden}
 .csum .c{padding:15px 17px;border-right:1px solid var(--line-soft)}.csum .c:last-child{border-right:0}
 .csum .cl{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}

@@ -27,6 +27,21 @@
   const periodTag = x => x?.calendar_year != null && x?.calendar_quarter ? `${x.calendar_year}${x.calendar_quarter}` : (x?.period_end || x?.period_id || '')
   const periodTitle = $derived(p ? periodTag(p) : (nav.periodId || ''))
   const periodCashFcf = $derived(p ? Selectors.fcf(p) : null)
+
+  // —— 显示币种（呈现分流）：单一载体期（period p 或 annual y）→ 一个标量汇率整体还原，
+  // 比例/桑基几何不变，只有金额标签换币。money(v, d) 传入 Sankey/RevenueBreakdown/Reconcile。
+  // 预测年无原币载体 → 回退 USD。失败关闭：币种不符或缺 fx 时 toSrc 返回 null → USD。
+  const srcCcy = $derived(c ? Selectors.srcCcyOf(c) : null)
+  const inSrc = $derived(nav.ccy === 'src' && !!srcCcy)
+  const moneyCarrier = $derived(isPeriod ? p : (isForecast ? null : y))
+  const money = (v, d = 1) => {
+    if (inSrc) {
+      const lv = Selectors.toSrc(v, moneyCarrier, srcCcy)
+      if (lv != null) return Fmt.local(lv, srcCcy, d)
+    }
+    return Fmt.bn(v, d)
+  }
+
   const periodSegRows = $derived.by(() => {
     if (!p) return []
     const sorted = Selectors.revenueSorted(p)
@@ -34,7 +49,7 @@
     return sorted.map(s => ({
       name: s.name,
       is_ai: s.is_ai,
-      revLabel: Fmt.bn(s.revenue, 2),
+      revLabel: money(s.revenue, 2),
       shareLabel: Fmt.pct(Selectors.segRevShare(p, s.name), 1),
       margin: Selectors.segOpMargin(s),  // 营业利润率并入营收行（#28 Phase 1；同分部同层级，天然安全）
       barW: (s.revenue / maxV * 100).toFixed(1),
@@ -47,7 +62,7 @@
     return sorted.map(s => ({
       name: s.name,
       is_ai: s.is_ai,
-      opLabel: Fmt.bn(s.op_income, 2),
+      opLabel: money(s.op_income, 2),
       marginLabel: Fmt.pct(Selectors.segOpMargin(s)),
       barW: (s.op_income / maxV * 100).toFixed(1),
     }))
@@ -63,7 +78,7 @@
       const yoyInfo = Selectors.annualSegYoYInfo(c, y.fiscal_year, p.name)
       return {
         name: p.name, is_ai: p.is_ai,
-        revLabel: Fmt.bn(p.revenue, 2),
+        revLabel: money(p.revenue, 2),
         shareLabel: Fmt.pct(Selectors.segRevShare(y, p.name), 1),  // 占分部合计比（Selector 派生，null 透传）
         margin: Selectors.segOpMargin(p),  // 营业利润率并入营收行（#28 Phase 1；同分部同层级，天然安全）
         barW: (p.revenue / maxV * 100).toFixed(1),  // 布局宽度百分比（非财务量）
@@ -94,7 +109,7 @@
     return ps.map(p => {
       return {
         name: p.name, is_ai: p.is_ai,
-        opLabel: Fmt.bn(p.op_income, 2),
+        opLabel: money(p.op_income, 2),
         marginLabel: Fmt.pct(Selectors.segOpMargin(p)),
         barW: (p.op_income / pmax * 100).toFixed(1),  // 布局宽度（非财务量）
       }
@@ -151,25 +166,25 @@
 
   {#if isPeriod}
     <!-- ============ 实际报告期 ============ -->
-    <div class="section-h" style="margin-top:18px">公司层面 · {periodTitle}</div>
+    <div class="section-h" style="margin-top:18px">公司层面 · {periodTitle}{#if inSrc}<span class="dbadge ccy-badge" title="报告币种视图：金额按该期财报入账汇率还原为 {srcCcy} 原币，与官方披露逐位一致">{srcCcy}</span>{/if}</div>
     <div class="card csum">
-      <div class="c"><div class="cl">营收</div><div class="cv num">{Fmt.bn(p.revenue, 1)}</div></div>
+      <div class="c"><div class="cl">营收</div><div class="cv num">{money(p.revenue, 1)}</div></div>
       <div class="c">
         <div class="cl">毛利{#if p.gross_profit == null}<span class="cl-flag" title="该季度原子未录入毛利，诚实留空">未录入</span>{/if}</div>
-        <div class="cv num">{Fmt.bn(p.gross_profit, 1)}</div>
+        <div class="cv num">{money(p.gross_profit, 1)}</div>
       </div>
-      <div class="c"><div class="cl">经营利润</div><div class="cv num">{Fmt.bn(p.op_income, 1)}</div></div>
+      <div class="c"><div class="cl">经营利润</div><div class="cv num">{money(p.op_income, 1)}</div></div>
       <div class="c"><div class="cl">经营利润率</div><div class="cv num">{Fmt.pct(Selectors.opMargin(p))}</div></div>
-      <div class="c"><div class="cl">净利润</div><div class="cv num green">{Fmt.bn(p.net_income, 1)}</div></div>
+      <div class="c"><div class="cl">净利润</div><div class="cv num green">{money(p.net_income, 1)}</div></div>
       <div class="c"><div class="cl">净利率</div><div class="cv num green">{Fmt.pct(Selectors.netMargin(p))}</div></div>
-      <div class="c"><div class="cl">CFO</div><div class="cv num">{Fmt.bn(p.cfo, 1)}</div></div>
-      <div class="c"><div class="cl">capex</div><div class="cv num">{Fmt.bn(p.capex, 1)}</div></div>
-      <div class="c"><div class="cl">自由现金流</div><div class="cv num {periodCashFcf != null && periodCashFcf >= 0 ? 'green' : ''}">{Fmt.bn(periodCashFcf, 1)}</div></div>
+      <div class="c"><div class="cl">CFO</div><div class="cv num">{money(p.cfo, 1)}</div></div>
+      <div class="c"><div class="cl">capex</div><div class="cv num">{money(p.capex, 1)}</div></div>
+      <div class="c"><div class="cl">自由现金流</div><div class="cv num {periodCashFcf != null && periodCashFcf >= 0 ? 'green' : ''}">{money(periodCashFcf, 1)}</div></div>
     </div>
 
-    <Sankey company={c} year={p} />
+    <Sankey company={c} year={p} {money} />
 
-    <RevenueBreakdown owner={p} company={c} periodId={p.period_id} />
+    <RevenueBreakdown owner={p} company={c} periodId={p.period_id} {money} />
 
     {#if periodSegRows.length}
       <div class="section-h">季度分部营收 · 降序</div>
@@ -185,7 +200,7 @@
             </div>
           {/each}
         </div>
-        {#if periodRec}<Reconcile rec={periodRec} />{/if}
+        {#if periodRec}<Reconcile rec={periodRec} {money} />{/if}
       </div>
     {:else}
       <div class="note-block"><b>季度分部未录入。</b>当前报告期只记录公司层面营收、利润和来源；公司若披露季度分部，补入 <code style="font-family:var(--mono)">periods[].segments</code> 后这里会自动展开。</div>
@@ -225,26 +240,26 @@
     <SourcesBlock year={y} />
   {:else}
     <!-- ============ 实际年 ============ -->
-    <div class="section-h" style="margin-top:18px">公司层面 · {yearLabel}</div>
+    <div class="section-h" style="margin-top:18px">公司层面 · {yearLabel}{#if inSrc}<span class="dbadge ccy-badge" title="报告币种视图：金额按该年财报入账汇率还原为 {srcCcy} 原币，与官方披露逐位一致">{srcCcy}</span>{/if}</div>
     <div class="card csum">
-      <div class="c"><div class="cl">营收</div><div class="cv num">{Fmt.bn(y.revenue, 1)}</div></div>
+      <div class="c"><div class="cl">营收</div><div class="cv num">{money(y.revenue, 1)}</div></div>
       <div class="c">
         <div class="cl">毛利率{#if annualGrossMargin == null}<span class="cl-flag" title="该公司未在此财年披露公司层面毛利——诚实留空，而非估算">未披露</span>{/if}</div>
         <div class="cv num">{Fmt.pct(annualGrossMargin)}</div>
       </div>
       <div class="c"><div class="cl">经营利润率</div><div class="cv num">{Fmt.pct(Selectors.opMargin(y))}</div></div>
-      <div class="c"><div class="cl">净利润</div><div class="cv num green">{Fmt.bn(y.net_income, 1)}</div></div>
+      <div class="c"><div class="cl">净利润</div><div class="cv num green">{money(y.net_income, 1)}</div></div>
       <div class="c"><div class="cl">净利率</div><div class="cv num green">{Fmt.pct(Selectors.netMargin(y))}</div></div>
       {#if showCash}
         <div class="c"><div class="cl">capex 强度</div><div class="cv num">{Fmt.pct(Selectors.capexIntensity(y))}</div></div>
-        <div class="c"><div class="cl">自由现金流</div><div class="cv num {cashFcf != null && cashFcf >= 0 ? 'green' : ''}">{Fmt.bn(cashFcf, 1)}</div></div>
+        <div class="c"><div class="cl">自由现金流</div><div class="cv num {cashFcf != null && cashFcf >= 0 ? 'green' : ''}">{money(cashFcf, 1)}</div></div>
         <div class="c"><div class="cl">现金转化率</div><div class="cv num">{Fmt.pct(Selectors.cashConversion(y))}</div></div>
       {/if}
     </div>
 
-    <Sankey company={c} year={y} />
+    <Sankey company={c} year={y} {money} />
 
-    <RevenueBreakdown owner={y} company={c} fy={y.fiscal_year} />
+    <RevenueBreakdown owner={y} company={c} fy={y.fiscal_year} {money} />
 
     <div class="section-h">业务板块营收 · 降序</div>
     <div class="card">
@@ -262,7 +277,7 @@
           </div>
         {/each}
       </div>
-      {#if rec}<Reconcile {rec} />{/if}
+      {#if rec}<Reconcile {rec} {money} />{/if}
     </div>
 
     <!-- 利润块三态 -->

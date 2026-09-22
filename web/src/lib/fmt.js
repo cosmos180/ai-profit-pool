@@ -15,12 +15,14 @@ const CCY_META = {
 export const Fmt = {
   bn: (v, d = 1) => v == null ? '—' : '$' + v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }) + 'B',
   // 原币档（bn 的币种版）：入参已是「原币 bn」（×fx 还原在 selector 完成），此处只做
-  // 符号/数量级缩放。未知币种退化为 ISO 前缀 + bn，不伪造符号。
-  local: (vBn, ccy) => {
+  // 符号/数量级缩放。d 可覆盖默认小数位（拆分行/对账行用 2-3 位）。未知币种退化为
+  // ISO 前缀 + bn，不伪造符号。
+  local: (vBn, ccy, d) => {
     if (vBn == null) return '—'
     const m = CCY_META[ccy] || { sym: ccy ? ccy + ' ' : '', unit: 'B', d: 1 }
+    const dd = d != null ? d : m.d
     const val = m.unit === 'T' ? vBn / 1000 : vBn
-    return m.sym + val.toLocaleString('en-US', { minimumFractionDigits: m.d, maximumFractionDigits: m.d }) + m.unit
+    return m.sym + val.toLocaleString('en-US', { minimumFractionDigits: dd, maximumFractionDigits: dd }) + m.unit
   },
   pct: (v, d = 1) => v == null ? '—' : (v * 100).toFixed(d) + '%',
   // 份额类·图内紧凑档（A4 统一规则）：图内空间紧时用整数百分比，但对非零小份额

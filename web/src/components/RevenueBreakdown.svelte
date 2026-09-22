@@ -3,7 +3,10 @@
   import { Selectors } from '../lib/data.js'
   import { Fmt } from '../lib/fmt.js'
 
-  let { owner, company = null, fy = null, periodId = null } = $props()
+  // money(v, d)：金额格式化注入（报告币种模式由 Detail 传入；默认 USD 的 Fmt.bn）。
+  // 拆分行是对账敏感数据 → 默认 2 位小数（与原实现一致）。
+  let { owner, company = null, fy = null, periodId = null, money = null } = $props()
+  const mn = (v, d = 2) => (money ? money(v, d) : Fmt.bn(v, d))
 
   const isQuarter = $derived(owner?.kind === 'quarter')
   // 季度拆分行显示同比/环比两枚 chip（值+原因分流由 Selector 备好，组件零财务算术）
@@ -17,7 +20,7 @@
     const map = {
       ok: { short: `营业利润率 ${Fmt.pct(pr.op_margin, 1)}`, title:
         `派生营业利润率（算不存）：映射自报告分部「${pr.segment_name}」——名称与营收（差≤0.001）双精确一致且候选唯一；`
-        + `分子=分部营业利润 ${Fmt.bn(pr.op_income, 3)}，分母=分部营收 ${Fmt.bn(pr.revenue, 3)}（库内 USD bn，${when}，均为分部披露事实）；`
+        + `分子=分部营业利润 ${mn(pr.op_income, 3)}，分母=分部营收 ${mn(pr.revenue, 3)}（报告币种口径，${when}，均为分部披露事实）；`
         + `比率为派生值，非官方直接披露${pr.op_margin < 0 ? '；负利润率照实呈现，不隐藏' : ''}` },
       undisclosed: { short: '该层级未披露利润', title:
         '公司未在 filing 把营业利润披露到该业务层级——诚实留空：不继承公司毛利率、不按营收摊派、不估算（Phase 2 也只录真实披露）' },
@@ -52,7 +55,7 @@
     const maxPositive = Math.max(...raw.map(row => row.revenue > 0 ? row.revenue : 0), 1)
     return raw.map(row => ({
       ...row,
-      revenueLabel: Fmt.bn(row.revenue, 2),
+      revenueLabel: mn(row.revenue, 2),
       shareLabel: Fmt.pct(row.share, 1),
       yoy: company && fy && owner?.kind === 'annual'
         ? Selectors.annualRevenueBreakdownYoY(company, fy, row.path)
