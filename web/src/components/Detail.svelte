@@ -124,17 +124,9 @@
   // —— 拆分顶层 ≡ 报告分部 去重：两者同名同额时只渲染收入拆分区（携带 products/层级），
   // 「季度/业务板块营收」区不再重复同一批行；对账行（Reconcile）移到拆分区下方保留。
   // 判定是纯数据比较（名称集合 + 金额逐位相等），无口径推断。
-  const rbDupesSegments = $derived.by(() => {
-    const carrier = isPeriod ? p : y
-    if (!carrier || isForecast) return false
-    const rb = Selectors.revenueBreakdown(carrier)
-    if (!rb || !Array.isArray(rb.items) || !rb.items.length) return false
-    const segs = carrier.segments || []
-    if (!segs.length || segs.length !== rb.items.length) return false
-    const byName = new Map(segs.map(s => [s.name, s.revenue]))
-    return rb.items.every(it => byName.has(it.name)
-      && Math.abs((byName.get(it.name) ?? 0) - it.revenue) < 1e-9)
-  })
+  const rbDupesSegments = $derived(isPeriod
+    ? Selectors.breakdownCoversSegments(p)
+    : (!isForecast && Selectors.breakdownCoversSegments(y)))
 
   // —— forecast：锚点 ——
   const anchors = $derived.by(() => {

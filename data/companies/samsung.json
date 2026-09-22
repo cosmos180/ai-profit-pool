@@ -98,11 +98,11 @@
         "complete": false,
         "items": [
           {
-            "name": "DX 部门（终端体验）",
+            "name": "DX 终端体验（手机/家电/网络）",
             "revenue": 128.202
           },
           {
-            "name": "DS 部门（半导体）",
+            "name": "DS 半导体（存储/代工/LSI）",
             "revenue": 81.418,
             "children": [
               {
@@ -205,11 +205,11 @@
         "complete": false,
         "items": [
           {
-            "name": "DX 部门（终端体验）",
+            "name": "DX 终端体验（手机/家电/网络）",
             "revenue": 132.229
           },
           {
-            "name": "DS 部门（半导体）",
+            "name": "DS 半导体（存储/代工/LSI）",
             "revenue": 91.505,
             "children": [
               {
@@ -378,11 +378,11 @@
         "complete": false,
         "items": [
           {
-            "name": "DX 部门（终端体验）",
+            "name": "DX 终端体验（手机/家电/网络）",
             "revenue": 128.202
           },
           {
-            "name": "DS 部门（半导体）",
+            "name": "DS 半导体（存储/代工/LSI）",
             "revenue": 81.418,
             "children": [
               {
@@ -609,11 +609,11 @@
         "complete": false,
         "items": [
           {
-            "name": "DX 部门（终端体验）",
+            "name": "DX 终端体验（手机/家电/网络）",
             "revenue": 132.229
           },
           {
-            "name": "DS 部门（半导体）",
+            "name": "DS 半导体（存储/代工/LSI）",
             "revenue": 91.505,
             "children": [
               {

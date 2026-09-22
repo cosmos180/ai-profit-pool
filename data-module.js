@@ -131,6 +131,23 @@ const Selectors = {
       : null;
   },
 
+  /* 拆分顶层是否覆盖全部报告分部（呈现层去重判定）：
+     每个分部都能在拆分顶层找到【唯一同名】行即覆盖（金额不作条件——两侧顶层各自
+     恒等于营收是 validate 的结构不变量；个别行差额由对冲/调节行解释，行级利润映射
+     自带 0.001 容差的失败关闭）。覆盖 → 视图隐藏独立分部区（拆分区是信息超集），
+     分部区独有信息（AI 标记/对账行）并入拆分区。无拆分/名称不覆盖（如 amazon 的
+     地域轴 vs 产品轴）→ 保留两区。纯数据比较，无模糊归一化。 */
+  breakdownCoversSegments(y) {
+    const rb = this.revenueBreakdown(y);
+    if (!rb || !Array.isArray(rb.items) || !rb.items.length) return false;
+    const segs = (y && Array.isArray(y.segments)) ? y.segments : [];
+    if (!segs.length) return false;
+    const topNames = rb.items.map(it => it && it.name).filter(n => n != null);
+    const nameCount = {};
+    for (const n of topNames) nameCount[n] = (nameCount[n] || 0) + 1;
+    return segs.every(s => s && s.name != null && nameCount[s.name] === 1);
+  },
+
   /* 拆分的口径元信息（视图文案分流用，组件不做 provenance 判断）：
      official = sources 非空且全部 data_status==="official"；complete 透传布尔。
      非 official（如 tsmc %×营收 derived）或 complete=false 时，视图不得宣称

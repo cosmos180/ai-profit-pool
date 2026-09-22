@@ -2562,4 +2562,28 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.equal(Selectors.annualRevYoYSrc(cny, "FY2023"), null);
 }
 
+// =====================================================================
+// breakdownCoversSegments —— 拆分顶层覆盖全部报告分部的去重判定：
+// 名称覆盖（唯一同名）即覆盖（金额恒等营收是 validate 不变量）；多余调节行（对冲）
+// 不阻断；无拆分/名称不覆盖（amazon 地域轴 vs 产品轴）→ false 保留两区。
+// =====================================================================
+{
+  const seg = (name, revenue) => ({ name, kind: "platform", revenue, is_ai: false });
+  const covered = {
+    segments: [seg("A", 60), seg("B", 40)],
+    revenue_breakdown: { label: "x", complete: true,
+      items: [{ name: "A", revenue: 60.05 }, { name: "B", revenue: 40 }, { name: "对冲", revenue: -0.05 }],
+      sources: [] },
+  };
+  assert.equal(Selectors.breakdownCoversSegments(covered), true);   // 含对冲调节行也覆盖
+  assert.equal(Selectors.breakdownCoversSegments({ segments: [seg("A", 60)] }), false);      // 无拆分
+  assert.equal(Selectors.breakdownCoversSegments({ segments: [], revenue_breakdown: covered.revenue_breakdown }), false); // 无分部
+  const diffAxis = { segments: [seg("北美", 60)], revenue_breakdown: { label: "x", complete: true,
+    items: [{ name: "线上商店", revenue: 50 }, { name: "AWS", revenue: 10 }], sources: [] } };
+  assert.equal(Selectors.breakdownCoversSegments(diffAxis), false);  // 名称不覆盖 → 保留两区
+  const dup = { segments: [seg("A", 60)], revenue_breakdown: { label: "x", complete: true,
+    items: [{ name: "A", revenue: 30 }, { name: "A", revenue: 30 }], sources: [] } };
+  assert.equal(Selectors.breakdownCoversSegments(dup), false);       // 同名不唯一 → 失败关闭
+}
+
 console.log("logic tests passed");

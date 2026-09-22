@@ -51,6 +51,15 @@
 
   const breakdown = $derived(Selectors.revenueBreakdown(owner))
   const meta = $derived(Selectors.revenueBreakdownMeta(owner))
+  // 顶行 AI 标记（去重后分部区隐藏时信息不丢）：与报告分部【精确同名】才透传 is_ai，
+  // 无模糊归一化（分部区独有语义，拆分子行不继承）。
+  const aiOfTopRow = $derived.by(() => {
+    const m = new Map()
+    for (const s of (owner?.segments || [])) {
+      if (s && s.name != null && !(s.name in m)) m.set(s.name, !!s.is_ai)
+    }
+    return m
+  })
   const rows = $derived.by(() => {
     const raw = Selectors.revenueBreakdownRows(owner)
     const maxPositive = Math.max(...raw.map(row => row.revenue > 0 ? row.revenue : 0), 1)
@@ -92,6 +101,7 @@
           <div class="pt" style:padding-left={row.indent}>
             <span class="pname">
               {#if row.depth > 0}<span class="branch" aria-hidden="true">↳</span>{/if}{row.name}
+              {#if row.depth === 0 && aiOfTopRow.get(row.name)}<span class="aitag">AI 主战场</span>{/if}
             </span>
             <span class="pv num">{row.revenueLabel}<span class="sh">{row.shareLabel}</span></span>
           </div>
