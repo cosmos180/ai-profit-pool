@@ -8,6 +8,7 @@
   import { Selectors } from '../lib/data.js'
   import { Fmt } from '../lib/fmt.js'
   import { Safe } from '../lib/safe.js'
+  import { money } from '../lib/ccy.svelte.js'
 
   const periodLabel = y => {
     if (!y) return ''
@@ -18,10 +19,10 @@
   }
 
   // 返回 { svg, notes[], showInflowLegend } —— 供模板声明式渲染 legend/foot，svg 走 {@html}。
-  // money(v, d)：金额标签格式化（默认 Fmt.bn USD）。报告币种模式下由 Detail 注入原币档——
-  // 单一载体期 → 整图一个标量汇率，几何比例不变，只有标签换币（组件零汇率知识）。
-  export function buildSankey(c, y, money) {
-    const mn = money || ((v, d = 1) => Fmt.bn(v, d))
+  // 金额标签统一走 lib/ccy 的 money(v, y, d)：报告币种模式下按该期入账汇率还原原币——
+  // 单一载体期 → 整图一个标量汇率，几何比例不变，只有标签换币（组件零汇率知识、零 prop 接线）。
+  export function buildSankey(c, y) {
+    const mn = (v, d = 1) => money(v, y, d)
     const f = Selectors.incomeFlow(y)
     if (f.revenue == null) return null // 无营收 → 整图不可用
     const rev = f.revenue
@@ -204,9 +205,9 @@
 <script>
   import { buildSankey as _build } from './Sankey.svelte'
 
-  let { company, year, money = null } = $props()
+  let { company, year } = $props()
 
-  const model = $derived(_build(company, year, money))
+  const model = $derived(_build(company, year))
 </script>
 
 {#if model}

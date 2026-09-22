@@ -2,11 +2,12 @@
   // 产品/收入类型层级。与 segments[]（报告分部及分部利润）严格分开，避免重复计数。
   import { Selectors } from '../lib/data.js'
   import { Fmt } from '../lib/fmt.js'
+  import { money } from '../lib/ccy.svelte.js'
 
-  // money(v, d)：金额格式化注入（报告币种模式由 Detail 传入；默认 USD 的 Fmt.bn）。
+  // 金额统一走 lib/ccy 的 money(v, owner, d)（报告币种口径的全局结构化入口，零 prop 接线）。
   // 拆分行是对账敏感数据 → 默认 2 位小数（与原实现一致）。
-  let { owner, company = null, fy = null, periodId = null, money = null } = $props()
-  const mn = (v, d = 2) => (money ? money(v, d) : Fmt.bn(v, d))
+  let { owner, company = null, fy = null, periodId = null } = $props()
+  const mn = (v, d = 2) => money(v, owner, d)
 
   const isQuarter = $derived(owner?.kind === 'quarter')
   // 季度拆分行显示同比/环比两枚 chip（值+原因分流由 Selector 备好，组件零财务算术）

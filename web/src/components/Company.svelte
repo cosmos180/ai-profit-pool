@@ -5,6 +5,7 @@
   import { Store, Selectors } from '../lib/data.js'
   import { Fmt } from '../lib/fmt.js'
   import { Safe } from '../lib/safe.js'
+  import { ccy, money } from '../lib/ccy.svelte.js'
   import Trend from '../charts/Trend.svelte'
   import ValuationCard from './ValuationCard.svelte'
   import SourcesBlock from './SourcesBlock.svelte'
@@ -22,27 +23,20 @@
   const latestReportCards = $derived.by(() => {
     if (!latestView?.complete) return []
     const cards = [
-      { lbl: '营收', val: money(latestView.revenue, latestPeriod), sub: `${latestView.label} · 截至 ${latestView.coverage.as_of}`, cls: '', sw: 'var(--past)' },
-      { lbl: '净利润', val: money(latestView.net_income, latestPeriod), sub: '最新实际季度', cls: 'accent', sw: 'var(--ok)' },
+      { lbl: '营收', val: money(latestView.revenue, latestPeriod, 1), sub: `${latestView.label} · 截至 ${latestView.coverage.as_of}`, cls: '', sw: 'var(--past)' },
+      { lbl: '净利润', val: money(latestView.net_income, latestPeriod, 1), sub: '最新实际季度', cls: 'accent', sw: 'var(--ok)' },
     ]
-    if (latestView.op_income != null) cards.push({ lbl: '经营利润', val: money(latestView.op_income, latestPeriod), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
-    if (latestPeriod?.gross_profit != null) cards.push({ lbl: '毛利', val: money(latestPeriod.gross_profit, latestPeriod), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
+    if (latestView.op_income != null) cards.push({ lbl: '经营利润', val: money(latestView.op_income, latestPeriod, 1), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
+    if (latestPeriod?.gross_profit != null) cards.push({ lbl: '毛利', val: money(latestPeriod.gross_profit, latestPeriod, 1), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
     return cards
   })
   const periodTag = p => p?.calendar_year != null && p?.calendar_quarter ? `${p.calendar_year}${p.calendar_quarter}` : (p?.period_end || p?.period_id || '—')
 
-  // —— 显示币种（呈现分流，无业务算术）：USD（库内统一口径）⇄ 报告币种（原币精确还原）——
-  // money(v, carrier)：src 模式且该期可还原（币种相符 + 有 fx）→ Fmt.local，否则回退 Fmt.bn。
-  // carrier 是该金额的数据期（period）；还原即 × 该期入账汇率——与官方 filing 逐位一致。
+  // —— 显示币种：口径收敛在 lib/ccy（结构化入口，见该模块注释）。此处只保留
+  // 切换可见性（srcCcyOf=null 的 USD 报表公司不渲染切换）与会话状态读写。金额调用点
+  // 直接 import 的 money(v, carrier, d)——carrier 是该金额的数据期。 ——
   const srcCcy = $derived(c ? Selectors.srcCcyOf(c) : null)
-  const inSrc = $derived(nav.ccy === 'src' && !!srcCcy)
-  const money = (v, carrier) => {
-    if (inSrc) {
-      const lv = Selectors.toSrc(v, carrier, srcCcy)
-      if (lv != null) return Fmt.local(lv, srcCcy)
-    }
-    return Fmt.bn(v, 1)
-  }
+  const inSrc = $derived(ccy.mode === 'src' && !!srcCcy)
   // Trend 的 localize（数值版）：按 FY 映射年度期 fx；预测年无期 → 用最新已知年汇率兜底
   // （图中标注「预测年按最新年汇率折算」，绝不显示错量级的 USD 裸值）。
   const fxByFy = $derived.by(() => {
@@ -68,8 +62,8 @@
     if (!c) return []
     return la
       ? [
-          { lbl: `${la.fiscal_year} 营收`, val: money(la.revenue, la), sub: '最新实际', cls: '', sw: 'var(--past)' },
-          { lbl: `${la.fiscal_year} 净利润`, val: money(la.net_income, la), sub: '净利率 ' + Fmt.pct(Selectors.netMargin(la)), cls: 'accent', sw: 'var(--ok)' },
+          { lbl: `${la.fiscal_year} 营收`, val: money(la.revenue, la, 1), sub: '最新实际', cls: '', sw: 'var(--past)' },
+          { lbl: `${la.fiscal_year} 净利润`, val: money(la.net_income, la, 1), sub: '净利率 ' + Fmt.pct(Selectors.netMargin(la)), cls: 'accent', sw: 'var(--ok)' },
           { lbl: `${la.fiscal_year} 毛利率`, val: Fmt.pct(Selectors.grossMargin(la)), sub: 'GAAP', cls: 'accent', sw: 'var(--ok)' },
         ]
       : [{ lbl: '实际财年', val: '—', sub: '尚未补录 actual 年', cls: '', sw: 'var(--past)' }]
@@ -88,8 +82,8 @@
         end: p.period_end,
         rev: p.revenue,
         ni: p.net_income,
-        revLabel: money(p.revenue, p),
-        niLabel: money(p.net_income, p),
+        revLabel: money(p.revenue, p, 1),
+        niLabel: money(p.net_income, p, 1),
         nmLabel: Fmt.pct(Selectors.netMargin(p)),
       }))
   })
@@ -102,8 +96,8 @@
       const ry = inSrc ? Selectors.annualRevYoYSrc(c, y.fiscal_year) : Selectors.annualRevYoY(c, y.fiscal_year)
       return {
         fy: y.fiscal_year, ry,
-        revLabel: money(y.revenue, y),
-        niLabel: y.net_income != null ? money(y.net_income, y) : '—',
+        revLabel: money(y.revenue, y, 1),
+        niLabel: y.net_income != null ? money(y.net_income, y, 1) : '—',
         nmLabel: Fmt.pct(Selectors.netMargin(y)),
       }
     })
@@ -127,8 +121,8 @@
     if (!cy) return []
     const fcf = Selectors.fcf(cy)
     return [
-      { lbl: 'capex 强度', val: Fmt.pct(Selectors.capexIntensity(cy)), sub: cy.capex != null ? 'capex ' + money(cy.capex, cy) + ' / 营收' : '未录入 capex', cls: '', sw: 'var(--est)' },
-      { lbl: '自由现金流 FCF', val: money(fcf, cy), sub: cy.cfo != null ? 'CFO ' + money(cy.cfo, cy) + ' − capex' : '缺 CFO 无法派生', cls: fcf != null && fcf < 0 ? '' : 'accent', sw: 'var(--ok)' },
+      { lbl: 'capex 强度', val: Fmt.pct(Selectors.capexIntensity(cy)), sub: cy.capex != null ? 'capex ' + money(cy.capex, cy, 1) + ' / 营收' : '未录入 capex', cls: '', sw: 'var(--est)' },
+      { lbl: '自由现金流 FCF', val: money(fcf, cy, 1), sub: cy.cfo != null ? 'CFO ' + money(cy.cfo, cy, 1) + ' − capex' : '缺 CFO 无法派生', cls: fcf != null && fcf < 0 ? '' : 'accent', sw: 'var(--ok)' },
       { lbl: 'FCF 利润率', val: Fmt.pct(Selectors.fcfMargin(cy)), sub: 'FCF / 营收', cls: 'accent', sw: 'var(--ok)' },
       { lbl: '现金转化率', val: Fmt.pct(Selectors.cashConversion(cy)), sub: 'FCF / 净利润 · 利润含金量', cls: 'accent', sw: 'var(--ok)' },
     ]
@@ -160,9 +154,9 @@
   {#if srcCcy}
     <div class="ccy-toggle" role="group" aria-label="显示币种">
       <span class="ct-lbl">显示币种</span>
-      <button class="ct-chip" class:on={nav.ccy !== 'src'} onclick={() => nav.setCcy('usd')}
+      <button class="ct-chip" class:on={ccy.mode !== 'src'} onclick={() => ccy.set('usd')}
         title="库内统一 USD 口径（按各期入账汇率折算），跨公司可比">USD</button>
-      <button class="ct-chip" class:on={nav.ccy === 'src'} onclick={() => nav.setCcy('src')}
+      <button class="ct-chip" class:on={ccy.mode === 'src'} onclick={() => ccy.set('src')}
         title="{srcCcy} 报告币种：按各期财报原币精确还原（该期入账汇率 ×），与官方 filing 逐位一致；同比亦按原币计算（去汇率影响）。预测年与估值卡仍为 USD。">{srcCcy} 报告币种</button>
     </div>
   {/if}
