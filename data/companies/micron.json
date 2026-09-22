@@ -1,0 +1,992 @@
+{
+  "id": "micron",
+  "name": "Micron 美光",
+  "ticker": "NASDAQ · MU",
+  "region": "美国",
+  "sector": "存储 (DRAM/NAND/HBM)",
+  "currency": "USD",
+  "seg_profit": "partial",
+  "logo_text": "mu",
+  "status": "populated",
+  "lead": "DRAM/NAND 存储巨头。FY2025 起按 CMBU（云/HBM）、CDBU（核心数据中心）、MCBU（移动/PC）与 AEBU（汽车/嵌入式）披露，CMBU 直接受益于 AI/HBM 需求。",
+  "fy_note": "财年通常在每年 8 月底结束。FY2025 10-K 对 FY2023/FY2024 分部数据做了追溯重列，本页统一采用 FY2025 10-K 的 CMBU/CDBU/MCBU/AEBU 口径。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 1060,
+    "price": 938.38,
+    "price_currency": "USD",
+    "net_debt": 5.05,
+    "sources": [
+      {
+        "label": "MU 2026-07-07 US close $938.38 (prev close 984.75, -4.71% amid semiconductor selloff); mkt cap = price x 1.1294B shares ~= 1060bn USD (sources report 1030-1112bn). Intraday/close approx.",
+        "url": "https://companiesmarketcap.com/micron-technology/marketcap/",
+        "data_status": "estimate"
+      },
+      {
+        "label": "net_debt（估算）：FY2025（截至 2025-08-28）有息债务 ≈ $15.352B，减 现金及等价物 $9.642B + 短期投资 $0.665B = $10.307B → 净负债 +$5.05B（口径：排经营租赁与长期有价投资 $1.629B；待核验 10-K）",
+        "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
+        "data_status": "estimate"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "截至 2023-08-31",
+      "period_end_iso": "2023-08-31",
+      "status": "actual",
+      "revenue": 15.54,
+      "gross_margin": null,
+      "op_income": -5.745,
+      "net_income": -5.833,
+      "capex": 7.0,
+      "cfo": 1.56,
+      "segments": [
+        {
+          "name": "CMBU 云存储",
+          "kind": "platform",
+          "revenue": 1.872,
+          "op_income": -0.768,
+          "op_margin": -0.41,
+          "is_ai": true
+        },
+        {
+          "name": "CDBU 核心数据中心",
+          "kind": "platform",
+          "revenue": 2.124,
+          "op_income": -0.563,
+          "op_margin": -0.265,
+          "is_ai": false
+        },
+        {
+          "name": "MCBU 移动和客户端",
+          "kind": "platform",
+          "revenue": 7.394,
+          "op_income": -3.189,
+          "op_margin": -0.431,
+          "is_ai": false
+        },
+        {
+          "name": "AEBU 汽车和嵌入式",
+          "kind": "platform",
+          "revenue": 4.139,
+          "op_income": 0.68,
+          "op_margin": 0.164,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.011,
+          "op_income": 0.008,
+          "op_margin": 0.727,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "estimate"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 10.978
+          },
+          {
+            "name": "NAND",
+            "revenue": 4.206
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.356
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2025 10-K filed 2025-10-03, Revenue by Technology: exact FY2023-FY2025 table (USD millions), verified from local Dayu filing fil_0000723125-25-000028.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "截至 2024-08-29",
+      "period_end_iso": "2024-08-29",
+      "status": "actual",
+      "revenue": 25.111,
+      "gross_margin": 0.224,
+      "op_income": 1.304,
+      "net_income": 0.778,
+      "capex": 8.39,
+      "cfo": 8.51,
+      "segments": [
+        {
+          "name": "CMBU 云存储",
+          "kind": "platform",
+          "revenue": 3.792,
+          "op_income": 0.244,
+          "op_margin": 0.064,
+          "is_ai": true
+        },
+        {
+          "name": "CDBU 核心数据中心",
+          "kind": "platform",
+          "revenue": 4.984,
+          "op_income": 0.255,
+          "op_margin": 0.051,
+          "is_ai": false
+        },
+        {
+          "name": "MCBU 移动和客户端",
+          "kind": "platform",
+          "revenue": 11.667,
+          "op_income": -0.001,
+          "op_margin": 0.0,
+          "is_ai": false
+        },
+        {
+          "name": "AEBU 汽车和嵌入式",
+          "kind": "platform",
+          "revenue": 4.631,
+          "op_income": 0.432,
+          "op_margin": 0.093,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.037,
+          "op_income": 0.018,
+          "op_margin": 0.486,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "estimate"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 17.603
+          },
+          {
+            "name": "NAND",
+            "revenue": 7.227
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.281
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2025 10-K filed 2025-10-03, Revenue by Technology: exact FY2023-FY2025 table (USD millions), verified from local Dayu filing fil_0000723125-25-000028.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "截至 2025-08-28",
+      "period_end_iso": "2025-08-28",
+      "status": "actual",
+      "revenue": 37.378,
+      "gross_margin": 0.398,
+      "op_income": 9.77,
+      "net_income": 8.539,
+      "capex": 13.8,
+      "cfo": 17.53,
+      "segments": [
+        {
+          "name": "CMBU 云存储",
+          "kind": "platform",
+          "revenue": 13.524,
+          "op_income": 6.129,
+          "op_margin": 0.453,
+          "is_ai": true
+        },
+        {
+          "name": "CDBU 核心数据中心",
+          "kind": "platform",
+          "revenue": 7.229,
+          "op_income": 2.18,
+          "op_margin": 0.302,
+          "is_ai": false
+        },
+        {
+          "name": "MCBU 移动和客户端",
+          "kind": "platform",
+          "revenue": 11.859,
+          "op_income": 1.981,
+          "op_margin": 0.167,
+          "is_ai": false
+        },
+        {
+          "name": "AEBU 汽车和嵌入式",
+          "kind": "platform",
+          "revenue": 4.753,
+          "op_income": 0.557,
+          "op_margin": 0.117,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.013,
+          "op_income": -0.001,
+          "op_margin": -0.077,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Micron FY2025 10-K（Note 26 Segment Disclosures）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2025 现金流量表，CFO $17.53B / capex（投资固定资产，净）$13.80B，待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
+          "data_status": "estimate"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 28.578
+          },
+          {
+            "name": "NAND",
+            "revenue": 8.503
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.297
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2025 10-K filed 2025-10-03, Revenue by Technology: exact FY2023-FY2025 table (USD millions), verified from local Dayu filing fil_0000723125-25-000028.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2024-11-28",
+      "label": "FQ1 FY2025（去年同季）",
+      "net_income": 1.87,
+      "revenue": 8.71,
+      "sources": [
+        {
+          "label": "Micron FQ1 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.87B，营收 $8.71B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-first-quarter-fiscal-2025",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-02-27",
+      "label": "FQ2 FY2025（去年同季）",
+      "net_income": 1.58,
+      "revenue": 8.05,
+      "sources": [
+        {
+          "label": "Micron FQ2 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.58B，营收 $8.05B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-second-quarter-fiscal-2025",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-05-29",
+      "label": "FQ3 FY2025（去年同季）",
+      "net_income": 1.89,
+      "revenue": 9.3,
+      "sources": [
+        {
+          "label": "Micron FQ3 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.89B，营收 $9.30B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2025",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-11-27",
+      "label": "FQ1 FY2026（加项季）",
+      "net_income": 5.24,
+      "revenue": 13.64,
+      "sources": [
+        {
+          "label": "Micron FQ1 FY2026 业绩新闻稿/8-K（GAAP 净利 $5.24B，营收 $13.64B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-first-quarter-fiscal-2026",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-02-26",
+      "label": "FQ2 FY2026（加项季）",
+      "net_income": 13.79,
+      "revenue": 23.86,
+      "sources": [
+        {
+          "label": "Micron FQ2 FY2026 业绩新闻稿/8-K（GAAP 净利 $13.79B，营收 $23.86B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-second-quarter-fiscal-2026",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-05-28",
+      "label": "FQ3 FY2026（最新季）",
+      "net_income": 28.24,
+      "revenue": 41.46,
+      "sources": [
+        {
+          "label": "Micron FQ3 FY2026 业绩新闻稿/8-K（GAAP 净利 $28.24B，营收 $41.46B，AI/HBM 超级周期）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2026",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "micron-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2022-09-02",
+      "period_end": "2023-08-31",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 15.54,
+      "gross_profit": -1.416,
+      "op_income": -5.745,
+      "net_income": -5.833,
+      "cfo": 1.56,
+      "capex": 7.0,
+      "segments": [
+        {
+          "name": "CMBU 云存储",
+          "kind": "platform",
+          "revenue": 1.872,
+          "op_income": -0.768,
+          "op_margin": -0.41,
+          "is_ai": true
+        },
+        {
+          "name": "CDBU 核心数据中心",
+          "kind": "platform",
+          "revenue": 2.124,
+          "op_income": -0.563,
+          "op_margin": -0.265,
+          "is_ai": false
+        },
+        {
+          "name": "MCBU 移动和客户端",
+          "kind": "platform",
+          "revenue": 7.394,
+          "op_income": -3.189,
+          "op_margin": -0.431,
+          "is_ai": false
+        },
+        {
+          "name": "AEBU 汽车和嵌入式",
+          "kind": "platform",
+          "revenue": 4.139,
+          "op_income": 0.68,
+          "op_margin": 0.164,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.011,
+          "op_income": 0.008,
+          "op_margin": 0.727,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "estimate"
+        },
+        {
+          "label": "period_start 推导：Micron 52/53 周财年，上一财年 FY2022 止 2022-09-01 → 起 2022-09-02（财年界，years[] 未含 FY2022 原子）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 10.978
+          },
+          {
+            "name": "NAND",
+            "revenue": 4.206
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.356
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2025 10-K filed 2025-10-03, Revenue by Technology: exact FY2023-FY2025 table (USD millions), verified from local Dayu filing fil_0000723125-25-000028.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "micron-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-09-01",
+      "period_end": "2024-08-29",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 25.111,
+      "gross_profit": 5.613,
+      "op_income": 1.304,
+      "net_income": 0.778,
+      "cfo": 8.51,
+      "capex": 8.39,
+      "segments": [
+        {
+          "name": "CMBU 云存储",
+          "kind": "platform",
+          "revenue": 3.792,
+          "op_income": 0.244,
+          "op_margin": 0.064,
+          "is_ai": true
+        },
+        {
+          "name": "CDBU 核心数据中心",
+          "kind": "platform",
+          "revenue": 4.984,
+          "op_income": 0.255,
+          "op_margin": 0.051,
+          "is_ai": false
+        },
+        {
+          "name": "MCBU 移动和客户端",
+          "kind": "platform",
+          "revenue": 11.667,
+          "op_income": -0.001,
+          "op_margin": 0.0,
+          "is_ai": false
+        },
+        {
+          "name": "AEBU 汽车和嵌入式",
+          "kind": "platform",
+          "revenue": 4.631,
+          "op_income": 0.432,
+          "op_margin": 0.093,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.037,
+          "op_income": 0.018,
+          "op_margin": 0.486,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Micron FY2025 10-K（Note 26 Segment Disclosures，追溯口径）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "estimate"
+        },
+        {
+          "label": "period_start 推导：上一财年 FY2023 止 2023-08-31 → 起 2023-09-01",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 17.603
+          },
+          {
+            "name": "NAND",
+            "revenue": 7.227
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.281
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2025 10-K filed 2025-10-03, Revenue by Technology: exact FY2023-FY2025 table (USD millions), verified from local Dayu filing fil_0000723125-25-000028.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "micron-fy2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-08-30",
+      "period_end": "2024-11-28",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 8.71,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 1.87,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Micron FQ1 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.87B，营收 $8.71B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-first-quarter-fiscal-2025",
+          "data_status": "official"
+        },
+        {
+          "label": "period_start 推导：链首 FQ1 FY2025 取上一财年末 +1 天（Micron 52/53 周财年，FY2024 止 2024-08-29 → 起 2024-08-30）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "micron-fy2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-11-29",
+      "period_end": "2025-02-27",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 8.05,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 1.58,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Micron FQ2 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.58B，营收 $8.05B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-second-quarter-fiscal-2025",
+          "data_status": "official"
+        },
+        {
+          "label": "period_start 推导：链内取上一季 period_end +1 天（FQ1 FY2025 止 2024-11-28 → 起 2024-11-29）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "micron-fy2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-02-28",
+      "period_end": "2025-05-29",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 9.3,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 1.89,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Micron FQ3 FY2025 业绩新闻稿/8-K（GAAP 净利 $1.89B，营收 $9.30B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2025",
+          "data_status": "official"
+        },
+        {
+          "label": "period_start 推导：链内取上一季 period_end +1 天（FQ2 FY2025 止 2025-02-27 → 起 2025-02-28）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "micron-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-08-30",
+      "period_end": "2025-08-28",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 37.378,
+      "gross_profit": 14.873,
+      "op_income": 9.77,
+      "net_income": 8.539,
+      "cfo": 17.53,
+      "capex": 13.8,
+      "d_and_a": 8.352,
+      "segments": [
+        {
+          "name": "CMBU 云存储",
+          "kind": "platform",
+          "revenue": 13.524,
+          "op_income": 6.129,
+          "op_margin": 0.453,
+          "is_ai": true
+        },
+        {
+          "name": "CDBU 核心数据中心",
+          "kind": "platform",
+          "revenue": 7.229,
+          "op_income": 2.18,
+          "op_margin": 0.302,
+          "is_ai": false
+        },
+        {
+          "name": "MCBU 移动和客户端",
+          "kind": "platform",
+          "revenue": 11.859,
+          "op_income": 1.981,
+          "op_margin": 0.167,
+          "is_ai": false
+        },
+        {
+          "name": "AEBU 汽车和嵌入式",
+          "kind": "platform",
+          "revenue": 4.753,
+          "op_income": 0.557,
+          "op_margin": 0.117,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.013,
+          "op_income": -0.001,
+          "op_margin": -0.077,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Micron FY2025 10-K（Note 26 Segment Disclosures）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2025 现金流量表，CFO $17.53B / capex（投资固定资产，净）$13.80B，待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000723125/000072312525000024/a2025q4ex991-pressrelease.htm",
+          "data_status": "estimate"
+        },
+        {
+          "label": "period_start 推导：上一财年 FY2024 止 2024-08-29 → 起 2024-08-30（与 micron-fy2025q1 起日一致）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "D&A：FY2025 10-K 合并现金流量表「Depreciation expense and amortization of intangible assets」USD 8,352M 单行直取",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/0000723125-25-000028-index.html",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 28.578
+          },
+          {
+            "name": "NAND",
+            "revenue": 8.503
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.297
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2025 10-K filed 2025-10-03, Revenue by Technology: exact FY2023-FY2025 table (USD millions), verified from local Dayu filing fil_0000723125-25-000028.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "micron-fy2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-08-29",
+      "period_end": "2025-11-27",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 13.64,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 5.24,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Micron FQ1 FY2026 业绩新闻稿/8-K（GAAP 净利 $5.24B，营收 $13.64B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-first-quarter-fiscal-2026",
+          "data_status": "official"
+        },
+        {
+          "label": "period_start 推导：链首 FQ1 FY2026 取上一财年末 +1 天（Micron 52/53 周财年，FY2025 止 2025-08-28 → 起 2025-08-29）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "micron-fy2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-11-28",
+      "period_end": "2026-02-26",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 23.86,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 13.79,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Micron FQ2 FY2026 业绩新闻稿/8-K（GAAP 净利 $13.79B，营收 $23.86B）",
+          "url": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-second-quarter-fiscal-2026",
+          "data_status": "official"
+        },
+        {
+          "label": "period_start 推导：链内取上一季 period_end +1 天（FQ1 FY2026 止 2025-11-27 → 起 2025-11-28）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 18.768
+          },
+          {
+            "name": "NAND",
+            "revenue": 4.997
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.095
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2026 Q2 10-Q filed 2026-03-19, Revenue by Technology (USD millions), verified from local Dayu filing fil_0000723125-26-000006.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000006/mu-20260226.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "micron-fy2026q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-02-27",
+      "period_end": "2026-05-28",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 41.456,
+      "gross_profit": 35.056,
+      "op_income": 33.318,
+      "net_income": 28.243,
+      "cfo": 25.388,
+      "capex": 7.826,
+      "segments": [
+        {
+          "name": "CMBU 云存储",
+          "kind": "platform",
+          "revenue": 13.769,
+          "op_income": 10.793,
+          "is_ai": true
+        },
+        {
+          "name": "CDBU 核心数据中心",
+          "kind": "platform",
+          "revenue": 11.524,
+          "op_income": 9.519,
+          "is_ai": false
+        },
+        {
+          "name": "MCBU 移动和客户端",
+          "kind": "platform",
+          "revenue": 11.521,
+          "op_income": 9.873,
+          "is_ai": false
+        },
+        {
+          "name": "AEBU 汽车和嵌入式",
+          "kind": "platform",
+          "revenue": 4.634,
+          "op_income": 3.493,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.008,
+          "op_income": 0.003,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Micron Form 10-Q filed 2026-06-26（FY2026 Q3 iXBRL: revenue $41,456M; gross profit $35,056M; operating income $33,318M; net income $28,243M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Micron Form 10-Q reportable segments（CMBU $13,769M / op income $10,793M; CDBU $11,524M / $9,519M; MCBU $11,521M / $9,873M; AEBU $4,634M / $3,493M; Other $8M / $3M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived Q3 cash flow = FY2026 9M 10-Q ($45,702M CFO; $19,602M capex) minus FY2026 6M 10-Q ($20,314M CFO; $11,776M capex)",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Micron Form 10-Q filed 2026-03-26（FY2026 Q2 YTD: CFO $20,314M; capex $11,776M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000006/mu-20260226.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "按技术划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "DRAM",
+            "revenue": 31.328
+          },
+          {
+            "name": "NAND",
+            "revenue": 9.943
+          },
+          {
+            "name": "Other (primarily NOR) 其他（主要为 NOR）",
+            "revenue": 0.185
+          }
+        ],
+        "sources": [
+          {
+            "label": "Micron FY2026 Q3 10-Q filed 2026-06-25, Revenue by Technology (USD millions), verified from local Dayu filing fil_0000723125-26-000015.",
+            "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    }
+  ]
+}

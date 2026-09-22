@@ -1,0 +1,1352 @@
+{
+  "id": "tsmc",
+  "name": "TSMC 台积电",
+  "ticker": "TWSE 2330 · NYSE TSM",
+  "region": "中国台湾",
+  "sector": "晶圆代工",
+  "currency": "TWD",
+  "seg_profit": "no",
+  "logo_text": "ts",
+  "status": "populated",
+  "lead": "全球最大的半导体代工企业，AI 计算与先进芯片制程的核心制造者。HPC 平台包含 AI 加速器、服务器 CPU 与其他高性能计算芯片，并不等同于纯 AI 收入。",
+  "fy_note": "TWD→USD 采用 SEC Form 20-F 披露的期末 Noon Buying Rate（2023: 30.62 / 2024: 32.79 / 2025: 31.37）。平台营收基于官方 HPC/Smartphone/IoT/Automotive/DCE/Other 占比并与合并营收对账。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 1905,
+    "price": 432.57,
+    "price_currency": "USD",
+    "net_debt": -77.58,
+    "sources": [
+      {
+        "label": "TSM ADR close 7/7 $432.57 (-4.25% vs 7/6 451.79) per Yahoo/macrotrends; market cap scaled from library 7/6 (1990bn/451.79) to stay on library methodology. NOTE: companiesmarketcap full-share-count gives ~2.1-2.2T (different share base)",
+        "url": "https://finance.yahoo.com/quote/TSM/",
+        "data_status": "estimate"
+      },
+      {
+        "label": "net_debt=-77.58 bn｜口径:net_debt = 有息债务 −(现金及等价物 + 短期投资)。分量(NT$bn,截至 2026-03-31):有息债务 901.02(TSMC 1Q26 投资人报告『Long-term Interest-bearing Debts』);现金及等价物 3035.64(1Q26 现金流量表期末余额,期初 2767.86 +约 268);现金及有价证券合计 3383.60(1Q26 投资人报告『Cash & Marketable Securities』,不含长期投资 NT$166.57B),据此短期投资 = 3383.60 − 3035.64 = 347.96(差额推导,即流动金融资产)。计算式:(901.02 − 3035.64 − 347.96)/32.0020 = -2482.58/32.0020 = -77.58 USD bn(净现金)。租赁负债排除见 lease_excluded_note。二手印证:数值经 stocktitan/investing.com/mlq.ai 等多站转载 TSMC 1Q26 摘要交叉一致。已用 SEC 原文与本地 Dayu filing fil_0001046179-26-000199 复核。",
+        "url": "https://investor.tsmc.com/english/quarterly-results/2026/q1",
+        "data_status": "official"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "自然年 2023（截至 2023-12-31）",
+      "period_end_iso": "2023-12-31",
+      "status": "actual",
+      "revenue": 70.599,
+      "gross_margin": 0.544,
+      "op_income": 30.094,
+      "net_income": 27.816,
+      "capex": 30.45,
+      "cfo": 40.0,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 30.357,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 26.828,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 5.648,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 4.236,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 1.412,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 2.118,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "TSMC FY2023 Form 20-F（SEC Filing）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "自然年 2024（截至 2024-12-31）",
+      "period_end_iso": "2024-12-31",
+      "status": "actual",
+      "revenue": 90.08,
+      "gross_margin": 0.561,
+      "op_income": 41.147,
+      "net_income": 36.52,
+      "capex": 29.76,
+      "cfo": 56.837,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 45.941,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 31.528,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 5.405,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 4.504,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 0.901,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 1.801,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "台积电 4Q24 全年财报发布(SEC Form 6-K)+ 2024 年报官方美元披露:全年营收 US$90.08B、税后净利 US$36.52B、毛利率 56.1%、营业利益率 45.7%",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "公司隐含平均汇率 32.130 = 年报 TWD 营收 NT$2,894.31bn ÷ 官方 USD 营收 90.08;营业利润 = TWD 营业利益 NT$1,322.05bn ÷ 32.130;CFO = TWD 营业活动净现金流 NT$1,826.18bn ÷ 32.130",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "capex:TSMC 自报 2024 全年资本支出 US$29.76B(年报 TWD 约 956.01bn ÷ 32.130 亦得同值)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "分部:年报「依產品平台區分」HPC 51%/智能手机 35%/IoT 6%/车用 5%/DCE 1%/其他 2% × 官方美元营收 90.08(尾差 0.001 微调其他至 1.801 使合计精确=90.08)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "制程节点（晶圆收入占比派生）",
+        "complete": false,
+        "items": [
+          {
+            "name": "3nm 3纳米",
+            "revenue": 16.2144
+          },
+          {
+            "name": "5nm 5纳米",
+            "revenue": 30.6272
+          },
+          {
+            "name": "7nm 7纳米",
+            "revenue": 15.3136
+          },
+          {
+            "name": "16nm 16纳米",
+            "revenue": 7.2064
+          },
+          {
+            "name": "20nm 20纳米",
+            "revenue": 0.0
+          },
+          {
+            "name": "28nm 28纳米",
+            "revenue": 6.3056
+          },
+          {
+            "name": "40/45nm 40/45纳米",
+            "revenue": 3.6032
+          },
+          {
+            "name": "65nm 65纳米",
+            "revenue": 3.6032
+          },
+          {
+            "name": "90nm 90纳米",
+            "revenue": 0.9008
+          },
+          {
+            "name": "0.11/0.13μm 0.11/0.13微米",
+            "revenue": 1.8016
+          },
+          {
+            "name": "0.15/0.18μm 0.15/0.18微米",
+            "revenue": 3.6032
+          },
+          {
+            "name": "0.25μm and above 0.25微米及以上",
+            "revenue": 0.9008
+          }
+        ],
+        "sources": [
+          {
+            "label": "TSMC 4Q24 Management Report（含 FY2024 全年 Revenue by Technology，占晶圆收入比）：3nm 18% / 5nm 34% / 7nm 17% / 16nm 8% / 20nm 0% / 28nm 7% / 40-45nm 4% / 65nm 4% / 90nm 1% / 0.11-0.13um 2% / 0.15-0.18um 4% / 0.25um and above 1%（先进制程 7nm 及以下 69%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2024 营收 90.08；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2025-01/2d8b2bb6fc3b5887d24ae0635f639c1cdca834f3/4Q24ManagementReport.pdf",
+            "data_status": "derived"
+          },
+          {
+            "label": "交叉印证（TSMC FY2024 4Q24 6-K，SEC 存档；The Motley Fool 深度整理亦复述）：3nm 18% / 5nm 34% / 7nm 17%，先进制程 7nm 及以下 69%（2023 为 58%），与官方管理层报告一致。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "自然年 2025（截至 2025-12-31）",
+      "period_end_iso": "2025-12-31",
+      "status": "actual",
+      "revenue": 122.42,
+      "gross_margin": 0.599,
+      "op_income": 62.224,
+      "net_income": 55.21,
+      "capex": 40.388,
+      "cfo": 73.116,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 71.004,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 35.502,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 6.121,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 6.121,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 1.224,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 2.448,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "台积电 2025(民国114年)年报 · 合并损益表(6.1.2)+ 致股东报告书官方美元披露:营收 US$122.42B、税后净利 US$55.21B、毛利率 59.9%",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "official"
+        },
+        {
+          "label": "CFO:6.1.3 合并现金流 TWD 2,274.98bn ÷ 公司隐含平均汇率 31.115(=年报TWD营收/官方USD营收)",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "derived"
+        },
+        {
+          "label": "capex:6.1.4 生產、研發及廠務設備實際資金運用 TWD 1,256.66bn ÷ 31.115",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "derived"
+        },
+        {
+          "label": "分部:年报「依產品平台區分」HPC 58%/智能手机 29%/IoT 5%/车用 5%/DCE 1%/其他 2% × 官方美元营收",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "制程节点（晶圆收入占比派生）",
+        "complete": false,
+        "items": [
+          {
+            "name": "3nm 3纳米",
+            "revenue": 29.3808
+          },
+          {
+            "name": "5nm 5纳米",
+            "revenue": 44.0712
+          },
+          {
+            "name": "7nm 7纳米",
+            "revenue": 17.1388
+          },
+          {
+            "name": "16/20nm 16/20纳米",
+            "revenue": 8.5694
+          },
+          {
+            "name": "28nm 28纳米",
+            "revenue": 8.5694
+          },
+          {
+            "name": "40/45nm 40/45纳米",
+            "revenue": 3.6726
+          },
+          {
+            "name": "65nm 65纳米",
+            "revenue": 4.8968
+          },
+          {
+            "name": "90nm 90纳米",
+            "revenue": 1.2242
+          },
+          {
+            "name": "0.11/0.13μm 0.11/0.13微米",
+            "revenue": 1.2242
+          },
+          {
+            "name": "0.15/0.18μm 0.15/0.18微米",
+            "revenue": 3.6726
+          },
+          {
+            "name": "0.25μm and above 0.25微米及以上",
+            "revenue": 0.0
+          }
+        ],
+        "sources": [
+          {
+            "label": "TSMC 4Q25 Management Report（含 FY2025 全年 Revenue by Technology，占晶圆收入比）：3nm 24% / 5nm 36% / 7nm 14% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 3% / 0.25um and above 0%（先进制程 7nm 及以下 74%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2025 营收 122.42；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，故绝对金额较真实晶圆金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/00fe50f72b38d74e6b9b066398f020f337cd4e9d/4Q25%20Management%20Report.pdf",
+            "data_status": "derived"
+          },
+          {
+            "label": "交叉印证（Silicon Canals 转载 TSMC 官方 FY2025 数据）：3nm 24% / 5nm 36% / 7nm 14%，先进制程 7nm 及以下 74%（2024 为 69%），与官方管理层报告一致。",
+            "url": "https://siliconcanals.com/j-v-advanced-chips-of-7-nanometers-and-beyond-made-up-74-of-tsmcs-wafer-revenue-in-2025-the-frontier-the-rest-of-the-world-depends-on-has-quietly-become-the-companys-entire-business/",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2026E",
+      "period_end": "自然年 2026（截至 2026-12-31）",
+      "period_end_iso": "2026-12-31",
+      "status": "forecast",
+      "revenue": 161.55,
+      "net_income": 80.15,
+      "consensus_rev": "$161.6B（TWD 5.18T 折算）",
+      "consensus_eps": "$15.47 per ADR",
+      "consensus_eps_value": 15.466963,
+      "consensus_eps_currency": "USD",
+      "consensus_eps_source": [
+        {
+          "label": "StockAnalysis/S&P Global FY2026 forecast normalized to USD ADR EPS: TWD EPS 99.19, ADS ratio 5 common shares per ADS, implied by forecast-page forward PE 29.21 and ADR close $451.79",
+          "url": "https://stockanalysis.com/stocks/tsm/forecast/",
+          "data_status": "consensus"
+        }
+      ],
+      "sources": [
+        {
+          "label": "StockAnalysis/S&P Global FY2026 forecast: revenue TWD 5.18T, net income TWD 2.57T, EPS TWD 99.19; USD values derived with implied TWD/USD 32.06 from ADR EPS normalization",
+          "url": "https://stockanalysis.com/stocks/tsm/forecast/",
+          "data_status": "consensus"
+        },
+        {
+          "label": "TSMC ADS ratio: each ADS represents five common shares",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000114554907000749/h01195fv3asr.htm",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2025-03-31",
+      "label": "1Q25（去年同季）",
+      "net_income": 11.0,
+      "sources": [
+        {
+          "label": "TSMC 1Q25 业绩（净利 NT$361.56B，EPS NT$13.94 / US$2.12 per ADR）",
+          "url": "https://pr.tsmc.com/english/news/3222",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：NT$361.56B ÷ NT/USD 32.87（1Q25 隐含汇率，由 TSMC 自报美元营收反推 NT$839.25B/US$25.53B）= $11.00B（换算待核验）",
+          "url": "https://anysilicon.com/tsmcs-financial-results-2025-q1/",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-03-31",
+      "label": "1Q26（最新季）",
+      "net_income": 18.12,
+      "sources": [
+        {
+          "label": "TSMC 1Q26 业绩（净利 NT$572.48B，EPS NT$22.08 / US$3.49 per ADR，净利率 50.5%）",
+          "url": "https://pr.tsmc.com/english/news/3297",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：NT$572.48B ÷ NT/USD 31.59（1Q26 隐含汇率，由 TSMC 自报美元营收反推 NT$1,134.10B/US$35.90B）= $18.12B（换算待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
+          "data_status": "estimate"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "tsmc-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "TWD",
+      "fx_to_usd": 30.62,
+      "revenue": 70.599,
+      "gross_profit": 38.3772,
+      "op_income": 30.094,
+      "net_income": 27.816,
+      "cfo": 40.0,
+      "capex": 30.45,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 30.357,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 26.828,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 5.648,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 4.236,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 1.412,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 2.118,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "TSMC FY2023 Form 20-F（SEC Filing）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex（TSMC 自报美元）/ CFO（NT$ 换算，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312524099840/d592628d20f.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "tsmc-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "TWD",
+      "fx_to_usd": 32.13,
+      "revenue": 90.08,
+      "gross_profit": 50.5557,
+      "op_income": 41.147,
+      "net_income": 36.52,
+      "cfo": 56.837,
+      "capex": 29.76,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 45.941,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 31.528,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 5.405,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 4.504,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 0.901,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 1.801,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "台积电 4Q24 全年财报发布(SEC Form 6-K)+ 2024 年报官方美元披露:全年营收 US$90.08B、税后净利 US$36.52B、毛利率 56.1%、营业利益率 45.7%",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "公司隐含平均汇率 32.130 = 年报 TWD 营收 NT$2,894.31bn ÷ 官方 USD 营收 90.08;营业利润 = TWD 营业利益 NT$1,322.05bn ÷ 32.130;CFO = TWD 营业活动净现金流 NT$1,826.18bn ÷ 32.130",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "capex:TSMC 自报 2024 全年资本支出 US$29.76B(年报 TWD 约 956.01bn ÷ 32.130 亦得同值)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000119312525083423/d896993d20f.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "分部:年报「依產品平台區分」HPC 51%/智能手机 35%/IoT 6%/车用 5%/DCE 1%/其他 2% × 官方美元营收 90.08(尾差 0.001 微调其他至 1.801 使合计精确=90.08)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "制程节点（晶圆收入占比派生）",
+        "complete": false,
+        "items": [
+          {
+            "name": "3nm 3纳米",
+            "revenue": 16.2144
+          },
+          {
+            "name": "5nm 5纳米",
+            "revenue": 30.6272
+          },
+          {
+            "name": "7nm 7纳米",
+            "revenue": 15.3136
+          },
+          {
+            "name": "16nm 16纳米",
+            "revenue": 7.2064
+          },
+          {
+            "name": "20nm 20纳米",
+            "revenue": 0.0
+          },
+          {
+            "name": "28nm 28纳米",
+            "revenue": 6.3056
+          },
+          {
+            "name": "40/45nm 40/45纳米",
+            "revenue": 3.6032
+          },
+          {
+            "name": "65nm 65纳米",
+            "revenue": 3.6032
+          },
+          {
+            "name": "90nm 90纳米",
+            "revenue": 0.9008
+          },
+          {
+            "name": "0.11/0.13μm 0.11/0.13微米",
+            "revenue": 1.8016
+          },
+          {
+            "name": "0.15/0.18μm 0.15/0.18微米",
+            "revenue": 3.6032
+          },
+          {
+            "name": "0.25μm and above 0.25微米及以上",
+            "revenue": 0.9008
+          }
+        ],
+        "sources": [
+          {
+            "label": "TSMC 4Q24 Management Report（含 FY2024 全年 Revenue by Technology，占晶圆收入比）：3nm 18% / 5nm 34% / 7nm 17% / 16nm 8% / 20nm 0% / 28nm 7% / 40-45nm 4% / 65nm 4% / 90nm 1% / 0.11-0.13um 2% / 0.15-0.18um 4% / 0.25um and above 1%（先进制程 7nm 及以下 69%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2024 营收 90.08；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2025-01/2d8b2bb6fc3b5887d24ae0635f639c1cdca834f3/4Q24ManagementReport.pdf",
+            "data_status": "derived"
+          },
+          {
+            "label": "交叉印证（TSMC FY2024 4Q24 6-K，SEC 存档；The Motley Fool 深度整理亦复述）：3nm 18% / 5nm 34% / 7nm 17%，先进制程 7nm 及以下 69%（2023 为 58%），与官方管理层报告一致。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000004/a4q24e_withguidancexfinal.htm",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tsmc-2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-03-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "TWD",
+      "fx_to_usd": 32.873247,
+      "revenue": 25.53,
+      "gross_profit": 15.009,
+      "op_income": 12.3834,
+      "net_income": 10.9987,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "TSMC 1Q25 6-K filed 2025-04-17: net sales NT$839.254B / US$25.53B, gross profit NT$493.395B, operating income NT$407.081B, net income NT$361.564B",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000035/a1q25e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX derived from same release: NT$839.254B / US$25.53B = 32.873247 TWD per USD",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000035/a1q25e_withguidancexfinal.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "tsmc-2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-04-01",
+      "period_end": "2025-06-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "TWD",
+      "fx_to_usd": 31.053941,
+      "revenue": 30.07,
+      "gross_profit": 17.6264,
+      "op_income": 14.9232,
+      "net_income": 12.8252,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "TSMC 2Q25 6-K filed 2025-07-17: net sales NT$933.792B / US$30.07B, gross profit NT$547.369B, operating income NT$463.423B, net income NT$398.273B",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000082/a2q25e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX derived from same release: NT$933.792B / US$30.07B = 31.053941 TWD per USD",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000082/a2q25e_withguidancexfinal.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "tsmc-2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2025-09-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "TWD",
+      "fx_to_usd": 29.906888,
+      "revenue": 33.1,
+      "gross_profit": 19.6792,
+      "op_income": 16.7415,
+      "net_income": 15.1237,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "TSMC 3Q25 6-K filed 2025-10-16: net sales NT$989.918B / US$33.10B, gross profit NT$588.543B, operating income NT$500.685B, net income NT$452.302B",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000116/a3q25e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX derived from same release: NT$989.918B / US$33.10B = 29.906888 TWD per USD",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000116/a3q25e_withguidancexfinal.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "tsmc-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "TWD",
+      "fx_to_usd": 31.115,
+      "revenue": 122.42,
+      "gross_profit": 73.3181,
+      "op_income": 62.224,
+      "net_income": 55.21,
+      "cfo": 73.116,
+      "capex": 40.388,
+      "d_and_a": 22.115,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 71.004,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 35.502,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 6.121,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 6.121,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 1.224,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 2.448,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "台积电 2025(民国114年)年报 · 合并损益表(6.1.2)+ 致股东报告书官方美元披露:营收 US$122.42B、税后净利 US$55.21B、毛利率 59.9%",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "official"
+        },
+        {
+          "label": "CFO:6.1.3 合并现金流 TWD 2,274.98bn ÷ 公司隐含平均汇率 31.115(=年报TWD营收/官方USD营收)",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "derived"
+        },
+        {
+          "label": "capex:6.1.4 生產、研發及廠務設備實際資金運用 TWD 1,256.66bn ÷ 31.115",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "derived"
+        },
+        {
+          "label": "分部:年报「依產品平台區分」HPC 58%/智能手机 29%/IoT 5%/车用 5%/DCE 1%/其他 2% × 官方美元营收",
+          "url": "https://investor.tsmc.com/chinese/annual-reports",
+          "data_status": "official"
+        },
+        {
+          "label": "D&A：FY2025 20-F 合并现金流量表 depreciation TWD 679.684bn + amortization TWD 8.4124bn = 688.0964bn；÷ fx 31.115 = 22.115（含 IFRS-16 使用权折旧）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "制程节点（晶圆收入占比派生）",
+        "complete": false,
+        "items": [
+          {
+            "name": "3nm 3纳米",
+            "revenue": 29.3808
+          },
+          {
+            "name": "5nm 5纳米",
+            "revenue": 44.0712
+          },
+          {
+            "name": "7nm 7纳米",
+            "revenue": 17.1388
+          },
+          {
+            "name": "16/20nm 16/20纳米",
+            "revenue": 8.5694
+          },
+          {
+            "name": "28nm 28纳米",
+            "revenue": 8.5694
+          },
+          {
+            "name": "40/45nm 40/45纳米",
+            "revenue": 3.6726
+          },
+          {
+            "name": "65nm 65纳米",
+            "revenue": 4.8968
+          },
+          {
+            "name": "90nm 90纳米",
+            "revenue": 1.2242
+          },
+          {
+            "name": "0.11/0.13μm 0.11/0.13微米",
+            "revenue": 1.2242
+          },
+          {
+            "name": "0.15/0.18μm 0.15/0.18微米",
+            "revenue": 3.6726
+          },
+          {
+            "name": "0.25μm and above 0.25微米及以上",
+            "revenue": 0.0
+          }
+        ],
+        "sources": [
+          {
+            "label": "TSMC 4Q25 Management Report（含 FY2025 全年 Revenue by Technology，占晶圆收入比）：3nm 24% / 5nm 36% / 7nm 14% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 3% / 0.25um and above 0%（先进制程 7nm 及以下 74%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 FY2025 营收 122.42；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，故绝对金额较真实晶圆金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/00fe50f72b38d74e6b9b066398f020f337cd4e9d/4Q25%20Management%20Report.pdf",
+            "data_status": "derived"
+          },
+          {
+            "label": "交叉印证（Silicon Canals 转载 TSMC 官方 FY2025 数据）：3nm 24% / 5nm 36% / 7nm 14%，先进制程 7nm 及以下 74%（2024 为 69%），与官方管理层报告一致。",
+            "url": "https://siliconcanals.com/j-v-advanced-chips-of-7-nanometers-and-beyond-made-up-74-of-tsmcs-wafer-revenue-in-2025-the-frontier-the-rest-of-the-world-depends-on-has-quietly-become-the-companys-entire-business/",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tsmc-2025q4",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-10-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q4",
+      "currency": "TWD",
+      "fx_to_usd": 31.013638,
+      "revenue": 33.73,
+      "gross_profit": 21.0226,
+      "op_income": 18.2147,
+      "net_income": 16.3071,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "TSMC 4Q25 6-K filed 2026-01-15: net sales NT$1,046.090B / US$33.73B, gross profit NT$651.987B, operating income NT$564.903B, net income NT$505.744B",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000008/a4q25e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX derived from same release: NT$1,046.090B / US$33.73B = 31.013638 TWD per USD",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000008/a4q25e_withguidancexfinal.htm",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "制程节点（晶圆收入占比派生）",
+        "complete": false,
+        "items": [
+          {
+            "name": "3nm 3纳米",
+            "revenue": 9.4444
+          },
+          {
+            "name": "5nm 5纳米",
+            "revenue": 11.8055
+          },
+          {
+            "name": "7nm 7纳米",
+            "revenue": 4.7222
+          },
+          {
+            "name": "16/20nm 16/20纳米",
+            "revenue": 2.0238
+          },
+          {
+            "name": "28nm 28纳米",
+            "revenue": 2.0238
+          },
+          {
+            "name": "40/45nm 40/45纳米",
+            "revenue": 1.0119
+          },
+          {
+            "name": "65nm 65纳米",
+            "revenue": 1.3492
+          },
+          {
+            "name": "90nm 90纳米",
+            "revenue": 0.3373
+          },
+          {
+            "name": "0.11/0.13μm 0.11/0.13微米",
+            "revenue": 0.3373
+          },
+          {
+            "name": "0.15/0.18μm 0.15/0.18微米",
+            "revenue": 0.6746
+          },
+          {
+            "name": "0.25μm and above 0.25微米及以上",
+            "revenue": 0.0
+          }
+        ],
+        "sources": [
+          {
+            "label": "TSMC 4Q25 Management Report（4Q25 单季 Revenue by Technology，占晶圆收入比）：3nm 28% / 5nm 35% / 7nm 14% / 16-20nm 6% / 28nm 6% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 2% / 0.25um and above 0%（先进制程 7nm 及以下 77%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 tsmc-2025q4 营收 33.73；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/00fe50f72b38d74e6b9b066398f020f337cd4e9d/4Q25%20Management%20Report.pdf",
+            "data_status": "derived"
+          },
+          {
+            "label": "交叉印证（Investing.com 复述 TSMC 4Q25 官方投资人简报）：3nm 28% / 5nm 35% / 7nm 14%，先进制程 7nm 及以下 77%，与官方管理层报告一致。",
+            "url": "https://www.investing.com/news/company-news/tsmc-q4-2025-slides-revenue-exceeds-guidance-as-advanced-nodes-drive-growth-93CH-4448734",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tsmc-2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": null,
+      "period_end": "2026-03-31",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "TWD",
+      "fx_to_usd": 31.590613,
+      "revenue": 35.9,
+      "gross_profit": 23.7822,
+      "op_income": 20.8596,
+      "net_income": 18.1218,
+      "cfo": 22.127,
+      "capex": 11.111,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 21.899,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 9.334,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 2.154,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 1.436,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 0.359,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.718,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "TSMC 1Q26 6-K filed 2026-04-16: net sales NT$1,134.103B / US$35.90B, gross profit NT$751.295B, operating income NT$658.966B, net income NT$572.480B",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "TSMC 1Q26 6-K: CFO NT$699B, capex NT$351B, platform revenue mix HPC 61% / Smartphone 26% / IoT 6% / Automotive 4% / DCE 1% / Other 2%",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX derived from same release: NT$1,134.103B / US$35.90B = 31.590613 TWD per USD",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000199/a1q26e_withguidancexfinal.htm",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "制程节点（晶圆收入占比派生）",
+        "complete": false,
+        "items": [
+          {
+            "name": "3nm 3纳米",
+            "revenue": 8.975
+          },
+          {
+            "name": "5nm 5纳米",
+            "revenue": 12.924
+          },
+          {
+            "name": "7nm 7纳米",
+            "revenue": 4.667
+          },
+          {
+            "name": "16/20nm 16/20纳米",
+            "revenue": 2.513
+          },
+          {
+            "name": "28nm 28纳米",
+            "revenue": 2.513
+          },
+          {
+            "name": "40/45nm 40/45纳米",
+            "revenue": 1.077
+          },
+          {
+            "name": "65nm 65纳米",
+            "revenue": 1.436
+          },
+          {
+            "name": "90nm 90纳米",
+            "revenue": 0.359
+          },
+          {
+            "name": "0.11/0.13μm 0.11/0.13微米",
+            "revenue": 0.359
+          },
+          {
+            "name": "0.15/0.18μm 0.15/0.18微米",
+            "revenue": 0.718
+          },
+          {
+            "name": "0.25μm and above 0.25微米及以上",
+            "revenue": 0.359
+          }
+        ],
+        "sources": [
+          {
+            "label": "TSMC 1Q26 Management Report（1Q26 Revenue by Technology，占晶圆收入比）：3nm 25% / 5nm 36% / 7nm 13% / 16-20nm 7% / 28nm 7% / 40-45nm 3% / 65nm 4% / 90nm 1% / 0.11-0.13um 1% / 0.15-0.18um 2% / 0.25um and above 1%（先进制程 7nm 及以下 74%；官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 tsmc-2026q1 营收 35.9；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-04/5508a9df8981f587c73dbfaf9f577f142e22bbb1/1Q26ManagementReport.pdf",
+            "data_status": "derived"
+          },
+          {
+            "label": "交叉印证（TSMC 1Q26 Presentation (E) 投资人简报，官方 PDF）：3nm 25% / 5nm 36% / 7nm 13%，先进制程 7nm 及以下 74%，与管理层报告一致。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-04/a7e3abe65a3fbc342aa55f9f53a5490dd621c1ac/1Q26%20Presentation%20(E).pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tsmc-2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "TWD",
+      "fx_to_usd": 31.601,
+      "revenue": 40.201,
+      "gross_profit": 27.224,
+      "op_income": 24.259,
+      "net_income": 22.359,
+      "cfo": 24.7892,
+      "capex": 15.6958,
+      "segments": [
+        {
+          "name": "HPC 高性能计算",
+          "kind": "platform",
+          "revenue": 26.533,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Smartphone 智能手机",
+          "kind": "platform",
+          "revenue": 8.844,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "IoT 物联网",
+          "kind": "platform",
+          "revenue": 2.01,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 车用电子",
+          "kind": "platform",
+          "revenue": 1.608,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "DCE 数字消费电子",
+          "kind": "platform",
+          "revenue": 0.402,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.804,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "TSMC 2Q26 Financial Statements（2026-07-16）第 2 页三个月损益表：Net Revenue NT$1,270.381B / 官方同表 US$40.201B，Gross Profit NT$860.311B，Income from Operations NT$766.603B，Net income attributable to shareholders of the parent NT$706.562B（归母口径，非含少数股东的 706.781）；注 1：2Q26 加权平均汇率 NT$31.601/USD",
+          "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-07/114aaca0fea2050e96b91fffbab9ed04ba09cd92/FS.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "TSMC 2Q26 FS 第 4 页单季现金流：Net Cash Generated by Operating Activities NT$783.365B；Acquisitions of Property, Plant and Equipment NT$496.002B（取非负 capex 量级）",
+          "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-07/114aaca0fea2050e96b91fffbab9ed04ba09cd92/FS.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "TSMC 2Q26 Management Report 第 2 页：平台收入占比 HPC 66% / Smartphone 22% / IoT 5% / Automotive 4% / DCE 1% / Others 2%（合计 100%）",
+          "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-07/6f49632674bd2d0fd48cb65aaf89ec6ab510b559/2Q26%20ManagementReport.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "USD 存储值换算（均 ÷ 官方加权平均汇率 31.601）：gross 860.311→27.224、op 766.603→24.259、归母净利 706.562→22.359、CFO 783.365→24.7892、capex 496.002→15.6958；平台各行 = 官方占比 × 库内营收 40.201（合计恰为 40.201）",
+          "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-07/114aaca0fea2050e96b91fffbab9ed04ba09cd92/FS.pdf",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "制程节点（晶圆收入占比派生）",
+        "complete": false,
+        "items": [
+          {
+            "name": "2nm 2纳米",
+            "revenue": 1.206
+          },
+          {
+            "name": "3nm 3纳米",
+            "revenue": 12.0603
+          },
+          {
+            "name": "5nm 5纳米",
+            "revenue": 13.2663
+          },
+          {
+            "name": "7nm 7纳米",
+            "revenue": 4.4221
+          },
+          {
+            "name": "16/20nm 16/20纳米",
+            "revenue": 2.4121
+          },
+          {
+            "name": "28nm 28纳米",
+            "revenue": 2.4121
+          },
+          {
+            "name": "40/45nm 40/45纳米",
+            "revenue": 0.804
+          },
+          {
+            "name": "65nm 65纳米",
+            "revenue": 1.608
+          },
+          {
+            "name": "90nm–0.13μm 90纳米–0.13微米",
+            "revenue": 0.804
+          },
+          {
+            "name": "≥0.15μm 0.15微米及以上",
+            "revenue": 1.206
+          }
+        ],
+        "sources": [
+          {
+            "label": "TSMC 2Q26 Management Report 第 2 页「Wafer Revenue by Technology」：2nm 3% / 3nm 30% / 5nm 33% / 7nm 11% / 16/20nm 6% / 28nm 6% / 40/45nm 2% / 65nm 4% / 90nm–0.13μm 2% / ≥0.15μm 3%（官方各档合计 100%）。换算式：各行金额 = 该节点占比 × 库内 tsmc-2026q2 营收 40.201；官方占比基数为晶圆收入，本表以总营收近似晶圆收入基数，绝对金额偏高约非晶圆业务占比（≈9%）；complete=false，不设轧差行、不做对账。2Q26 起官方将低端档合并为 90nm–0.13μm 与 ≥0.15μm 两桶并新增 2nm 档——照官方原桶记录，不反拆成旧桶（跨期同比按行名失败关闭，属诚实断点）。",
+            "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-07/6f49632674bd2d0fd48cb65aaf89ec6ab510b559/2Q26%20ManagementReport.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    }
+  ]
+}

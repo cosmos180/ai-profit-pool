@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-merge.py — 把取数工具的产物合并进 companies.json,并跑通校验/构建(与 app 解耦的收尾步骤)。
+merge.py — 把取数工具的产物合并进 data/ 分片(一司一文件),并跑通校验/构建(与 app 解耦的收尾步骤)。
 
-它是 fetch_fmp.py / Dayu / 人工提取的下游:接收「一个或多个 companies.json 形状的公司对象」,
-按 id 合并进 companies.json,然后强制过 validate.py;只有 0 ERROR 才写盘并构建(cd web && bun run build)。
-任何一步失败都会回滚 companies.json,保证仓库里的数据永远是校验通过的状态。
+它是 fetch_fmp.py / Dayu / 人工提取的下游:接收「一个或多个公司对象(JSON)」,
+按 id 合并进 data/companies/<id>.json(真相源分片),然后强制过 validate.py(目录模式);
+只有 0 ERROR 才落盘并构建(cd web && bun run build)。任何一步失败都会回滚分片,
+保证仓库里的数据永远是校验通过的状态。根 companies.json 已退役为构建产物(gitignore)。
 
     # 直接接管道:取数 → 合并 → 校验 → 构建,一条龙
     python3 tools/fetch_fmp.py NVDA MSFT ORCL AMD | python3 tools/merge.py -
@@ -38,7 +39,9 @@ import argparse, json, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DB = ROOT / "companies.json"
+DATA = ROOT / "data"
+META = DATA / "meta.json"
+SHARDS = DATA / "companies"
 SCHEMA = ROOT / "schema.json"
 
 # 工具给不出、需人工补录的判断项:覆盖同 id 公司时,若新对象缺这些,则保留旧值。
@@ -65,11 +68,11 @@ def load_objs(paths):
         label = "stdin" if p == "-" else p
         if not raw.strip():
             # 上游取数失败时管道会喂进空输入(如 fetch_fmp 全 402)——给人话而非 JSON traceback。
-            sys.exit(f"{label} 没有 JSON 输入；上游取数可能失败或没有返回公司对象。companies.json 未改动。")
+            sys.exit(f"{label} 没有 JSON 输入；上游取数可能失败或没有返回公司对象。data/ 分片未改动。")
         try:
             data = json.loads(raw)
         except json.JSONDecodeError as e:
-            sys.exit(f"{label} 不是合法 JSON：{e.msg} (line {e.lineno}, column {e.colno})。companies.json 未改动。")
+            sys.exit(f"{label} 不是合法 JSON：{e.msg} (line {e.lineno}, column {e.colno})。data/ 分片未改动。")
         objs.extend(data if isinstance(data, list) else [data])
     return objs
 
@@ -148,7 +151,11 @@ def main():
     ap.add_argument("--no-build", action="store_true", help="合并+校验后不构建 app.html")
     a = ap.parse_args()
 
-    db = json.loads(DB.read_text(encoding="utf-8"))
+    sys.path.insert(0, str(ROOT / "tools"))
+    from assemble import assemble
+    db = assemble()
+    meta = json.loads(META.read_text(encoding="utf-8"))
+    order = list(meta.get("company_order") or [])
     by_id = {c["id"]: c for c in db["companies"]}
     new_objs = load_objs(a.inputs)
     if not new_objs:
@@ -176,12 +183,12 @@ def main():
             else:
                 if partial:
                     raise MergeError(
-                        f"{cid} 是部分对象(缺 years 或带 _partial),但 companies.json 里没有这个 id —— "
+                        f"{cid} 是部分对象(缺 years 或带 _partial),但 data/companies/ 里没有这个 id —— "
                         f"部分合并只能更新已存在的公司。先用【完整对象】录入这家公司。")
                 added.append(cid)
                 by_id[cid] = c
     except MergeError as e:
-        sys.exit(f"❌ {e}\ncompanies.json 未改动。")
+        sys.exit(f"❌ {e}\ndata/ 分片未改动。")
 
     if a.dry_run:
         print(f"[dry-run] 追加(新公司): {added or '—'}")
@@ -195,15 +202,32 @@ def main():
         print(f"[dry-run] 合并后共 {len(by_id)} 家;未写盘。")
         return
 
-    # 备份 → 写盘 → 校验;失败则回滚,保证仓库永远是校验通过的数据。
-    backup = DB.read_text(encoding="utf-8")
-    db["companies"] = list(by_id.values())
-    DB.write_text(json.dumps(db, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # 备份 → 写分片 → 组装产物 → 校验;失败则回滚分片,保证仓库永远是校验通过的数据。
+    touched_ids = sorted({cid for cid in added + updated + [c for c, _ in partials]}
+                         | {cid for cid in by_id if cid not in order})   # 含新公司
+    backups = {cid: (SHARDS / f"{cid}.json").read_text(encoding="utf-8")
+               for cid in touched_ids if (SHARDS / f"{cid}.json").exists()}
+    meta_backup = META.read_text(encoding="utf-8")
 
-    r = subprocess.run([sys.executable, str(ROOT / "validate.py"), str(DB), str(SCHEMA)])
+    for cid, c in by_id.items():
+        if cid in touched_ids:
+            (SHARDS / f"{cid}.json").write_text(
+                json.dumps(c, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if set(order) != set(by_id):
+        order = [cid for cid in order if cid in by_id] + [cid for cid in by_id if cid not in order]
+        meta["company_order"] = order
+        META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    r = subprocess.run([sys.executable, str(ROOT / "validate.py"), str(DATA), str(SCHEMA)])
     if r.returncode != 0:
-        DB.write_text(backup, encoding="utf-8")
-        sys.exit("\n❌ 校验未通过 → 已回滚 companies.json(未改动)。修好取数/判断项后重试。")
+        for cid, text in backups.items():
+            (SHARDS / f"{cid}.json").write_text(text, encoding="utf-8")
+        for cid in touched_ids:
+            p = SHARDS / f"{cid}.json"
+            if cid not in backups and p.exists():
+                p.unlink()          # 新公司分片:回滚即删除
+        META.write_text(meta_backup, encoding="utf-8")
+        sys.exit("\n❌ 校验未通过 → 已回滚 data/ 分片(未改动)。修好取数/判断项后重试。")
 
     print(f"\n✅ 合并完成:追加 {len(added)}、覆盖 {len(updated)}、部分更新 {len(partials)},"
           f"共 {len(by_id)} 家,校验 0 ERROR。")
@@ -220,11 +244,11 @@ def main():
     try:
         b = subprocess.run(["bun", "run", "build"], cwd=str(ROOT / "web"))
     except FileNotFoundError:
-        print("   ⚠ 未找到 bun —— companies.json 已更新且校验通过。"
+        print("   ⚠ 未找到 bun —— data/ 分片已更新且校验通过。"
               "装好依赖后手动跑 `cd web && bun install && bun run build` 重建 app.html。")
         return
     if b.returncode != 0:
-        sys.exit("web 构建失败 —— companies.json 已更新且校验通过,手动排查 `cd web && bun run build`。")
+        sys.exit("web 构建失败 —— data/ 分片已更新且校验通过,手动排查 `cd web && bun run build`。")
     print("   app.html 已重建(cd web && bun run build)→ 打开即可看到新数据。")
 
     # 温馨提示:未补判断项的公司会honest降级(不进 AI 利润池/迁移图)。

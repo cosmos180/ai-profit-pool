@@ -1,0 +1,1557 @@
+{
+  "id": "google",
+  "name": "Alphabet 谷歌",
+  "ticker": "NASDAQ · GOOGL",
+  "region": "美国",
+  "sector": "搜索/广告 + 云 + AI",
+  "currency": "USD",
+  "seg_profit": "yes",
+  "logo_text": "go",
+  "logo_class": "go",
+  "status": "populated",
+  "chain_stage": "cloud",
+  "ai_exposure": "partial",
+  "ai_profit_share": 0.107797,
+  "ai_share_source": [
+    {
+      "label": "AI profit share proxy: FY2025 Google Cloud operating income $13.910B / Alphabet operating income $129.039B = 10.7797%. Cloud is used as an AI infrastructure proxy, not company-disclosed AI-only profit.",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+      "data_status": "derived"
+    }
+  ],
+  "lead": "需求侧超大规模厂商样本：营收按 Google Services / Google Cloud / Other Bets 三个报告分部披露，并有分部营业利润。Google Cloud 标 is_ai（含企业 AI 基础设施与 GenAI），但占合并营收仅约 15% → C 加权后云环节被显著折算，正是“整公司≠全 AI”的样本。Google Services 含对冲/抵消调节项以与合并营收对账。",
+  "fy_note": "财年=自然年（截至每年 12 月 31 日），USD 原币无需换算。Google Services 分部营收已吸收官方“对冲损益(hedging gains/losses)”调节项（数亿美元级），使三分部合计=合并营收，便于平台对账；Cloud / Other Bets 为官方原值。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 4480,
+    "price": 367.03,
+    "price_currency": "USD",
+    "net_debt": null,
+    "sources": [
+      {
+        "label": "GOOGL close $367.03 (+0.16% vs 07-06 $366.46); market cap derived from library implied share count (~12.20B), cross-checked vs stockanalysis/companiesmarketcap ($4.36-4.44T range)",
+        "url": "https://stockanalysis.com/stocks/googl/",
+        "data_status": "estimate"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "自然年 2023（截至 2023-12-31）",
+      "period_end_iso": "2023-12-31",
+      "status": "actual",
+      "revenue": 307.394,
+      "gross_margin": null,
+      "op_income": 84.293,
+      "net_income": 73.795,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+          "kind": "platform",
+          "revenue": 272.779,
+          "op_income": 95.858,
+          "op_margin": 0.351,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 33.088,
+          "op_income": 1.716,
+          "op_margin": 0.052,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 1.527,
+          "op_income": -4.095,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 272.543,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 175.033
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 31.51
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 31.312
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 34.688
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 33.088
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 1.527
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.236
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet FY2025 Form 10-K Note 2 — FY2023 revenue by type: Search $175,033M; YouTube ads $31,510M; Network $31,312M; subscriptions/platforms/devices $34,688M; Cloud $33,088M; Other Bets $1,527M; hedging +$236M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet FY2024 业绩新闻稿（含 FY2023 对比：总营收 $307,394M、营业利润 $84,293M、净利 $73,795M；分部 Services/Cloud/Other Bets 与对冲调节）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收官方对冲损益调节项 ≈ +$236M；Cloud/Other Bets 为官方原值），便于平台对账",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2023 Form 10-K filed 2024-01-31（SEC XBRL: CFO $101,746M, capex $32,251M；P&L 与现有 FY2024/press-release 口径交叉核对）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000022/goog-20231231.htm",
+          "data_status": "official"
+        }
+      ],
+      "cfo": 101.746,
+      "capex": 32.251
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "自然年 2024（截至 2024-12-31）",
+      "period_end_iso": "2024-12-31",
+      "status": "actual",
+      "revenue": 350.018,
+      "gross_margin": 0.582,
+      "op_income": 112.39,
+      "net_income": 100.118,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+          "kind": "platform",
+          "revenue": 305.141,
+          "op_income": 121.263,
+          "op_margin": 0.397,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 43.229,
+          "op_income": 6.112,
+          "op_margin": 0.141,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 1.648,
+          "op_income": -4.444,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 304.93,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 198.084
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 36.147
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 30.359
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 40.34
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 43.229
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 1.648
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.211
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet FY2025 Form 10-K Note 2 — FY2024 revenue by type: Search $198,084M; YouTube ads $36,147M; Network $30,359M; subscriptions/platforms/devices $40,340M; Cloud $43,229M; Other Bets $1,648M; hedging +$211M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet FY2024 业绩新闻稿（总营收 $350,018M、营业利润 $112,390M、净利 $100,118M；cost of revenues $146,306M → 毛利率 58.2%；分部 Cloud $43,229M / Other Bets $1,648M / 对冲 +$211M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ +$211M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2024 Form 10-K filed 2025-02-05（SEC XBRL: CFO $125,299M, capex $52,535M；P&L 与现有 FY2024 口径交叉核对）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
+          "data_status": "official"
+        }
+      ],
+      "cfo": 125.299,
+      "capex": 52.535
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "自然年 2025（截至 2025-12-31）",
+      "period_end_iso": "2025-12-31",
+      "status": "actual",
+      "revenue": 402.836,
+      "gross_margin": null,
+      "op_income": 129.039,
+      "net_income": 132.17,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+          "kind": "platform",
+          "revenue": 342.594,
+          "op_income": 139.404,
+          "op_margin": 0.407,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 58.705,
+          "op_income": 13.91,
+          "op_margin": 0.237,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 1.537,
+          "op_income": -7.515,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 342.721,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 224.532
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 40.367
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 29.792
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 48.03
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 58.705
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 1.537
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": -0.127
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet FY2025 Form 10-K Note 2 — FY2025 revenue by type: Search $224,532M; YouTube ads $40,367M; Network $29,792M; subscriptions/platforms/devices $48,030M; Cloud $58,705M; Other Bets $1,537M; hedging −$127M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet Q4 & FY2025 业绩新闻稿（总营收 $402,836M、营业利润 $129,039M、净利 $132,170M；Google Cloud $58,705M、Other Bets $1,537M）",
+          "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ −$127M，使三分部合计=合并营收）",
+          "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2025 Form 10-K filed 2026-02-05（SEC XBRL: revenue $402,836M, operating income $129,039M, net income $132,170M, CFO $164,713M, capex $91,447M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+          "data_status": "official"
+        }
+      ],
+      "cfo": 164.713,
+      "capex": 91.447
+    },
+    {
+      "fy": "FY2026E",
+      "period_end": "自然年 2026（截至 2026-12-31）",
+      "period_end_iso": "2026-12-31",
+      "status": "forecast",
+      "revenue": 488.02,
+      "net_income": 173.69,
+      "consensus_rev": "$488.0B",
+      "consensus_eps": "$14.22",
+      "consensus_eps_value": 14.22,
+      "consensus_eps_currency": "USD",
+      "consensus_eps_source": [
+        {
+          "label": "StockAnalysis/S&P Global consensus FY2026 EPS average $14.22; last updated 2026-07-02",
+          "url": "https://stockanalysis.com/stocks/googl/forecast/",
+          "data_status": "consensus"
+        }
+      ],
+      "sources": [
+        {
+          "label": "StockAnalysis/S&P Global FY2026 forecast: revenue $488.02B, net income $173.69B, EPS $14.22",
+          "url": "https://stockanalysis.com/stocks/googl/forecast/",
+          "data_status": "consensus"
+        }
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2023-09-30",
+      "label": "Q3 FY2023",
+      "revenue": 76.693,
+      "net_income": 19.689,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2023-10-25（quarter ended 2023-09-30: revenue $76,693M, net income $19,689M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000094/goog-20230930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-03-31",
+      "label": "Q1 FY2024",
+      "revenue": 80.539,
+      "net_income": 23.662,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2024-04-26（quarter ended 2024-03-31: revenue $80,539M, net income $23,662M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000053/goog-20240331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-06-30",
+      "label": "Q2 FY2024",
+      "revenue": 84.742,
+      "net_income": 23.619,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2024-07-24（quarter ended 2024-06-30: revenue $84,742M, net income $23,619M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000079/goog-20240630.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-09-30",
+      "label": "Q3 FY2024",
+      "revenue": 88.268,
+      "net_income": 26.301,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2024-10-30（quarter ended 2024-09-30: revenue $88,268M, net income $26,301M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000118/goog-20240930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-03-31",
+      "label": "Q1 FY2025",
+      "revenue": 90.234,
+      "net_income": 34.54,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2025-04-25（quarter ended 2025-03-31: revenue $90,234M, net income $34,540M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000043/goog-20250331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-06-30",
+      "label": "Q2 FY2025",
+      "revenue": 96.428,
+      "net_income": 28.196,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2025-07-24（quarter ended 2025-06-30: revenue $96,428M, net income $28,196M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000062/goog-20250630.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-09-30",
+      "label": "Q3 FY2025",
+      "revenue": 102.346,
+      "net_income": 34.979,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2025-10-30（quarter ended 2025-09-30: revenue $102,346M, net income $34,979M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000091/goog-20250930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-03-31",
+      "label": "Q1 FY2026",
+      "revenue": 109.896,
+      "net_income": 62.578,
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2026-04-30（quarter ended 2026-03-31: revenue $109,896M, net income $62,578M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "google-2023q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2023-07-01",
+      "period_end": "2023-09-30",
+      "calendar_year": 2023,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 76.693,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 19.689,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 67.986,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 44.026
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 7.952
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.669
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 8.339
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 8.411
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.297
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": -0.001
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q3 2023 Form 10-Q — quarter revenue by type, including YouTube ads $7,952M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000094/goog-20230930.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2023-10-25（quarter ended 2023-09-30: revenue $76,693M, net income $19,689M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000094/goog-20230930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 307.394,
+      "gross_profit": 174.062,
+      "op_income": 84.293,
+      "net_income": 73.795,
+      "cfo": 101.746,
+      "capex": 32.251,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+          "kind": "platform",
+          "revenue": 272.779,
+          "op_income": 95.858,
+          "op_margin": 0.351,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 33.088,
+          "op_income": 1.716,
+          "op_margin": 0.052,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 1.527,
+          "op_income": -4.095,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 272.543,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 175.033
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 31.51
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 31.312
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 34.688
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 33.088
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 1.527
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.236
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet FY2025 Form 10-K Note 2 — FY2023 revenue by type, including YouTube ads $31,510M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "毛利派生 = revenue $307,394M − cost of revenues $133,332M = $174,062M（Alphabet FY2025 10-K 比较列）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2024 业绩新闻稿（含 FY2023 对比：总营收 $307,394M、营业利润 $84,293M、净利 $73,795M；分部 Services/Cloud/Other Bets 与对冲调节）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收官方对冲损益调节项 ≈ +$236M；Cloud/Other Bets 为官方原值），便于平台对账",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2023 Form 10-K filed 2024-01-31（SEC XBRL: CFO $101,746M, capex $32,251M；P&L 与现有 FY2024/press-release 口径交叉核对）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000022/goog-20231231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2024q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-03-31",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 80.539,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 23.662,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 70.398,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 46.156
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 8.09
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.413
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 8.739
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 9.574
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.495
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.072
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q1 2024 Form 10-Q — quarter revenue by type, including YouTube ads $8,090M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000053/goog-20240331.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2024-04-26（quarter ended 2024-03-31: revenue $80,539M, net income $23,662M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000053/goog-20240331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2024q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-04-01",
+      "period_end": "2024-06-30",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 84.742,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 23.619,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 73.928,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 48.509
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 8.663
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.444
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 9.312
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 10.347
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.365
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.102
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q2 2024 Form 10-Q — quarter revenue by type, including YouTube ads $8,663M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000079/goog-20240630.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2024-07-24（quarter ended 2024-06-30: revenue $84,742M, net income $23,619M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000079/goog-20240630.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2024q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-07-01",
+      "period_end": "2024-09-30",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 88.268,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 26.301,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 76.51,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 49.385
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 8.921
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.548
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 10.656
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 11.353
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.388
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.017
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q3 2024 Form 10-Q — quarter revenue by type, including YouTube ads $8,921M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000118/goog-20240930.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2024-10-30（quarter ended 2024-09-30: revenue $88,268M, net income $26,301M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000118/goog-20240930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 350.018,
+      "gross_profit": 203.712,
+      "op_income": 112.39,
+      "net_income": 100.118,
+      "cfo": 125.299,
+      "capex": 52.535,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+          "kind": "platform",
+          "revenue": 305.141,
+          "op_income": 121.263,
+          "op_margin": 0.397,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 43.229,
+          "op_income": 6.112,
+          "op_margin": 0.141,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 1.648,
+          "op_income": -4.444,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 304.93,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 198.084
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 36.147
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 30.359
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 40.34
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 43.229
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 1.648
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.211
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet FY2025 Form 10-K Note 2 — FY2024 revenue by type, including YouTube ads $36,147M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "毛利派生 = revenue $350,018M − cost of revenues $146,306M = $203,712M（Alphabet FY2025 10-K 比较列）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2024 业绩新闻稿（总营收 $350,018M、营业利润 $112,390M、净利 $100,118M；cost of revenues $146,306M → 毛利率 58.2%；分部 Cloud $43,229M / Other Bets $1,648M / 对冲 +$211M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ +$211M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000010/googexhibit991q42024.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2024 Form 10-K filed 2025-02-05（SEC XBRL: CFO $125,299M, capex $52,535M；P&L 与现有 FY2024 口径交叉核对）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-03-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 90.234,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 34.54,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 77.264,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 50.702
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 8.927
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.256
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 10.379
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 12.26
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.45
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.26
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q1 2025 Form 10-Q — quarter revenue by type, including YouTube ads $8,927M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000043/goog-20250331.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2025-04-25（quarter ended 2025-03-31: revenue $90,234M, net income $34,540M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000043/goog-20250331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-04-01",
+      "period_end": "2025-06-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 96.428,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 28.196,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 82.543,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 54.19
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 9.796
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.354
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 11.203
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 13.624
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.373
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": -0.112
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q2 2025 Form 10-Q — quarter revenue by type, including YouTube ads $9,796M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000062/goog-20250630.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2025-07-24（quarter ended 2025-06-30: revenue $96,428M, net income $28,196M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000062/goog-20250630.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2025-09-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 102.346,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 34.979,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 87.052,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 56.567
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 10.261
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.354
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 12.87
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 15.157
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.344
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": -0.207
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q3 2025 Form 10-Q — quarter revenue by type, including YouTube ads $10,261M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000091/goog-20250930.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet 10-Q filed 2025-10-30（quarter ended 2025-09-30: revenue $102,346M, net income $34,979M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000091/goog-20250930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 402.836,
+      "gross_profit": 240.301,
+      "op_income": 129.039,
+      "net_income": 132.17,
+      "cfo": 164.713,
+      "capex": 91.447,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（搜索/广告/YouTube/订阅设备，含对冲调节）",
+          "kind": "platform",
+          "revenue": 342.594,
+          "op_income": 139.404,
+          "op_margin": 0.407,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 58.705,
+          "op_income": 13.91,
+          "op_margin": 0.237,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 1.537,
+          "op_income": -7.515,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 342.721,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 224.532
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 40.367
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 29.792
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 48.03
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 58.705
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 1.537
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": -0.127
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet FY2025 Form 10-K Note 2 — FY2025 revenue by type, including YouTube ads $40,367M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "毛利派生 = revenue $402,836M − cost of revenues $162,535M = $240,301M（Alphabet FY2025 10-K）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet Q4 & FY2025 业绩新闻稿（总营收 $402,836M、营业利润 $129,039M、净利 $132,170M；Google Cloud $58,705M、Other Bets $1,537M）",
+          "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Google Services 营收 = 合并营收 − Cloud − Other Bets（吸收对冲调节 ≈ −$127M，使三分部合计=合并营收）",
+          "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2025q4-alphabet-earnings-release.pdf",
+          "data_status": "derived"
+        },
+        {
+          "label": "Alphabet FY2025 Form 10-K filed 2026-02-05（SEC XBRL: revenue $402,836M, operating income $129,039M, net income $132,170M, CFO $164,713M, capex $91,447M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-01-01",
+      "period_end": "2026-03-31",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 109.896,
+      "gross_profit": 68.625,
+      "op_income": 39.696,
+      "net_income": 62.578,
+      "cfo": 45.79,
+      "capex": 35.674,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（含收入对冲调节）",
+          "kind": "platform",
+          "revenue": 89.457,
+          "op_income": 40.589,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 20.028,
+          "op_income": 6.598,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 0.411,
+          "op_income": -2.1,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 89.637,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 60.399
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 9.883
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 6.971
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 12.384
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 20.028
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.411
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": -0.18
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q1 2026 Form 10-Q — quarter revenue by type, including YouTube ads $9,883M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet Form 10-Q filed 2026-04-30（Q1 2026 iXBRL: revenue $109,896M; cost of revenues $41,271M; operating income $39,696M; net income $62,578M; CFO $45,790M; capex $35,674M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Alphabet Form 10-Q segment table（Google Services $89,637M, Google Cloud $20,028M, Other Bets $411M, revenue hedging -$180M folded into Services for platform reconciliation）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived gross profit = revenue $109,896M - cost of revenues $41,271M = $68,625M",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "google-2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 119.796,
+      "gross_profit": 73.853,
+      "op_income": 40.77,
+      "net_income": 112.193,
+      "cfo": 39.069,
+      "capex": 44.924,
+      "segments": [
+        {
+          "name": "Google Services 谷歌服务（含收入对冲调节）",
+          "kind": "platform",
+          "revenue": 94.646,
+          "op_income": 39.544,
+          "is_ai": false
+        },
+        {
+          "name": "Google Cloud 谷歌云",
+          "kind": "platform",
+          "revenue": 24.768,
+          "op_income": 8.814,
+          "is_ai": true
+        },
+        {
+          "name": "Other Bets 其他押注",
+          "kind": "platform",
+          "revenue": 0.382,
+          "op_income": -1.799,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Google Services 谷歌服务",
+            "revenue": 94.54,
+            "children": [
+              {
+                "name": "Google Search & other 搜索及其他",
+                "revenue": 63.271
+              },
+              {
+                "name": "YouTube Ads YouTube 广告",
+                "revenue": 11.055
+              },
+              {
+                "name": "Google Network 谷歌联盟广告",
+                "revenue": 7.303
+              },
+              {
+                "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                "revenue": 12.911
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud 谷歌云",
+            "revenue": 24.768
+          },
+          {
+            "name": "Other Bets 其他押注",
+            "revenue": 0.382
+          },
+          {
+            "name": "Hedging gains (losses) 对冲损益",
+            "revenue": 0.106
+          }
+        ],
+        "sources": [
+          {
+            "label": "Alphabet Q2 2026 Form 10-Q — quarter revenue by type, including YouTube ads $11,055M",
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Alphabet Form 10-Q filed 2026-07-23（Q2 2026: revenue $119,796M; cost of revenues $45,943M; operating income $40,770M; net income $112,193M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Alphabet Form 10-Q segment table（Google Services $94,540M, Google Cloud $24,768M, Other Bets $382M, revenue hedging +$106M folded into Services for platform reconciliation）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived gross profit = revenue $119,796M − cost of revenues $45,943M = $73,853M",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Derived quarterly CFO/capex from matching USD YTD cash-flow disclosures: CFO $84,859M (6M 2026) − $45,790M (Q1 2026) = $39,069M; PPE purchases $80,598M − $35,674M = $44,924M",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+          "data_status": "derived"
+        }
+      ]
+    }
+  ]
+}

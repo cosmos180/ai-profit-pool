@@ -1,0 +1,1254 @@
+{
+  "id": "tencent",
+  "name": "Tencent 腾讯控股",
+  "ticker": "HKEX 0700 · OTC TCEHY",
+  "region": "中国",
+  "sector": "应用/平台 (游戏·广告·金融科技·云)",
+  "currency": "CNY",
+  "seg_profit": "no",
+  "logo_text": "tx",
+  "logo_class": "tx",
+  "status": "populated",
+  "lead": "价值链需求侧的“应用/平台”样本：营收按三大业务线（增值服务VAS、营销服务、金融科技及企业服务）披露，但营业利润仅到合并层、不到分部级 → seg_profit='no'。归母净利含大额联营/被投公司公允价值收益，PE 失真（类软银），但经营现金流真实、FCF 口径有意义。",
+  "fy_note": "财年=自然年（截至每年 12 月 31 日）。归母净利为 IFRS 口径（含投资公允价值损益），非 Non-IFRS。CNY→USD 用年均汇率换算（FY2023≈7.20、FY2024≈7.185[由腾讯官方披露的 RMB/USD 对照反推]、FY2025≈7.187[全年均值]）；分部营收同口径换算。op_income 留空：腾讯 IFRS 全年营业利润未在摘要中可靠取得（避免误用季度数）。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 497,
+    "price": 431.2,
+    "price_currency": "HKD",
+    "net_debt": -14.9,
+    "sources": [
+      {
+        "label": "0700.HK close ~431 HKD (UNCERTAIN: sources conflict 420-461; 461.20 rejected as it fails mkt-cap cross-check; anchors: Jul-2 close 430.2, Jul-3 close 431.2, Jul-8 range 429.40-447.00). Mkt cap 3.90T HKD / 7.843 (USD/HKD, 2026-07-07) = ~497bn USD.",
+        "url": "https://www.investing.com/equities/tencent-holdings-hk",
+        "data_status": "estimate"
+      },
+      {
+        "label": "net_debt：FY2025 财报披露净现金(net cash position) RMB107.1B ÷ 7.187 = +$14.9B 净现金 → net_debt = −14.9（口径：现金及等价物+定期存款 − 有息债务，排经营租赁；腾讯长期净现金）",
+        "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+        "data_status": "estimate"
+      }
+    ]
+  },
+  "valuation_caveat": {
+    "pe": "distorted",
+    "ps": "ok",
+    "fcf_yield": "ok",
+    "ev_sales": "ok",
+    "note": "归母净利(IFRS)含联营公司及被投企业的公允价值变动/处置收益（2024 净利 +68% 主要由投资收益与一次性项目驱动，非经营性），PE 失真、显示但降级；腾讯有真实大额经营现金流（FY2025 FCF RMB182.6B），PS / FCF yield / EV/Sales 口径有意义，正常出值；净现金 → EV<市值。IFRS 营业利润含其他收益净额公允价值变动 → EBITDA 失真，EV/EBITDA 若出值仅供参考（当前 annual op_income 未录，诚实 blank）",
+    "ev_ebitda": "distorted"
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "截至 2023-12-31",
+      "period_end_iso": "2023-12-31",
+      "status": "actual",
+      "revenue": 84.6,
+      "gross_margin": 0.481,
+      "op_income": null,
+      "net_income": 21.9,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 41.444,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 14.097,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 28.3,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 0.744,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Tencent 2023 Annual & Q4 Results（2024-03-20）— 全年营收 RMB609.015B(USD84.6B)、归母净利 RMB157.68B、毛利 RMB293.1B(毛利率48%)；分部：VAS RMB298.4B、网络广告 RMB101.5B、金融科技及企业服务 RMB203.76B",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2023-annual-and-fourth-quarter-results-302094552.html",
+          "data_status": "official"
+        },
+        {
+          "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+          "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": false,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 41.444,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 17.597
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 7.3888
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 16.4582
+              }
+            ]
+          },
+          {
+            "name": "网络广告 Online Advertising",
+            "revenue": 14.097
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 28.3
+          },
+          {
+            "name": "其他",
+            "revenue": 0.744
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 官方 4Q24/FY2024 业绩演示第 15 页同时披露 FY2023 对比值：VAS RMB298.4B，本土游戏 126.7B / 国际游戏 53.2B / 社交网络 118.5B，三子精确加总 VAS。顶层四行复用库内 FY2023 segments；children 按 VAS 库内 USD 41.444 的隐含汇率 7.20008 换算为 17.597 / 7.3888 / 16.4582，精确加总 41.444。顶层合计 84.585 与库内营收 84.6 的 -0.015 差异源于营收存储精度，故 complete=false。",
+            "url": "https://static.www.tencent.com/uploads/2025/03/19/f55938d61be94cf9700a971a4db08809.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "截至 2024-12-31",
+      "period_end_iso": "2024-12-31",
+      "status": "actual",
+      "revenue": 91.9,
+      "gross_margin": 0.529,
+      "op_income": null,
+      "net_income": 27,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 44.426,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 16.896,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 29.506,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 1.072,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Tencent 2024 Annual & Q4 Results（2025-03-19）— 全年营收 RMB660.3B(USD91.9B)、归母净利 RMB194.1B(USD27.0B,+68%)、毛利 RMB349.2B(USD48.6B)；分部：VAS RMB319.2B、营销服务 RMB121.4B、金融科技及企业服务 RMB212.0B",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+          "data_status": "official"
+        },
+        {
+          "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+          "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": true,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 44.426,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 19.4433
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 8.0724
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 16.9103
+              }
+            ]
+          },
+          {
+            "name": "营销服务 Marketing Services",
+            "revenue": 16.896
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 29.506
+          },
+          {
+            "name": "其他",
+            "revenue": 1.072
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 官方 4Q24/FY2024 业绩演示：VAS RMB319.2B，本土游戏 139.7B / 国际游戏 58.0B / 社交网络 121.5B，三子精确加总 VAS。顶层四行复用库内 FY2024 segments；children 按 VAS 库内 USD 44.426 的隐含汇率 7.18498 换算为 19.4433 / 8.0724 / 16.9103，精确加总 44.426。顶层合计 91.900=库内营收 91.9，故 complete=true。",
+            "url": "https://static.www.tencent.com/uploads/2025/03/19/f55938d61be94cf9700a971a4db08809.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "截至 2025-12-31",
+      "period_end_iso": "2025-12-31",
+      "status": "actual",
+      "revenue": 104.6,
+      "gross_margin": 0.562,
+      "op_income": null,
+      "net_income": 36.1,
+      "capex": 11.02,
+      "cfo": 36.43,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 51.384,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 20.175,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 31.919,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 1.127,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Tencent 2025 Annual & Q4 Results（2026-03-18）— 全年营收 RMB751.8B(+14%)、归母净利(IFRS) RMB259.6B、毛利 RMB422.6B；分部：VAS RMB369.3B、营销服务 RMB145.0B、金融科技及企业服务 RMB229.4B；FCF RMB182.6B、capex RMB79.2B、净现金 RMB107.1B",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+          "data_status": "official"
+        },
+        {
+          "label": "换算汇率：CNY→USD 采用年均汇率（FY2023≈7.20、FY2024≈7.185[由官方披露 USD 反推]、FY2025≈7.187[全年均值,x-rates/exchangerates.org.uk]）",
+          "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": false,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 51.384,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 22.8466
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 10.7694
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 17.768
+              }
+            ]
+          },
+          {
+            "name": "营销服务 Marketing Services",
+            "revenue": 20.175
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 31.919
+          },
+          {
+            "name": "其他",
+            "revenue": 1.127
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 官方 FY2025 业绩新闻稿：VAS RMB369.3B，本土游戏 164.2B / 国际游戏 77.4B / 社交网络 127.7B，三子精确加总 VAS。顶层四行复用库内 FY2025 segments；children 按 VAS 库内 USD 51.384 的隐含汇率 7.18706 换算为 22.8466 / 10.7694 / 17.768，精确加总 51.384。顶层合计 104.605 与库内营收 104.6 相差 +0.005，源于营收存储精度，故 complete=false。",
+            "url": "https://static.www.tencent.com/uploads/2026/03/18/bd32d8ee320b72f0d72d545fd2d65851.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "tencent-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "CNY",
+      "fx_to_usd": 7.2,
+      "revenue": 84.6,
+      "gross_profit": 40.7096,
+      "op_income": null,
+      "net_income": 21.9,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 41.444,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 14.097,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 28.3,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 0.744,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Tencent 2023 Annual Report（gross profit RMB 293,109M）",
+          "url": "https://static.www.tencent.com/uploads/2024/04/08/e95c902973fc282be3b3e285c6245281.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Tencent 2023 Annual & Q4 Results（2024-03-20）— 全年营收 RMB609.015B(USD84.6B)、归母净利 RMB157.68B、毛利 RMB293.1B(毛利率48%)；分部：VAS RMB298.4B、网络广告 RMB101.5B、金融科技及企业服务 RMB203.76B",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2023-annual-and-fourth-quarter-results-302094552.html",
+          "data_status": "official"
+        },
+        {
+          "label": "换算汇率 CNY→USD 7.20（CNY per USD，source-currency-per-USD 契约方向，FY2023 年均汇率），见 fy_note",
+          "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2023",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": false,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 41.444,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 17.597
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 7.3888
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 16.4582
+              }
+            ]
+          },
+          {
+            "name": "网络广告 Online Advertising",
+            "revenue": 14.097
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 28.3
+          },
+          {
+            "name": "其他",
+            "revenue": 0.744
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 官方 4Q24/FY2024 业绩演示第 15 页同时披露 FY2023 对比值：VAS RMB298.4B，本土游戏 126.7B / 国际游戏 53.2B / 社交网络 118.5B，三子精确加总 VAS。顶层四行复用库内 FY2023 segments；children 按 VAS 库内 USD 41.444 的隐含汇率 7.20008 换算为 17.597 / 7.3888 / 16.4582，精确加总 41.444。顶层合计 84.585 与库内营收 84.6 的 -0.015 差异源于营收存储精度，故 complete=false。",
+            "url": "https://static.www.tencent.com/uploads/2025/03/19/f55938d61be94cf9700a971a4db08809.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tencent-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "CNY",
+      "fx_to_usd": 7.185,
+      "revenue": 91.9,
+      "gross_profit": 48.6077,
+      "op_income": null,
+      "net_income": 27,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 44.426,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 16.896,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 29.506,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 1.072,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Tencent 2024 Annual Report（gross profit RMB 349,246M）",
+          "url": "https://static.www.tencent.com/uploads/2025/04/08/1132b72b565389d1b913aea60a648d73.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Tencent 2024 Annual & Q4 Results（2025-03-19）— 全年营收 RMB660.3B(USD91.9B)、归母净利 RMB194.1B(USD27.0B,+68%)、毛利 RMB349.2B(USD48.6B)；分部：VAS RMB319.2B、营销服务 RMB121.4B、金融科技及企业服务 RMB212.0B",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+          "data_status": "official"
+        },
+        {
+          "label": "换算汇率 CNY→USD 7.185（CNY per USD，source-currency-per-USD 契约方向，由腾讯官方披露 RMB/USD 对照反推），见 fy_note",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2024-annual-and-fourth-quarter-results-302405688.html",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": true,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 44.426,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 19.4433
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 8.0724
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 16.9103
+              }
+            ]
+          },
+          {
+            "name": "营销服务 Marketing Services",
+            "revenue": 16.896
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 29.506
+          },
+          {
+            "name": "其他",
+            "revenue": 1.072
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 官方 4Q24/FY2024 业绩演示：VAS RMB319.2B，本土游戏 139.7B / 国际游戏 58.0B / 社交网络 121.5B，三子精确加总 VAS。顶层四行复用库内 FY2024 segments；children 按 VAS 库内 USD 44.426 的隐含汇率 7.18498 换算为 19.4433 / 8.0724 / 16.9103，精确加总 44.426。顶层合计 91.900=库内营收 91.9，故 complete=true。",
+            "url": "https://static.www.tencent.com/uploads/2025/03/19/f55938d61be94cf9700a971a4db08809.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tencent-2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-03-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "CNY",
+      "fx_to_usd": 7.187,
+      "revenue": 25.0483,
+      "gross_profit": 13.9826,
+      "op_income": 8.0097,
+      "net_income": 6.6538,
+      "cfo": null,
+      "capex": 3.823,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Tencent 2025 First Quarter Results press release, condensed consolidated income statement",
+          "url": "https://static.www.tencent.com/uploads/2025/05/16/2af4e73edd208df236dadd8b9df89fc4.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "FX basis: CNY/USD 7.187, matching existing Tencent FY2025 annual route-B basis",
+          "url": "https://www.tencent.com/en-us/investors/financial-news.html",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "tencent-2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-04-01",
+      "period_end": "2025-06-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "CNY",
+      "fx_to_usd": 7.187,
+      "revenue": 25.6719,
+      "gross_profit": 14.6115,
+      "op_income": 8.3629,
+      "net_income": 7.7401,
+      "cfo": null,
+      "capex": 2.6586,
+      "segments": [],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": true,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 12.713,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 5.6193,
+                "products": [
+                  {
+                    "name": "Delta Force 三角洲行动",
+                    "note": "2Q25 收入增长贡献"
+                  },
+                  {
+                    "name": "Honour of Kings 王者荣耀",
+                    "note": "2Q25 常青游戏收入增长贡献"
+                  },
+                  {
+                    "name": "VALORANT 无畏契约",
+                    "note": "2Q25 常青游戏收入增长贡献"
+                  },
+                  {
+                    "name": "Peacekeeper Elite 和平精英",
+                    "note": "2Q25 常青游戏收入增长贡献"
+                  }
+                ],
+                "product_note": "公司在 2Q25 业绩材料点名的收入增长贡献产品；未披露单款游戏收入。"
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 2.6149,
+                "products": [
+                  {
+                    "name": "Supercell 游戏组合",
+                    "note": "2Q25 收入增长贡献"
+                  },
+                  {
+                    "name": "PUBG MOBILE",
+                    "note": "2Q25 收入增长贡献"
+                  },
+                  {
+                    "name": "Dune: Awakening 沙丘：觉醒",
+                    "note": "2Q25 新游戏收入贡献"
+                  }
+                ],
+                "product_note": "公司在 2Q25 业绩材料点名的收入增长贡献产品；未披露单款游戏收入。"
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 4.4787,
+                "products": [
+                  {
+                    "name": "应用内游戏虚拟道具",
+                    "note": "2Q25 社交网络收入增长来源"
+                  },
+                  {
+                    "name": "微信视频号直播",
+                    "note": "2Q25 社交网络收入增长来源"
+                  },
+                  {
+                    "name": "腾讯音乐订阅",
+                    "note": "2Q25 社交网络收入增长来源"
+                  }
+                ],
+                "product_note": "公司披露的本期收入来源；不等同于微信和 QQ 的整体收入，且未披露各产品金额。"
+              }
+            ]
+          },
+          {
+            "name": "营销服务 Marketing Services",
+            "revenue": 4.9759,
+            "products": [
+              {
+                "name": "微信视频号广告",
+                "note": "2Q25 公司点名的广告需求载体"
+              },
+              {
+                "name": "微信小程序广告",
+                "note": "2Q25 公司点名的广告需求载体"
+              },
+              {
+                "name": "微信搜一搜广告",
+                "note": "2Q25 公司点名的广告需求载体"
+              }
+            ],
+            "product_note": "公司点名的营销载体；未披露各载体独立收入。"
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 7.7273,
+            "products": [
+              {
+                "name": "消费贷款服务",
+                "note": "2Q25 金融科技收入增长来源"
+              },
+              {
+                "name": "微信支付（商业支付）",
+                "note": "2Q25 金融科技收入增长来源"
+              },
+              {
+                "name": "财富管理服务",
+                "note": "2Q25 金融科技收入增长来源"
+              },
+              {
+                "name": "腾讯云 GPU 租赁",
+                "note": "2Q25 AI 相关企业服务收入来源"
+              },
+              {
+                "name": "腾讯云 API Token 使用",
+                "note": "2Q25 AI 相关企业服务收入来源"
+              },
+              {
+                "name": "电商技术服务",
+                "note": "2Q25 企业服务收入增长来源"
+              }
+            ],
+            "product_note": "金融科技与企业服务为合并披露；未披露子业务及单品金额。"
+          },
+          {
+            "name": "其他",
+            "revenue": 0.2557,
+            "product_note": "2Q25 业绩材料未披露“其他”收入对应的具体产品，保持未拆分。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 2Q2025 official earnings release — exact IFRS business revenue; rounded VAS subcategories proportionally scaled to exact VAS and converted at the period FX rate; named product drivers carry no standalone revenue amounts",
+            "url": "https://static.www.tencent.com/uploads/2025/08/13/56af6c5c98acdc7bd757a7bd208d8189.pdf",
+            "data_status": "derived"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Tencent 2025 Second Quarter Results press release, condensed consolidated income statement",
+          "url": "https://static.www.tencent.com/uploads/2025/08/13/56af6c5c98acdc7bd757a7bd208d8189.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "FX basis: CNY/USD 7.187, matching existing Tencent FY2025 annual route-B basis",
+          "url": "https://www.tencent.com/en-us/investors/financial-news.html",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "tencent-2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2025-09-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "CNY",
+      "fx_to_usd": 7.187,
+      "revenue": 26.8358,
+      "gross_profit": 15.1382,
+      "op_income": 8.8429,
+      "net_income": 8.7843,
+      "cfo": null,
+      "capex": 1.8065,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Tencent 2025 Third Quarter Results press release, condensed consolidated income statement",
+          "url": "https://static.www.tencent.com/uploads/2025/11/13/a33b6f19738615834787623f17d20ba3.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "FX basis: CNY/USD 7.187, matching existing Tencent FY2025 annual route-B basis",
+          "url": "https://www.tencent.com/en-us/investors/financial-news.html",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "tencent-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "CNY",
+      "fx_to_usd": 7.187,
+      "revenue": 104.6,
+      "gross_profit": 58.7996,
+      "op_income": null,
+      "net_income": 36.1,
+      "cfo": 36.43,
+      "capex": 11.02,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 51.384,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 20.175,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 31.919,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 1.127,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Tencent 2025 Annual Report（gross profit RMB 422,593M）",
+          "url": "https://static.www.tencent.com/uploads/2026/04/09/62d786fcf3d3c8cb7e54791ee95439ac.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Tencent 2025 Annual & Q4 Results（2026-03-18）— 全年营收 RMB751.8B(+14%)、归母净利(IFRS) RMB259.6B、毛利 RMB422.6B；分部：VAS RMB369.3B、营销服务 RMB145.0B、金融科技及企业服务 RMB229.4B；FCF RMB182.6B、capex RMB79.2B、净现金 RMB107.1B",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2025-annual-and-fourth-quarter-results-302717280.html",
+          "data_status": "official"
+        },
+        {
+          "label": "换算汇率 CNY→USD 7.187（CNY per USD，source-currency-per-USD 契约方向，FY2025 全年均值 x-rates/exchangerates.org.uk），见 fy_note",
+          "url": "https://www.x-rates.com/average/?from=USD&to=CNY&amount=1&year=2025",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": false,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 51.384,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 22.8466
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 10.7694
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 17.768
+              }
+            ]
+          },
+          {
+            "name": "营销服务 Marketing Services",
+            "revenue": 20.175
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 31.919
+          },
+          {
+            "name": "其他",
+            "revenue": 1.127
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 官方 FY2025 业绩新闻稿：VAS RMB369.3B，本土游戏 164.2B / 国际游戏 77.4B / 社交网络 127.7B，三子精确加总 VAS。顶层四行复用库内 FY2025 segments；children 按 VAS 库内 USD 51.384 的隐含汇率 7.18706 换算为 22.8466 / 10.7694 / 17.768，精确加总 51.384。顶层合计 104.605 与库内营收 104.6 相差 +0.005，源于营收存储精度，故 complete=false。",
+            "url": "https://static.www.tencent.com/uploads/2026/03/18/bd32d8ee320b72f0d72d545fd2d65851.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tencent-2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-01-01",
+      "period_end": "2026-03-31",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "CNY",
+      "fx_to_usd": 6.927341,
+      "revenue": 28.36,
+      "gross_profit": 16.062,
+      "op_income": 9.726,
+      "net_income": 8.386,
+      "cfo": 12.795,
+      "capex": 4.61,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 13.874,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 5.51,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 8.645,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 0.331,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Tencent 2026 First Quarter Results（2026-05-13）— 1Q2026 revenue RMB196.458B, gross profit RMB111.265B, IFRS operating profit RMB67.375B, profit attributable to equity holders RMB58.093B; segments: VAS RMB96.110B, Marketing Services RMB38.171B, FinTech and Business Services RMB59.885B, Others RMB2.292B",
+          "url": "https://static.www.tencent.com/uploads/2026/05/13/47382ae415a209fd161bc19a1f9b3704.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Tencent 2026 First Quarter Results — free cash flow RMB56.7B, capital expenditures RMB31.936B; cfo derived as FCF + capex = RMB88.636B, capex stored as absolute value",
+          "url": "https://www.prnewswire.com/apac/news-releases/tencent-announces-2026-first-quarter-results-302770779.html",
+          "data_status": "derived"
+        },
+        {
+          "label": "FX: USD/CNY 2026 Q1 weighted monthly average = 6.927341 CNY per USD（x-rates Jan/Feb/Mar 2026 monthly averages weighted by days; source-currency-per-USD）",
+          "url": "https://www.x-rates.com/average/?amount=1&from=USD&to=CNY&year=2026",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": true,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 13.874,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 6.5544
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 2.7142
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 4.6054
+              }
+            ]
+          },
+          {
+            "name": "营销服务 Marketing Services",
+            "revenue": 5.51
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 8.645
+          },
+          {
+            "name": "其他",
+            "revenue": 0.331
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 官方 1Q2026 业绩新闻稿：VAS RMB96.1B，本土游戏 45.4B / 国际游戏 18.8B / 社交网络 31.9B，三子精确加总 VAS。顶层四行复用库内 tencent-2026q1 segments；children 按 VAS 库内 USD 13.874 的隐含汇率 6.92663 换算为 6.5544 / 2.7142 / 4.6054，精确加总 13.874。顶层合计 28.36=库内营收 28.36，故 complete=true。",
+            "url": "https://static.www.tencent.com/uploads/2026/05/13/47382ae415a209fd161bc19a1f9b3704.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "tencent-2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "CNY",
+      "fx_to_usd": 6.806106897,
+      "revenue": 30.0884,
+      "gross_profit": 17.401,
+      "op_income": 9.8847,
+      "net_income": 8.2311,
+      "cfo": 7.743,
+      "capex": 8.7128,
+      "segments": [
+        {
+          "name": "增值服务 VAS（游戏·社交网络）",
+          "kind": "platform",
+          "revenue": 14.4597,
+          "op_income": null,
+          "is_ai": false
+        },
+        {
+          "name": "网络广告 / 营销服务",
+          "kind": "platform",
+          "revenue": 6.4009,
+          "op_income": null,
+          "is_ai": true
+        },
+        {
+          "name": "金融科技及企业服务",
+          "kind": "platform",
+          "revenue": 8.8576,
+          "op_income": null,
+          "is_ai": false
+        },
+        {
+          "name": "其他",
+          "kind": "platform",
+          "revenue": 0.3703,
+          "op_income": null,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（IFRS）",
+        "complete": true,
+        "items": [
+          {
+            "name": "增值服务 Value-Added Services",
+            "revenue": 14.4597,
+            "children": [
+              {
+                "name": "本土市场游戏 Domestic Games",
+                "revenue": 6.9506,
+                "products": [
+                  {
+                    "name": "Delta Force 三角洲行动",
+                    "note": "2Q26 公司点名的主要收入增长贡献产品"
+                  },
+                  {
+                    "name": "VALORANT PC 无畏契约端游",
+                    "note": "2Q26 公司点名的主要收入增长贡献产品"
+                  },
+                  {
+                    "name": "VALORANT Mobile 无畏契约手游",
+                    "note": "2Q26 公司点名的主要收入增长贡献产品"
+                  },
+                  {
+                    "name": "Roco Kingdom: World 洛克王国：世界",
+                    "note": "2Q26 公司点名的主要收入增长贡献产品"
+                  }
+                ],
+                "product_note": "公司点名的本期主要增长贡献产品，并非完整游戏清单；未披露单款游戏收入。"
+              },
+              {
+                "name": "国际市场游戏 International Games",
+                "revenue": 2.7332,
+                "products": [
+                  {
+                    "name": "Wuthering Waves 鸣潮",
+                    "note": "2Q26 收入增长贡献"
+                  },
+                  {
+                    "name": "VALORANT PC 无畏契约端游",
+                    "note": "2Q26 收入增长贡献"
+                  },
+                  {
+                    "name": "Supercell 游戏组合",
+                    "note": "2Q26 部分产品收入同比下降，抵消了其他产品增长"
+                  },
+                  {
+                    "name": "League of Legends 英雄联盟",
+                    "note": "2Q26 国际游戏业务回顾点名产品"
+                  },
+                  {
+                    "name": "Warframe 星际战甲",
+                    "note": "2Q26 国际游戏业务回顾点名产品"
+                  }
+                ],
+                "product_note": "公司在本期业绩材料点名的国际游戏，并非完整组合；未披露单款游戏收入。"
+              },
+              {
+                "name": "社交网络 Social Networks",
+                "revenue": 4.7758,
+                "products": [
+                  {
+                    "name": "腾讯视频",
+                    "note": "长视频订阅收入；本期公司披露该收入同比下降"
+                  },
+                  {
+                    "name": "QQ音乐",
+                    "note": "音频订阅产品；本期公司披露音乐 ARPU 上升"
+                  },
+                  {
+                    "name": "应用内游戏虚拟道具",
+                    "note": "公司披露的社交网络收入来源之一，未点名具体应用"
+                  }
+                ],
+                "product_note": "这里列的是公司披露的收入来源/对应产品，不等同于微信和 QQ 的整体收入；未披露各产品金额。"
+              }
+            ]
+          },
+          {
+            "name": "营销服务 Marketing Services",
+            "revenue": 6.4009,
+            "products": [
+              {
+                "name": "微信视频号广告",
+                "note": "2Q26 广告展示量快速增长"
+              },
+              {
+                "name": "微信小程序激励广告",
+                "note": "小游戏和短剧带动营销支出"
+              },
+              {
+                "name": "AIM+",
+                "note": "自动化广告投放与动态竞价解决方案"
+              },
+              {
+                "name": "Arrows – Puzzle Escape",
+                "note": "其应用内广告收入计入营销服务"
+              }
+            ],
+            "product_note": "公司点名的广告载体与营销产品；未披露各载体或产品的独立收入。"
+          },
+          {
+            "name": "金融科技及企业服务",
+            "revenue": 8.8576,
+            "products": [
+              {
+                "name": "微信支付（商业支付）",
+                "note": "金融科技收入增长来源"
+              },
+              {
+                "name": "财富管理服务",
+                "note": "金融科技收入增长来源；本期材料未披露具体品牌及金额"
+              },
+              {
+                "name": "消费贷款服务",
+                "note": "金融科技收入增长来源；本期材料未披露具体品牌及金额"
+              },
+              {
+                "name": "腾讯云 GPU 租赁",
+                "note": "AI 相关云收入产品"
+              },
+              {
+                "name": "腾讯云 MaaS",
+                "note": "Model-as-a-Service，AI 相关云收入产品"
+              },
+              {
+                "name": "WorkBuddy",
+                "note": "公司点名产生收入的生产力 AI 产品"
+              },
+              {
+                "name": "CodeBuddy",
+                "note": "公司点名产生收入的 AI 编程产品"
+              }
+            ],
+            "product_note": "金融科技与企业服务仍是合并披露；这里只列公司点名的收入来源/产品，未披露子业务及单品金额。"
+          },
+          {
+            "name": "其他",
+            "revenue": 0.3703,
+            "product_note": "2Q26 业绩材料未披露“其他”收入对应的具体产品，保持未拆分。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tencent 2Q2026 official earnings release — IFRS revenue by business; VAS subcategories are rounded in the release and proportionally scaled to the exact VAS total for hierarchy reconciliation",
+            "url": "https://www.tencent.com/wp-content/uploads/2026/08/Tencent-Announces-2026-Second-Quarter-Results.pdf",
+            "data_status": "derived"
+          },
+          {
+            "label": "Tencent 2Q2026 official results presentation — named products, revenue drivers and product-to-segment context; product references carry no standalone revenue amounts",
+            "url": "https://static.www.tencent.com/website-2026-upload/2Q26-earnings-PPT_20260812_1800-88b183.pdf",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Tencent 2026 Second Quarter Results（2026-08-12）— revenue RMB204.785B; gross profit RMB118.433B; IFRS operating profit RMB67.276B; profit attributable to equity holders RMB56.022B",
+          "url": "https://www.tencent.com/wp-content/uploads/2026/08/Tencent-Announces-2026-Second-Quarter-Results.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Tencent HKEX interim-results announcement — independent official cross-check of Q2 income statement and revenue-by-business figures",
+          "url": "https://www.tencent.com/wp-content/uploads/2026/08/E700_IRA.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "Tencent 2Q2026 official release — single-quarter operating cash flow RMB52.7B and capital-expenditure payments RMB59.3B; capex stored as an absolute cash outflow",
+          "url": "https://www.tencent.com/wp-content/uploads/2026/08/Tencent-Announces-2026-Second-Quarter-Results.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "FX: USD/CNY 2026 Q2 weighted monthly average = 6.806106897 CNY per USD（x-rates Apr/May/Jun averages weighted by calendar days; source-currency-per-USD）",
+          "url": "https://www.x-rates.com/average/?amount=1&from=USD&to=CNY&year=2026",
+          "data_status": "derived"
+        }
+      ]
+    }
+  ]
+}

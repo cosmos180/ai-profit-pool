@@ -1,0 +1,467 @@
+{
+  "id": "skhynix",
+  "name": "SK hynix",
+  "ticker": "KRX · 000660",
+  "region": "韩国",
+  "sector": "存储 / HBM",
+  "currency": "KRW",
+  "seg_profit": "partial",
+  "logo_text": "sk",
+  "status": "populated",
+  "lead": "全球 HBM 核心领头羊，存储器业务几乎贡献全部营收。官方没有可与合并营收精确对账的 DRAM/NAND 年度绝对分部表，因此以 Memory 单一平台承接营收。",
+  "fy_note": "KRW→USD 采用 IRS 年度平均汇率（2023: 1306.686 / 2024: 1364.153 / 2025: 1421.779），与三星折算口径保持一致。分部利润未按 DRAM/NAND 对外披露。",
+  "quote": {
+    "as_of": "2026-06-26",
+    "market_cap": 1236,
+    "net_debt": -22.77,
+    "price": 2628000,
+    "price_currency": "KRW",
+    "sources": [
+      {
+        "label": "companiesmarketcap.com — SK hynix market cap (KRW 1,897.44T @ 2026-06-26)",
+        "url": "https://companiesmarketcap.com/sk-hynix/marketcap/",
+        "data_status": "official"
+      },
+      {
+        "label": "派生：本地市值 KRW 1,897.44T ÷ USD/KRW 1535",
+        "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+        "data_status": "derived"
+      },
+      {
+        "label": "net_debt=-22.77 bn｜SK hynix 2026년 1분기(2026-03-31) 연결. [직접 취득] 이자부부채 19.3조원(전분기比 −2.9조); 현금및단기투자 합계 54.3조원; 회사 공표 순현금 35조원(=54.3−19.3, 검증 일치); 현금및현금성자산(협의) 21.2조원. [파생] 단기투자(단기금융상품/예치금)=54.3−21.2=33.1조. 계산식: net_debt=19.3−21.2−33.1=−35.0조원 → −35.0조/1537.15=−$22.77B. 교차확인: PRNewswire/삼성계열아닌 SK hynix 1Q26 보도자료, news.skhynix.com, 다수 매체(Morningstar/Barchart/StorageNewsletter). 프로젝트 참고치(2025년말 −$8.27B, 현금성자산만·단기투자 미포함)와 방향 동일하나 크게 확대(>50%): 원인=(1)본건은 지시대로 단기금융상품을 현금류에 포함(참고치는 미포함으로 보수적), (2)Q1 사상최대 실적·현금창출, (3)이자부부채 22.2조→19.3조 축소. 모두 순현금 증가 방향으로 일관.",
+        "url": "https://www.prnewswire.com/news-releases/sk-hynix-announces-1q26-financial-results-302750959.html",
+        "data_status": "estimate"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "自然年 2023（截至 2023-12-31）",
+      "period_end_iso": "2023-12-31",
+      "status": "actual",
+      "revenue": 25.075,
+      "gross_margin": null,
+      "op_income": -5.916,
+      "net_income": -6.993,
+      "segments": [
+        {
+          "name": "Memory 存储器",
+          "kind": "platform",
+          "revenue": 25.075,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        }
+      ],
+      "sources": [
+        {
+          "label": "SK hynix FY2023 Financial Results（4Q23）",
+          "url": "https://news.skhynix.com/sk-hynix-reports-fourth-quarter-2023-financial-results/",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "自然年 2024（截至 2024-12-31）",
+      "period_end_iso": "2024-12-31",
+      "status": "actual",
+      "revenue": 48.523,
+      "gross_margin": null,
+      "op_income": 17.203,
+      "net_income": 14.512,
+      "segments": [
+        {
+          "name": "Memory 存储器",
+          "kind": "platform",
+          "revenue": 48.523,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        }
+      ],
+      "sources": [
+        {
+          "label": "SK hynix FY2024 Financial Results（4Q24）",
+          "url": "https://news.skhynix.com/sk-hynix-announces-4q24-financial-results/",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "自然年 2025（截至 2025-12-31）",
+      "period_end_iso": "2025-12-31",
+      "status": "actual",
+      "revenue": 68.328,
+      "gross_margin": null,
+      "op_income": 33.202,
+      "net_income": 30.207,
+      "capex": 19.36,
+      "cfo": 37.3,
+      "segments": [
+        {
+          "name": "Memory 存储器",
+          "kind": "platform",
+          "revenue": 68.328,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        }
+      ],
+      "sources": [
+        {
+          "label": "SK hynix FY2025 Financial Results",
+          "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2025 연결 현금흐름표 / 사업보고서：CFO KRW 53.04T ÷ 1421.779 = $37.30B；capex（유형자산 취득）KRW 27.52T ÷ 1421.779 = $19.36B。CFO > 净利 42.95T、FCF≈+25.5T 与 2025 上行周期一致；KRW 换算待核验）",
+          "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+          "data_status": "derived"
+        }
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2025-03-31",
+      "label": "1Q25（去年同季）",
+      "net_income": 5.7,
+      "sources": [
+        {
+          "label": "SK hynix 1Q25 业绩（净利 KRW 8.1082T）",
+          "url": "https://news.skhynix.com/sk-hynix-announces-1q25-financial-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：KRW 8.1082T ÷ USD/KRW 1421.779（与年度口径一致）= $5.70B（换算待核验）",
+          "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-03-31",
+      "label": "1Q26（最新季）",
+      "net_income": 28.38,
+      "sources": [
+        {
+          "label": "SK hynix 1Q26 业绩（净利 KRW 40.3459T，净利率 77%，同比 +398%）",
+          "url": "https://news.skhynix.com/q1-2026-business-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：KRW 40.3459T ÷ USD/KRW 1421.779（与去年同季同口径汇率）= $28.38B（换算待核验；2026 汇率或偏强，绝对值或略高估，方向稳健）",
+          "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+          "data_status": "estimate"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "skhynix-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "KRW",
+      "fx_to_usd": 1306.686,
+      "revenue": 25.075,
+      "gross_profit": -0.4082,
+      "op_income": -5.916,
+      "net_income": -6.993,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "Memory 存储器",
+          "kind": "platform",
+          "revenue": 25.075,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        }
+      ],
+      "sources": [
+        {
+          "label": "SK hynix FY2023 audited consolidated statement（gross loss KRW 533,448M；2026 SEC registration statement comparative column）",
+          "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "SK hynix FY2023 Financial Results（4Q23）",
+          "url": "https://news.skhynix.com/sk-hynix-reports-fourth-quarter-2023-financial-results/",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "skhynix-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "KRW",
+      "fx_to_usd": 1364.153,
+      "revenue": 48.523,
+      "gross_profit": 23.3318,
+      "op_income": 17.203,
+      "net_income": 14.512,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "Memory 存储器",
+          "kind": "platform",
+          "revenue": 48.523,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        }
+      ],
+      "sources": [
+        {
+          "label": "SK hynix FY2024 audited consolidated statement（gross profit KRW 31,828,146M；2026 SEC registration statement comparative column）",
+          "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "SK hynix FY2024 Financial Results（4Q24）",
+          "url": "https://news.skhynix.com/sk-hynix-announces-4q24-financial-results/",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "skhynix-2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-03-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "KRW",
+      "fx_to_usd": 1421.779,
+      "revenue": null,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 5.7,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "SK hynix 1Q25 业绩（净利 KRW 8.1082T）",
+          "url": "https://news.skhynix.com/sk-hynix-announces-1q25-financial-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：KRW 8.1082T ÷ USD/KRW 1421.779（与年度口径一致）= $5.70B（换算待核验）",
+          "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "skhynix-2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-04-01",
+      "period_end": "2025-06-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "KRW",
+      "fx_to_usd": 1421.779,
+      "revenue": 15.6367,
+      "gross_profit": null,
+      "op_income": 6.4798,
+      "net_income": 4.9207,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "SK hynix 2Q25 Financial Results (K-IFRS; revenue KRW 22,232.0B, operating profit KRW 9,212.9B, net income KRW 6,996.2B)",
+          "url": "https://news.skhynix.com/sk-hynix-announces-2q25-financial-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "FX conversion: KRW figures divided by 1421.779 KRW/USD, matching existing SK hynix FY2025 annual and Q1 FY2025 period basis",
+          "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "skhynix-2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2025-09-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "KRW",
+      "fx_to_usd": 1421.779,
+      "revenue": 17.196,
+      "gross_profit": null,
+      "op_income": 8.0064,
+      "net_income": 8.8604,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "SK hynix 3Q25 Financial Results (K-IFRS; revenue KRW 24,448.9B, operating profit KRW 11,383.4B, net income KRW 12,597.5B)",
+          "url": "https://news.skhynix.com/sk-hynix-announces-3q25-financial-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "FX conversion: KRW figures divided by 1421.779 KRW/USD, matching existing SK hynix FY2025 annual and Q1 FY2025 period basis",
+          "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "skhynix-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "KRW",
+      "fx_to_usd": 1421.779,
+      "revenue": 68.328,
+      "gross_profit": 41.2798,
+      "op_income": 33.202,
+      "net_income": 30.207,
+      "cfo": 37.3,
+      "capex": 19.36,
+      "d_and_a": 9.798,
+      "segments": [
+        {
+          "name": "Memory 存储器",
+          "kind": "platform",
+          "revenue": 68.328,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        }
+      ],
+      "sources": [
+        {
+          "label": "SK hynix FY2025 audited consolidated statement（gross profit KRW 58,690,790M；2026 SEC registration statement）",
+          "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "SK hynix FY2025 Financial Results",
+          "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2025 연결 현금흐름표 / 사업보고서：CFO KRW 53.04T ÷ 1421.779 = $37.30B；capex（유형자산 취득）KRW 27.52T ÷ 1421.779 = $19.36B。CFO > 净利 42.95T、FCF≈+25.5T 与 2025 上行周期一致；KRW 换算待核验）",
+          "url": "https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/",
+          "data_status": "derived"
+        },
+        {
+          "label": "D&A：FY2025 经审计报表（2026-07-06 F-1/A）Note 33 现金流量表 depreciation KRW 13,099,311M + amortization KRW 830,819M = 13,930,130M；13,930.130bn ÷ fx 1421.779 = 9.798（含 IFRS-16 使用权折旧）",
+          "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526295501/d32785df1a.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "skhynix-2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-01-01",
+      "period_end": "2026-03-31",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "KRW",
+      "fx_to_usd": 1421.779,
+      "revenue": null,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 28.38,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "SK hynix 1Q26 业绩（净利 KRW 40.3459T，净利率 77%，同比 +398%）",
+          "url": "https://news.skhynix.com/q1-2026-business-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：KRW 40.3459T ÷ USD/KRW 1421.779（与去年同季同口径汇率）= $28.38B（换算待核验；2026 汇率或偏强，绝对值或略高估，方向稳健）",
+          "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_id": "skhynix-2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "KRW",
+      "fx_to_usd": 1421.779,
+      "revenue": 55.7883,
+      "gross_profit": null,
+      "op_income": 42.5823,
+      "net_income": 66.0599,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "Memory 存储器",
+          "kind": "platform",
+          "revenue": 55.7883,
+          "op_income": null,
+          "is_ai": true
+        }
+      ],
+      "sources": [
+        {
+          "label": "SK hynix official 2Q26 financial-results release — revenue, operating profit and net profit",
+          "url": "https://news.skhynix.com/en/q2-2026-business-results/",
+          "data_status": "official"
+        },
+        {
+          "label": "USD conversion uses the repository's fixed 2025/2026 KRW convention of KRW 1,421.779 per USD for cross-period consistency",
+          "url": "https://fred.stlouisfed.org/series/DEXKOUS",
+          "data_status": "derived"
+        }
+      ]
+    }
+  ]
+}

@@ -13,9 +13,12 @@ It enforces the invariants this whole project exists to protect:
 Derived metrics are never stored, so they are never validated here — only raw facts.
 Exit code is non-zero if any ERROR is found (so it can gate a pipeline).
 """
-import json, re, sys
+import json, os, re, sys
 from datetime import date
+from pathlib import Path
 from urllib.parse import urlparse
+
+ROOT = Path(__file__).resolve().parent
 
 TOL = 0.05  # USD bn tolerance for reconciliation
 RB_TOL = 0.001  # revenue_breakdown 专用容差：产品层级按 4 位小数录入，对账要求精确（≤$1M）
@@ -31,6 +34,12 @@ PERIOD_NET_INCOME_CAN_EXCEED_REVENUE = {
 GROSS_PROFIT_POLICY_EXEMPT = {"amazon"}  # 不披露传统公司层面毛利，B2 按政策诚实留空
 
 def load(path):
+    # 目录输入 = 数据分片真相源（data/：meta.json + companies/*.json，见 tools/assemble.py）；
+    # 单文件输入 = 组装产物（companies.json），向后兼容老命令行。
+    if os.path.isdir(path):
+        sys.path.insert(0, str(ROOT / "tools"))
+        from assemble import assemble
+        return assemble()
     with open(path, encoding="utf-8") as f:
         return json.load(f)
 
@@ -740,7 +749,7 @@ def check(data):
 
 def main():
     if len(sys.argv) < 2:
-        print("用法: python3 validate.py companies.json [schema.json]"); sys.exit(2)
+        print("用法: python3 validate.py <data目录或companies.json> [schema.json]"); sys.exit(2)
     data = load(sys.argv[1])
     schema_path = sys.argv[2] if len(sys.argv) > 2 else None
 

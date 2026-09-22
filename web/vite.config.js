@@ -1,12 +1,29 @@
 import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { viteSingleFile } from 'vite-plugin-singlefile'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// 数据分片组装（JS 侧，与 tools/assemble.py 同契约）：真相源 = data/meta.json 的
+// company_order + data/companies/<id>.json。根 companies.json 是 gitignore 的构建产物，
+// dev 与 build 都从这里组装，不依赖产物存在。
+function loadDataset() {
+  const dataDir = resolve(__dirname, '../data')
+  const meta = JSON.parse(readFileSync(resolve(dataDir, 'meta.json'), 'utf-8'))
+  const order = meta.company_order
+  if (!Array.isArray(order) || !order.length) throw new Error('vite: data/meta.json 缺 company_order')
+  const files = new Set(readdirSync(resolve(dataDir, 'companies')).filter(f => f.endsWith('.json')).map(f => f.replace(/\.json$/, '')))
+  const missing = order.filter(id => !files.has(id)), extra = [...files].filter(id => !order.includes(id))
+  if (missing.length || extra.length) throw new Error(`vite: company_order 与 data/companies 不一致 缺[${missing}] 多[${extra}]`)
+  return {
+    meta,
+    companies: order.map(id => JSON.parse(readFileSync(resolve(dataDir, 'companies', id + '.json'), 'utf-8'))),
+  }
+}
 
 // 构建水印（评审 #6）：单文件 app.html 会被转发，页脚亮明「数据截至 X · 行情 Y · commit」
 // 让每个流转副本可溯源。数据时点取库内最大 actual period_end 与最大 quote.as_of；
@@ -18,7 +35,7 @@ function buildStamp() {
   } catch { /* 无 git 环境 */ }
   let dataAsOf = '', quoteAsOf = ''
   try {
-    const db = JSON.parse(readFileSync(resolve(__dirname, '../companies.json'), 'utf-8'))
+    const db = loadDataset()
     const dates = []
     for (const c of db.companies || []) {
       for (const p of c.periods || []) if (p.status === 'actual' && p.period_end) dates.push(p.period_end)
@@ -30,8 +47,8 @@ function buildStamp() {
   return `数据截至 ${dataAsOf || '—'}${quoteAsOf ? ` · 行情 ${quoteAsOf}` : ''}${commit ? ` · ${commit}` : ''}`
 }
 
-// 构建期把根 companies.json 内联进 index.html 的 dataset 占位符（ADR 决策 6）。
-// 单一真相源仍是根 companies.json；这里只做注入，不改写、不校验（校验归 prebuild 的 validate.py）。
+// 构建期把组装后的数据集内联进 index.html 的 dataset 占位符（ADR 决策 6）。
+// 单一真相源是 data/ 分片（见 loadDataset）；这里只做注入，不改写、不校验（校验归 prebuild 的 validate.py）。
 // Store.load() 会读 <script id="dataset"> 命中内联分支，file:// 双击可用（不触发 fetch）。
 function inlineDataset() {
   return {
@@ -40,7 +57,7 @@ function inlineDataset() {
     transformIndexHtml: {
       order: 'pre',
       handler(html) {
-        const data = readFileSync(resolve(__dirname, '../companies.json'), 'utf-8').trim()
+        const data = JSON.stringify(loadDataset()).trim()
         if (!html.includes('<!--__DATASET_JSON__-->')) {
           throw new Error('inlineDataset: dataset 占位符 <!--__DATASET_JSON__--> 未找到，index.html 被改坏了')
         }

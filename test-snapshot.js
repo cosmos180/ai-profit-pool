@@ -1,4 +1,4 @@
-// test-snapshot.js — 真实数据（companies.json）派生值的快照对账。
+// test-snapshot.js — 真实数据（data/ 分片，经 tools/assemble.cjs 组装）派生值的快照对账。
 // 不硬编码期望值：把关键派生值算出来，与已提交的 test-snapshot.expected.json 逐字段比对。
 //   数据变更流程 = 人工确认变更合理 → `node test-snapshot.js --update` 重生成快照 →
 //   git diff 里快照变化一目了然、可 review。**数据刷新不再手改测试文件。**
@@ -8,7 +8,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const data = require("./companies.json");
+const data = require("./tools/assemble.cjs").loadDataset();
 const { Store, Selectors, STAGE_ORDER, STAGE_LABEL, STAGE_COLOR, stageOf, _refreshStages } = require("./data-module.js");
 
 Store._data = data;

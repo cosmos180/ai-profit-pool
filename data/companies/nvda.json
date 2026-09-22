@@ -1,0 +1,961 @@
+{
+  "id": "nvda",
+  "name": "NVIDIA 英伟达",
+  "ticker": "NASDAQ · NVDA",
+  "region": "美国",
+  "sector": "AI 加速计算",
+  "currency": "USD",
+  "seg_profit": "partial",
+  "logo_text": "nv",
+  "logo_class": "nv",
+  "status": "populated",
+  "lead": "营收拆到 5 个市场平台，利润只披露到 2 个报告分部 —— “分部毛利率拿不到”的活样本。",
+  "fy_note": "财年截至每年 1 月末，例如 FY2026 = 2025-01 至 2026-01。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 4640,
+    "price": 191.3,
+    "price_currency": "USD",
+    "net_debt": -54.09,
+    "sources": [
+      {
+        "label": "NVDA off ~2.2% to ~$191.30 on 7/7 (DeepSeek in-house AI chip report); price from intraday/close recap, market cap = price x ~24.24bn shares (implied from library 7/6 4740bn/195.55), cross-checked vs Yahoo/CNBC ~4.6-4.7T",
+        "url": "https://www.moomoo.com/community/feed/u-s-market-outlook-nvidia-s-stock-price-fell-following-116878953480198",
+        "data_status": "estimate"
+      },
+      {
+        "label": "net_debt：FY2026 10-K 资产负债表（截至 2026-01-25）有息债务 = 短债 $0.999B + 长债 $7.469B = $8.468B；减 现金及等价物 $10.605B + 有价证券 $51.951B = $62.556B → 净现金 −$54.09B（口径：排经营租赁；现金含有价证券）",
+        "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+        "data_status": "official"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2024",
+      "period_end": "截至 2024-01-28",
+      "period_end_iso": "2024-01-28",
+      "status": "actual",
+      "revenue": 60.92,
+      "gross_margin": 0.727,
+      "op_income": 32.97,
+      "net_income": 29.76,
+      "capex": 1.07,
+      "cfo": 28.09,
+      "segments": [
+        {
+          "name": "Data Center 数据中心",
+          "kind": "platform",
+          "revenue": 47.52,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Gaming 游戏",
+          "kind": "platform",
+          "revenue": 10.45,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Professional Visualization 专业可视化",
+          "kind": "platform",
+          "revenue": 1.55,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 汽车",
+          "kind": "platform",
+          "revenue": 1.09,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "OEM & Other",
+          "kind": "platform",
+          "revenue": 0.31,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:market_platform:v1",
+      "reportable_note": {
+        "Compute & Networking": "≈ 78%",
+        "Graphics": "≈ 22%"
+      },
+      "sources": [
+        {
+          "label": "FY2024 业绩（FY2025 新闻稿含上一年对比）",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "截至 2025-01-26",
+      "period_end_iso": "2025-01-26",
+      "status": "actual",
+      "revenue": 130.5,
+      "gross_margin": 0.75,
+      "op_income": 81.45,
+      "net_income": 72.88,
+      "capex": 3.24,
+      "cfo": 64.09,
+      "segments": [
+        {
+          "name": "Data Center 数据中心",
+          "kind": "platform",
+          "revenue": 115.19,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Gaming 游戏",
+          "kind": "platform",
+          "revenue": 11.35,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Professional Visualization 专业可视化",
+          "kind": "platform",
+          "revenue": 1.88,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 汽车",
+          "kind": "platform",
+          "revenue": 1.69,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "OEM & Other",
+          "kind": "platform",
+          "revenue": 0.39,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:market_platform:v1",
+      "reportable_note": {
+        "Compute & Networking": "≈ 88%",
+        "Graphics": "≈ 12%"
+      },
+      "sources": [
+        {
+          "label": "FY2025 业绩新闻稿",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025",
+          "data_status": "official"
+        },
+        {
+          "label": "FY2025 10-K（Note 16）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "fy": "FY2026",
+      "period_end": "截至 2026-01-25",
+      "period_end_iso": "2026-01-25",
+      "status": "actual",
+      "revenue": 215.94,
+      "gross_margin": 0.711,
+      "op_income": 130.39,
+      "net_income": 120.1,
+      "capex": 6.1,
+      "cfo": 102.7,
+      "segments": [
+        {
+          "name": "Data Center 数据中心",
+          "kind": "platform",
+          "revenue": 193.74,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Gaming 游戏",
+          "kind": "platform",
+          "revenue": 16.04,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Professional Visualization 专业可视化",
+          "kind": "platform",
+          "revenue": 3.19,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 汽车",
+          "kind": "platform",
+          "revenue": 2.35,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "OEM & Other",
+          "kind": "platform",
+          "revenue": 0.62,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:market_platform:v1",
+      "reportable_note": {
+        "Compute & Networking": "≈ 90%",
+        "Graphics": "≈ 10%"
+      },
+      "sources": [
+        {
+          "label": "Q4 & FY2026 业绩新闻稿",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
+          "data_status": "official"
+        },
+        {
+          "label": "FY2026 10-K",
+          "url": "https://www.publicnow.com/view/2882BBE40A7C6C824C8A8D4C36B7AE84D3C63264?1772059708=",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2026 现金流量表，CFO $102.7B / capex（购建固定资产）$6.1B，待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "fy": "FY2027E",
+      "period_end": "本财年进行中 · 截至 2027-01",
+      "period_end_iso": "2027-01-31",
+      "status": "forecast",
+      "revenue": 392.64,
+      "net_income": 228.51,
+      "consensus_rev": "$392.6B",
+      "consensus_eps": "$8.97",
+      "consensus_eps_value": 8.97,
+      "consensus_eps_currency": "USD",
+      "consensus_eps_source": [
+        {
+          "label": "StockAnalysis/S&P Global consensus FY2027 EPS average $8.97; last updated 2026-06-23",
+          "url": "https://stockanalysis.com/stocks/nvda/forecast/",
+          "data_status": "consensus"
+        }
+      ],
+      "framework_change": "自 FY2027 Q1 起，板块由五平台改为 Data Center / Edge Computing 两平台，FY2027 起无法与 FY2024–FY2026 逐项对比。",
+      "anchors": [
+        {
+          "label": "Q1 FY2027 实际营收",
+          "value": "$81.6B",
+          "note": "已公布，同比 +85%",
+          "data_status": "official"
+        },
+        {
+          "label": "Q1 数据中心营收",
+          "value": "$75.2B",
+          "note": "占比 92%，同比 +92%",
+          "data_status": "official"
+        },
+        {
+          "label": "Q2 FY2027 营收指引",
+          "value": "$91.0B",
+          "note": "公司官方，±2%",
+          "data_status": "guidance"
+        },
+        {
+          "label": "全年营收一致预期",
+          "value": "≈ $392.6B",
+          "note": "StockAnalysis/S&P Global FY2027 consensus revenue average",
+          "data_status": "consensus"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Q1 FY2027 业绩新闻稿（实际 + Q2 指引）",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+          "data_status": "official"
+        },
+        {
+          "label": "FY2027 一致预期（卖方汇总）",
+          "url": "https://stockanalysis.com/stocks/nvda/forecast/",
+          "data_status": "consensus"
+        }
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2025-04-27",
+      "label": "Q1 FY2026（去年同季）",
+      "net_income": 18.8,
+      "sources": [
+        {
+          "label": "NVIDIA Q1 FY2027 新闻稿（披露去年同季净利 $18.8B）",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-04-26",
+      "label": "Q1 FY2027（最新季）",
+      "net_income": 58.3,
+      "sources": [
+        {
+          "label": "NVIDIA Q1 FY2027 新闻稿（GAAP 净利 $58.3B，同比 +211%）",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "nvda-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-01-30",
+      "period_end": "2024-01-28",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 60.92,
+      "gross_profit": 44.301,
+      "op_income": 32.97,
+      "net_income": 29.76,
+      "cfo": 28.09,
+      "capex": 1.07,
+      "segments": [
+        {
+          "name": "Data Center 数据中心",
+          "kind": "platform",
+          "revenue": 47.52,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Gaming 游戏",
+          "kind": "platform",
+          "revenue": 10.45,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Professional Visualization 专业可视化",
+          "kind": "platform",
+          "revenue": 1.55,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 汽车",
+          "kind": "platform",
+          "revenue": 1.09,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "OEM & Other",
+          "kind": "platform",
+          "revenue": 0.31,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:market_platform:v1",
+      "reportable_note": {
+        "Compute & Networking": "≈ 78%",
+        "Graphics": "≈ 22%"
+      },
+      "sources": [
+        {
+          "label": "FY2024 业绩（FY2025 新闻稿含上一年对比）",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "estimate"
+        },
+        {
+          "label": "period_start 推导：NVDA 1 月末财年，FY2024 起 = 上一财年 FY2023 末（2023-01-29）+1 天 = 2023-01-30（fy_note 文档化财年界，years[] 未含 FY2023 原子）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-01-29",
+      "period_end": "2025-01-26",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 130.5,
+      "gross_profit": 97.858,
+      "op_income": 81.45,
+      "net_income": 72.88,
+      "cfo": 64.09,
+      "capex": 3.24,
+      "segments": [
+        {
+          "name": "Data Center 数据中心",
+          "kind": "platform",
+          "revenue": 115.19,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Gaming 游戏",
+          "kind": "platform",
+          "revenue": 11.35,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Professional Visualization 专业可视化",
+          "kind": "platform",
+          "revenue": 1.88,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 汽车",
+          "kind": "platform",
+          "revenue": 1.69,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "OEM & Other",
+          "kind": "platform",
+          "revenue": 0.39,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:market_platform:v1",
+      "reportable_note": {
+        "Compute & Networking": "≈ 88%",
+        "Graphics": "≈ 12%"
+      },
+      "sources": [
+        {
+          "label": "FY2025 业绩新闻稿",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025",
+          "data_status": "official"
+        },
+        {
+          "label": "FY2025 10-K（Note 16）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex / CFO（现金流量表，Claude 录入待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "estimate"
+        },
+        {
+          "label": "period_start 推导：上一财年 FY2024 末（2024-01-28）+1 天 = 2024-01-29",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581025000023/nvda-20250126.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-27",
+      "period_end": "2025-04-27",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": null,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 18.8,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "NVIDIA Q1 FY2027 新闻稿（披露去年同季 Q1 FY2026 净利 $18.8B）",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+          "data_status": "official"
+        },
+        {
+          "label": "calendar_quarter 由日期数学得出：period_end 2025-04-27（4 月）落自然年 Q2；fiscal Q1 FY2026 ≠ calendar Q2（NVDA 1 月末财年错位）。period_start = 上一财年 FY2025 末（2025-01-26）+1 天 = 2025-01-27",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-04-28",
+      "period_end": "2025-07-27",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 46.743,
+      "net_income": 26.422,
+      "gross_profit": 33.853,
+      "op_income": 28.44,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "NVIDIA Q2 FY2026 新闻稿 2025-08-27 + 10-Q filed 2025-08-27, period ended 2025-07-27",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000209/",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2026q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-28",
+      "period_end": "2025-10-26",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 57.006,
+      "net_income": 31.91,
+      "gross_profit": 41.849,
+      "op_income": 36.01,
+      "cfo": 23.75,
+      "capex": 1.637,
+      "segments": [],
+      "sources": [
+        {
+          "label": "NVIDIA Q3 FY2026 新闻稿 2025-11-19 + 10-Q filed 2025-11-19, period ended 2025-10-26; CFO $23,750M & capex $1,637M 取自 FY2026 Q4/全年新闻稿 FCF 调节表三列中的 Q3 列（三个月口径）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000230/",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2026-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-01-27",
+      "period_end": "2026-01-25",
+      "calendar_year": 2026,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 215.94,
+      "gross_profit": 153.463,
+      "op_income": 130.39,
+      "net_income": 120.1,
+      "cfo": 102.7,
+      "capex": 6.1,
+      "d_and_a": 2.843,
+      "segments": [
+        {
+          "name": "Data Center 数据中心",
+          "kind": "platform",
+          "revenue": 193.74,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Gaming 游戏",
+          "kind": "platform",
+          "revenue": 16.04,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Professional Visualization 专业可视化",
+          "kind": "platform",
+          "revenue": 3.19,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Automotive 汽车",
+          "kind": "platform",
+          "revenue": 2.35,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "OEM & Other",
+          "kind": "platform",
+          "revenue": 0.62,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:market_platform:v1",
+      "reportable_note": {
+        "Compute & Networking": "≈ 90%",
+        "Graphics": "≈ 10%"
+      },
+      "sources": [
+        {
+          "label": "Q4 & FY2026 业绩新闻稿",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
+          "data_status": "official"
+        },
+        {
+          "label": "FY2026 10-K",
+          "url": "https://www.publicnow.com/view/2882BBE40A7C6C824C8A8D4C36B7AE84D3C63264?1772059708=",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2026 现金流量表，CFO $102.7B / capex（购建固定资产）$6.1B，待核验）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+          "data_status": "estimate"
+        },
+        {
+          "label": "period_start 推导：上一财年 FY2025 末（2025-01-26）+1 天 = 2025-01-27",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000021/nvda-20260125.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "D&A：FY2026 10-K 合并现金流量表「Depreciation and amortization」USD 2,843M 单行直取",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2027q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-01-26",
+      "period_end": "2026-04-26",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2027",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 81.615,
+      "gross_profit": 61.157,
+      "op_income": 53.536,
+      "net_income": 58.321,
+      "cfo": 50.344,
+      "capex": 1.757,
+      "eps_diluted": 2.39,
+      "eps_diluted_basis": "gaap",
+      "buyback": 19.312,
+      "dividends": 0.243,
+      "segments": [
+        {
+          "name": "Compute & Networking 计算与网络",
+          "kind": "reportable",
+          "revenue": 74.55,
+          "op_income": 53.335,
+          "is_ai": true
+        },
+        {
+          "name": "Graphics 图形",
+          "kind": "reportable",
+          "revenue": 7.065,
+          "op_income": 2.941,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:reportable:v1",
+      "framework_change": "自 FY2027 Q1 起，segments[] 采用法定 reportable 分部（Compute & Networking / Graphics，含分部营业利润），与 FY2024–FY2026 年度的市场平台轴（Data Center / Gaming 等）为不同口径——两轴并存、非官方重组，跨口径分部同比不可比。",
+      "revenue_breakdown": {
+        "label": "按市场平台划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Data Center 数据中心",
+            "revenue": 75.246,
+            "children": [
+              {
+                "name": "Hyperscale 超大规模云厂商",
+                "revenue": 37.869
+              },
+              {
+                "name": "AI Clouds, Industrial, & Enterprise AI 云·工业与企业",
+                "revenue": 37.377
+              }
+            ]
+          },
+          {
+            "name": "Edge Computing 边缘计算",
+            "revenue": 6.369
+          }
+        ],
+        "sources": [
+          {
+            "label": "NVIDIA Form 10-Q filed 2026-05-28，Segment Information — Schedule of Revenue by Market Platform（3 months ended 2026-04-26, USD millions）：Data Center 75,246（Hyperscale 37,869；AI Clouds, Industrial, & Enterprise 37,377）；Edge Computing 6,369；合计 81,615",
+            "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "NVIDIA Form 10-Q filed 2026-05-28（FY2027 Q1 iXBRL: revenue $81,615M; gross profit $61,157M; operating income $53,536M; net income $58,321M; CFO $50,344M; capex $1,757M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "NVIDIA Form 10-Q reportable segments（Compute & Networking $74,550M / op income $53,335M; Graphics $7,065M / $2,941M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "NVIDIA Form 10-Q filed 2026-05-28，利润表摊薄每股收益（GAAP）$2.39（three months ended 2026-04-26，公司直接披露，非由净利/股数回算）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "NVIDIA Form 10-Q filed 2026-05-28 现金流量表筹资段（three months ended 2026-04-26，Q1 的 YTD 即单季）：Payments related to repurchases of common stock $19,312M；Dividends paid $243M",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2027q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-27",
+      "period_end": "2026-07-26",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2027",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 96.221,
+      "gross_profit": 72.142,
+      "op_income": 63.734,
+      "net_income": 59.688,
+      "cfo": 24.077,
+      "capex": 2.677,
+      "eps_diluted": 2.46,
+      "eps_diluted_basis": "gaap",
+      "buyback": 19.732,
+      "dividends": 6.047,
+      "segments": [
+        {
+          "name": "Compute & Networking 计算与网络",
+          "kind": "reportable",
+          "revenue": 88.299,
+          "op_income": 62.696,
+          "is_ai": true
+        },
+        {
+          "name": "Graphics 图形",
+          "kind": "reportable",
+          "revenue": 7.922,
+          "op_income": 3.899,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "nvda:reportable:v1",
+      "revenue_breakdown": {
+        "label": "按市场平台划分的收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Data Center 数据中心",
+            "revenue": 89.023,
+            "children": [
+              {
+                "name": "Hyperscale 超大规模云厂商",
+                "revenue": 48.71
+              },
+              {
+                "name": "AI Clouds, Industrial, & Enterprise AI 云·工业与企业",
+                "revenue": 40.313
+              }
+            ]
+          },
+          {
+            "name": "Edge Computing 边缘计算",
+            "revenue": 7.198
+          }
+        ],
+        "sources": [
+          {
+            "label": "NVIDIA Form 10-Q filed 2026-08-26，Segment Information — Schedule of Revenue by Market Platform（3 months ended 2026-07-26, USD millions）：Data Center 89,023（Hyperscale 48,710；AI Clouds, Industrial, & Enterprise 40,313）；Edge Computing 7,198；合计 96,221",
+            "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+            "data_status": "official"
+          }
+        ]
+      },
+      "consensus": {
+        "as_of": "2026-08-26",
+        "provider": "LSEG",
+        "estimate_count": null,
+        "revenue": 92.17,
+        "revenue_low": null,
+        "revenue_high": null,
+        "eps": null,
+        "sources": [
+          {
+            "label": "LSEG 分析师民调（经 CNBC 财报直播页转述，2026-08-26 发布前口径）：FY2027 Q2 营收共识 $92.17B。同一民调的每股收益共识为 adjusted（non-GAAP）$2.10，对应公司 non-GAAP 实际 $2.22——本库 eps_diluted 存的是 GAAP $2.46，与 non-GAAP 共识口径不同，按 schema 契约 consensus.eps 留 null、不构造不可比的配对；该数字仅在此存证",
+            "url": "https://www.cnbc.com/2026/08/26/nvidia-nvda-earnings-report-q2-2027-live-updates.html",
+            "data_status": "consensus"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "NVIDIA Form 10-Q filed 2026-08-26（FY2027 Q2 iXBRL: revenue $96,221M; gross profit $72,142M; operating income $63,734M; net income $59,688M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "NVIDIA Form 10-Q reportable segments（Compute & Networking $88,299M / op income $62,696M; Graphics $7,922M / $3,899M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived Q2 cash flow = FY2027 6M 10-Q ($74,421M CFO; $4,434M payments to acquire productive assets) minus FY2027 Q1 10-Q ($50,344M CFO; $1,757M)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "NVIDIA Form 10-Q filed 2026-05-28（FY2027 Q1: CFO $50,344M; capex $1,757M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "NVIDIA Form 10-Q filed 2026-08-26，利润表摊薄每股收益（GAAP）$2.46（three months ended 2026-07-26）。同日 8-K Ex-99.1 的 non-GAAP 表另给 $2.22——本字段按 eps_diluted_basis='gaap' 存 GAAP 口径，两者不可混用",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived Q2 股东回报 = FY2027 6M 10-Q 现金流量表筹资段（repurchases of common stock $39,044M；dividends paid $6,290M）减 FY2027 Q1 10-Q 同口径同标签（$19,312M；$243M）= 回购 $19,732M / 股息 $6,047M。注：本次 filing 另有一条 three-month 期间的 PaymentsOfDividends $6,000M（非现金流量表口径，现金流量表本期只出半年列），与上式差 $47M——按 schema 契约以现金流量表行为准，差异存证于此",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "nvda-fy2027q3-guidance",
+      "kind": "quarter",
+      "status": "guidance",
+      "period_start": "2026-07-27",
+      "period_end": "2026-10-25",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2027",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 108.0,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": null,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "consensus": {
+        "as_of": "2026-08-26",
+        "provider": "LSEG",
+        "estimate_count": null,
+        "revenue": 104.19,
+        "revenue_low": null,
+        "revenue_high": null,
+        "eps": null,
+        "sources": [
+          {
+            "label": "LSEG 汇编数据（经路透报道转述，2026-08-26）：FY2027 Q3 营收分析师平均预期 $104.19B，对应公司指引中值 $108.0B",
+            "url": "https://www.investing.com/news/stock-market-news/nvidia-forecasts-quarterly-revenue-above-estimates-4877887",
+            "data_status": "consensus"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "NVIDIA Q2 FY2027 earnings release (Form 8-K Ex-99.1, filed 2026-08-26) — Outlook: revenue expected to be $108.0 billion, plus or minus 2%; NVIDIA is not assuming any Data Center compute revenue from China in its outlook",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/q2fy27pr.htm",
+          "data_status": "guidance"
+        },
+        {
+          "label": "同一 Outlook 中公司还给出但本 schema 无对应字段、故不入库的指引项（仅存证）：GAAP 与 non-GAAP 毛利率均 74.0% ±50bp；GAAP 运营费用约 $9.2B、non-GAAP 约 $9.0B；FY2027 全年 GAAP 与 non-GAAP 税率 16.0%–18.0%（不含离散项）。毛利/营业利润未按绝对额披露，故 gross_profit / op_income 留 null，不用比率回乘编造",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/q2fy27pr.htm",
+          "data_status": "guidance"
+        },
+        {
+          "label": "报告期起止日取自 NVIDIA Form 10-Q filed 2026-08-26「Fiscal Year」注：FY2027 为 53 周年度、结束于一月最后一个周日，FY2027 Q2 为 13 周季度且 FY2027 Q4 将为 14 周季度 —— 据此 FY2027 Q3 为 13 周，自 Q2 期末 2026-07-26 次日起算至 2026-10-25。公司未在 Outlook 中明示该季起止日",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+          "data_status": "official"
+        }
+      ]
+    }
+  ]
+}

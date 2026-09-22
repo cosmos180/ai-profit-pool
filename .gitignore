@@ -10,3 +10,6 @@ __pycache__/
 node_modules/
 web/node_modules/
 web/dist/
+
+# 数据分片构建产物（真相源 = data/，由 tools/assemble.py 组装；vite/tests 直接读分片）
+/companies.json

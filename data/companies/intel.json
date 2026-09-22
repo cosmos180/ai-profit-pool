@@ -1,0 +1,478 @@
+{
+  "id": "intel",
+  "name": "Intel 英特尔",
+  "ticker": "NASDAQ · INTC",
+  "region": "美国",
+  "sector": "CPU / 数据中心 AI / 晶圆代工",
+  "currency": "USD",
+  "seg_profit": "yes",
+  "status": "populated",
+  "chain_stage": "design",
+  "ai_exposure": "partial",
+  "lead": "x86 CPU 与数据中心芯片厂商，同时经营面向外部及内部客户的 Intel Foundry。DCAI（Data Center and AI）是其最直接的 AI 基础设施分部；代工分部收入大部分来自内部交易，不能与合并营收相加。",
+  "fy_note": "财年为 52/53 周、通常在 12 月末结束。2025 年 9 月 Altera 去并表，年报对比列与当前分部口径均以 Intel 官方重述/列报为准。",
+  "quote": {
+    "as_of": "2026-07-24",
+    "market_cap": 509.469,
+    "net_debt": 20.81,
+    "price": 100.23,
+    "price_currency": "USD",
+    "sources": [
+      {
+        "label": "INTC market snapshot: price $100.23 and market cap $509.469B, retrieved 2026-07-24; intraday snapshot, for display only.",
+        "url": "https://www.nasdaq.com/market-activity/stocks/intc",
+        "data_status": "estimate"
+      },
+      {
+        "label": "Net debt = Q2 2026 short- and long-term debt $1,988M + $48,549M − cash and equivalents $12,874M − short-term investments $16,853M = $20,810M.",
+        "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000155/q226earningsrelease.htm",
+        "data_status": "derived"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "截至 2023-12-30",
+      "period_end_iso": "2023-12-30",
+      "status": "actual",
+      "revenue": 54.228,
+      "gross_margin": 0.4,
+      "op_income": 0.093,
+      "net_income": 1.675,
+      "cfo": 11.471,
+      "capex": 25.75,
+      "segments": [
+        {
+          "name": "Client Computing Group (CCG) 客户计算",
+          "kind": "division",
+          "revenue": 32.305,
+          "op_income": 10.128,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 15.98,
+          "op_income": 0.945,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 18.504,
+          "op_income": -7.083,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 5.463,
+          "op_income": 1.507,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v1",
+      "sources": [
+        {
+          "label": "Intel FY2025 Form 10-K comparative FY2023 consolidated P&L/cash-flow and operating-segment tables.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "截至 2024-12-28",
+      "period_end_iso": "2024-12-28",
+      "status": "actual",
+      "revenue": 53.101,
+      "gross_margin": 0.327,
+      "op_income": -11.678,
+      "net_income": -19.233,
+      "cfo": 8.288,
+      "capex": 23.944,
+      "segments": [
+        {
+          "name": "Client Computing Group (CCG) 客户计算",
+          "kind": "division",
+          "revenue": 33.346,
+          "op_income": 11.594,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 16.125,
+          "op_income": 1.414,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 17.317,
+          "op_income": -13.291,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 3.601,
+          "op_income": -0.057,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v1",
+      "sources": [
+        {
+          "label": "Intel FY2025 Form 10-K comparative FY2024 consolidated P&L/cash-flow and operating-segment tables.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "截至 2025-12-27",
+      "period_end_iso": "2025-12-27",
+      "status": "actual",
+      "revenue": 52.853,
+      "gross_margin": 0.348,
+      "op_income": -2.214,
+      "net_income": 0.026,
+      "cfo": 9.697,
+      "capex": 14.646,
+      "segments": [
+        {
+          "name": "Client Computing Group (CCG) 客户计算",
+          "kind": "division",
+          "revenue": 32.228,
+          "op_income": 9.317,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 16.919,
+          "op_income": 3.422,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 17.826,
+          "op_income": -10.318,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 3.563,
+          "op_income": 0.264,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v1",
+      "sources": [
+        {
+          "label": "Intel FY2025 Form 10-K filed 2026-01-23: consolidated P&L/cash flow and operating-segment tables.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "intel-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-30",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 54.228,
+      "gross_profit": 21.711,
+      "op_income": 0.093,
+      "net_income": 1.675,
+      "cfo": 11.471,
+      "capex": 25.75,
+      "segments": [
+        {
+          "name": "Client Computing Group (CCG) 客户计算",
+          "kind": "division",
+          "revenue": 32.305,
+          "op_income": 10.128,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 15.98,
+          "op_income": 0.945,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 18.504,
+          "op_income": -7.083,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 5.463,
+          "op_income": 1.507,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v1",
+      "sources": [
+        {
+          "label": "Intel FY2025 Form 10-K comparative FY2023 consolidated P&L/cash-flow and operating-segment tables.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "intel-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-12-31",
+      "period_end": "2024-12-28",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 53.101,
+      "gross_profit": 17.345,
+      "op_income": -11.678,
+      "net_income": -19.233,
+      "cfo": 8.288,
+      "capex": 23.944,
+      "segments": [
+        {
+          "name": "Client Computing Group (CCG) 客户计算",
+          "kind": "division",
+          "revenue": 33.346,
+          "op_income": 11.594,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 16.125,
+          "op_income": 1.414,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 17.317,
+          "op_income": -13.291,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 3.601,
+          "op_income": -0.057,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v1",
+      "sources": [
+        {
+          "label": "Intel FY2025 Form 10-K comparative FY2024 consolidated P&L/cash-flow and operating-segment tables.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "intel-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-12-29",
+      "period_end": "2025-12-27",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 52.853,
+      "gross_profit": 18.375,
+      "op_income": -2.214,
+      "net_income": 0.026,
+      "cfo": 9.697,
+      "capex": 14.646,
+      "segments": [
+        {
+          "name": "Client Computing Group (CCG) 客户计算",
+          "kind": "division",
+          "revenue": 32.228,
+          "op_income": 9.317,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 16.919,
+          "op_income": 3.422,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 17.826,
+          "op_income": -10.318,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 3.563,
+          "op_income": 0.264,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v1",
+      "sources": [
+        {
+          "label": "Intel FY2025 Form 10-K filed 2026-01-23: consolidated P&L/cash flow and operating-segment tables.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "intel-2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-12-28",
+      "period_end": "2026-03-28",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 13.577,
+      "gross_profit": 5.347,
+      "op_income": -3.136,
+      "net_income": -4.281,
+      "cfo": 1.096,
+      "capex": 3.636,
+      "segments": [
+        {
+          "name": "Client Computing Group (CCG) 客户计算",
+          "kind": "division",
+          "revenue": 7.727,
+          "op_income": 2.516,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 5.052,
+          "op_income": 1.542,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 5.421,
+          "op_income": -2.437,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 0.628,
+          "op_income": 0.102,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v1",
+      "sources": [
+        {
+          "label": "Intel Form 10-Q filed 2026-04-30: Q1 2026 GAAP statements, cash flow and segment results.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000079/intc-20260328.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "intel-2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-03-29",
+      "period_end": "2026-06-27",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 16.128,
+      "gross_profit": 6.509,
+      "op_income": 1.796,
+      "net_income": -10.848,
+      "cfo": 7.006,
+      "capex": 2.556,
+      "segments": [
+        {
+          "name": "Client Computing and Physical AI Group (CCPG) 客户计算与物理 AI",
+          "kind": "division",
+          "revenue": 8.877,
+          "op_income": 2.343,
+          "is_ai": false
+        },
+        {
+          "name": "Data Center and AI (DCAI) 数据中心与 AI",
+          "kind": "division",
+          "revenue": 6.262,
+          "op_income": 2.474,
+          "is_ai": true
+        },
+        {
+          "name": "Intel Foundry 英特尔代工",
+          "kind": "division",
+          "revenue": 5.765,
+          "op_income": -2.089,
+          "is_ai": false
+        },
+        {
+          "name": "All Other 其他",
+          "kind": "division",
+          "revenue": 0.701,
+          "op_income": 0.23,
+          "is_ai": false
+        }
+      ],
+      "segment_framework": "intel:reportable:v2",
+      "framework_change": "Q2 FY2026 将 Client Computing Group 更名为 Client Computing and Physical AI Group；其余报告分部口径沿用。",
+      "sources": [
+        {
+          "label": "Intel Q2 2026 Form 8-K Exhibit 99.1: Q2 GAAP statements and supplemental operating-segment results.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000155/q226earningsrelease.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived quarterly CFO/capex from matching USD cash-flow disclosures: six-month CFO $8,102M − Q1 $1,096M = $7,006M; six-month PPE additions $6,192M − Q1 $3,636M = $2,556M.",
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000155/q226earningsrelease.htm",
+          "data_status": "derived"
+        }
+      ]
+    }
+  ]
+}

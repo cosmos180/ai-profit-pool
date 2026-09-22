@@ -13,7 +13,7 @@
 const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const { Selectors: S } = require(path.join(ROOT, "data-module.js"));
-const db = require(path.join(ROOT, "companies.json"));
+const db = require(path.join(__dirname, "assemble.cjs")).loadDataset();
 
 /* 采集通道:哪些公司 Dayu(SEC 10-Q/6-K)可得,哪些需丢 PDF 人工提取。 */
 const CHANNEL = {

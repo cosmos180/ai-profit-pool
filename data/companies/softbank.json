@@ -1,0 +1,603 @@
+{
+  "id": "softbank",
+  "name": "SoftBank Group 软银集团",
+  "ticker": "TSE · 9984",
+  "region": "日本",
+  "sector": "投资 / AI 产业生态",
+  "currency": "JPY",
+  "seg_profit": "no",
+  "logo_text": "sb",
+  "logo_class": "sb",
+  "status": "populated",
+  "lead": "以投资控股、SoftBank Vision Funds、SoftBank 电信与 AI Computing（Arm/Ampere/Graphcore）为核心。利润高度受 OpenAI、Arm 等资产估值与投资损益影响，官方分部利润是税前利润口径，不等同于经营利润。",
+  "fy_note": "财年截至每年 3 月 31 日，例如 FY2025 = 2025-04-01 至 2026-03-31。JPY→USD 采用 SoftBank 官方财报披露的期末汇率（FY2023: 151.41 / FY2024: 149.52 / FY2025: 159.88）。分部 income 为 income before income tax 且包含投资损益，因此 op_income 留空。",
+  "quote": {
+    "as_of": "2026-06-26",
+    "market_cap": 206.0,
+    "net_debt": 125.47,
+    "sources": [
+      {
+        "label": "stockanalysis.com — SoftBank Group 市值 ~JPY 33.34T @ 2026-06",
+        "url": "https://stockanalysis.com/quote/tyo/9984/",
+        "data_status": "official"
+      },
+      {
+        "label": "派生：本地市值 JPY 33.34T ÷ USD/JPY 161.8",
+        "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ja.htm",
+        "data_status": "derived"
+      },
+      {
+        "label": "net_debt（估算）：FY2025（截至 2026-03-31）合并有息债务 ≈ JPY 25.66T，减 现金及等价物 ≈ JPY 5.36T → 净负债 JPY 20.30T ÷ USD/JPY 161.8 = +$125.47B（口径：合并报表含 SoftBank 电信/愿景基金子公司债务，排经营租赁；投资控股高杠杆，EV 口径特殊，待核验）",
+        "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+        "data_status": "estimate"
+      }
+    ]
+  },
+  "valuation_caveat": {
+    "pe": "na",
+    "fcf_yield": "na",
+    "ps": "distorted",
+    "ev_sales": "distorted",
+    "note": "投资控股公司，净利润含愿景基金投资公允价值损益，PE/FCF yield 不反映经营盈利能力；PS / EV/Sales 仅供参考（营收主要来自电信子公司，非其 AI 投资价值载体；合并净负债含电信子公司债务，EV/Sales 失真，显示但降级）；投资控股无经营 EBITDA 含义，EV/EBITDA 不适用",
+    "ev_ebitda": "na"
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "截至 2024-03-31",
+      "period_end_iso": "2024-03-31",
+      "status": "actual",
+      "revenue": 44.624,
+      "gross_margin": null,
+      "op_income": null,
+      "net_income": -1.504,
+      "segments": [
+        {
+          "name": "Investment Business of Holding Companies 控股公司投资业务",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "SoftBank Vision Funds 软银愿景基金",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "SoftBank segment 软银电信与互联网",
+          "kind": "platform",
+          "revenue": 40.164,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Arm 芯片 IP",
+          "kind": "platform",
+          "revenue": 3.065,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 1.395,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "SoftBank Group FY2024 Consolidated Financial Report（FY2023 对比期）",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2024_01_en.pdf",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "截至 2025-03-31",
+      "period_end_iso": "2025-03-31",
+      "status": "actual",
+      "revenue": 48.447,
+      "gross_margin": null,
+      "op_income": null,
+      "net_income": 7.714,
+      "segments": [
+        {
+          "name": "Investment Business of Holding Companies 控股公司投资业务",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "SoftBank Vision Funds 软银愿景基金",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "SoftBank segment 软银电信与互联网",
+          "kind": "platform",
+          "revenue": 43.749,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "AI Computing segment AI 计算",
+          "kind": "platform",
+          "revenue": 3.948,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.75,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "SoftBank Group FY2025 Consolidated Financial Report（FY2024 对比期，按 AI Computing 重分类）",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "截至 2026-03-31",
+      "period_end_iso": "2026-03-31",
+      "status": "actual",
+      "revenue": 48.778,
+      "gross_margin": null,
+      "op_income": null,
+      "net_income": 31.288,
+      "segments": [
+        {
+          "name": "Investment Business of Holding Companies 控股公司投资业务",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "SoftBank Vision Funds 软银愿景基金",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "SoftBank segment 软银电信与互联网",
+          "kind": "platform",
+          "revenue": 43.995,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "AI Computing segment AI 计算",
+          "kind": "platform",
+          "revenue": 4.005,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.778,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "SoftBank Group FY2025 Consolidated Financial Report",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "softbank-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-04-01",
+      "period_end": "2024-03-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "JPY",
+      "fx_to_usd": 151.41,
+      "revenue": 44.624,
+      "gross_profit": 23.396,
+      "op_income": null,
+      "net_income": -1.504,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "Investment Business of Holding Companies 控股公司投资业务",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "SoftBank Vision Funds 软银愿景基金",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "SoftBank segment 软银电信与互联网",
+          "kind": "platform",
+          "revenue": 40.164,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Arm 芯片 IP",
+          "kind": "platform",
+          "revenue": 3.065,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 1.395,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "SoftBank Group FY2024 Consolidated Financial Report（FY2023 对比期）",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2024_01_en.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "JPY→USD 换算率 151.41（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2023 期末汇率，见 fy_note",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2024_01_en.pdf",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "softbank-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-04-01",
+      "period_end": "2025-03-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "JPY",
+      "fx_to_usd": 149.52,
+      "revenue": 48.447,
+      "gross_profit": 25.1084,
+      "op_income": null,
+      "net_income": 7.714,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "Investment Business of Holding Companies 控股公司投资业务",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "SoftBank Vision Funds 软银愿景基金",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "SoftBank segment 软银电信与互联网",
+          "kind": "platform",
+          "revenue": 43.749,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "AI Computing segment AI 计算",
+          "kind": "platform",
+          "revenue": 3.948,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.75,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "SoftBank Group FY2025 Consolidated Financial Report（FY2024 对比期，按 AI Computing 重分类）",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "JPY→USD 换算率 149.52（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2024 期末汇率，见 fy_note",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "softbank-fy2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-04-01",
+      "period_end": "2025-06-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "JPY",
+      "fx_to_usd": 159.88,
+      "revenue": 11.3857,
+      "gross_profit": 5.9711,
+      "op_income": null,
+      "net_income": 2.6383,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "SoftBank Group Consolidated Financial Report for the Three-Month Period Ended June 30, 2025 (IFRS)",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2025_01_en.pdf",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "softbank-fy2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2025-09-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "JPY",
+      "fx_to_usd": 159.88,
+      "revenue": 11.9871,
+      "gross_profit": 6.2896,
+      "op_income": null,
+      "net_income": 15.6508,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "SoftBank Group Consolidated Financial Report for the Six-Month Period Ended September 30, 2025 (IFRS); standalone Q2 from three-month appendix",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q2fy2025_01_en.pdf",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "softbank-fy2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-10-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "JPY",
+      "fx_to_usd": 159.88,
+      "revenue": 12.3993,
+      "gross_profit": 6.4103,
+      "op_income": null,
+      "net_income": 1.5548,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "SoftBank Group Consolidated Financial Report for the Nine-Month Period Ended December 31, 2025 (IFRS); standalone Q3 from three-month appendix",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q3fy2025_01_en.pdf",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "softbank-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-04-01",
+      "period_end": "2026-03-31",
+      "calendar_year": 2026,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "JPY",
+      "fx_to_usd": 159.88,
+      "revenue": 48.778,
+      "gross_profit": 25.1197,
+      "op_income": null,
+      "net_income": 31.288,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "Investment Business of Holding Companies 控股公司投资业务",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "SoftBank Vision Funds 软银愿景基金",
+          "kind": "platform",
+          "revenue": 0.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "SoftBank segment 软银电信与互联网",
+          "kind": "platform",
+          "revenue": 43.995,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "AI Computing segment AI 计算",
+          "kind": "platform",
+          "revenue": 4.005,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.778,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "SoftBank Group FY2025 Consolidated Financial Report",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "JPY→USD 换算率 159.88（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2025 期末汇率，见 fy_note",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "softbank-fy2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "JPY",
+      "fx_to_usd": 160.51,
+      "revenue": 12.5823,
+      "gross_profit": 6.5643,
+      "op_income": null,
+      "net_income": 2.1639,
+      "cfo": -2.7404,
+      "capex": 7.5302,
+      "segments": [
+        {
+          "name": "Investment Business of Holding Companies 控股公司投资业务",
+          "kind": "platform",
+          "revenue": 0,
+          "op_income": null,
+          "is_ai": false
+        },
+        {
+          "name": "SoftBank Vision Funds 软银愿景基金",
+          "kind": "platform",
+          "revenue": 0,
+          "op_income": null,
+          "is_ai": true
+        },
+        {
+          "name": "SoftBank segment 软银电信与互联网",
+          "kind": "platform",
+          "revenue": 11.2807,
+          "op_income": null,
+          "is_ai": false
+        },
+        {
+          "name": "AI Computing segment AI 计算",
+          "kind": "platform",
+          "revenue": 1.0919,
+          "op_income": null,
+          "is_ai": true
+        },
+        {
+          "name": "Other 其他",
+          "kind": "platform",
+          "revenue": 0.2098,
+          "op_income": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "SoftBank Group Consolidated Financial Report for the Three-Month Period Ended June 30, 2026（2026-08-06）— net sales ¥2,019.591B; gross profit ¥1,053.634B; net income attributable to owners ¥347.330B",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2026_01_en.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "SoftBank Group Q1 FY2026 official data sheets — independent official cross-check of net sales, gross profit, attributable net income and operating cash flow",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/presentations/2026/earnings-datasheet_q1fy2026_02.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "SoftBank Group Q1 FY2026 cash-flow statement — operating cash flow −¥439.860B; purchases of PPE and intangible assets ¥1,208.669B; capex stored as an absolute cash outflow",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2026_01_en.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "SoftBank Group official Q1 FY2026 appendix — quarterly average USD/JPY rate ¥160.51 per USD（source-currency-per-USD）",
+          "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2026_01_en.pdf",
+          "data_status": "official"
+        }
+      ]
+    }
+  ]
+}

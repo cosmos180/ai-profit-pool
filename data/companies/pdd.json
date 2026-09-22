@@ -1,0 +1,727 @@
+{
+  "id": "pdd",
+  "name": "PDD Holdings 拼多多",
+  "ticker": "NASDAQ PDD",
+  "region": "中国（注册地爱尔兰都柏林，运营上海）",
+  "sector": "应用/平台 (电商·Temu)",
+  "currency": "CNY",
+  "seg_profit": "no",
+  "logo_text": "pd",
+  "logo_class": "",
+  "status": "populated",
+  "chain_stage": "app",
+  "lead": "价值链需求侧的「应用/平台」样本：拼多多主站 + Temu。营收仅拆两条线（在线营销服务=站内广告、交易服务=佣金/支付），分部营业利润不披露 → seg_profit='no'。GAAP 归母净利含大额利息/投资净收益（Q2'26 利息+投资收入 RMB13.5B ≈ 经营利润一半），非 GAAP 口径剔除股权激励与投资公允价值变动；本库按 GAAP 照录。现金及短投 RMB456B、无有息借款 → 深度净现金，EV 显著低于市值。",
+  "fy_note": "财年=自然年（截至每年 12 月 31 日）。RMB 报表（US GAAP），USD 换算用公司便利换算口径：各报告期期末联邦储备 H.10 noon buying rate（逐期标注 fx_to_usd）。capex 未在 6-K 简编现金流量表单列 → 诚实留空（不估）。毛利率由 营收−营业成本 派生。2024 各季精确值取自 2025 年各季新闻稿的官方对比列，与 2024 原稿交叉核验一致。",
+  "quote": {
+    "as_of": "2026-09-21",
+    "market_cap": 112.8,
+    "price": 79.43,
+    "price_currency": "USD",
+    "net_debt": -67.3,
+    "sources": [
+      {
+        "label": "PDD ADR 收盘 $79.43（2026-09-21，Benzinga）；市值 ~$112.8B 与 Yahoo/CompaniesMarketCap $110.7-114.9B 区间交叉印证；52 周高 $139.41、YTD 约 -34%。公开行情检索，estimate。",
+        "url": "https://www.benzinga.com/quote/PDD",
+        "data_status": "estimate"
+      },
+      {
+        "label": "net_debt：现金+短投 RMB456.4B（2026-06-30，Q2'26 6-K）÷ 6.7851 = $67.3B 净现金；资产负债表无有息借款（仅租赁负债，按口径排除）→ net_debt=-67.3。EV≈$45.5B 与外部行情站 ~$45.0B 交叉一致。",
+        "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926100534/tm2623874d1_ex99-1.htm",
+        "data_status": "derived"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2024",
+      "period_end": "截至 2024-12-31",
+      "period_end_iso": "2024-12-31",
+      "status": "actual",
+      "revenue": 53.9553,
+      "gross_margin": 0.6092,
+      "op_income": 14.8539,
+      "net_income": 15.4035,
+      "capex": null,
+      "cfo": 16.7042,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 27.1169,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 26.8385,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings FY2024（Q4/FY2024 稿 2025-03-20）：SEC 6-K ex-99.1 官方新闻稿。营收 393,836.1 / 营销服务 197,934.2 / 交易服务 195,901.9 / 营业成本 153,900.4 / 经营利润 108,422.9 / 归母净利 112,434.5 / CFO 121,929.3（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.2993，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "截至 2025-12-31",
+      "period_end_iso": "2025-12-31",
+      "status": "actual",
+      "revenue": 61.7531,
+      "gross_margin": 0.5628,
+      "op_income": 13.5311,
+      "net_income": 14.2089,
+      "capex": null,
+      "cfo": 15.292,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 31.1426,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 30.6106,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings FY2025（Q4/FY2025 稿 2026-03-25）：SEC 6-K ex-99.1 官方新闻稿。营收 431,845.7 / 营销服务 217,783.0 / 交易服务 214,062.7 / 营业成本 188,801.8 / 经营利润 94,624.1 / 归母净利 99,364.5 / CFO 106,938.7（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926034813/tm269789d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 6.9931，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926034813/tm269789d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "quarters": [],
+  "periods": [
+    {
+      "period_id": "pdd-2024q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-03-31",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q1",
+      "currency": "CNY",
+      "fx_to_usd": 7.2203,
+      "revenue": 12.0233,
+      "gross_profit": 7.4952,
+      "op_income": 3.5973,
+      "net_income": 3.8777,
+      "cfo": 2.9178,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 5.8801,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 6.1432,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q1 2024（6-K 2024-05-22）：SEC 6-K ex-99.1 官方新闻稿。营收 86,812.1 / 营销服务 42,456.2 / 交易服务 44,355.8 / 营业成本 32,694.7 / 经营利润 25,973.7 / 归母净利 27,997.8 / CFO 21,067.2（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924064321/tm2415048d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.2203，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924064321/tm2415048d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "pdd-2024q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-04-01",
+      "period_end": "2024-06-30",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q2",
+      "currency": "CNY",
+      "fx_to_usd": 7.2672,
+      "revenue": 13.3558,
+      "gross_profit": 8.7188,
+      "op_income": 4.481,
+      "net_income": 4.4046,
+      "cfo": 6.0261,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 6.7586,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 6.5973,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q2 2024（6-K 2024-08-26）：SEC 6-K ex-99.1 官方新闻稿。营收 97,059.5 / 营销服务 49,115.9 / 交易服务 47,943.7 / 营业成本 33,698.1 / 经营利润 32,564.5 / 归母净利 32,009.4 / CFO 43,792.6（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924092851/tm2422641d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.2672，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924092851/tm2422641d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "pdd-2024q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-07-01",
+      "period_end": "2024-09-30",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q3",
+      "currency": "CNY",
+      "fx_to_usd": 7.0176,
+      "revenue": 14.1579,
+      "gross_profit": 8.4994,
+      "op_income": 3.4617,
+      "net_income": 3.5597,
+      "cfo": 3.9219,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 7.0325,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 7.1254,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q3 2024（6-K 2024-11-21）：SEC 6-K ex-99.1 官方新闻稿。营收 99,354.4 / 营销服务 49,351.0 / 交易服务 50,003.4 / 营业成本 39,709.2 / 经营利润 24,292.5 / 归母净利 24,980.7 / CFO 27,522.3（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924121500/tm2429127d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.0176，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924121500/tm2429127d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "pdd-2024q4",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-10-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q4",
+      "currency": "CNY",
+      "fx_to_usd": 7.2993,
+      "revenue": 15.1535,
+      "gross_profit": 8.6052,
+      "op_income": 3.5061,
+      "net_income": 3.7602,
+      "cfo": 4.0479,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 7.8105,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 7.343,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q4 2024（FY2024 稿 2025-03-20，对比列）：SEC 6-K ex-99.1 官方新闻稿。营收 110,610.1 / 营销服务 57,011.1 / 交易服务 53,599.0 / 营业成本 47,798.4 / 经营利润 25,592.2 / 归母净利 27,446.6 / CFO 29,547.2（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.2993，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "pdd-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "CNY",
+      "fx_to_usd": 7.2993,
+      "revenue": 53.9553,
+      "gross_profit": 32.8711,
+      "op_income": 14.8539,
+      "net_income": 15.4035,
+      "cfo": 16.7042,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 27.1169,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 26.8385,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings FY2024（Q4/FY2024 稿 2025-03-20）：SEC 6-K ex-99.1 官方新闻稿。营收 393,836.1 / 营销服务 197,934.2 / 交易服务 195,901.9 / 营业成本 153,900.4 / 经营利润 108,422.9 / 归母净利 112,434.5 / CFO 121,929.3（RMB M，GAAP；毛利=营收−营业成本）。eps_diluted 为 GAAP 摊薄每 ADS（RMB，4 普通股=1 ADS）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.2993，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 76.01,
+      "eps_diluted_basis": "gaap"
+    },
+    {
+      "period_id": "pdd-2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-03-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "CNY",
+      "fx_to_usd": 7.2567,
+      "revenue": 13.184,
+      "gross_profit": 7.5413,
+      "op_income": 2.2167,
+      "net_income": 2.0315,
+      "cfo": 2.1383,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 6.7141,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 6.4699,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q1 2025（6-K 2025-05-27）：SEC 6-K ex-99.1 官方新闻稿。营收 95,672.2 / 营销服务 48,722.2 / 交易服务 46,950.0 / 营业成本 40,947.1 / 经营利润 16,085.6 / 归母净利 14,741.8 / CFO 15,516.9（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925053013/tm2516198d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.2567，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925053013/tm2516198d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 9.94,
+      "eps_diluted_basis": "gaap"
+    },
+    {
+      "period_id": "pdd-2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-04-01",
+      "period_end": "2025-06-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "CNY",
+      "fx_to_usd": 7.1636,
+      "revenue": 14.5157,
+      "gross_profit": 8.1141,
+      "op_income": 3.6006,
+      "net_income": 4.293,
+      "cfo": 3.0211,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 7.7759,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 6.7399,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q2 2025（6-K 2025-08-25）：SEC 6-K ex-99.1 官方新闻稿。营收 103,984.8 / 营销服务 55,703.2 / 交易服务 48,281.6 / 营业成本 45,858.9 / 经营利润 25,792.9 / 归母净利 30,753.5 / CFO 21,641.7（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925082502/tm2524268d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.1636，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925082502/tm2524268d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 20.75,
+      "eps_diluted_basis": "gaap"
+    },
+    {
+      "period_id": "pdd-2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2025-09-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "CNY",
+      "fx_to_usd": 7.119,
+      "revenue": 15.2095,
+      "gross_profit": 8.6299,
+      "op_income": 3.5154,
+      "net_income": 4.1197,
+      "cfo": 6.4139,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 7.4937,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 7.7158,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q3 2025（6-K 2025-11-18）：SEC 6-K ex-99.1 官方新闻稿。营收 108,276.5 / 营销服务 53,347.6 / 交易服务 54,928.9 / 营业成本 46,840.2 / 经营利润 25,025.9 / 归母净利 29,328.2 / CFO 45,660.5（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925113490/tm2531580d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 7.119，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925113490/tm2531580d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 19.7,
+      "eps_diluted_basis": "gaap"
+    },
+    {
+      "period_id": "pdd-2025q4",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-10-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q4",
+      "currency": "CNY",
+      "fx_to_usd": 6.9931,
+      "revenue": 17.7192,
+      "gross_profit": 9.8321,
+      "op_income": 3.9639,
+      "net_income": 3.5093,
+      "cfo": 3.449,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 8.5813,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 9.1379,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q4 2025（Q4/FY2025 稿 2026-03-25）：SEC 6-K ex-99.1 官方新闻稿。营收 123,912.2 / 营销服务 60,010.1 / 交易服务 63,902.1 / 营业成本 55,155.6 / 经营利润 27,719.7 / 归母净利 24,541.0 / CFO 24,119.5（RMB M，GAAP；毛利=营收−营业成本）。eps_diluted 为 GAAP 摊薄每 ADS（RMB，4 普通股=1 ADS）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926034813/tm269789d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 6.9931，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926034813/tm269789d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 16.51,
+      "eps_diluted_basis": "gaap"
+    },
+    {
+      "period_id": "pdd-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "CNY",
+      "fx_to_usd": 6.9931,
+      "revenue": 61.7531,
+      "gross_profit": 34.7548,
+      "op_income": 13.5311,
+      "net_income": 14.2089,
+      "cfo": 15.292,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 31.1426,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 30.6106,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings FY2025（Q4/FY2025 稿 2026-03-25）：SEC 6-K ex-99.1 官方新闻稿。营收 431,845.7 / 营销服务 217,783.0 / 交易服务 214,062.7 / 营业成本 188,801.8 / 经营利润 94,624.1 / 归母净利 99,364.5 / CFO 106,938.7（RMB M，GAAP；毛利=营收−营业成本）。eps_diluted 为 GAAP 摊薄每 ADS（RMB，4 普通股=1 ADS）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926034813/tm269789d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 6.9931，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926034813/tm269789d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 67.03,
+      "eps_diluted_basis": "gaap"
+    },
+    {
+      "period_id": "pdd-2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-01-01",
+      "period_end": "2026-03-31",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "CNY",
+      "fx_to_usd": 6.898,
+      "revenue": 15.4,
+      "gross_profit": 8.6019,
+      "op_income": 2.8365,
+      "net_income": 1.8189,
+      "cfo": 2.384,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 7.2392,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 8.1608,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q1 2026（6-K 2026-05-27）：SEC 6-K ex-99.1 官方新闻稿。营收 106,229.0 / 营销服务 49,936.0 / 交易服务 56,293.0 / 营业成本 46,893.0 / 经营利润 19,566.0 / 归母净利 12,547.0 / CFO 16,445.0（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926067186/tm2615739d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 6.898，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926067186/tm2615739d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 8.48,
+      "eps_diluted_basis": "gaap"
+    },
+    {
+      "period_id": "pdd-2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "CNY",
+      "fx_to_usd": 6.7851,
+      "revenue": 16.5595,
+      "gross_profit": 9.4827,
+      "op_income": 4.0919,
+      "net_income": 4.0061,
+      "cfo": 3.7833,
+      "capex": null,
+      "segments": [
+        {
+          "name": "在线营销服务及其他 Online marketing services and others（广告）",
+          "kind": "platform",
+          "revenue": 8.4946,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "交易服务 Transaction services（佣金·支付）",
+          "kind": "platform",
+          "revenue": 8.0649,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "PDD Holdings Q2 2026（6-K 2026-08-24）：SEC 6-K ex-99.1 官方新闻稿。营收 112,358.0 / 营销服务 57,637.0 / 交易服务 54,721.0 / 营业成本 48,017.0 / 经营利润 27,764.0 / 归母净利 27,182.0 / CFO 25,670.0（RMB M，GAAP；毛利=营收−营业成本）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926100534/tm2623874d1_ex99-1.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "FX 基准：RMB→USD 6.7851，公司便利换算所用期末 H.10 noon buying rate（新闻稿注 1）。",
+          "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926100534/tm2623874d1_ex99-1.htm",
+          "data_status": "official"
+        }
+      ],
+      "eps_diluted": 18.45,
+      "eps_diluted_basis": "gaap"
+    }
+  ]
+}

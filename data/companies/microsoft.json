@@ -1,0 +1,1201 @@
+{
+  "id": "microsoft",
+  "name": "Microsoft 微软",
+  "ticker": "NASDAQ · MSFT",
+  "region": "美国",
+  "sector": "软件 + 云 (Azure) + AI",
+  "currency": "USD",
+  "seg_profit": "yes",
+  "logo_text": "ms",
+  "logo_class": "ms",
+  "status": "populated",
+  "chain_stage": "cloud",
+  "ai_exposure": "partial",
+  "ai_profit_share": 0.346921,
+  "ai_share_source": [
+    {
+      "label": "AI profit share proxy: FY2025 Intelligent Cloud operating income $44.589B / Microsoft operating income $128.528B = 34.6921%. Intelligent Cloud is used as an AI infrastructure proxy, not company-disclosed AI-only profit.",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+      "data_status": "derived"
+    }
+  ],
+  "lead": "需求侧超大规模厂商：按 Productivity and Business Processes / Intelligent Cloud / More Personal Computing 三个报告分部披露营收与营业利润。Intelligent Cloud（含 Azure）标 is_ai，约占合并营收 38%（FY2025 重列口径）→ C 加权后云环节被折算，体现“AI 是其中一块”。",
+  "fy_note": "财年截至每年 6 月 30 日（FY2025 = 2024-07 至 2025-06）。USD 原币。FY2025 起公司重列分部口径（商业版 M365 归入 PBP），各财年分部均按其当年披露口径录入、合计=当年合并营收；FY2024/FY2023 为旧口径，FY2025 为重列口径，跨年分部不完全可比。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 2880,
+    "price": 388.07,
+    "price_currency": "USD",
+    "net_debt": null,
+    "sources": [
+      {
+        "label": "MSFT close $388.07 (+0.34% vs 07-06 $386.74); market cap derived from library implied share count (~7.42B), cross-checked vs stockanalysis/companiesmarketcap (~$2.89T)",
+        "url": "https://stockanalysis.com/stocks/msft/market-cap/",
+        "data_status": "estimate"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "财年截至 2023-06-30",
+      "period_end_iso": "2023-06-30",
+      "status": "actual",
+      "revenue": 211.915,
+      "gross_margin": 0.689,
+      "op_income": 88.523,
+      "net_income": 72.361,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程",
+          "kind": "platform",
+          "revenue": 69.274,
+          "op_income": 34.189,
+          "op_margin": 0.494,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 87.907,
+          "op_income": 37.884,
+          "op_margin": 0.431,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 54.734,
+          "op_income": 16.45,
+          "op_margin": 0.301,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Microsoft FY2023 分部营收与营业利润（旧口径，合计营收 $211,915M / 营业利润 $88,523M、净利 $72,361M）",
+          "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2023-q4/segment-revenues",
+          "data_status": "official"
+        },
+        {
+          "label": "Microsoft FY2023 Form 10-K filed 2023-07-27（SEC XBRL: revenue $211,915M, gross profit $146,052M, operating income $88,523M, net income $72,361M, CFO $87,582M, capex $28,107M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017023035122/msft-20230630.htm",
+          "data_status": "official"
+        }
+      ],
+      "cfo": 87.582,
+      "capex": 28.107,
+      "revenue_breakdown": {
+        "label": "主要产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Server products and cloud services 服务器产品与云服务",
+            "revenue": 65.007
+          },
+          {
+            "name": "Microsoft 365 Commercial products and cloud services Microsoft 365 商业产品与云服务",
+            "revenue": 66.949
+          },
+          {
+            "name": "Gaming 游戏",
+            "revenue": 15.466
+          },
+          {
+            "name": "LinkedIn 领英",
+            "revenue": 14.989
+          },
+          {
+            "name": "Windows and Devices Windows 与设备",
+            "revenue": 17.147
+          },
+          {
+            "name": "Search and news advertising 搜索与新闻广告",
+            "revenue": 12.125
+          },
+          {
+            "name": "Dynamics products and cloud services Dynamics 产品与云服务",
+            "revenue": 5.796
+          },
+          {
+            "name": "Enterprise and partner services 企业与合作伙伴服务",
+            "revenue": 7.9
+          },
+          {
+            "name": "Microsoft 365 Consumer products and cloud services Microsoft 365 消费者产品与云服务",
+            "revenue": 6.417
+          },
+          {
+            "name": "Other 其他",
+            "revenue": 0.119
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2025 10-K filed 2025-07-30, Note 13 Segments: revenue by major product and service offering; exact three-year table (USD millions), verified from local Dayu filing fil_0000950170-25-100235.",
+            "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "财年截至 2024-06-30",
+      "period_end_iso": "2024-06-30",
+      "status": "actual",
+      "revenue": 245.122,
+      "gross_margin": 0.698,
+      "op_income": 109.433,
+      "net_income": 88.136,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程",
+          "kind": "platform",
+          "revenue": 77.728,
+          "op_income": 40.54,
+          "op_margin": 0.522,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 105.362,
+          "op_income": 49.584,
+          "op_margin": 0.471,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 62.032,
+          "op_income": 19.309,
+          "op_margin": 0.311,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Microsoft FY2024 分部营收与营业利润（旧口径，合计营收 $245,122M / 营业利润 $109,433M、净利 $88,136M）",
+          "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2024-q4/segment-revenues",
+          "data_status": "official"
+        },
+        {
+          "label": "Microsoft FY2024 Form 10-K filed 2024-07-30（SEC XBRL: revenue $245,122M, gross profit $171,008M, operating income $109,433M, net income $88,136M, CFO $118,548M, capex $44,477M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024087843/msft-20240630.htm",
+          "data_status": "official"
+        }
+      ],
+      "cfo": 118.548,
+      "capex": 44.477,
+      "revenue_breakdown": {
+        "label": "主要产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Server products and cloud services 服务器产品与云服务",
+            "revenue": 79.828
+          },
+          {
+            "name": "Microsoft 365 Commercial products and cloud services Microsoft 365 商业产品与云服务",
+            "revenue": 76.969
+          },
+          {
+            "name": "Gaming 游戏",
+            "revenue": 21.503
+          },
+          {
+            "name": "LinkedIn 领英",
+            "revenue": 16.372
+          },
+          {
+            "name": "Windows and Devices Windows 与设备",
+            "revenue": 17.026
+          },
+          {
+            "name": "Search and news advertising 搜索与新闻广告",
+            "revenue": 12.306
+          },
+          {
+            "name": "Dynamics products and cloud services Dynamics 产品与云服务",
+            "revenue": 6.831
+          },
+          {
+            "name": "Enterprise and partner services 企业与合作伙伴服务",
+            "revenue": 7.594
+          },
+          {
+            "name": "Microsoft 365 Consumer products and cloud services Microsoft 365 消费者产品与云服务",
+            "revenue": 6.648
+          },
+          {
+            "name": "Other 其他",
+            "revenue": 0.045
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2025 10-K filed 2025-07-30, Note 13 Segments: revenue by major product and service offering; exact three-year table (USD millions), verified from local Dayu filing fil_0000950170-25-100235.",
+            "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "财年截至 2025-06-30",
+      "period_end_iso": "2025-06-30",
+      "status": "actual",
+      "revenue": 281.724,
+      "gross_margin": 0.688,
+      "op_income": 128.528,
+      "net_income": 101.832,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程（重列含商业版 M365）",
+          "kind": "platform",
+          "revenue": 120.81,
+          "op_income": 69.773,
+          "op_margin": 0.578,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 106.265,
+          "op_income": 44.589,
+          "op_margin": 0.42,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 54.649,
+          "op_income": 14.166,
+          "op_margin": 0.259,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Microsoft FY2025 业绩（重列口径，合计营收 $281,724M、营业利润 $128,528M、净利 $101,832M、毛利 $193,893M → 毛利率 68.8%；分部 PBP $120,810M / Intelligent Cloud $106,265M / MPC $54,649M）",
+          "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2025-q4/press-release-webcast",
+          "data_status": "official"
+        },
+        {
+          "label": "Microsoft FY2025 Form 10-K filed 2025-07-30（SEC XBRL: revenue $281,724M, gross profit $193,893M, operating income $128,528M, net income $101,832M, CFO $136,162M, capex $64,551M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+          "data_status": "official"
+        }
+      ],
+      "cfo": 136.162,
+      "capex": 64.551,
+      "revenue_breakdown": {
+        "label": "主要产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Server products and cloud services 服务器产品与云服务",
+            "revenue": 98.435
+          },
+          {
+            "name": "Microsoft 365 Commercial products and cloud services Microsoft 365 商业产品与云服务",
+            "revenue": 87.767
+          },
+          {
+            "name": "Gaming 游戏",
+            "revenue": 23.455
+          },
+          {
+            "name": "LinkedIn 领英",
+            "revenue": 17.812
+          },
+          {
+            "name": "Windows and Devices Windows 与设备",
+            "revenue": 17.314
+          },
+          {
+            "name": "Search and news advertising 搜索与新闻广告",
+            "revenue": 13.878
+          },
+          {
+            "name": "Dynamics products and cloud services Dynamics 产品与云服务",
+            "revenue": 7.827
+          },
+          {
+            "name": "Enterprise and partner services 企业与合作伙伴服务",
+            "revenue": 7.76
+          },
+          {
+            "name": "Microsoft 365 Consumer products and cloud services Microsoft 365 消费者产品与云服务",
+            "revenue": 7.404
+          },
+          {
+            "name": "Other 其他",
+            "revenue": 0.072
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2025 10-K filed 2025-07-30, Note 13 Segments: revenue by major product and service offering; exact three-year table (USD millions), verified from local Dayu filing fil_0000950170-25-100235.",
+            "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2026E",
+      "period_end": "财年截至 2026-06-30",
+      "period_end_iso": "2026-06-30",
+      "status": "forecast",
+      "revenue": 329.5,
+      "net_income": 129.24,
+      "consensus_rev": "$329.5B",
+      "consensus_eps": "$16.82",
+      "consensus_eps_value": 16.82,
+      "consensus_eps_currency": "USD",
+      "consensus_eps_source": [
+        {
+          "label": "StockAnalysis/S&P Global consensus FY2026 EPS average $16.82; last updated 2026-07-06",
+          "url": "https://stockanalysis.com/stocks/msft/forecast/",
+          "data_status": "consensus"
+        }
+      ],
+      "sources": [
+        {
+          "label": "StockAnalysis/S&P Global FY2026 forecast: revenue $329.50B, net income $129.24B, EPS $16.82",
+          "url": "https://stockanalysis.com/stocks/msft/forecast/",
+          "data_status": "consensus"
+        }
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2023-12-31",
+      "label": "Q2 FY2024",
+      "revenue": 62.02,
+      "net_income": 21.87,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2024-01-30（quarter ended 2023-12-31: revenue $62,020M, net income $21,870M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024008814/msft-20231231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-03-31",
+      "label": "Q3 FY2024",
+      "revenue": 61.858,
+      "net_income": 21.939,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2024-04-25（quarter ended 2024-03-31: revenue $61,858M, net income $21,939M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024048288/msft-20240331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-09-30",
+      "label": "Q1 FY2025",
+      "revenue": 65.585,
+      "net_income": 24.667,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2024-10-30（quarter ended 2024-09-30: revenue $65,585M, net income $24,667M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024118967/msft-20240930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-12-31",
+      "label": "Q2 FY2025",
+      "revenue": 69.632,
+      "net_income": 24.108,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2025-01-29（quarter ended 2024-12-31: revenue $69,632M, net income $24,108M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025010491/msft-20241231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-03-31",
+      "label": "Q3 FY2025",
+      "revenue": 70.066,
+      "net_income": 25.824,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2025-04-30（quarter ended 2025-03-31: revenue $70,066M, net income $25,824M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025061046/msft-20250331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-09-30",
+      "label": "Q1 FY2026",
+      "revenue": 77.673,
+      "net_income": 27.747,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2025-10-29（quarter ended 2025-09-30: revenue $77,673M, net income $27,747M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312525256321/msft-20250930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-12-31",
+      "label": "Q2 FY2026",
+      "revenue": 81.273,
+      "net_income": 38.458,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2026-01-28（quarter ended 2025-12-31: revenue $81,273M, net income $38,458M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526027207/msft-20251231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-03-31",
+      "label": "Q3 FY2026",
+      "revenue": 82.886,
+      "net_income": 31.778,
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2026-04-29（quarter ended 2026-03-31: revenue $82,886M, net income $31,778M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "microsoft-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2022-07-01",
+      "period_end": "2023-06-30",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 211.915,
+      "gross_profit": 146.052,
+      "op_income": 88.523,
+      "net_income": 72.361,
+      "cfo": 87.582,
+      "capex": 28.107,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程",
+          "kind": "platform",
+          "revenue": 69.274,
+          "op_income": 34.189,
+          "op_margin": 0.494,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 87.907,
+          "op_income": 37.884,
+          "op_margin": 0.431,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 54.734,
+          "op_income": 16.45,
+          "op_margin": 0.301,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Microsoft FY2023 分部营收与营业利润（旧口径，合计营收 $211,915M / 营业利润 $88,523M、净利 $72,361M）",
+          "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2023-q4/segment-revenues",
+          "data_status": "official"
+        },
+        {
+          "label": "Microsoft FY2023 Form 10-K filed 2023-07-27（SEC XBRL: revenue $211,915M, gross profit $146,052M, operating income $88,523M, net income $72,361M, CFO $87,582M, capex $28,107M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017023035122/msft-20230630.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "主要产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Server products and cloud services 服务器产品与云服务",
+            "revenue": 65.007
+          },
+          {
+            "name": "Microsoft 365 Commercial products and cloud services Microsoft 365 商业产品与云服务",
+            "revenue": 66.949
+          },
+          {
+            "name": "Gaming 游戏",
+            "revenue": 15.466
+          },
+          {
+            "name": "LinkedIn 领英",
+            "revenue": 14.989
+          },
+          {
+            "name": "Windows and Devices Windows 与设备",
+            "revenue": 17.147
+          },
+          {
+            "name": "Search and news advertising 搜索与新闻广告",
+            "revenue": 12.125
+          },
+          {
+            "name": "Dynamics products and cloud services Dynamics 产品与云服务",
+            "revenue": 5.796
+          },
+          {
+            "name": "Enterprise and partner services 企业与合作伙伴服务",
+            "revenue": 7.9
+          },
+          {
+            "name": "Microsoft 365 Consumer products and cloud services Microsoft 365 消费者产品与云服务",
+            "revenue": 6.417
+          },
+          {
+            "name": "Other 其他",
+            "revenue": 0.119
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2025 10-K filed 2025-07-30, Note 13 Segments: revenue by major product and service offering; exact three-year table (USD millions), verified from local Dayu filing fil_0000950170-25-100235.",
+            "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "microsoft-fy2024q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2023-10-01",
+      "period_end": "2023-12-31",
+      "calendar_year": 2023,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 62.02,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 21.87,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2024-01-30（quarter ended 2023-12-31: revenue $62,020M, net income $21,870M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024008814/msft-20231231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2024q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-03-31",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 61.858,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 21.939,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2024-04-25（quarter ended 2024-03-31: revenue $61,858M, net income $21,939M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024048288/msft-20240331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-07-01",
+      "period_end": "2024-06-30",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 245.122,
+      "gross_profit": 171.008,
+      "op_income": 109.433,
+      "net_income": 88.136,
+      "cfo": 118.548,
+      "capex": 44.477,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程",
+          "kind": "platform",
+          "revenue": 77.728,
+          "op_income": 40.54,
+          "op_margin": 0.522,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 105.362,
+          "op_income": 49.584,
+          "op_margin": 0.471,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 62.032,
+          "op_income": 19.309,
+          "op_margin": 0.311,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Microsoft FY2024 分部营收与营业利润（旧口径，合计营收 $245,122M / 营业利润 $109,433M、净利 $88,136M）",
+          "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2024-q4/segment-revenues",
+          "data_status": "official"
+        },
+        {
+          "label": "Microsoft FY2024 Form 10-K filed 2024-07-30（SEC XBRL: revenue $245,122M, gross profit $171,008M, operating income $109,433M, net income $88,136M, CFO $118,548M, capex $44,477M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024087843/msft-20240630.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "主要产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Server products and cloud services 服务器产品与云服务",
+            "revenue": 79.828
+          },
+          {
+            "name": "Microsoft 365 Commercial products and cloud services Microsoft 365 商业产品与云服务",
+            "revenue": 76.969
+          },
+          {
+            "name": "Gaming 游戏",
+            "revenue": 21.503
+          },
+          {
+            "name": "LinkedIn 领英",
+            "revenue": 16.372
+          },
+          {
+            "name": "Windows and Devices Windows 与设备",
+            "revenue": 17.026
+          },
+          {
+            "name": "Search and news advertising 搜索与新闻广告",
+            "revenue": 12.306
+          },
+          {
+            "name": "Dynamics products and cloud services Dynamics 产品与云服务",
+            "revenue": 6.831
+          },
+          {
+            "name": "Enterprise and partner services 企业与合作伙伴服务",
+            "revenue": 7.594
+          },
+          {
+            "name": "Microsoft 365 Consumer products and cloud services Microsoft 365 消费者产品与云服务",
+            "revenue": 6.648
+          },
+          {
+            "name": "Other 其他",
+            "revenue": 0.045
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2025 10-K filed 2025-07-30, Note 13 Segments: revenue by major product and service offering; exact three-year table (USD millions), verified from local Dayu filing fil_0000950170-25-100235.",
+            "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "microsoft-fy2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-07-01",
+      "period_end": "2024-09-30",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 65.585,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 24.667,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2024-10-30（quarter ended 2024-09-30: revenue $65,585M, net income $24,667M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024118967/msft-20240930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-10-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 69.632,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 24.108,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2025-01-29（quarter ended 2024-12-31: revenue $69,632M, net income $24,108M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025010491/msft-20241231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-03-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 70.066,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 25.824,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2025-04-30（quarter ended 2025-03-31: revenue $70,066M, net income $25,824M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025061046/msft-20250331.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-07-01",
+      "period_end": "2025-06-30",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 281.724,
+      "gross_profit": 193.893,
+      "op_income": 128.528,
+      "net_income": 101.832,
+      "cfo": 136.162,
+      "capex": 64.551,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程（重列含商业版 M365）",
+          "kind": "platform",
+          "revenue": 120.81,
+          "op_income": 69.773,
+          "op_margin": 0.578,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 106.265,
+          "op_income": 44.589,
+          "op_margin": 0.42,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 54.649,
+          "op_income": 14.166,
+          "op_margin": 0.259,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Microsoft FY2025 业绩（重列口径，合计营收 $281,724M、营业利润 $128,528M、净利 $101,832M、毛利 $193,893M → 毛利率 68.8%；分部 PBP $120,810M / Intelligent Cloud $106,265M / MPC $54,649M）",
+          "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2025-q4/press-release-webcast",
+          "data_status": "official"
+        },
+        {
+          "label": "Microsoft FY2025 Form 10-K filed 2025-07-30（SEC XBRL: revenue $281,724M, gross profit $193,893M, operating income $128,528M, net income $101,832M, CFO $136,162M, capex $64,551M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "主要产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Server products and cloud services 服务器产品与云服务",
+            "revenue": 98.435
+          },
+          {
+            "name": "Microsoft 365 Commercial products and cloud services Microsoft 365 商业产品与云服务",
+            "revenue": 87.767
+          },
+          {
+            "name": "Gaming 游戏",
+            "revenue": 23.455
+          },
+          {
+            "name": "LinkedIn 领英",
+            "revenue": 17.812
+          },
+          {
+            "name": "Windows and Devices Windows 与设备",
+            "revenue": 17.314
+          },
+          {
+            "name": "Search and news advertising 搜索与新闻广告",
+            "revenue": 13.878
+          },
+          {
+            "name": "Dynamics products and cloud services Dynamics 产品与云服务",
+            "revenue": 7.827
+          },
+          {
+            "name": "Enterprise and partner services 企业与合作伙伴服务",
+            "revenue": 7.76
+          },
+          {
+            "name": "Microsoft 365 Consumer products and cloud services Microsoft 365 消费者产品与云服务",
+            "revenue": 7.404
+          },
+          {
+            "name": "Other 其他",
+            "revenue": 0.072
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2025 10-K filed 2025-07-30, Note 13 Segments: revenue by major product and service offering; exact three-year table (USD millions), verified from local Dayu filing fil_0000950170-25-100235.",
+            "url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "microsoft-fy2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2025-09-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 77.673,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 27.747,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2025-10-29（quarter ended 2025-09-30: revenue $77,673M, net income $27,747M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312525256321/msft-20250930.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-10-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 81.273,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 38.458,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Microsoft 10-Q filed 2026-01-28（quarter ended 2025-12-31: revenue $81,273M, net income $38,458M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526027207/msft-20251231.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2026q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-01-01",
+      "period_end": "2026-03-31",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 82.886,
+      "gross_profit": 56.058,
+      "op_income": 38.398,
+      "net_income": 31.778,
+      "cfo": 46.679,
+      "capex": 30.876,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程",
+          "kind": "platform",
+          "revenue": 35.013,
+          "op_income": 20.973,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 34.681,
+          "op_income": 13.753,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 13.192,
+          "op_income": 3.672,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Microsoft Form 10-Q filed 2026-04-30（FY2026 Q3 iXBRL: revenue $82,886M; cost of revenue $26,828M; operating income $38,398M; net income $31,778M; CFO $46,679M; capex $30,876M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Microsoft Form 10-Q segment table（Productivity $35,013M / op income $20,973M; Intelligent Cloud $34,681M / $13,753M; More Personal Computing $13,192M / $3,672M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived gross profit = revenue $82,886M - cost of revenue $26,828M = $56,058M",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2026q4",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q4",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 90.007,
+      "gross_profit": 60.482,
+      "op_income": 40.603,
+      "net_income": 35.766,
+      "cfo": 55.441,
+      "capex": 35.802,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程",
+          "kind": "platform",
+          "revenue": 37.847,
+          "op_income": 21.9,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 39.306,
+          "op_income": 15.955,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 12.854,
+          "op_income": 2.748,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Product 产品",
+            "revenue": 17.234
+          },
+          {
+            "name": "Service and other 服务及其他",
+            "revenue": 72.773
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2026 Q4 earnings release — quarterly product and service revenue",
+            "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Microsoft FY2026 Q4 official earnings release — quarter ended June 30, 2026",
+          "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "microsoft-fy2026-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-07-01",
+      "period_end": "2026-06-30",
+      "calendar_year": 2026,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 331.839,
+      "gross_profit": 225.465,
+      "op_income": 155.237,
+      "net_income": 133.749,
+      "cfo": 182.935,
+      "capex": 115.948,
+      "segments": [
+        {
+          "name": "Productivity and Business Processes 生产力与业务流程",
+          "kind": "platform",
+          "revenue": 139.996,
+          "op_income": 83.879,
+          "is_ai": false
+        },
+        {
+          "name": "Intelligent Cloud 智能云（Azure 等）",
+          "kind": "platform",
+          "revenue": 137.791,
+          "op_income": 56.972,
+          "is_ai": true
+        },
+        {
+          "name": "More Personal Computing 个人计算",
+          "kind": "platform",
+          "revenue": 54.052,
+          "op_income": 14.386,
+          "is_ai": false
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与服务收入",
+        "complete": true,
+        "items": [
+          {
+            "name": "Product 产品",
+            "revenue": 64.696
+          },
+          {
+            "name": "Service and other 服务及其他",
+            "revenue": 267.143
+          }
+        ],
+        "sources": [
+          {
+            "label": "Microsoft FY2026 earnings release — annual product and service revenue",
+            "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+            "data_status": "official"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Microsoft FY2026 official earnings release — fiscal year ended June 30, 2026",
+          "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+          "data_status": "official"
+        }
+      ]
+    }
+  ]
+}

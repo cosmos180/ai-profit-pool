@@ -1,0 +1,964 @@
+{
+  "id": "asml",
+  "name": "ASML",
+  "ticker": "NASDAQ / Euronext · ASML",
+  "region": "欧洲",
+  "sector": "半导体设备 / 光刻系统",
+  "currency": "EUR",
+  "seg_profit": "no",
+  "logo_text": "as",
+  "logo_class": "as",
+  "status": "populated",
+  "lead": "全球光刻机核心供应商，独家提供 EUV 光刻系统。EUV/High-NA EUV 是先进制程 AI 芯片制造的底层关键设备，但 ASML 是单一报告经营分部，不披露产品级利润。",
+  "fy_note": "自然年，财年截至 12 月 31 日。EUR→USD 按 ECB 每日历史汇率年度平均值折算（2023: 1.081269 / 2024: 1.082380 / 2025: 1.129983）。产品平台拆分为 EUV、DUV、量测与检测、装机基地管理。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 679,
+    "price": 1732,
+    "price_currency": "USD",
+    "net_debt": -6.52,
+    "sources": [
+      {
+        "label": "ASML (NASDAQ ADR) down ~5.08% on 7/7 (Samsung Q2 miss -> chip-equip selloff); price approximated from daily-move recap x library 7/6 close 1825.07 (~$1732, sources cite -3.6% EUR / -4.6% intraday / -5.08% full day). Market cap price-scaled from library 715.48bn/1825.07. Exact USD close not cleanly published as of 7/8",
+        "url": "https://www.fool.com/investing/2026/07/07/why-asml-stock-dropped-today/",
+        "data_status": "estimate"
+      },
+      {
+        "label": "net_debt=-6.52 bn｜口径:net_debt = 有息债务 −(现金及等价物 + 短期投资)。分量(€bn,截至 2026-03-29):有息债务(长期债务/债券)2.7056;现金及等价物 7.9704;短期投资 0.4059;现金+短投合计 8.3763。EUR 净现金 = 2.7056 − 8.3763 = -5.6707。按期末汇率换算:-5.6707 × 1.149425 = -6.52 USD bn(净现金)。租赁排除见 lease_excluded_note。二手印证:cash €7,970.4M / ST inv €405.9M / LT debt €2,705.6M 经 SEC 6-K 摘要、asml.com/nasdaq 新闻稿、YCharts『Total Long-Term Debt』等多来源一致。已用 SEC 原文与本地 Dayu filing fil_0001628280-26-025147 复核。",
+        "url": "https://www.asml.com/en/news/press-releases/2026/q1-2026-financial-results",
+        "data_status": "official"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2023",
+      "period_end": "自然年 2023（截至 2023-12-31）",
+      "period_end_iso": "2023-12-31",
+      "status": "actual",
+      "revenue": 29.798,
+      "gross_margin": 0.513,
+      "op_income": 9.777,
+      "net_income": 8.476,
+      "segments": [
+        {
+          "name": "EUV 先进光刻系统",
+          "kind": "platform",
+          "revenue": 9.865,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "DUV 成熟光刻系统",
+          "kind": "platform",
+          "revenue": 13.276,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Metrology & Inspection 量测与检测",
+          "kind": "platform",
+          "revenue": 0.58,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Installed Base Management 装机基地管理",
+          "kind": "platform",
+          "revenue": 6.077,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "ASML FY2025 Form 20-F（含 FY2023 对比数据）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；EUR→USD 按库内 2023 年均 ECB 汇率 1.081269 换算，与库内营收同口径；检索交叉印证，待 Dayu 复核）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 23.721,
+            "children": [
+              {
+                "name": "EUV 先进光刻系统",
+                "revenue": 9.865
+              },
+              {
+                "name": "DUV 成熟光刻系统",
+                "revenue": 13.276
+              },
+              {
+                "name": "Metrology & Inspection 量测与检测",
+                "revenue": 0.58
+              }
+            ]
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 6.077
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML FY2025 Form 20-F（含 FY2023 对比）— 技术级 EUV/DUV/量测检测/装机基地管理分部;库内 USD 值精确合计=营收 29.798（diff=0）。EUR 口径:系统≈€21,937.7M / 服务≈€5,620.2M / 总€27,557.9M（2023 官方总营收€27.6B 印证）。检索交叉印证，待 Dayu 复核",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+            "data_status": "official"
+          },
+          {
+            "label": "ASML reports €27.6 billion net sales in 2023（全年总营收印证）",
+            "url": "https://www.globenewswire.com/news-release/2024/01/24/2814732/0/en/ASML-reports-27-6-billion-net-sales-and-7-8-billion-net-income-in-2023.html",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2024",
+      "period_end": "自然年 2024（截至 2024-12-31）",
+      "period_end_iso": "2024-12-31",
+      "status": "actual",
+      "revenue": 30.591,
+      "gross_margin": 0.513,
+      "op_income": 9.766,
+      "net_income": 8.195,
+      "segments": [
+        {
+          "name": "EUV 先进光刻系统",
+          "kind": "platform",
+          "revenue": 9.007,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "DUV 成熟光刻系统",
+          "kind": "platform",
+          "revenue": 13.856,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Metrology & Inspection 量测与检测",
+          "kind": "platform",
+          "revenue": 0.699,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Installed Base Management 装机基地管理",
+          "kind": "platform",
+          "revenue": 7.029,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "ASML FY2025 Form 20-F（含 FY2024 对比数据）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；EUR→USD 按库内 2024 年均 ECB 汇率 1.082380 换算，与库内营收同口径；检索交叉印证，待 Dayu 复核）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 23.562,
+            "children": [
+              {
+                "name": "EUV 先进光刻系统",
+                "revenue": 9.007
+              },
+              {
+                "name": "DUV 成熟光刻系统",
+                "revenue": 13.856
+              },
+              {
+                "name": "Metrology & Inspection 量测与检测",
+                "revenue": 0.699
+              }
+            ]
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 7.029
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML FY2025 Form 20-F（含 FY2024 对比）— 技术级分部;库内 USD 值精确合计=营收 30.591（diff=0）。EUR 口径:系统≈€21,768.3M / 服务≈€6,494.1M（官方『IBM 增至€6.5B』印证）/ 总€28.3B。检索交叉印证，待 Dayu 复核",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+            "data_status": "official"
+          },
+          {
+            "label": "ASML reports €28.3 billion total net sales in 2024;Installed Base Management 全年增至€6.5B（服务行印证）",
+            "url": "https://www.asml.com/en/news/press-releases/2025/q4-2024-financial-results",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "自然年 2025（截至 2025-12-31）",
+      "period_end_iso": "2025-12-31",
+      "status": "actual",
+      "revenue": 36.913,
+      "gross_margin": 0.528,
+      "op_income": 12.77,
+      "net_income": 10.858,
+      "capex": 1.574,
+      "cfo": 12.659,
+      "segments": [
+        {
+          "name": "EUV 先进光刻系统",
+          "kind": "platform",
+          "revenue": 13.111,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "DUV 成熟光刻系统",
+          "kind": "platform",
+          "revenue": 13.612,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Metrology & Inspection 量测与检测",
+          "kind": "platform",
+          "revenue": 0.932,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Installed Base Management 装机基地管理",
+          "kind": "platform",
+          "revenue": 9.258,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "ASML FY2025 Form 20-F（SEC Edgar）",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2025 现金流，EUR 口径与营收一致：CFO €12.659B / capex（购建固定资产）€1.574B，待核验）",
+          "url": "https://ourbrand.asml.com/m/419103cb23dfeaa4/original/asml-2025-annual-report-financial-performance-section.pdf",
+          "data_status": "estimate"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；EUR→USD 按库内 2025 年均 ECB 汇率 1.129983 换算，与库内营收同口径；检索交叉印证，待 Dayu 复核）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 27.655,
+            "children": [
+              {
+                "name": "EUV 先进光刻系统",
+                "revenue": 13.111
+              },
+              {
+                "name": "DUV 成熟光刻系统",
+                "revenue": 13.612
+              },
+              {
+                "name": "Metrology & Inspection 量测与检测",
+                "revenue": 0.932
+              }
+            ]
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 9.258
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML FY2025 Form 20-F — 技术级分部;库内 USD 值精确合计=营收 36.913（diff=0）。EUR 官方披露:系统€24,474.3M / 服务€8,193.0M / 总€32,667.3M;技术级 EUV≈€11.6B（€11,602.8M）/ DUV≈€12.0B（€12,046.2M）/ 量测检测€825M。系统€24,474.3M×1.129983=27.6555、服务€8,193.0M×1.129983=9.258 与库内 USD 完全吻合。检索交叉印证，待 Dayu 复核",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+            "data_status": "official"
+          },
+          {
+            "label": "ASML reports €32.7 billion total net sales in 2025;net system sales €24,474.3M / net service and field option €8,193.0M（两行 EUR 独立印证）",
+            "url": "https://www.nasdaq.com/press-release/asml-reports-eu327-billion-total-net-sales-and-eu96-billion-net-income-2025-2026-01",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2026E",
+      "period_end": "自然年 2026（截至 2026-12-31）",
+      "period_end_iso": "2026-12-31",
+      "status": "forecast",
+      "revenue": 44.92,
+      "net_income": 13.98,
+      "consensus_rev": "$44.9B（EUR 39.27B 折算）",
+      "consensus_eps": "$36.41",
+      "consensus_eps_value": 36.414006,
+      "consensus_eps_currency": "USD",
+      "consensus_eps_source": [
+        {
+          "label": "StockAnalysis/S&P Global FY2026 forecast normalized to USD NASDAQ-share EPS: EUR EPS 31.83, ASML NASDAQ registry share trades 1:1 with ordinary share, implied by forecast-page forward PE 50.12 and close $1,825.07",
+          "url": "https://stockanalysis.com/stocks/asml/forecast/",
+          "data_status": "consensus"
+        }
+      ],
+      "sources": [
+        {
+          "label": "StockAnalysis/S&P Global FY2026 forecast: revenue EUR 39.27B, net income EUR 12.22B, EPS EUR 31.83; USD values derived with implied EUR/USD 1.144 from USD EPS normalization",
+          "url": "https://stockanalysis.com/stocks/asml/forecast/",
+          "data_status": "consensus"
+        },
+        {
+          "label": "ASML investor relations: ordinary shares trade on NASDAQ in USD and Euronext Amsterdam in EUR",
+          "url": "https://www.asml.com/investors/shares",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2025-03-31",
+      "label": "Q1 2025（去年同季）",
+      "net_income": 2.57,
+      "sources": [
+        {
+          "label": "ASML Q1 2025 业绩（净利 €2,355M）",
+          "url": "https://www.asml.com/en/news/press-releases/2025/q1-2025-financial-results",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：€2,355M × EUR/USD 1.0931（1Q25 季度均价）= $2.57B（换算待核验）",
+          "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html",
+          "data_status": "estimate"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-03-31",
+      "label": "Q1 2026（最新季）",
+      "net_income": 3.12,
+      "sources": [
+        {
+          "label": "ASML Q1 2026 业绩（净利 €2,757M）",
+          "url": "https://www.asml.com/en/news/press-releases/2026/q1-2026-financial-results",
+          "data_status": "official"
+        },
+        {
+          "label": "派生换算：€2,757M × EUR/USD 1.13（1Q26 季度均价）= $3.12B（换算待核验）",
+          "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html",
+          "data_status": "estimate"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "asml-fy2023-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "calendar_year": 2023,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2023",
+      "fiscal_quarter": null,
+      "currency": "EUR",
+      "fx_to_usd": 0.924839,
+      "revenue": 29.798,
+      "gross_profit": 15.2849,
+      "op_income": 9.777,
+      "net_income": 8.476,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "EUV 先进光刻系统",
+          "kind": "platform",
+          "revenue": 9.865,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "DUV 成熟光刻系统",
+          "kind": "platform",
+          "revenue": 13.276,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Metrology & Inspection 量测与检测",
+          "kind": "platform",
+          "revenue": 0.58,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Installed Base Management 装机基地管理",
+          "kind": "platform",
+          "revenue": 6.077,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "ASML FY2025 Form 20-F（含 FY2023 对比数据）(FX: USD/EUR 1.081269 → 契约方向 EUR/USD 0.924839)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；EUR→USD 按库内 2023 年均 ECB 汇率 1.081269 换算，与库内营收同口径；检索交叉印证，待 Dayu 复核）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 23.721,
+            "children": [
+              {
+                "name": "EUV 先进光刻系统",
+                "revenue": 9.865
+              },
+              {
+                "name": "DUV 成熟光刻系统",
+                "revenue": 13.276
+              },
+              {
+                "name": "Metrology & Inspection 量测与检测",
+                "revenue": 0.58
+              }
+            ]
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 6.077
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML FY2025 Form 20-F（含 FY2023 对比）— 技术级 EUV/DUV/量测检测/装机基地管理分部;库内 USD 值精确合计=营收 29.798（diff=0）。EUR 口径:系统≈€21,937.7M / 服务≈€5,620.2M / 总€27,557.9M（2023 官方总营收€27.6B 印证）。检索交叉印证，待 Dayu 复核",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+            "data_status": "official"
+          },
+          {
+            "label": "ASML reports €27.6 billion net sales in 2023（全年总营收印证）",
+            "url": "https://www.globenewswire.com/news-release/2024/01/24/2814732/0/en/ASML-reports-27-6-billion-net-sales-and-7-8-billion-net-income-in-2023.html",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "asml-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "EUR",
+      "fx_to_usd": 0.92389,
+      "revenue": 30.591,
+      "gross_profit": 15.6859,
+      "op_income": 9.766,
+      "net_income": 8.195,
+      "cfo": null,
+      "capex": null,
+      "segments": [
+        {
+          "name": "EUV 先进光刻系统",
+          "kind": "platform",
+          "revenue": 9.007,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "DUV 成熟光刻系统",
+          "kind": "platform",
+          "revenue": 13.856,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Metrology & Inspection 量测与检测",
+          "kind": "platform",
+          "revenue": 0.699,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Installed Base Management 装机基地管理",
+          "kind": "platform",
+          "revenue": 7.029,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "ASML FY2025 Form 20-F（含 FY2024 对比数据）(FX: USD/EUR 1.08238 → 契约方向 EUR/USD 0.92389)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；EUR→USD 按库内 2024 年均 ECB 汇率 1.082380 换算，与库内营收同口径；检索交叉印证，待 Dayu 复核）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 23.562,
+            "children": [
+              {
+                "name": "EUV 先进光刻系统",
+                "revenue": 9.007
+              },
+              {
+                "name": "DUV 成熟光刻系统",
+                "revenue": 13.856
+              },
+              {
+                "name": "Metrology & Inspection 量测与检测",
+                "revenue": 0.699
+              }
+            ]
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 7.029
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML FY2025 Form 20-F（含 FY2024 对比）— 技术级分部;库内 USD 值精确合计=营收 30.591（diff=0）。EUR 口径:系统≈€21,768.3M / 服务≈€6,494.1M（官方『IBM 增至€6.5B』印证）/ 总€28.3B。检索交叉印证，待 Dayu 复核",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+            "data_status": "official"
+          },
+          {
+            "label": "ASML reports €28.3 billion total net sales in 2024;Installed Base Management 全年增至€6.5B（服务行印证）",
+            "url": "https://www.asml.com/en/news/press-releases/2025/q4-2024-financial-results",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "asml-2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-03-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "EUR",
+      "fx_to_usd": 0.950262,
+      "revenue": 8.1467,
+      "gross_profit": 4.3985,
+      "op_income": 2.8812,
+      "net_income": 2.4783,
+      "cfo": -0.0617,
+      "capex": 0.4383,
+      "segments": [],
+      "sources": [
+        {
+          "label": "ASML Q1 2026 6-K Exhibit 99.3, filed 2026-04-15: quarterly summary includes Q1 2025 actuals",
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026025147/financialstatementsusgaa.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "ASML Q1 2025 financial results press release, published 2025-04-16",
+          "url": "https://www.asml.com/en/news/press-releases/2025/q1-2025-financial-results",
+          "data_status": "official"
+        },
+        {
+          "label": "FX: ECB daily EUR/USD average for 2025-01-01..2025-03-31 = 1.052341 USD/EUR; contract direction EUR/USD = 0.950262",
+          "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "asml-2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-03-31",
+      "period_end": "2025-06-29",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "EUR",
+      "fx_to_usd": 0.881987,
+      "revenue": 8.7209,
+      "gross_profit": 4.682,
+      "op_income": 3.0206,
+      "net_income": 2.5967,
+      "cfo": 0.8477,
+      "capex": 0.4863,
+      "segments": [],
+      "sources": [
+        {
+          "label": "ASML Q1 2026 6-K Exhibit 99.3, filed 2026-04-15: quarterly summary includes Q2 2025 actuals",
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026025147/financialstatementsusgaa.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "ASML Q2 2025 financial results press release, published 2025-07-16",
+          "url": "https://www.asml.com/en/news/press-releases/2025/q2-2025-financial-results",
+          "data_status": "official"
+        },
+        {
+          "label": "FX: ECB daily EUR/USD average for 2025-04-01..2025-06-30 = 1.133803 USD/EUR; contract direction EUR/USD = 0.881987",
+          "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "asml-2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-06-30",
+      "period_end": "2025-09-28",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "EUR",
+      "fx_to_usd": 0.856101,
+      "revenue": 8.7793,
+      "gross_profit": 4.5325,
+      "op_income": 2.8833,
+      "net_income": 2.4816,
+      "cfo": 0.6531,
+      "capex": 0.3684,
+      "segments": [],
+      "sources": [
+        {
+          "label": "ASML Q1 2026 6-K Exhibit 99.3, filed 2026-04-15: quarterly summary includes Q3 2025 actuals",
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026025147/financialstatementsusgaa.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "ASML Q3 2025 financial results press release, published 2025-10-15",
+          "url": "https://www.asml.com/en/news/press-releases/2025/q3-2025-financial-results",
+          "data_status": "official"
+        },
+        {
+          "label": "FX: ECB daily EUR/USD average for 2025-07-01..2025-09-30 = 1.168086 USD/EUR; contract direction EUR/USD = 0.856101",
+          "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "asml-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "EUR",
+      "fx_to_usd": 0.884969,
+      "revenue": 36.913,
+      "gross_profit": 19.5012,
+      "op_income": 12.77,
+      "net_income": 10.858,
+      "cfo": 12.659,
+      "capex": 1.574,
+      "d_and_a": 1.159,
+      "segments": [
+        {
+          "name": "EUV 先进光刻系统",
+          "kind": "platform",
+          "revenue": 13.111,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "DUV 成熟光刻系统",
+          "kind": "platform",
+          "revenue": 13.612,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Metrology & Inspection 量测与检测",
+          "kind": "platform",
+          "revenue": 0.932,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Installed Base Management 装机基地管理",
+          "kind": "platform",
+          "revenue": 9.258,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "ASML FY2025 Form 20-F（SEC Edgar）(FX: USD/EUR 1.129983 → 契约方向 EUR/USD 0.884969)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "capex/CFO（FY2025 现金流，EUR 口径与营收一致：CFO €12.659B / capex（购建固定资产）€1.574B，待核验）",
+          "url": "https://ourbrand.asml.com/m/419103cb23dfeaa4/original/asml-2025-annual-report-financial-performance-section.pdf",
+          "data_status": "estimate"
+        },
+        {
+          "label": "D&A：FY2025 20-F Consolidated Statements of Cash Flows「Depreciation and amortization」EUR 1.0259bn ÷ fx 0.884969 = 1.159（含 IFRS-16 使用权折旧）",
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026011378/0001628280-26-011378-index.html",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；EUR→USD 按库内 2025 年均 ECB 汇率 1.129983 换算，与库内营收同口径；检索交叉印证，待 Dayu 复核）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 27.655,
+            "children": [
+              {
+                "name": "EUV 先进光刻系统",
+                "revenue": 13.111
+              },
+              {
+                "name": "DUV 成熟光刻系统",
+                "revenue": 13.612
+              },
+              {
+                "name": "Metrology & Inspection 量测与检测",
+                "revenue": 0.932
+              }
+            ]
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 9.258
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML FY2025 Form 20-F — 技术级分部;库内 USD 值精确合计=营收 36.913（diff=0）。EUR 官方披露:系统€24,474.3M / 服务€8,193.0M / 总€32,667.3M;技术级 EUV≈€11.6B（€11,602.8M）/ DUV≈€12.0B（€12,046.2M）/ 量测检测€825M。系统€24,474.3M×1.129983=27.6555、服务€8,193.0M×1.129983=9.258 与库内 USD 完全吻合。检索交叉印证，待 Dayu 复核",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+            "data_status": "official"
+          },
+          {
+            "label": "ASML reports €32.7 billion total net sales in 2025;net system sales €24,474.3M / net service and field option €8,193.0M（两行 EUR 独立印证）",
+            "url": "https://www.nasdaq.com/press-release/asml-reports-eu327-billion-total-net-sales-and-eu96-billion-net-income-2025-2026-01",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "asml-2025q4",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-09-29",
+      "period_end": "2025-12-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q4",
+      "currency": "EUR",
+      "fx_to_usd": 0.859537,
+      "revenue": 11.3062,
+      "gross_profit": 5.8969,
+      "op_income": 3.9918,
+      "net_income": 3.3036,
+      "cfo": 13.2749,
+      "capex": 0.5473,
+      "segments": [],
+      "sources": [
+        {
+          "label": "ASML Q1 2026 6-K Exhibit 99.3, filed 2026-04-15: quarterly summary includes Q4 2025 actuals",
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026025147/financialstatementsusgaa.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "ASML Q4/FY2025 financial results press release, published 2026-01-28",
+          "url": "https://www.asml.com/en/news/press-releases/2026/q4-2025-financial-results",
+          "data_status": "official"
+        },
+        {
+          "label": "FX: ECB daily EUR/USD average for 2025-10-01..2025-12-31 = 1.163417 USD/EUR; contract direction EUR/USD = 0.859537",
+          "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip",
+          "data_status": "derived"
+        }
+      ]
+    },
+    {
+      "period_id": "asml-2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-01-01",
+      "period_end": "2026-03-29",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "EUR",
+      "fx_to_usd": 0.85451,
+      "revenue": 10.2596,
+      "gross_profit": 5.4359,
+      "op_income": 3.6955,
+      "net_income": 3.2261,
+      "cfo": -2.5577,
+      "capex": 0.4942,
+      "segments": [],
+      "sources": [
+        {
+          "label": "ASML Q1 2026 6-K Exhibit 99.3, filed 2026-04-15: quarterly summary includes Q1 2026 actuals",
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026025147/financialstatementsusgaa.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "ASML Q1 2026 financial results press release, published 2026-04-15",
+          "url": "https://www.asml.com/en/news/press-releases/2026/q1-2026-financial-results",
+          "data_status": "official"
+        },
+        {
+          "label": "FX: ECB daily EUR/USD average for 2026-01-01..2026-03-31 = 1.170262 USD/EUR; contract direction EUR/USD = 0.854510",
+          "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；官方 EUR 两行按库内季度均值汇率 1.170262(fx_to_usd=0.85451) 换算，与库内营收同口径；检索交叉印证，待 Dayu 复核）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 7.3486
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 2.911
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML Q1 2026 6-K（filed 2026-04-15）损益表:net system sales €6,279.4M / net service and field option sales €2,487.5M / 总€8,766.9M。换算 USD:系统 €6,279.4M/0.85451=7.3485、服务 €2,487.5M/0.85451=2.9110,合计 10.25956;为与库内营收 10.2596 精确对齐,系统行吸收 +0.0001 舍入残差记 7.3486。季度按 filing 惯例不披露技术级金额,故仅两顶层行。检索交叉印证，待 Dayu 复核",
+            "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026025147/financialstatementsusgaa.htm",
+            "data_status": "derived"
+          },
+          {
+            "label": "ASML reports €8.8 billion total net sales in Q1 2026（总营收印证）",
+            "url": "https://www.nasdaq.com/press-release/asml-reports-eu88-billion-total-net-sales-and-eu28-billion-net-income-q1-2026-2026-0",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "asml-2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2026-03-30",
+      "period_end": "2026-06-28",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q2",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "EUR",
+      "fx_to_usd": 0.859714,
+      "revenue": 10.8484,
+      "gross_profit": 5.8571,
+      "op_income": 4.0201,
+      "net_income": 3.3937,
+      "cfo": 1.9809,
+      "capex": 0.3483,
+      "segments": [],
+      "sources": [
+        {
+          "label": "ASML Q2 2026 US GAAP Financial Statements（2026-07-15）第 2 页三个月损益表：total net sales €9,326.5M，gross profit €5,035.4M，income from operations €3,456.1M，net income €2,917.6M；现金流：CFO €1,703.0M，capex €299.4M",
+          "url": "https://ourbrand.asml.com/asset/ffeb8813-403b-49df-83c0-01aae7533dd6/Financial-statements-US-GAAP-Q2-2026.pdf",
+          "data_status": "official"
+        },
+        {
+          "label": "ASML Q2 2026 financial results 发布页（2026-07-15）",
+          "url": "https://www.asml.com/en/investors/financial-results/q2-2026",
+          "data_status": "official"
+        },
+        {
+          "label": "FX：ECB 2026-03-30..2026-06-28 共 62 个交易日 EUR/USD 均值 1.163177419 USD/EUR → fx_to_usd = 0.859714；USD 存储值 = EUR ÷ 0.859714（rev 10.8484 / gross 5.8571 / op 4.0201 / ni 3.3937 / cfo 1.9809 / capex 0.3483）",
+          "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（系统销售/服务与升级；官方 EUR 两行按 ECB 季度均值汇率 1.163177419(fx_to_usd=0.859714) 换算，与库内营收同口径）",
+        "complete": true,
+        "items": [
+          {
+            "name": "Net system sales 系统销售",
+            "revenue": 7.636
+          },
+          {
+            "name": "Installed Base Management 装机基地管理",
+            "revenue": 3.2124
+          }
+        ],
+        "sources": [
+          {
+            "label": "ASML Q2 2026 US GAAP FS 第 2 页三个月损益表直接呈列：net system sales €6,564.8M / net service and field option sales €2,761.7M，总 €9,326.5M 两行精确加总。换算 USD：系统 6.5648/0.859714=7.6360、服务 2.7617/0.859714=3.2123；为与库内营收 10.8484 精确对账，末行吸收 +0.0001 四位舍入尾差记 3.2124（源币原值不改）。第二行沿用库内既有名称映射 Installed Base Management 装机基地管理。",
+            "url": "https://ourbrand.asml.com/asset/ffeb8813-403b-49df-83c0-01aae7533dd6/Financial-statements-US-GAAP-Q2-2026.pdf",
+            "data_status": "derived"
+          }
+        ]
+      }
+    }
+  ]
+}

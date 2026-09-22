@@ -1,0 +1,1174 @@
+{
+  "id": "oracle",
+  "name": "Oracle 甲骨文",
+  "ticker": "NYSE · ORCL",
+  "region": "美国",
+  "sector": "企业软件 + 云基础设施 (OCI) + AI",
+  "currency": "USD",
+  "seg_profit": "no",
+  "logo_text": "or",
+  "logo_class": "or",
+  "status": "populated",
+  "chain_stage": "cloud",
+  "ai_exposure": "partial",
+  "lead": "需求侧超大规模厂商：按四条营收线（云服务及授权支持 / 云授权及本地授权 / 硬件 / 服务）披露，合计=合并营收。把“云服务及授权支持”标 is_ai（含 OCI/AI 基础设施与 SaaS），约占营收 77% → 占比偏高，但分部利润不到线（seg_profit='no'）。AI 相关 RPO 积压暴增是其看点，但当期利润占比仍受传统授权拖累。",
+  "fy_note": "财年截至每年 5 月 31 日（FY2026 = 2025-06 至 2026-05）。USD 原币。营收按公司损益表四条线录入、合计=合并营收（平台对账）；分部营业利润未到线，op_income 留空。CFO 为官方现金流；net_debt 留空（高杠杆 AI 资本开支期，未取可靠余额）。",
+  "quote": {
+    "as_of": "2026-07-07",
+    "market_cap": 408,
+    "price": 141.6,
+    "price_currency": "USD",
+    "net_debt": 97.647,
+    "sources": [
+      {
+        "label": "ORCL close $141.60 (-1.50% vs 07-06 $143.76, change confirmed); market cap derived from library implied share count (~2.88B); capital.com listed $411.4B (~2.90B shares)",
+        "url": "https://stockanalysis.com/stocks/orcl/history/",
+        "data_status": "estimate"
+      },
+      {
+        "label": "net_debt=97.647 bn｜Oracle FY2026 年报（10-K，财年截至 2026-05-31，2026-06 下旬提交）。有息债务=Notes payable and other borrowings：非流动 122.342 bn + 流动 7.199 bn = 129.541 bn（不含经营租赁）。现金及等价物 31.289 bn（$31,289M）+ 短期投资 marketable securities 0.605 bn（$605M）。净债务 = 129.541 − 31.289 − 0.605 = 97.647 bn（正=净负债）。数值为二手来源交叉印证：总债务 129.541 bn 与长期债务 122.342 bn 由 macrotrends/finbox 印证，流动部分 7.199 bn 出自 10-K 资产负债表，三者相加自洽（122.342+7.199=129.541）；现金 31,289M 与短期投资 605M 由 10-K 资产负债表多源印证。已用 SEC 原文与本地 Dayu filing fil_0001193125-26-277521 复核。",
+        "url": "https://www.macrotrends.net/stocks/charts/ORCL/oracle/long-term-debt",
+        "data_status": "official"
+      }
+    ]
+  },
+  "years": [
+    {
+      "fy": "FY2024",
+      "period_end": "财年截至 2024-05-31",
+      "period_end_iso": "2024-05-31",
+      "status": "actual",
+      "revenue": 52.961,
+      "gross_margin": null,
+      "op_income": 15.353,
+      "net_income": 10.653,
+      "segments": [
+        {
+          "name": "Cloud services and license support 云服务及授权支持",
+          "kind": "platform",
+          "revenue": 39.383,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Cloud license and on-premise license 云授权及本地授权",
+          "kind": "platform",
+          "revenue": 5.084,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Hardware 硬件",
+          "kind": "platform",
+          "revenue": 3.062,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Services 服务",
+          "kind": "platform",
+          "revenue": 5.432,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Oracle FY2024 业绩新闻稿（总营收 $52,961M、净利 $10,467M；云服务及授权支持 $39,383M；其余三线为合计对账拆分，Claude 录入待核验）",
+          "url": "https://www.oracle.com/news/announcement/q4fy24-earnings-release-2024-06-11/",
+          "data_status": "estimate"
+        },
+        {
+          "label": "Oracle FY2024 Form 10-K filed 2024-06-20（SEC XBRL: revenue $52,961M, operating income $15,353M, net income $10,653M, CFO $18,673M, capex $6,866M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024075605/orcl-20240531.htm",
+          "data_status": "official"
+        }
+      ],
+      "cfo": 18.673,
+      "capex": 6.866,
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Cloud 云业务",
+            "revenue": 19.774,
+            "children": [
+              {
+                "name": "Cloud applications 云应用（SaaS）",
+                "revenue": 12.934
+              },
+              {
+                "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                "revenue": 6.84
+              }
+            ]
+          },
+          {
+            "name": "Software 软件（授权及本地）",
+            "revenue": 24.69,
+            "children": [
+              {
+                "name": "Software license 软件授权",
+                "revenue": 5.081
+              },
+              {
+                "name": "Software support 软件支持",
+                "revenue": 19.609
+              }
+            ]
+          },
+          {
+            "name": "Hardware 硬件",
+            "revenue": 3.066
+          },
+          {
+            "name": "Services 服务",
+            "revenue": 5.431
+          }
+        ],
+        "sources": [
+          {
+            "label": "Oracle FY2026 10-K filed 2026-06-22: Consolidated Statements of Operations plus Notes 13-14 three-year Cloud/Software offering tables (USD millions), verified from local Dayu filing fil_0001193125-26-277521.",
+            "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2025",
+      "period_end": "财年截至 2025-05-31",
+      "period_end_iso": "2025-05-31",
+      "status": "actual",
+      "revenue": 57.399,
+      "gross_margin": null,
+      "op_income": 17.678,
+      "net_income": 12.627,
+      "capex": 21.215,
+      "cfo": 20.821,
+      "segments": [
+        {
+          "name": "Cloud services and license support 云服务及授权支持",
+          "kind": "platform",
+          "revenue": 44.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Cloud license and on-premise license 云授权及本地授权",
+          "kind": "platform",
+          "revenue": 5.2,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Hardware + Services 硬件与服务",
+          "kind": "platform",
+          "revenue": 8.2,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Oracle FY2025 业绩新闻稿（总营收 $57.4B、GAAP 营业利润 $17.7B、GAAP 净利 $12.4B、CFO $20.8B；云服务及授权支持 $44.0B、云授权及本地授权 $5.2B；硬件+服务 $8.2B 为对账拆分）",
+          "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+          "data_status": "official"
+        },
+        {
+          "label": "capex FY2025 ≈$21.2B（公司披露净资本开支，含营收型设备；CFO $20.8B 官方）— capex 为估算量级，待 10-K 核验；硬件+服务合并因新闻稿未单列年度细项",
+          "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+          "data_status": "estimate"
+        },
+        {
+          "label": "Oracle FY2025 Form 10-K filed 2025-06-18（SEC XBRL: revenue $57,399M, operating income $17,678M, net income $12,627M, CFO $20,821M, capex $21,215M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017025087926/orcl-20250531.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Cloud 云业务",
+            "revenue": 24.506,
+            "children": [
+              {
+                "name": "Cloud applications 云应用（SaaS）",
+                "revenue": 14.272
+              },
+              {
+                "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                "revenue": 10.234
+              }
+            ]
+          },
+          {
+            "name": "Software 软件（授权及本地）",
+            "revenue": 24.724,
+            "children": [
+              {
+                "name": "Software license 软件授权",
+                "revenue": 5.201
+              },
+              {
+                "name": "Software support 软件支持",
+                "revenue": 19.523
+              }
+            ]
+          },
+          {
+            "name": "Hardware 硬件",
+            "revenue": 2.936
+          },
+          {
+            "name": "Services 服务",
+            "revenue": 5.233
+          }
+        ],
+        "sources": [
+          {
+            "label": "Oracle FY2026 10-K filed 2026-06-22: Consolidated Statements of Operations plus Notes 13-14 three-year Cloud/Software offering tables (USD millions), verified from local Dayu filing fil_0001193125-26-277521.",
+            "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2026",
+      "period_end": "财年截至 2026-05-31",
+      "period_end_iso": "2026-05-31",
+      "status": "actual",
+      "revenue": 67.357,
+      "gross_margin": null,
+      "op_income": 20.606,
+      "net_income": 17.309,
+      "cfo": 31.977,
+      "segments": [
+        {
+          "name": "Cloud 云（OCI 基础设施 + SaaS 应用）",
+          "kind": "platform",
+          "revenue": 33.989,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Software 软件（授权及本地）",
+          "kind": "platform",
+          "revenue": 24.541,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Services 服务",
+          "kind": "platform",
+          "revenue": 5.743,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Hardware 硬件",
+          "kind": "platform",
+          "revenue": 3.084,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Oracle Q4 & FY2026 业绩新闻稿（总营收 $67.4B、GAAP 营业利润 $20.6B、GAAP 净利 $17.0B、CFO $32.0B；Cloud $34.0B、Software $24.5B、Services $5.7B、Hardware $3.1B → 合计四舍五入 $67.4B）",
+          "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+          "data_status": "official"
+        },
+        {
+          "label": "FY2026 起公司改以 Cloud(IaaS+SaaS)/Software/Services/Hardware 口径披露；Hardware 取 $3.2B（原文 $3.1B 上调 0.1 以使四线合计=$67.4B 对账），与 FY2024/FY2025 四线口径不完全可比",
+          "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+          "data_status": "derived"
+        },
+        {
+          "label": "Oracle FY2026 Form 10-K filed 2026-06-22（SEC XBRL: revenue $67,357M, operating income $20,606M, net income $17,309M, CFO $31,977M, capex $55,663M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+          "data_status": "official"
+        }
+      ],
+      "capex": 55.663,
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Cloud 云业务",
+            "revenue": 33.989,
+            "children": [
+              {
+                "name": "Cloud applications 云应用（SaaS）",
+                "revenue": 15.888
+              },
+              {
+                "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                "revenue": 18.101
+              }
+            ]
+          },
+          {
+            "name": "Software 软件（授权及本地）",
+            "revenue": 24.541,
+            "children": [
+              {
+                "name": "Software license 软件授权",
+                "revenue": 4.737
+              },
+              {
+                "name": "Software support 软件支持",
+                "revenue": 19.804
+              }
+            ]
+          },
+          {
+            "name": "Hardware 硬件",
+            "revenue": 3.084
+          },
+          {
+            "name": "Services 服务",
+            "revenue": 5.743
+          }
+        ],
+        "sources": [
+          {
+            "label": "Oracle FY2026 10-K filed 2026-06-22: Consolidated Statements of Operations plus Notes 13-14 three-year Cloud/Software offering tables (USD millions), verified from local Dayu filing fil_0001193125-26-277521.",
+            "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "fy": "FY2027E",
+      "period_end": "财年截至 2027-05-31",
+      "period_end_iso": "2027-05-31",
+      "status": "forecast",
+      "revenue": 89.22,
+      "net_income": 19.02,
+      "consensus_rev": "$89.2B",
+      "consensus_eps": "$8.05",
+      "consensus_eps_value": 8.05,
+      "consensus_eps_currency": "USD",
+      "consensus_eps_source": [
+        {
+          "label": "StockAnalysis/S&P Global consensus FY2027 EPS average $8.05; last updated 2026-07-06",
+          "url": "https://stockanalysis.com/stocks/orcl/forecast/",
+          "data_status": "consensus"
+        }
+      ],
+      "sources": [
+        {
+          "label": "StockAnalysis/S&P Global FY2027 forecast: revenue $89.22B, net income $19.02B, EPS $8.05",
+          "url": "https://stockanalysis.com/stocks/orcl/forecast/",
+          "data_status": "consensus"
+        }
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period_end": "2023-11-30",
+      "label": "Q2 FY2024",
+      "revenue": 12.941,
+      "net_income": 2.503,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2023-12-12（quarter ended 2023-11-30: revenue $12,941M, net income $2,503M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017023069682/orcl-20231130.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-02-29",
+      "label": "Q3 FY2024",
+      "revenue": 13.28,
+      "net_income": 2.401,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2024-03-12（quarter ended 2024-02-29: revenue $13,280M, net income $2,401M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024029904/orcl-20240229.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-08-31",
+      "label": "Q1 FY2025",
+      "revenue": 13.307,
+      "net_income": 2.929,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2024-09-10（quarter ended 2024-08-31: revenue $13,307M, net income $2,929M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024104905/orcl-20240831.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2024-11-30",
+      "label": "Q2 FY2025",
+      "revenue": 14.059,
+      "net_income": 3.151,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2024-12-10（quarter ended 2024-11-30: revenue $14,059M, net income $3,151M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024134973/orcl-20241130.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-02-28",
+      "label": "Q3 FY2025",
+      "revenue": 14.13,
+      "net_income": 2.936,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2025-03-11（quarter ended 2025-02-28: revenue $14,130M, net income $2,936M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017025037143/orcl-20250228.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-08-31",
+      "label": "Q1 FY2026",
+      "revenue": 14.926,
+      "net_income": 2.927,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2025-09-10（quarter ended 2025-08-31: revenue $14,926M, net income $2,927M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525200095/orcl-20250831.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2025-11-30",
+      "label": "Q2 FY2026",
+      "revenue": 16.058,
+      "net_income": 6.135,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2025-12-11（quarter ended 2025-11-30: revenue $16,058M, net income $6,135M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525315925/orcl-20251130.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_end": "2026-02-28",
+      "label": "Q3 FY2026",
+      "revenue": 17.19,
+      "net_income": 3.721,
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2026-03-11（quarter ended 2026-02-28: revenue $17,190M, net income $3,721M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+          "data_status": "official"
+        }
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "oracle-fy2024q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2023-09-01",
+      "period_end": "2023-11-30",
+      "calendar_year": 2023,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 12.941,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 2.503,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2023-12-12（quarter ended 2023-11-30: revenue $12,941M, net income $2,503M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017023069682/orcl-20231130.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "oracle-fy2024q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2023-12-01",
+      "period_end": "2024-02-29",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 13.28,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 2.401,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2024-03-12（quarter ended 2024-02-29: revenue $13,280M, net income $2,401M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024029904/orcl-20240229.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "oracle-fy2024-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2023-06-01",
+      "period_end": "2024-05-31",
+      "calendar_year": 2024,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2024",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 52.961,
+      "gross_profit": 37.818,
+      "op_income": 15.353,
+      "net_income": 10.653,
+      "cfo": 18.673,
+      "capex": 6.866,
+      "segments": [
+        {
+          "name": "Cloud services and license support 云服务及授权支持",
+          "kind": "platform",
+          "revenue": 39.383,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Cloud license and on-premise license 云授权及本地授权",
+          "kind": "platform",
+          "revenue": 5.084,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Hardware 硬件",
+          "kind": "platform",
+          "revenue": 3.062,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Services 服务",
+          "kind": "platform",
+          "revenue": 5.432,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "毛利派生 = total revenues $52,961M − cloud and software $9,427M − hardware $891M − services $4,825M = $37,818M（GAAP Consolidated Statements of Operations）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Oracle FY2024 业绩新闻稿（总营收 $52,961M、净利 $10,467M；云服务及授权支持 $39,383M；其余三线为合计对账拆分，Claude 录入待核验）",
+          "url": "https://www.oracle.com/news/announcement/q4fy24-earnings-release-2024-06-11/",
+          "data_status": "estimate"
+        },
+        {
+          "label": "Oracle FY2024 Form 10-K filed 2024-06-20（SEC XBRL: revenue $52,961M, operating income $15,353M, net income $10,653M, CFO $18,673M, capex $6,866M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024075605/orcl-20240531.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Cloud 云业务",
+            "revenue": 19.774,
+            "children": [
+              {
+                "name": "Cloud applications 云应用（SaaS）",
+                "revenue": 12.934
+              },
+              {
+                "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                "revenue": 6.84
+              }
+            ]
+          },
+          {
+            "name": "Software 软件（授权及本地）",
+            "revenue": 24.69,
+            "children": [
+              {
+                "name": "Software license 软件授权",
+                "revenue": 5.081
+              },
+              {
+                "name": "Software support 软件支持",
+                "revenue": 19.609
+              }
+            ]
+          },
+          {
+            "name": "Hardware 硬件",
+            "revenue": 3.066
+          },
+          {
+            "name": "Services 服务",
+            "revenue": 5.431
+          }
+        ],
+        "sources": [
+          {
+            "label": "Oracle FY2026 10-K filed 2026-06-22: Consolidated Statements of Operations plus Notes 13-14 three-year Cloud/Software offering tables (USD millions), verified from local Dayu filing fil_0001193125-26-277521.",
+            "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "oracle-fy2025q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-06-01",
+      "period_end": "2024-08-31",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 13.307,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 2.929,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2024-09-10（quarter ended 2024-08-31: revenue $13,307M, net income $2,929M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024104905/orcl-20240831.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "oracle-fy2025q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-09-01",
+      "period_end": "2024-11-30",
+      "calendar_year": 2024,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 14.059,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 3.151,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2024-12-10（quarter ended 2024-11-30: revenue $14,059M, net income $3,151M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017024134973/orcl-20241130.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "oracle-fy2025q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2024-12-01",
+      "period_end": "2025-02-28",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 14.13,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 2.936,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2025-03-11（quarter ended 2025-02-28: revenue $14,130M, net income $2,936M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017025037143/orcl-20250228.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "oracle-fy2025-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2024-06-01",
+      "period_end": "2025-05-31",
+      "calendar_year": 2025,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2025",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 57.399,
+      "gross_profit": 40.472,
+      "op_income": 17.678,
+      "net_income": 12.627,
+      "cfo": 20.821,
+      "capex": 21.215,
+      "segments": [
+        {
+          "name": "Cloud services and license support 云服务及授权支持",
+          "kind": "platform",
+          "revenue": 44.0,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Cloud license and on-premise license 云授权及本地授权",
+          "kind": "platform",
+          "revenue": 5.2,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Hardware + Services 硬件与服务",
+          "kind": "platform",
+          "revenue": 8.2,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "毛利派生 = total revenues $57,399M − cloud and software $11,569M − hardware $782M − services $4,576M = $40,472M（GAAP Consolidated Statements of Operations）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Oracle FY2025 业绩新闻稿（总营收 $57.4B、GAAP 营业利润 $17.7B、GAAP 净利 $12.4B、CFO $20.8B；云服务及授权支持 $44.0B、云授权及本地授权 $5.2B；硬件+服务 $8.2B 为对账拆分）",
+          "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+          "data_status": "official"
+        },
+        {
+          "label": "capex FY2025 ≈$21.2B（公司披露净资本开支，含营收型设备；CFO $20.8B 官方）— capex 为估算量级，待 10-K 核验；硬件+服务合并因新闻稿未单列年度细项",
+          "url": "https://www.oracle.com/news/announcement/q4fy25-earnings-release-2025-06-11/",
+          "data_status": "estimate"
+        },
+        {
+          "label": "Oracle FY2025 Form 10-K filed 2025-06-18（SEC XBRL: revenue $57,399M, operating income $17,678M, net income $12,627M, CFO $20,821M, capex $21,215M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000095017025087926/orcl-20250531.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Cloud 云业务",
+            "revenue": 24.506,
+            "children": [
+              {
+                "name": "Cloud applications 云应用（SaaS）",
+                "revenue": 14.272
+              },
+              {
+                "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                "revenue": 10.234
+              }
+            ]
+          },
+          {
+            "name": "Software 软件（授权及本地）",
+            "revenue": 24.724,
+            "children": [
+              {
+                "name": "Software license 软件授权",
+                "revenue": 5.201
+              },
+              {
+                "name": "Software support 软件支持",
+                "revenue": 19.523
+              }
+            ]
+          },
+          {
+            "name": "Hardware 硬件",
+            "revenue": 2.936
+          },
+          {
+            "name": "Services 服务",
+            "revenue": 5.233
+          }
+        ],
+        "sources": [
+          {
+            "label": "Oracle FY2026 10-K filed 2026-06-22: Consolidated Statements of Operations plus Notes 13-14 three-year Cloud/Software offering tables (USD millions), verified from local Dayu filing fil_0001193125-26-277521.",
+            "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "oracle-fy2026q1",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-06-01",
+      "period_end": "2025-08-31",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q3",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q1",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 14.926,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 2.927,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2025-09-10（quarter ended 2025-08-31: revenue $14,926M, net income $2,927M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525200095/orcl-20250831.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "oracle-fy2026q2",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-09-01",
+      "period_end": "2025-11-30",
+      "calendar_year": 2025,
+      "calendar_quarter": "Q4",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q2",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 16.058,
+      "gross_profit": null,
+      "op_income": null,
+      "net_income": 6.135,
+      "cfo": null,
+      "capex": null,
+      "segments": [],
+      "sources": [
+        {
+          "label": "Oracle 10-Q filed 2025-12-11（quarter ended 2025-11-30: revenue $16,058M, net income $6,135M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525315925/orcl-20251130.htm",
+          "data_status": "official"
+        }
+      ]
+    },
+    {
+      "period_id": "oracle-fy2026q3",
+      "kind": "quarter",
+      "status": "actual",
+      "period_start": "2025-12-01",
+      "period_end": "2026-02-28",
+      "calendar_year": 2026,
+      "calendar_quarter": "Q1",
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": "Q3",
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 17.19,
+      "gross_profit": 11.098,
+      "op_income": 5.464,
+      "net_income": 3.721,
+      "cfo": 7.151,
+      "capex": 18.635,
+      "segments": [
+        {
+          "name": "Cloud services and license support 云服务及授权支持",
+          "kind": "platform",
+          "revenue": 13.883,
+          "is_ai": true
+        },
+        {
+          "name": "Cloud license and on-premise license 云授权及本地授权",
+          "kind": "platform",
+          "revenue": 1.15,
+          "is_ai": false
+        },
+        {
+          "name": "Hardware 硬件",
+          "kind": "platform",
+          "revenue": 0.714,
+          "is_ai": false
+        },
+        {
+          "name": "Services 服务",
+          "kind": "platform",
+          "revenue": 1.443,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "Oracle Form 10-Q filed 2026-03-11（FY2026 Q3 iXBRL: revenue $17,190M; direct revenue expenses $6,092M; operating income $5,464M; net income $3,721M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Oracle Form 10-Q segment/product table（cloud applications $4,026M; cloud infrastructure $4,888M; software support $4,969M; software license $1,150M; hardware $714M; services $1,443M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "Derived gross profit = revenue $17,190M - (cloud/software expenses $4,776M + hardware expenses $183M + services expense $1,133M) = $11,098M",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Derived Q3 cash flow = FY2026 9M 10-Q ($17,357M CFO; $39,170M capex) minus FY2026 6M 10-Q ($10,206M CFO; $20,535M capex)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Oracle Form 10-Q filed 2025-12-09（FY2026 Q2 YTD: CFO $10,206M; capex $20,535M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525315925/orcl-20251130.htm",
+          "data_status": "official"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Cloud 云业务",
+            "revenue": 8.914,
+            "children": [
+              {
+                "name": "Cloud applications 云应用（SaaS）",
+                "revenue": 4.026
+              },
+              {
+                "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                "revenue": 4.888
+              }
+            ]
+          },
+          {
+            "name": "Software 软件（授权及本地）",
+            "revenue": 6.119,
+            "children": [
+              {
+                "name": "Software license 软件授权",
+                "revenue": 1.15
+              },
+              {
+                "name": "Software support 软件支持",
+                "revenue": 4.969
+              }
+            ]
+          },
+          {
+            "name": "Hardware 硬件",
+            "revenue": 0.714
+          },
+          {
+            "name": "Services 服务",
+            "revenue": 1.443
+          }
+        ],
+        "sources": [
+          {
+            "label": "Oracle Form 10-Q filed 2026-03-11（FY2026 Q3 原始收入层级：Cloud $8,914M → cloud applications $4,026M + cloud infrastructure $4,888M；Software $6,119M → software license $1,150M + software support $4,969M；Hardware $714M；Services $1,443M；合计 $17,190M；已按 SEC 10-Q 原文逐行复核）。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526101045/orcl-20260228.htm",
+            "data_status": "official"
+          },
+          {
+            "label": "Oracle FY2026 Q3 业绩新闻稿（2026-03-10）交叉印证：Q3 Cloud Infrastructure (IaaS) $4.9B、Cloud Application (SaaS) $4.0B、Cloud 合计 $8.9B、总营收 $17.2B——与 10-Q 精确表（IaaS 4.888 / SaaS 4.026 / Cloud 8.914 / total 17.190）一致。",
+            "url": "https://www.oracle.com/news/announcement/q3fy26-earnings-release-2026-03-10/",
+            "data_status": "official"
+          }
+        ]
+      }
+    },
+    {
+      "period_id": "oracle-fy2026-annual",
+      "kind": "annual",
+      "status": "actual",
+      "period_start": "2025-06-01",
+      "period_end": "2026-05-31",
+      "calendar_year": 2026,
+      "calendar_quarter": null,
+      "fiscal_year": "FY2026",
+      "fiscal_quarter": null,
+      "currency": "USD",
+      "fx_to_usd": 1,
+      "revenue": 67.357,
+      "gross_profit": 44.336,
+      "op_income": 20.606,
+      "net_income": 17.309,
+      "cfo": 31.977,
+      "capex": 55.663,
+      "d_and_a": 9.294,
+      "segments": [
+        {
+          "name": "Cloud 云（OCI 基础设施 + SaaS 应用）",
+          "kind": "platform",
+          "revenue": 33.989,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": true
+        },
+        {
+          "name": "Software 软件（授权及本地）",
+          "kind": "platform",
+          "revenue": 24.541,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Services 服务",
+          "kind": "platform",
+          "revenue": 5.743,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        },
+        {
+          "name": "Hardware 硬件",
+          "kind": "platform",
+          "revenue": 3.084,
+          "op_income": null,
+          "op_margin": null,
+          "is_ai": false
+        }
+      ],
+      "sources": [
+        {
+          "label": "毛利派生 = total revenues $67,357M − cloud and software $17,597M − hardware $868M − services $4,556M = $44,336M（GAAP Consolidated Statements of Operations）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+          "data_status": "derived"
+        },
+        {
+          "label": "Oracle Q4 & FY2026 业绩新闻稿（总营收 $67.4B、GAAP 营业利润 $20.6B、GAAP 净利 $17.0B、CFO $32.0B；Cloud $34.0B、Software $24.5B、Services $5.7B、Hardware $3.1B → 合计四舍五入 $67.4B）",
+          "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+          "data_status": "official"
+        },
+        {
+          "label": "FY2026 起公司改以 Cloud(IaaS+SaaS)/Software/Services/Hardware 口径披露；Hardware 取 $3.2B（原文 $3.1B 上调 0.1 以使四线合计=$67.4B 对账），与 FY2024/FY2025 四线口径不完全可比",
+          "url": "https://www.oracle.com/news/announcement/q4fy26-earnings-release-2026-06-10/",
+          "data_status": "derived"
+        },
+        {
+          "label": "Oracle FY2026 Form 10-K filed 2026-06-22（SEC XBRL: revenue $67,357M, operating income $20,606M, net income $17,309M, CFO $31,977M, capex $55,663M）",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+          "data_status": "official"
+        },
+        {
+          "label": "D&A：FY2026 10-K 合并现金流量表「Depreciation」USD 7,623M +「Amortization of intangible assets」USD 1,671M = 9,294M",
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/0001193125-26-277521-index.html",
+          "data_status": "derived"
+        }
+      ],
+      "revenue_breakdown": {
+        "label": "产品与收入类型",
+        "complete": true,
+        "items": [
+          {
+            "name": "Cloud 云业务",
+            "revenue": 33.989,
+            "children": [
+              {
+                "name": "Cloud applications 云应用（SaaS）",
+                "revenue": 15.888
+              },
+              {
+                "name": "Cloud infrastructure 云基础设施（OCI/IaaS）",
+                "revenue": 18.101
+              }
+            ]
+          },
+          {
+            "name": "Software 软件（授权及本地）",
+            "revenue": 24.541,
+            "children": [
+              {
+                "name": "Software license 软件授权",
+                "revenue": 4.737
+              },
+              {
+                "name": "Software support 软件支持",
+                "revenue": 19.804
+              }
+            ]
+          },
+          {
+            "name": "Hardware 硬件",
+            "revenue": 3.084
+          },
+          {
+            "name": "Services 服务",
+            "revenue": 5.743
+          }
+        ],
+        "sources": [
+          {
+            "label": "Oracle FY2026 10-K filed 2026-06-22: Consolidated Statements of Operations plus Notes 13-14 three-year Cloud/Software offering tables (USD millions), verified from local Dayu filing fil_0001193125-26-277521.",
+            "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm",
+            "data_status": "official"
+          }
+        ]
+      }
+    }
+  ]
+}
