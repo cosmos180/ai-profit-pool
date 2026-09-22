@@ -22,6 +22,12 @@ RB_TOL = 0.001  # revenue_breakdown 专用容差：产品层级按 4 位小数�
 GM_TOL = 0.001  # annual gross_profit/revenue 与 legacy gross_margin 的比率容差
 TODAY = date.today()  # 取真实当日，用于快照新鲜度判断（as_of 晚于今天 / 早于 90 天 → WARN）
 INVESTMENT_INCOME_CAN_EXCEED_REVENUE = {"softbank"}
+PERIOD_NET_INCOME_CAN_EXCEED_REVENUE = {
+    # SK hynix 2Q26 reported KRW 93.9226T net income on KRW 79.3187T revenue,
+    # driven by non-operating items. Keep this exception period-scoped so later
+    # quarters remain protected by the operating-company sanity check.
+    ("skhynix", "skhynix-2026q2"),
+}
 GROSS_PROFIT_POLICY_EXEMPT = {"amazon"}  # 不披露传统公司层面毛利，B2 按政策诚实留空
 
 def load(path):
@@ -40,10 +46,13 @@ def schema_check(data, schema_path):
     except Exception as e:
         return ["ERROR JSON Schema 校验失败: " + str(e).splitlines()[0]]
 
-def allows_net_income_above_revenue(cid):
+def allows_net_income_above_revenue(cid, period_id=None):
     # SoftBank 的利润高度受投资收益/估值重估驱动；这些收益不进入 Net sales，
-    # 所以单季归母净利可能超过销售收入。其他公司继续保留强校验。
-    return cid in INVESTMENT_INCOME_CAN_EXCEED_REVENUE
+    # 所以单季归母净利可能超过销售收入。其他异常只按精确报告期放行。
+    return (
+        cid in INVESTMENT_INCOME_CAN_EXCEED_REVENUE
+        or (cid, period_id) in PERIOD_NET_INCOME_CAN_EXCEED_REVENUE
+    )
 
 def check_revenue_breakdown(owner, revenue, tag, errors, oks):
     """Validate a source-backed product/revenue hierarchy independently of segments[]."""
@@ -336,7 +345,7 @@ def check(data):
             rev, ni = p.get("revenue"), p.get("net_income")
             if rev is not None and rev < 0:
                 errors.append(f"ERROR {ptag}: revenue({rev}) < 0")
-            if rev is not None and ni is not None and ni > rev + TOL and not allows_net_income_above_revenue(cid):
+            if rev is not None and ni is not None and ni > rev + TOL and not allows_net_income_above_revenue(cid, p.get("period_id")):
                 errors.append(f"ERROR {ptag}: net_income({ni}) > revenue({rev})")
             elif rev is not None and ni is not None and ni > rev + TOL:
                 oks.append(f"INFO  {ptag}: net_income({ni}) > revenue({rev})，投资收益口径已按公司例外放行")

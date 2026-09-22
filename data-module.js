@@ -161,6 +161,8 @@ const Selectors = {
           revenue: item.revenue,
           share: y.revenue ? item.revenue / y.revenue : null,
           hasChildren: children.length > 0,
+          products: Array.isArray(item.products) ? item.products : [],
+          productNote: typeof item.product_note === "string" ? item.product_note : "",
         });
         if (children.length) walk(children, depth + 1, path);
       }
@@ -172,6 +174,22 @@ const Selectors = {
   revenueBreakdownItem(y, path) {
     if (!path) return null;
     return this.revenueBreakdownRows(y).find(item => item.path === path) || null;
+  },
+
+  /* Growth should follow the filing's reporting currency when both carriers share it.
+     Stored amounts are USD bn for cross-company comparison; multiplying by each
+     carrier's source-currency-per-USD rate removes FX translation noise from YoY/QoQ. */
+  _revenueGrowth(curValue, curCarrier, priorValue, priorCarrier) {
+    if (!priorValue) return null;
+    const sameSourceCurrency = curCarrier?.currency && curCarrier.currency === priorCarrier?.currency;
+    const curFx = curCarrier?.fx_to_usd;
+    const priorFx = priorCarrier?.fx_to_usd;
+    if (sameSourceCurrency && curFx > 0 && priorFx > 0) {
+      const curLocal = curValue * curFx;
+      const priorLocal = priorValue * priorFx;
+      return priorLocal ? (curLocal - priorLocal) / priorLocal : null;
+    }
+    return (curValue - priorValue) / priorValue;
   },
 
   revenueBreakdownYoY(c, fy, path) {
@@ -186,9 +204,12 @@ const Selectors = {
     const anns = this.actualAnnuals(c);
     const i = anns.findIndex(p => p.fiscal_year === fy);
     if (i <= 0) return null;
-    const prev = this.revenueBreakdownItem(anns[i - 1], path);
-    const cur = this.revenueBreakdownItem(anns[i], path);
-    return (prev && cur && prev.revenue) ? (cur.revenue - prev.revenue) / prev.revenue : null;
+    const priorCarrier = anns[i - 1], curCarrier = anns[i];
+    const prev = this.revenueBreakdownItem(priorCarrier, path);
+    const cur = this.revenueBreakdownItem(curCarrier, path);
+    return (prev && cur && prev.revenue)
+      ? this._revenueGrowth(cur.revenue, curCarrier, prev.revenue, priorCarrier)
+      : null;
   },
 
   /* ---- quarterly revenue_breakdown 行的 同比 / 环比 (用户直接需求) ----
@@ -198,7 +219,8 @@ const Selectors = {
          · 用日历季索引 _quarterIndex (calendar_year*4 + Qn-1) 对齐自然季 ——
            YoY = 索引差 4 (上一年同一自然季); QoQ = 索引差 1 (相邻自然季);
          · 绝不用 implied Q4 凑 (合成期无 breakdown): 美股 filer 缺财年 Q4 原子时 QoQ 诚实 null;
-         · 比较库内 USD 存储值 (全站 YoY 同口径);
+         · 同源币种且两期均有 fx_to_usd 时，先还原财报币种再比较，避免汇率变化污染经营增速；
+           其余情况回退比较库内 USD 存储值;
        reason ∈
          'ok'            value 已算出;
          'no_prior'      找不到对齐的对比季原子 (缺上年同季 / 缺上季);
@@ -224,7 +246,7 @@ const Selectors = {
     const priorItem = this.revenueBreakdownItem(prior, path);
     if (!curItem || !priorItem) return { value: null, reason: "name_mismatch" };
     if (!priorItem.revenue) return { value: null, reason: "no_base" };
-    return { value: (curItem.revenue - priorItem.revenue) / priorItem.revenue, reason: "ok" };
+    return { value: this._revenueGrowth(curItem.revenue, cur, priorItem.revenue, prior), reason: "ok" };
   },
   quarterRevenueBreakdownDelta(c, periodId, path) {
     return {

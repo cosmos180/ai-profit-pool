@@ -63,7 +63,6 @@
       profit: company ? Selectors.rowProfitability(company, owner, row.path) : null,
       barW: row.revenue > 0 ? (row.revenue / maxPositive * 100).toFixed(1) : '0',
       indent: `${row.depth * 22}px`,
-      focus: /youtube/i.test(row.name),
     }))
   })
 </script>
@@ -81,19 +80,18 @@
 {/snippet}
 
 {#if breakdown && rows.length}
-  <div class="section-h">{breakdown.label} · {meta.official ? '官方收入拆分' : '收入拆分（派生口径）'}{#if !meta.complete}<span class="rb-flag">不完整拆分</span>{/if}</div>
+  <div class="section-h" role="heading" aria-level="3">{breakdown.label} · {meta.official ? '官方收入拆分' : '收入拆分（派生口径）'}{#if !meta.complete}<span class="rb-flag" title="该拆分不完整，顶层不与公司营收对账">不完整拆分</span>{/if}</div>
   <div class="card breakdown-card">
     <div class="plat">
       {#each rows as row (row.path)}
-        <div class="platrow breakrow {row.hasChildren ? 'group' : ''} {row.focus ? 'focus' : ''} {row.revenue < 0 ? 'negative' : ''}">
+        <div class="platrow breakrow {row.hasChildren ? 'group' : ''} {row.revenue < 0 ? 'negative' : ''}">
           <div class="pt" style:padding-left={row.indent}>
             <span class="pname">
-              {#if row.depth > 0}<span class="branch">↳</span>{/if}{row.name}
-              {#if row.focus}<span class="producttag">产品收入</span>{/if}
+              {#if row.depth > 0}<span class="branch" aria-hidden="true">↳</span>{/if}{row.name}
             </span>
             <span class="pv num">{row.revenueLabel}<span class="sh">{row.shareLabel}</span></span>
           </div>
-          <div class="ptrack" style:margin-left={row.indent}><div class="pfill" style:width="{row.barW}%"></div></div>
+          <div class="ptrack" style:margin-left={row.indent} aria-hidden="true"><div class="pfill" style:width="{row.barW}%"></div></div>
           {#if showQuarterDelta && row.delta}
             <div class="pyoy" style:margin-left={row.indent}>
               {#each [['yoy', '同比'], ['qoq', '环比']] as [k, lbl], ci (k)}
@@ -114,6 +112,19 @@
               {@render profitChip(row.profit)}
             </div>
           {/if}
+          {#if row.products.length || row.productNote}
+            <div class="prods" style:margin-left={row.indent} role="note" aria-label="产品归属与披露边界">
+              <span class="prods-label">{row.products.length ? '对应产品 · 未披露单品收入' : '产品构成未披露'}</span>
+              {#if row.products.length}
+                <ul class="prods-list">
+                  {#each row.products as product (product.name)}
+                    <li class="prod-chip" title={product.note || undefined}>{product.name}</li>
+                  {/each}
+                </ul>
+              {/if}
+              {#if row.productNote}<span class="prods-note">{row.productNote}</span>{/if}
+            </div>
+          {/if}
         </div>
       {/each}
     </div>
@@ -126,4 +137,10 @@
   .pyoy .pm{color:var(--ink);font-weight:600}
   /* 窄屏 chip 整体换行,禁止从词中间断开(390px 实测「营业利润率 32.9%」曾被腰斩) */
   .pyoy span{white-space:nowrap}
+  .prods{display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px;margin-top:7px;padding:7px 9px;border-left:2px solid var(--line);background:var(--card-2);border-radius:0 7px 7px 0}
+  .prods-label{font-family:var(--mono);font-size:10px;color:var(--ink-faint);white-space:nowrap}
+  .prods-list{display:flex;flex-wrap:wrap;gap:5px 6px;margin:0;padding:0;list-style:none}
+  .prod-chip{font-size:11px;line-height:1.6;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:1px 8px;white-space:nowrap;cursor:help}
+  .prods-note{flex-basis:100%;font-size:10.5px;line-height:1.55;color:var(--ink-faint)}
+  @media(max-width:520px){.prods{align-items:flex-start}.prods-label{white-space:normal}.prod-chip{white-space:normal}}
 </style>

@@ -194,8 +194,8 @@ function invariants(snap) {
     // 计数跟踪库内当前物理位置数(新报告期携带规范名属合法增长, 需同步计数并注明来源);
     // 真正的回归锁是上面的「旧装饰名绝迹」与下面的逐行分类/不点亮断言, 新行同样被覆盖。
     const CANONICAL = [
-      ["tencent", "金融科技及企业服务", 7],
-      ["tencent", "其他", 7],
+      ["tencent", "金融科技及企业服务", 9], // tencent-2025q2 / 2026q2 新增
+      ["tencent", "其他", 9],               // tencent-2025q2 / 2026q2 新增
       ["asml", "DUV 成熟光刻系统", 6],
       ["asml", "Installed Base Management 装机基地管理", 8],   // #30 对齐时 7 + asml-2026q2 新增(#37)
       ["oracle", "Software 软件（授权及本地）", 7],
@@ -210,7 +210,7 @@ function invariants(snap) {
         }
       }
     }
-    // ①b 34 个物理位置完整 + ② 分类 undisclosed 且不点亮
+    // ①b 39 个物理位置完整 + ② 分类 undisclosed 且不点亮
     let physical = 0;
     for (const [cid, name, expectCount] of CANONICAL) {
       const co = byId(cid);
@@ -227,7 +227,7 @@ function invariants(snap) {
       assert.equal(n, expectCount, `${cid}「${name}」物理位置应 ${expectCount}, 实际 ${n}`);
       physical += n;
     }
-    assert.equal(physical, 35, "装饰名规范名物理位置总数应 35（#30 对齐 34 + asml-2026q2 新增 1）");
+    assert.equal(physical, 39, "装饰名规范名物理位置总数应 39（原 35 + tencent-2025q2/2026q2 各新增 2）");
     // ③ Oracle FY2024 Hardware: 真实营收口径差(3.066 vs 3.062), 继续失败关闭
     const ora30 = byId("oracle");
     for (const carrier of carriersOf(ora30).filter((x) => (x.period_id === "oracle-fy2024-annual") || x.fy === "FY2024")) {
@@ -283,6 +283,7 @@ function invariants(snap) {
     const expectedQuarterIds = [
       "amazon-2023q3", "amazon-2024q1", "amazon-2024q2", "amazon-2024q3",
       "amazon-2025q1", "amazon-2025q2", "amazon-2025q3", "amazon-2026q1",
+      "amazon-2026q2",
     ];
     const quarters = amazon.periods.filter((p) => p.kind === "quarter" && p.status === "actual");
     assert.deepEqual(quarters.map((p) => p.period_id), expectedQuarterIds, "amazon 实际季度集合应完整且顺序稳定");
@@ -304,6 +305,7 @@ function invariants(snap) {
       "amazon-2025q2": [19.171, [["North America 北美", 100.068, 7.517], ["International 国际", 36.761, 1.494], ["AWS 亚马逊云", 30.873, 10.16]]],
       "amazon-2025q3": [17.422, [["North America 北美", 106.267, 4.789], ["International 国际", 40.896, 1.199], ["AWS 亚马逊云", 33.006, 11.434]]],
       "amazon-2026q1": [23.852, [["North America 北美", 104.143, 8.267], ["International 国际", 39.789, 1.424], ["AWS 亚马逊云", 37.587, 14.161]]],
+      "amazon-2026q2": [27.461, [["North America 北美", 116.177, 9.123], ["International 国际", 42.197, 1.717], ["AWS 亚马逊云", 42.232, 16.621]]],
     };
     for (const q of quarters) {
       const [expectedOpIncome, expectedSegments] = expectedQuarterSegments[q.period_id];

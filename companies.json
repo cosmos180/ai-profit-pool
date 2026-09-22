@@ -1724,6 +1724,67 @@
               "data_status": "estimate"
             }
           ]
+        },
+        {
+          "period_id": "samsung-2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 120.6235,
+          "gross_profit": 83.909,
+          "op_income": 62.9493,
+          "net_income": 50.3594,
+          "cfo": 73.9074,
+          "capex": 9.9242,
+          "segments": [
+            {
+              "name": "DX 终端体验（手机/家电/网络）",
+              "kind": "division",
+              "revenue": 33.7605,
+              "op_income": -0.5627,
+              "is_ai": false
+            },
+            {
+              "name": "DS 半导体（存储/代工/LSI）",
+              "kind": "division",
+              "revenue": 89.6764,
+              "op_income": 62.7383,
+              "is_ai": true
+            },
+            {
+              "name": "SDC 显示面板",
+              "kind": "division",
+              "revenue": 5.2751,
+              "op_income": 0.4923,
+              "is_ai": false
+            },
+            {
+              "name": "Harman 车载/音频",
+              "kind": "division",
+              "revenue": 3.2354,
+              "op_income": 0.2813,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "Samsung Electronics 2Q 2026 official earnings-call presentation — consolidated results, segment results and cash flow",
+              "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2026_2Q_conference_eng.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "USD conversion uses the repository's fixed 2025/2026 KRW convention of KRW 1,421.779 per USD for cross-period consistency",
+              "url": "https://fred.stlouisfed.org/series/DEXKOUS",
+              "data_status": "derived"
+            }
+          ]
         }
       ]
     },
@@ -2819,6 +2880,84 @@
               "label": "JPY→USD 换算率 159.88（JPY per USD，source-currency-per-USD 契约方向）：SoftBank 官方财报披露 FY2025 期末汇率，见 fy_note",
               "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf",
               "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "softbank-fy2026q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q1",
+          "currency": "JPY",
+          "fx_to_usd": 160.51,
+          "revenue": 12.5823,
+          "gross_profit": 6.5643,
+          "op_income": null,
+          "net_income": 2.1639,
+          "cfo": -2.7404,
+          "capex": 7.5302,
+          "segments": [
+            {
+              "name": "Investment Business of Holding Companies 控股公司投资业务",
+              "kind": "platform",
+              "revenue": 0,
+              "op_income": null,
+              "is_ai": false
+            },
+            {
+              "name": "SoftBank Vision Funds 软银愿景基金",
+              "kind": "platform",
+              "revenue": 0,
+              "op_income": null,
+              "is_ai": true
+            },
+            {
+              "name": "SoftBank segment 软银电信与互联网",
+              "kind": "platform",
+              "revenue": 11.2807,
+              "op_income": null,
+              "is_ai": false
+            },
+            {
+              "name": "AI Computing segment AI 计算",
+              "kind": "platform",
+              "revenue": 1.0919,
+              "op_income": null,
+              "is_ai": true
+            },
+            {
+              "name": "Other 其他",
+              "kind": "platform",
+              "revenue": 0.2098,
+              "op_income": null,
+              "is_ai": false
+            }
+          ],
+          "sources": [
+            {
+              "label": "SoftBank Group Consolidated Financial Report for the Three-Month Period Ended June 30, 2026（2026-08-06）— net sales ¥2,019.591B; gross profit ¥1,053.634B; net income attributable to owners ¥347.330B",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2026_01_en.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "SoftBank Group Q1 FY2026 official data sheets — independent official cross-check of net sales, gross profit, attributable net income and operating cash flow",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/presentations/2026/earnings-datasheet_q1fy2026_02.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "SoftBank Group Q1 FY2026 cash-flow statement — operating cash flow −¥439.860B; purchases of PPE and intangible assets ¥1,208.669B; capex stored as an absolute cash outflow",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2026_01_en.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "SoftBank Group official Q1 FY2026 appendix — quarterly average USD/JPY rate ¥160.51 per USD（source-currency-per-USD）",
+              "url": "https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q1fy2026_01_en.pdf",
+              "data_status": "official"
             }
           ]
         }
@@ -4238,6 +4377,46 @@
               "label": "派生换算：KRW 40.3459T ÷ USD/KRW 1421.779（与去年同季同口径汇率）= $28.38B（换算待核验；2026 汇率或偏强，绝对值或略高估，方向稳健）",
               "url": "https://www.federalreserve.gov/releases/h10/hist/dat00_ko.htm",
               "data_status": "estimate"
+            }
+          ]
+        },
+        {
+          "period_id": "skhynix-2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "KRW",
+          "fx_to_usd": 1421.779,
+          "revenue": 55.7883,
+          "gross_profit": null,
+          "op_income": 42.5823,
+          "net_income": 66.0599,
+          "cfo": null,
+          "capex": null,
+          "segments": [
+            {
+              "name": "Memory 存储器",
+              "kind": "platform",
+              "revenue": 55.7883,
+              "op_income": null,
+              "is_ai": true
+            }
+          ],
+          "sources": [
+            {
+              "label": "SK hynix official 2Q26 financial-results release — revenue, operating profit and net profit",
+              "url": "https://news.skhynix.com/en/q2-2026-business-results/",
+              "data_status": "official"
+            },
+            {
+              "label": "USD conversion uses the repository's fixed 2025/2026 KRW convention of KRW 1,421.779 per USD for cross-period consistency",
+              "url": "https://fred.stlouisfed.org/series/DEXKOUS",
+              "data_status": "derived"
             }
           ]
         }
@@ -7178,6 +7357,141 @@
           "cfo": null,
           "capex": 2.6586,
           "segments": [],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": true,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 12.713,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 5.6193,
+                    "products": [
+                      {
+                        "name": "Delta Force 三角洲行动",
+                        "note": "2Q25 收入增长贡献"
+                      },
+                      {
+                        "name": "Honour of Kings 王者荣耀",
+                        "note": "2Q25 常青游戏收入增长贡献"
+                      },
+                      {
+                        "name": "VALORANT 无畏契约",
+                        "note": "2Q25 常青游戏收入增长贡献"
+                      },
+                      {
+                        "name": "Peacekeeper Elite 和平精英",
+                        "note": "2Q25 常青游戏收入增长贡献"
+                      }
+                    ],
+                    "product_note": "公司在 2Q25 业绩材料点名的收入增长贡献产品；未披露单款游戏收入。"
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 2.6149,
+                    "products": [
+                      {
+                        "name": "Supercell 游戏组合",
+                        "note": "2Q25 收入增长贡献"
+                      },
+                      {
+                        "name": "PUBG MOBILE",
+                        "note": "2Q25 收入增长贡献"
+                      },
+                      {
+                        "name": "Dune: Awakening 沙丘：觉醒",
+                        "note": "2Q25 新游戏收入贡献"
+                      }
+                    ],
+                    "product_note": "公司在 2Q25 业绩材料点名的收入增长贡献产品；未披露单款游戏收入。"
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 4.4787,
+                    "products": [
+                      {
+                        "name": "应用内游戏虚拟道具",
+                        "note": "2Q25 社交网络收入增长来源"
+                      },
+                      {
+                        "name": "微信视频号直播",
+                        "note": "2Q25 社交网络收入增长来源"
+                      },
+                      {
+                        "name": "腾讯音乐订阅",
+                        "note": "2Q25 社交网络收入增长来源"
+                      }
+                    ],
+                    "product_note": "公司披露的本期收入来源；不等同于微信和 QQ 的整体收入，且未披露各产品金额。"
+                  }
+                ]
+              },
+              {
+                "name": "营销服务 Marketing Services",
+                "revenue": 4.9759,
+                "products": [
+                  {
+                    "name": "微信视频号广告",
+                    "note": "2Q25 公司点名的广告需求载体"
+                  },
+                  {
+                    "name": "微信小程序广告",
+                    "note": "2Q25 公司点名的广告需求载体"
+                  },
+                  {
+                    "name": "微信搜一搜广告",
+                    "note": "2Q25 公司点名的广告需求载体"
+                  }
+                ],
+                "product_note": "公司点名的营销载体；未披露各载体独立收入。"
+              },
+              {
+                "name": "金融科技及企业服务",
+                "revenue": 7.7273,
+                "products": [
+                  {
+                    "name": "消费贷款服务",
+                    "note": "2Q25 金融科技收入增长来源"
+                  },
+                  {
+                    "name": "微信支付（商业支付）",
+                    "note": "2Q25 金融科技收入增长来源"
+                  },
+                  {
+                    "name": "财富管理服务",
+                    "note": "2Q25 金融科技收入增长来源"
+                  },
+                  {
+                    "name": "腾讯云 GPU 租赁",
+                    "note": "2Q25 AI 相关企业服务收入来源"
+                  },
+                  {
+                    "name": "腾讯云 API Token 使用",
+                    "note": "2Q25 AI 相关企业服务收入来源"
+                  },
+                  {
+                    "name": "电商技术服务",
+                    "note": "2Q25 企业服务收入增长来源"
+                  }
+                ],
+                "product_note": "金融科技与企业服务为合并披露；未披露子业务及单品金额。"
+              },
+              {
+                "name": "其他",
+                "revenue": 0.2557,
+                "product_note": "2Q25 业绩材料未披露“其他”收入对应的具体产品，保持未拆分。"
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2Q2025 official earnings release — exact IFRS business revenue; rounded VAS subcategories proportionally scaled to exact VAS and converted at the period FX rate; named product drivers carry no standalone revenue amounts",
+                "url": "https://static.www.tencent.com/uploads/2025/08/13/56af6c5c98acdc7bd757a7bd208d8189.pdf",
+                "data_status": "derived"
+              }
+            ]
+          },
           "sources": [
             {
               "label": "Tencent 2025 Second Quarter Results press release, condensed consolidated income statement",
@@ -7448,6 +7762,233 @@
               }
             ]
           }
+        },
+        {
+          "period_id": "tencent-2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "CNY",
+          "fx_to_usd": 6.806106897,
+          "revenue": 30.0884,
+          "gross_profit": 17.401,
+          "op_income": 9.8847,
+          "net_income": 8.2311,
+          "cfo": 7.743,
+          "capex": 8.7128,
+          "segments": [
+            {
+              "name": "增值服务 VAS（游戏·社交网络）",
+              "kind": "platform",
+              "revenue": 14.4597,
+              "op_income": null,
+              "is_ai": false
+            },
+            {
+              "name": "网络广告 / 营销服务",
+              "kind": "platform",
+              "revenue": 6.4009,
+              "op_income": null,
+              "is_ai": true
+            },
+            {
+              "name": "金融科技及企业服务",
+              "kind": "platform",
+              "revenue": 8.8576,
+              "op_income": null,
+              "is_ai": false
+            },
+            {
+              "name": "其他",
+              "kind": "platform",
+              "revenue": 0.3703,
+              "op_income": null,
+              "is_ai": false
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型（IFRS）",
+            "complete": true,
+            "items": [
+              {
+                "name": "增值服务 Value-Added Services",
+                "revenue": 14.4597,
+                "children": [
+                  {
+                    "name": "本土市场游戏 Domestic Games",
+                    "revenue": 6.9506,
+                    "products": [
+                      {
+                        "name": "Delta Force 三角洲行动",
+                        "note": "2Q26 公司点名的主要收入增长贡献产品"
+                      },
+                      {
+                        "name": "VALORANT PC 无畏契约端游",
+                        "note": "2Q26 公司点名的主要收入增长贡献产品"
+                      },
+                      {
+                        "name": "VALORANT Mobile 无畏契约手游",
+                        "note": "2Q26 公司点名的主要收入增长贡献产品"
+                      },
+                      {
+                        "name": "Roco Kingdom: World 洛克王国：世界",
+                        "note": "2Q26 公司点名的主要收入增长贡献产品"
+                      }
+                    ],
+                    "product_note": "公司点名的本期主要增长贡献产品，并非完整游戏清单；未披露单款游戏收入。"
+                  },
+                  {
+                    "name": "国际市场游戏 International Games",
+                    "revenue": 2.7332,
+                    "products": [
+                      {
+                        "name": "Wuthering Waves 鸣潮",
+                        "note": "2Q26 收入增长贡献"
+                      },
+                      {
+                        "name": "VALORANT PC 无畏契约端游",
+                        "note": "2Q26 收入增长贡献"
+                      },
+                      {
+                        "name": "Supercell 游戏组合",
+                        "note": "2Q26 部分产品收入同比下降，抵消了其他产品增长"
+                      },
+                      {
+                        "name": "League of Legends 英雄联盟",
+                        "note": "2Q26 国际游戏业务回顾点名产品"
+                      },
+                      {
+                        "name": "Warframe 星际战甲",
+                        "note": "2Q26 国际游戏业务回顾点名产品"
+                      }
+                    ],
+                    "product_note": "公司在本期业绩材料点名的国际游戏，并非完整组合；未披露单款游戏收入。"
+                  },
+                  {
+                    "name": "社交网络 Social Networks",
+                    "revenue": 4.7758,
+                    "products": [
+                      {
+                        "name": "腾讯视频",
+                        "note": "长视频订阅收入；本期公司披露该收入同比下降"
+                      },
+                      {
+                        "name": "QQ音乐",
+                        "note": "音频订阅产品；本期公司披露音乐 ARPU 上升"
+                      },
+                      {
+                        "name": "应用内游戏虚拟道具",
+                        "note": "公司披露的社交网络收入来源之一，未点名具体应用"
+                      }
+                    ],
+                    "product_note": "这里列的是公司披露的收入来源/对应产品，不等同于微信和 QQ 的整体收入；未披露各产品金额。"
+                  }
+                ]
+              },
+              {
+                "name": "营销服务 Marketing Services",
+                "revenue": 6.4009,
+                "products": [
+                  {
+                    "name": "微信视频号广告",
+                    "note": "2Q26 广告展示量快速增长"
+                  },
+                  {
+                    "name": "微信小程序激励广告",
+                    "note": "小游戏和短剧带动营销支出"
+                  },
+                  {
+                    "name": "AIM+",
+                    "note": "自动化广告投放与动态竞价解决方案"
+                  },
+                  {
+                    "name": "Arrows – Puzzle Escape",
+                    "note": "其应用内广告收入计入营销服务"
+                  }
+                ],
+                "product_note": "公司点名的广告载体与营销产品；未披露各载体或产品的独立收入。"
+              },
+              {
+                "name": "金融科技及企业服务",
+                "revenue": 8.8576,
+                "products": [
+                  {
+                    "name": "微信支付（商业支付）",
+                    "note": "金融科技收入增长来源"
+                  },
+                  {
+                    "name": "财富管理服务",
+                    "note": "金融科技收入增长来源；本期材料未披露具体品牌及金额"
+                  },
+                  {
+                    "name": "消费贷款服务",
+                    "note": "金融科技收入增长来源；本期材料未披露具体品牌及金额"
+                  },
+                  {
+                    "name": "腾讯云 GPU 租赁",
+                    "note": "AI 相关云收入产品"
+                  },
+                  {
+                    "name": "腾讯云 MaaS",
+                    "note": "Model-as-a-Service，AI 相关云收入产品"
+                  },
+                  {
+                    "name": "WorkBuddy",
+                    "note": "公司点名产生收入的生产力 AI 产品"
+                  },
+                  {
+                    "name": "CodeBuddy",
+                    "note": "公司点名产生收入的 AI 编程产品"
+                  }
+                ],
+                "product_note": "金融科技与企业服务仍是合并披露；这里只列公司点名的收入来源/产品，未披露子业务及单品金额。"
+              },
+              {
+                "name": "其他",
+                "revenue": 0.3703,
+                "product_note": "2Q26 业绩材料未披露“其他”收入对应的具体产品，保持未拆分。"
+              }
+            ],
+            "sources": [
+              {
+                "label": "Tencent 2Q2026 official earnings release — IFRS revenue by business; VAS subcategories are rounded in the release and proportionally scaled to the exact VAS total for hierarchy reconciliation",
+                "url": "https://www.tencent.com/wp-content/uploads/2026/08/Tencent-Announces-2026-Second-Quarter-Results.pdf",
+                "data_status": "derived"
+              },
+              {
+                "label": "Tencent 2Q2026 official results presentation — named products, revenue drivers and product-to-segment context; product references carry no standalone revenue amounts",
+                "url": "https://static.www.tencent.com/website-2026-upload/2Q26-earnings-PPT_20260812_1800-88b183.pdf",
+                "data_status": "official"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "label": "Tencent 2026 Second Quarter Results（2026-08-12）— revenue RMB204.785B; gross profit RMB118.433B; IFRS operating profit RMB67.276B; profit attributable to equity holders RMB56.022B",
+              "url": "https://www.tencent.com/wp-content/uploads/2026/08/Tencent-Announces-2026-Second-Quarter-Results.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Tencent HKEX interim-results announcement — independent official cross-check of Q2 income statement and revenue-by-business figures",
+              "url": "https://www.tencent.com/wp-content/uploads/2026/08/E700_IRA.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "Tencent 2Q2026 official release — single-quarter operating cash flow RMB52.7B and capital-expenditure payments RMB59.3B; capex stored as an absolute cash outflow",
+              "url": "https://www.tencent.com/wp-content/uploads/2026/08/Tencent-Announces-2026-Second-Quarter-Results.pdf",
+              "data_status": "official"
+            },
+            {
+              "label": "FX: USD/CNY 2026 Q2 weighted monthly average = 6.806106897 CNY per USD（x-rates Apr/May/Jun averages weighted by calendar days; source-currency-per-USD）",
+              "url": "https://www.x-rates.com/average/?amount=1&from=USD&to=CNY&year=2026",
+              "data_status": "derived"
+            }
+          ]
         }
       ]
     },
@@ -8894,6 +9435,117 @@
               "data_status": "derived"
             }
           ]
+        },
+        {
+          "period_id": "google-2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 119.796,
+          "gross_profit": 73.853,
+          "op_income": 40.77,
+          "net_income": 112.193,
+          "cfo": 39.069,
+          "capex": 44.924,
+          "segments": [
+            {
+              "name": "Google Services 谷歌服务（含收入对冲调节）",
+              "kind": "platform",
+              "revenue": 94.646,
+              "op_income": 39.544,
+              "is_ai": false
+            },
+            {
+              "name": "Google Cloud 谷歌云",
+              "kind": "platform",
+              "revenue": 24.768,
+              "op_income": 8.814,
+              "is_ai": true
+            },
+            {
+              "name": "Other Bets 其他押注",
+              "kind": "platform",
+              "revenue": 0.382,
+              "op_income": -1.799,
+              "is_ai": false
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "产品与收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Google Services 谷歌服务",
+                "revenue": 94.54,
+                "children": [
+                  {
+                    "name": "Google Search & other 搜索及其他",
+                    "revenue": 63.271
+                  },
+                  {
+                    "name": "YouTube Ads YouTube 广告",
+                    "revenue": 11.055
+                  },
+                  {
+                    "name": "Google Network 谷歌联盟广告",
+                    "revenue": 7.303
+                  },
+                  {
+                    "name": "Subscriptions, platforms & devices 订阅、平台与设备",
+                    "revenue": 12.911
+                  }
+                ]
+              },
+              {
+                "name": "Google Cloud 谷歌云",
+                "revenue": 24.768
+              },
+              {
+                "name": "Other Bets 其他押注",
+                "revenue": 0.382
+              },
+              {
+                "name": "Hedging gains (losses) 对冲损益",
+                "revenue": 0.106
+              }
+            ],
+            "sources": [
+              {
+                "label": "Alphabet Q2 2026 Form 10-Q — quarter revenue by type, including YouTube ads $11,055M",
+                "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+                "data_status": "official"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "label": "Alphabet Form 10-Q filed 2026-07-23（Q2 2026: revenue $119,796M; cost of revenues $45,943M; operating income $40,770M; net income $112,193M）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Alphabet Form 10-Q segment table（Google Services $94,540M, Google Cloud $24,768M, Other Bets $382M, revenue hedging +$106M folded into Services for platform reconciliation）",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived gross profit = revenue $119,796M − cost of revenues $45,943M = $73,853M",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+              "data_status": "derived"
+            },
+            {
+              "label": "Derived quarterly CFO/capex from matching USD YTD cash-flow disclosures: CFO $84,859M (6M 2026) − $45,790M (Q1 2026) = $39,069M; PPE purchases $80,598M − $35,674M = $44,924M",
+              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+              "data_status": "derived"
+            }
+          ]
         }
       ]
     },
@@ -9953,6 +10605,146 @@
               "label": "Derived gross profit = revenue $82,886M - cost of revenue $26,828M = $56,058M",
               "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
               "data_status": "derived"
+            }
+          ]
+        },
+        {
+          "period_id": "microsoft-fy2026q4",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q4",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 90.007,
+          "gross_profit": 60.482,
+          "op_income": 40.603,
+          "net_income": 35.766,
+          "cfo": 55.441,
+          "capex": 35.802,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程",
+              "kind": "platform",
+              "revenue": 37.847,
+              "op_income": 21.9,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 39.306,
+              "op_income": 15.955,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 12.854,
+              "op_income": 2.748,
+              "is_ai": false
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "产品与服务收入",
+            "complete": true,
+            "items": [
+              {
+                "name": "Product 产品",
+                "revenue": 17.234
+              },
+              {
+                "name": "Service and other 服务及其他",
+                "revenue": 72.773
+              }
+            ],
+            "sources": [
+              {
+                "label": "Microsoft FY2026 Q4 earnings release — quarterly product and service revenue",
+                "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+                "data_status": "official"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "label": "Microsoft FY2026 Q4 official earnings release — quarter ended June 30, 2026",
+              "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "microsoft-fy2026-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2025-07-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 331.839,
+          "gross_profit": 225.465,
+          "op_income": 155.237,
+          "net_income": 133.749,
+          "cfo": 182.935,
+          "capex": 115.948,
+          "segments": [
+            {
+              "name": "Productivity and Business Processes 生产力与业务流程",
+              "kind": "platform",
+              "revenue": 139.996,
+              "op_income": 83.879,
+              "is_ai": false
+            },
+            {
+              "name": "Intelligent Cloud 智能云（Azure 等）",
+              "kind": "platform",
+              "revenue": 137.791,
+              "op_income": 56.972,
+              "is_ai": true
+            },
+            {
+              "name": "More Personal Computing 个人计算",
+              "kind": "platform",
+              "revenue": 54.052,
+              "op_income": 14.386,
+              "is_ai": false
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "产品与服务收入",
+            "complete": true,
+            "items": [
+              {
+                "name": "Product 产品",
+                "revenue": 64.696
+              },
+              {
+                "name": "Service and other 服务及其他",
+                "revenue": 267.143
+              }
+            ],
+            "sources": [
+              {
+                "label": "Microsoft FY2026 earnings release — annual product and service revenue",
+                "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+                "data_status": "official"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "label": "Microsoft FY2026 official earnings release — fiscal year ended June 30, 2026",
+              "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2026-Q4/press-release-webcast",
+              "data_status": "official"
             }
           ]
         }
@@ -11473,6 +12265,96 @@
             {
               "label": "Amazon Form 10-Q segment table — North America $104,143M / op income $8,267M; International $39,789M / $1,424M; AWS $37,587M / $14,161M",
               "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "amazon-2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 200.606,
+          "gross_profit": null,
+          "op_income": 27.461,
+          "net_income": 62.647,
+          "cfo": 45.387,
+          "capex": 54.208,
+          "segments": [
+            {
+              "name": "North America 北美",
+              "kind": "platform",
+              "revenue": 116.177,
+              "op_income": 9.123,
+              "is_ai": false
+            },
+            {
+              "name": "International 国际",
+              "kind": "platform",
+              "revenue": 42.197,
+              "op_income": 1.717,
+              "is_ai": false
+            },
+            {
+              "name": "AWS 亚马逊云",
+              "kind": "platform",
+              "revenue": 42.232,
+              "op_income": 16.621,
+              "is_ai": true
+            }
+          ],
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "Online stores 线上商店",
+                "revenue": 70.432
+              },
+              {
+                "name": "Physical stores 实体商店",
+                "revenue": 5.794
+              },
+              {
+                "name": "Third-party seller services 第三方卖家服务",
+                "revenue": 46.78
+              },
+              {
+                "name": "Advertising services 广告服务",
+                "revenue": 19.809
+              },
+              {
+                "name": "Subscription services 订阅服务",
+                "revenue": 13.73
+              },
+              {
+                "name": "AWS 亚马逊云",
+                "revenue": 42.232
+              },
+              {
+                "name": "Other 其他",
+                "revenue": 1.829
+              }
+            ],
+            "sources": [
+              {
+                "label": "Amazon Q2 2026 official results — net sales by groups of similar products and services",
+                "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/",
+                "data_status": "official"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "label": "Amazon Q2 2026 official earnings release — quarter ended June 30, 2026",
+              "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/",
               "data_status": "official"
             }
           ]
@@ -13067,6 +13949,531 @@
               "label": "Arm FYE26 Q4 Form 6-K cash flow: operating cash flow $0.260B; capex convention = PP&E $0.074B + intangible assets $0.016B + intangible obligation payments $0.018B",
               "url": "https://www.sec.gov/Archives/edgar/data/1973239/000197323926000062/exhibit992fye26q431-marx26.htm",
               "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "arm-fy2027q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2027",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 1.289,
+          "gross_profit": 1.253,
+          "op_income": 0.091,
+          "net_income": 0.27,
+          "cfo": 0.902,
+          "capex": 0.197,
+          "revenue_breakdown": {
+            "label": "收入类型",
+            "complete": true,
+            "items": [
+              {
+                "name": "License and other revenue 授权及其他收入",
+                "revenue": 0.574
+              },
+              {
+                "name": "Royalty revenue 版税收入",
+                "revenue": 0.715
+              }
+            ],
+            "sources": [
+              {
+                "label": "Arm FYE27 Q1 shareholder letter — license and royalty revenue",
+                "url": "https://investors.arm.com/static-files/d8db20bd-7b96-486a-b99b-23315627d1ec",
+                "data_status": "official"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "label": "Arm FYE27 Q1 official shareholder letter — quarter ended June 30, 2026",
+              "url": "https://investors.arm.com/static-files/d8db20bd-7b96-486a-b99b-23315627d1ec",
+              "data_status": "official"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "intel",
+      "name": "Intel 英特尔",
+      "ticker": "NASDAQ · INTC",
+      "region": "美国",
+      "sector": "CPU / 数据中心 AI / 晶圆代工",
+      "currency": "USD",
+      "seg_profit": "yes",
+      "status": "populated",
+      "chain_stage": "design",
+      "ai_exposure": "partial",
+      "lead": "x86 CPU 与数据中心芯片厂商，同时经营面向外部及内部客户的 Intel Foundry。DCAI（Data Center and AI）是其最直接的 AI 基础设施分部；代工分部收入大部分来自内部交易，不能与合并营收相加。",
+      "fy_note": "财年为 52/53 周、通常在 12 月末结束。2025 年 9 月 Altera 去并表，年报对比列与当前分部口径均以 Intel 官方重述/列报为准。",
+      "quote": {
+        "as_of": "2026-07-24",
+        "market_cap": 509.469,
+        "net_debt": 20.81,
+        "price": 100.23,
+        "price_currency": "USD",
+        "sources": [
+          {
+            "label": "INTC market snapshot: price $100.23 and market cap $509.469B, retrieved 2026-07-24; intraday snapshot, for display only.",
+            "url": "https://www.nasdaq.com/market-activity/stocks/intc",
+            "data_status": "estimate"
+          },
+          {
+            "label": "Net debt = Q2 2026 short- and long-term debt $1,988M + $48,549M − cash and equivalents $12,874M − short-term investments $16,853M = $20,810M.",
+            "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000155/q226earningsrelease.htm",
+            "data_status": "derived"
+          }
+        ]
+      },
+      "years": [
+        {
+          "fy": "FY2023",
+          "period_end": "截至 2023-12-30",
+          "period_end_iso": "2023-12-30",
+          "status": "actual",
+          "revenue": 54.228,
+          "gross_margin": 0.4,
+          "op_income": 0.093,
+          "net_income": 1.675,
+          "cfo": 11.471,
+          "capex": 25.75,
+          "segments": [
+            {
+              "name": "Client Computing Group (CCG) 客户计算",
+              "kind": "division",
+              "revenue": 32.305,
+              "op_income": 10.128,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 15.98,
+              "op_income": 0.945,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 18.504,
+              "op_income": -7.083,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 5.463,
+              "op_income": 1.507,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v1",
+          "sources": [
+            {
+              "label": "Intel FY2025 Form 10-K comparative FY2023 consolidated P&L/cash-flow and operating-segment tables.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2024",
+          "period_end": "截至 2024-12-28",
+          "period_end_iso": "2024-12-28",
+          "status": "actual",
+          "revenue": 53.101,
+          "gross_margin": 0.327,
+          "op_income": -11.678,
+          "net_income": -19.233,
+          "cfo": 8.288,
+          "capex": 23.944,
+          "segments": [
+            {
+              "name": "Client Computing Group (CCG) 客户计算",
+              "kind": "division",
+              "revenue": 33.346,
+              "op_income": 11.594,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 16.125,
+              "op_income": 1.414,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 17.317,
+              "op_income": -13.291,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 3.601,
+              "op_income": -0.057,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v1",
+          "sources": [
+            {
+              "label": "Intel FY2025 Form 10-K comparative FY2024 consolidated P&L/cash-flow and operating-segment tables.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "fy": "FY2025",
+          "period_end": "截至 2025-12-27",
+          "period_end_iso": "2025-12-27",
+          "status": "actual",
+          "revenue": 52.853,
+          "gross_margin": 0.348,
+          "op_income": -2.214,
+          "net_income": 0.026,
+          "cfo": 9.697,
+          "capex": 14.646,
+          "segments": [
+            {
+              "name": "Client Computing Group (CCG) 客户计算",
+              "kind": "division",
+              "revenue": 32.228,
+              "op_income": 9.317,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 16.919,
+              "op_income": 3.422,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 17.826,
+              "op_income": -10.318,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 3.563,
+              "op_income": 0.264,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v1",
+          "sources": [
+            {
+              "label": "Intel FY2025 Form 10-K filed 2026-01-23: consolidated P&L/cash flow and operating-segment tables.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+              "data_status": "official"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "period_id": "intel-fy2023-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2023-01-01",
+          "period_end": "2023-12-30",
+          "calendar_year": 2023,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2023",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 54.228,
+          "gross_profit": 21.711,
+          "op_income": 0.093,
+          "net_income": 1.675,
+          "cfo": 11.471,
+          "capex": 25.75,
+          "segments": [
+            {
+              "name": "Client Computing Group (CCG) 客户计算",
+              "kind": "division",
+              "revenue": 32.305,
+              "op_income": 10.128,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 15.98,
+              "op_income": 0.945,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 18.504,
+              "op_income": -7.083,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 5.463,
+              "op_income": 1.507,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v1",
+          "sources": [
+            {
+              "label": "Intel FY2025 Form 10-K comparative FY2023 consolidated P&L/cash-flow and operating-segment tables.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "intel-fy2024-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2023-12-31",
+          "period_end": "2024-12-28",
+          "calendar_year": 2024,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2024",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 53.101,
+          "gross_profit": 17.345,
+          "op_income": -11.678,
+          "net_income": -19.233,
+          "cfo": 8.288,
+          "capex": 23.944,
+          "segments": [
+            {
+              "name": "Client Computing Group (CCG) 客户计算",
+              "kind": "division",
+              "revenue": 33.346,
+              "op_income": 11.594,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 16.125,
+              "op_income": 1.414,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 17.317,
+              "op_income": -13.291,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 3.601,
+              "op_income": -0.057,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v1",
+          "sources": [
+            {
+              "label": "Intel FY2025 Form 10-K comparative FY2024 consolidated P&L/cash-flow and operating-segment tables.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "intel-fy2025-annual",
+          "kind": "annual",
+          "status": "actual",
+          "period_start": "2024-12-29",
+          "period_end": "2025-12-27",
+          "calendar_year": 2025,
+          "calendar_quarter": null,
+          "fiscal_year": "FY2025",
+          "fiscal_quarter": null,
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 52.853,
+          "gross_profit": 18.375,
+          "op_income": -2.214,
+          "net_income": 0.026,
+          "cfo": 9.697,
+          "capex": 14.646,
+          "segments": [
+            {
+              "name": "Client Computing Group (CCG) 客户计算",
+              "kind": "division",
+              "revenue": 32.228,
+              "op_income": 9.317,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 16.919,
+              "op_income": 3.422,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 17.826,
+              "op_income": -10.318,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 3.563,
+              "op_income": 0.264,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v1",
+          "sources": [
+            {
+              "label": "Intel FY2025 Form 10-K filed 2026-01-23: consolidated P&L/cash flow and operating-segment tables.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "intel-2026q1",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2025-12-28",
+          "period_end": "2026-03-28",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q1",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q1",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 13.577,
+          "gross_profit": 5.347,
+          "op_income": -3.136,
+          "net_income": -4.281,
+          "cfo": 1.096,
+          "capex": 3.636,
+          "segments": [
+            {
+              "name": "Client Computing Group (CCG) 客户计算",
+              "kind": "division",
+              "revenue": 7.727,
+              "op_income": 2.516,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 5.052,
+              "op_income": 1.542,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 5.421,
+              "op_income": -2.437,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 0.628,
+              "op_income": 0.102,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v1",
+          "sources": [
+            {
+              "label": "Intel Form 10-Q filed 2026-04-30: Q1 2026 GAAP statements, cash flow and segment results.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000079/intc-20260328.htm",
+              "data_status": "official"
+            }
+          ]
+        },
+        {
+          "period_id": "intel-2026q2",
+          "kind": "quarter",
+          "status": "actual",
+          "period_start": "2026-03-29",
+          "period_end": "2026-06-27",
+          "calendar_year": 2026,
+          "calendar_quarter": "Q2",
+          "fiscal_year": "FY2026",
+          "fiscal_quarter": "Q2",
+          "currency": "USD",
+          "fx_to_usd": 1,
+          "revenue": 16.128,
+          "gross_profit": 6.509,
+          "op_income": 1.796,
+          "net_income": -10.848,
+          "cfo": 7.006,
+          "capex": 2.556,
+          "segments": [
+            {
+              "name": "Client Computing and Physical AI Group (CCPG) 客户计算与物理 AI",
+              "kind": "division",
+              "revenue": 8.877,
+              "op_income": 2.343,
+              "is_ai": false
+            },
+            {
+              "name": "Data Center and AI (DCAI) 数据中心与 AI",
+              "kind": "division",
+              "revenue": 6.262,
+              "op_income": 2.474,
+              "is_ai": true
+            },
+            {
+              "name": "Intel Foundry 英特尔代工",
+              "kind": "division",
+              "revenue": 5.765,
+              "op_income": -2.089,
+              "is_ai": false
+            },
+            {
+              "name": "All Other 其他",
+              "kind": "division",
+              "revenue": 0.701,
+              "op_income": 0.23,
+              "is_ai": false
+            }
+          ],
+          "segment_framework": "intel:reportable:v2",
+          "framework_change": "Q2 FY2026 将 Client Computing Group 更名为 Client Computing and Physical AI Group；其余报告分部口径沿用。",
+          "sources": [
+            {
+              "label": "Intel Q2 2026 Form 8-K Exhibit 99.1: Q2 GAAP statements and supplemental operating-segment results.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000155/q226earningsrelease.htm",
+              "data_status": "official"
+            },
+            {
+              "label": "Derived quarterly CFO/capex from matching USD cash-flow disclosures: six-month CFO $8,102M − Q1 $1,096M = $7,006M; six-month PPE additions $6,192M − Q1 $3,636M = $2,556M.",
+              "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000155/q226earningsrelease.htm",
+              "data_status": "derived"
             }
           ]
         }

@@ -192,13 +192,15 @@
     },
     "revenue_breakdown_item": {
       "type": "object",
-      "description": "One node in a revenue hierarchy. children are a complete disaggregation of the parent node and therefore must sum to revenue. Signed revenue is allowed for reconciliation items such as hedging gains/losses.",
+      "description": "One node in a revenue hierarchy. children are a complete monetary disaggregation of the parent and therefore must sum to revenue. products are non-monetary, non-exhaustive product/service references disclosed for this line; they never participate in reconciliation. Signed revenue is allowed for reconciliation items such as hedging gains/losses.",
       "required": ["name", "revenue"],
       "additionalProperties": false,
       "properties": {
         "name": {"type": "string"},
         "revenue": {"type": "number"},
-        "children": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/revenue_breakdown_item"}}
+        "children": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/revenue_breakdown_item"}},
+        "products": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/product_reference"}, "description": "Named products/services associated with this revenue line by company disclosure. Context only: no product-level revenue is implied and values are not added into the hierarchy."},
+        "product_note": {"type": "string", "description": "Human-readable disclosure boundary for products, such as whether the list is partial or the company did not disclose a product composition for the period."}
       }
     },
     "stage": {
@@ -221,6 +223,16 @@
         "value": {"type": "string"},
         "note": {"type": "string"},
         "data_status": {"enum": ["official", "guidance", "consensus", "estimate", "derived"]}
+      }
+    },
+    "product_reference": {
+      "type": "object",
+      "description": "A non-monetary product/service reference attached to a revenue line. It is not a child revenue item.",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "note": {"type": "string"}
       }
     },
     "consensus": {

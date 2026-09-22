@@ -90,7 +90,10 @@ const productHierarchy = {
     { fy: "FY2", status: "actual", revenue: 125, segments: [{ name: "Services", kind: "platform", revenue: 125 }],
       revenue_breakdown: { label: "产品", complete: true, sources: [], items: [
         { name: "Services", revenue: 126, children: [
-          { name: "YouTube Ads", revenue: 25 }, { name: "Other", revenue: 101 },
+          { name: "YouTube Ads", revenue: 25,
+            products: [{ name: "YouTube", note: "named product, no standalone revenue" }],
+            product_note: "Representative product only." },
+          { name: "Other", revenue: 101 },
         ] },
         { name: "Hedging", revenue: -1 },
       ] } },
@@ -103,6 +106,11 @@ assert.deepEqual(productRows.map(x => [x.path, x.depth]), [
 assert.equal(Selectors.revenueBreakdownItem(productHierarchy.years[1], "Services / YouTube Ads").revenue, 25);
 assert.equal(Selectors.revenueBreakdownYoY(productHierarchy, "FY2", "Services / YouTube Ads"), 0.25);
 assert.equal(productRows.find(x => x.path === "Services / YouTube Ads").share, 0.2);
+assert.deepEqual(productRows.find(x => x.path === "Services / YouTube Ads").products,
+  [{ name: "YouTube", note: "named product, no standalone revenue" }]);
+assert.equal(productRows.find(x => x.path === "Services / YouTube Ads").productNote,
+  "Representative product only.");
+assert.deepEqual(productRows.find(x => x.path === "Services / Other").products, []);
 assert.deepEqual(Selectors.revenueSorted(productHierarchy.years[1]).map(x => x.name), ["Services"]); // no double count
 assert.deepEqual(Selectors.revenueBreakdownRows(null), []);
 
@@ -417,6 +425,21 @@ const qdNB = { id: "qnb", years: [], periods: [
 ] };
 assert.deepEqual(Selectors.quarterRevenueBreakdownDelta(qdNB, "qnb-2026q1", "3nm").qoq,
   { value: null, reason: "no_breakdown" });
+
+// 非美元公司季度增速按财报本币计算，避免每期 USD 换算汇率变化污染经营同比/环比。
+const qdFx = { id: "qfx", years: [], periods: [
+  { period_id: "qfx-2025q2", kind: "quarter", status: "actual", calendar_year: 2025, calendar_quarter: "Q2",
+    period_end: "2025-06-30", currency: "CNY", fx_to_usd: 7.2, revenue: 10,
+    revenue_breakdown: { label: "业务", complete: true, sources: [{ data_status: "derived" }],
+      items: [{ name: "VAS", revenue: 10 }] } },
+  { period_id: "qfx-2026q2", kind: "quarter", status: "actual", calendar_year: 2026, calendar_quarter: "Q2",
+    period_end: "2026-06-30", currency: "CNY", fx_to_usd: 6.6, revenue: 12,
+    revenue_breakdown: { label: "业务", complete: true, sources: [{ data_status: "derived" }],
+      items: [{ name: "VAS", revenue: 12 }] } },
+] };
+const qdFxYoY = Selectors.quarterRevenueBreakdownDelta(qdFx, "qfx-2026q2", "VAS").yoy;
+assert.equal(qdFxYoY.reason, "ok");
+assert.ok(Math.abs(qdFxYoY.value - 0.1) < 1e-12); // CNY 72 → 79.2 = +10%，不是 USD 10 → 12 = +20%
 
 // ---- rowProfitability: 业务行营业利润率 (Issue #28 Phase 1) ----
 // 安全 1:1 映射 = 同 carrier + 名称精确相等 + 营收差 ≤ 0.001(+1e-9 浮点噪声) + 候选唯一;
