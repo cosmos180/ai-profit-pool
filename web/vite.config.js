@@ -2,10 +2,33 @@ import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import { readFileSync } from 'node:fs'
+import { execSync } from 'node:child_process'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// 构建水印（评审 #6）：单文件 app.html 会被转发，页脚亮明「数据截至 X · 行情 Y · commit」
+// 让每个流转副本可溯源。数据时点取库内最大 actual period_end 与最大 quote.as_of；
+// commit 取 git short hash（无 git 环境静默降级为空，不阻塞构建）。
+function buildStamp() {
+  let commit = ''
+  try {
+    commit = execSync('git rev-parse --short HEAD', { cwd: resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
+  } catch { /* 无 git 环境 */ }
+  let dataAsOf = '', quoteAsOf = ''
+  try {
+    const db = JSON.parse(readFileSync(resolve(__dirname, '../companies.json'), 'utf-8'))
+    const dates = []
+    for (const c of db.companies || []) {
+      for (const p of c.periods || []) if (p.status === 'actual' && p.period_end) dates.push(p.period_end)
+      if (c.quote && c.quote.as_of && String(c.quote.as_of) > quoteAsOf) quoteAsOf = String(c.quote.as_of)
+    }
+    dates.sort()
+    dataAsOf = dates[dates.length - 1] || ''
+  } catch { /* 数据缺失时水印只带 commit */ }
+  return `数据截至 ${dataAsOf || '—'}${quoteAsOf ? ` · 行情 ${quoteAsOf}` : ''}${commit ? ` · ${commit}` : ''}`
+}
 
 // 构建期把根 companies.json 内联进 index.html 的 dataset 占位符（ADR 决策 6）。
 // 单一真相源仍是根 companies.json；这里只做注入，不改写、不校验（校验归 prebuild 的 validate.py）。
@@ -61,6 +84,7 @@ function esmDataModule() {
 // 采纳 dist + copy 方案（ADR 决策 6/7）：输出到 web/dist/，绝不用 outDir:'..'+emptyOutDir。
 // 迁移并行期不覆盖仓库根 app.html；package.json build 末尾 cp dist/index.html dist/app.html 供比对。
 export default defineConfig({
+  define: { __BUILD_STAMP__: JSON.stringify(buildStamp()) },
   plugins: [svelte(), esmDataModule(), inlineDataset(), viteSingleFile()],
   build: {
     outDir: 'dist',

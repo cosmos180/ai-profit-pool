@@ -36,7 +36,7 @@ export default [
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: { ...globals.browser, ...runes },
+      globals: { ...globals.browser, ...runes, __BUILD_STAMP__: 'readonly' },
     },
     // 只挂 import 边界闸门 + no-undef（本轮 A3 目标：钉死不变量 5 的导入边界）。
     // 不引 svelte/recommended 全套——其 no-at-html-tags 会误伤已登记的桑基 {@html}
@@ -52,7 +52,7 @@ export default [
       parser: svelteParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: { ...globals.browser, ...runes },
+      globals: { ...globals.browser, ...runes, __BUILD_STAMP__: 'readonly' },
     },
     rules: { ...noDirectDataAccess },
   },

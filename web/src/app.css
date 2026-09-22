@@ -293,6 +293,7 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .sankey-legend .i{display:flex;align-items:center;gap:7px}
 .sankey-legend .sw{width:15px;height:11px;border-radius:3px;flex:none}
 footer{color:var(--ink-faint);font-size:12px;padding:30px 0 50px;text-align:center;line-height:1.7}footer b{color:var(--ink-soft)}
+.build-stamp{margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--ink-faint);opacity:.85}
 @media(max-width:640px){
   .logo{width:42px;height:42px}.logo span{font-size:14px}
   .crow{grid-template-columns:42px 1fr auto}.crow .cbarcell{display:none}

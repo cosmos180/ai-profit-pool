@@ -22,5 +22,6 @@
 
   <footer>
     三层抽象：<b>登记表（公司）→ 公司（多年）→ 财年（板块）</b> · 数据：<b>companies.json</b> · 契约：<b>schema.json</b> · 校验：<b>validate.py</b> · 读取/派生：<b>data-module.js</b>
+    <div class="build-stamp">{__BUILD_STAMP__}</div>
   </footer>
 </div>
