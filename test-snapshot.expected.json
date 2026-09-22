@@ -1,5 +1,5 @@
 {
-  "companyCount": 15,
+  "companyCount": 16,
   "populatedIds": [
     "nvda",
     "samsung",
@@ -15,7 +15,8 @@
     "amazon",
     "oracle",
     "arm",
-    "intel"
+    "intel",
+    "pdd"
   ],
   "pendingIds": [],
   "stages": {
@@ -707,20 +708,64 @@
         "value": 0.239863,
         "basis": "proxy"
       }
+    },
+    "pdd": {
+      "latestActualFy": "FY2025",
+      "forecastFy": null,
+      "segmentKind": "platform",
+      "reconcileOk": true,
+      "reconcilePartition": true,
+      "hasSegmentProfit": false,
+      "topProfitSegment": null,
+      "topRevSegment": "在线营销服务及其他 Online marketing services and others（广告）",
+      "netMargin": 0.230092,
+      "opMargin": 0.219116,
+      "revYoY": 0.144523,
+      "niYoY": -0.077554,
+      "homeRevenue": 61.7531,
+      "homeNetIncome": 14.2089,
+      "marketCap": 112.8,
+      "netDebt": -67.3,
+      "ev": 45.5,
+      "evSales": 0.736805,
+      "pe": 7.938686,
+      "ps": 1.826629,
+      "fcfYield": null,
+      "forwardPE": null,
+      "evEbitda": null,
+      "valuationCaveat": {
+        "pe": "ok",
+        "ps": "ok",
+        "fcf_yield": "ok",
+        "ev_sales": "ok",
+        "ev_ebitda": "ok"
+      },
+      "ttmNetIncome": null,
+      "ttmAsOf": null,
+      "incomeFlowHas": {
+        "gross": true,
+        "opex": true,
+        "taxOther": true,
+        "segments": true
+      },
+      "aiShare": {
+        "value": 0.504307,
+        "basis": "proxy"
+      }
     }
   },
   "aiPool": {
-    "total": 313.54475,
-    "n": 14,
-    "N": 15,
+    "total": 320.710404,
+    "n": 15,
+    "N": 16,
     "basisCount": {
       "sourced": 3,
-      "proxy": 11
+      "proxy": 12
     },
     "byStage": {
       "design": {
         "value": 121.10116,
-        "share": 0.386232,
+        "share": 0.377603,
         "companies": [
           {
             "id": "nvda",
@@ -747,7 +792,7 @@
       },
       "foundry": {
         "value": 32.02198,
-        "share": 0.102129,
+        "share": 0.099847,
         "companies": [
           {
             "id": "tsmc",
@@ -760,7 +805,7 @@
       },
       "memory": {
         "value": 44.43246,
-        "share": 0.14171,
+        "share": 0.138544,
         "companies": [
           {
             "id": "samsung",
@@ -787,7 +832,7 @@
       },
       "equipment": {
         "value": 3.856615,
-        "share": 0.0123,
+        "share": 0.012025,
         "companies": [
           {
             "id": "asml",
@@ -800,7 +845,7 @@
       },
       "invest": {
         "value": 2.568954,
-        "share": 0.008193,
+        "share": 0.00801,
         "companies": [
           {
             "id": "softbank",
@@ -812,8 +857,8 @@
         ]
       },
       "app": {
-        "value": 6.96255,
-        "share": 0.022206,
+        "value": 14.128204,
+        "share": 0.044053,
         "companies": [
           {
             "id": "tencent",
@@ -821,12 +866,19 @@
             "ni": 6.96255,
             "aiShare": 0.192868,
             "basis": "proxy"
+          },
+          {
+            "id": "pdd",
+            "name": "PDD Holdings 拼多多",
+            "ni": 7.165654,
+            "aiShare": 0.504307,
+            "basis": "proxy"
           }
         ]
       },
       "cloud": {
         "value": 102.60103,
-        "share": 0.327229,
+        "share": 0.319918,
         "companies": [
           {
             "id": "google",
@@ -978,13 +1030,13 @@
     },
     {
       "label": "≈2024",
-      "total": 197.768884,
-      "n": 14,
-      "N": 15,
+      "total": 205.510374,
+      "n": 15,
+      "N": 16,
       "stages": {
         "design": {
           "value": 63.363916,
-          "share": 0.320394,
+          "share": 0.308325,
           "companies": [
             {
               "id": "nvda",
@@ -1005,7 +1057,7 @@
         },
         "foundry": {
           "value": 18.625281,
-          "share": 0.094177,
+          "share": 0.090629,
           "companies": [
             {
               "id": "tsmc",
@@ -1016,7 +1068,7 @@
         },
         "memory": {
           "value": 22.939949,
-          "share": 0.115994,
+          "share": 0.111624,
           "companies": [
             {
               "id": "samsung",
@@ -1037,7 +1089,7 @@
         },
         "equipment": {
           "value": 2.412878,
-          "share": 0.0122,
+          "share": 0.011741,
           "companies": [
             {
               "id": "asml",
@@ -1048,7 +1100,7 @@
         },
         "invest": {
           "value": 0.628622,
-          "share": 0.003179,
+          "share": 0.003059,
           "companies": [
             {
               "id": "softbank",
@@ -1058,19 +1110,24 @@
           ]
         },
         "app": {
-          "value": 4.964004,
-          "share": 0.0251,
+          "value": 12.705494,
+          "share": 0.061824,
           "companies": [
             {
               "id": "tencent",
               "name": "Tencent 腾讯控股",
               "ni": 4.964004
+            },
+            {
+              "id": "pdd",
+              "name": "PDD Holdings 拼多多",
+              "ni": 7.74149
             }
           ]
         },
         "cloud": {
           "value": 84.834232,
-          "share": 0.428956,
+          "share": 0.412798,
           "companies": [
             {
               "id": "google",
@@ -1098,13 +1155,13 @@
     },
     {
       "label": "≈2025",
-      "total": 313.54475,
-      "n": 14,
-      "N": 15,
+      "total": 320.710404,
+      "n": 15,
+      "N": 16,
       "stages": {
         "design": {
           "value": 121.10116,
-          "share": 0.386232,
+          "share": 0.377603,
           "companies": [
             {
               "id": "nvda",
@@ -1125,7 +1182,7 @@
         },
         "foundry": {
           "value": 32.02198,
-          "share": 0.102129,
+          "share": 0.099847,
           "companies": [
             {
               "id": "tsmc",
@@ -1136,7 +1193,7 @@
         },
         "memory": {
           "value": 44.43246,
-          "share": 0.14171,
+          "share": 0.138544,
           "companies": [
             {
               "id": "samsung",
@@ -1157,7 +1214,7 @@
         },
         "equipment": {
           "value": 3.856615,
-          "share": 0.0123,
+          "share": 0.012025,
           "companies": [
             {
               "id": "asml",
@@ -1168,7 +1225,7 @@
         },
         "invest": {
           "value": 2.568954,
-          "share": 0.008193,
+          "share": 0.00801,
           "companies": [
             {
               "id": "softbank",
@@ -1178,19 +1235,24 @@
           ]
         },
         "app": {
-          "value": 6.96255,
-          "share": 0.022206,
+          "value": 14.128204,
+          "share": 0.044053,
           "companies": [
             {
               "id": "tencent",
               "name": "Tencent 腾讯控股",
               "ni": 6.96255
+            },
+            {
+              "id": "pdd",
+              "name": "PDD Holdings 拼多多",
+              "ni": 7.165654
             }
           ]
         },
         "cloud": {
           "value": 102.60103,
-          "share": 0.327229,
+          "share": 0.319918,
           "companies": [
             {
               "id": "google",
@@ -1219,31 +1281,31 @@
   ],
   "leader": {
     "id": "nvda",
-    "share": 0.343661,
-    "pool": 313.54475,
-    "n": 14,
-    "N": 15,
+    "share": 0.335982,
+    "pool": 320.710404,
+    "n": 15,
+    "N": 16,
     "basisCount": {
       "sourced": 3,
-      "proxy": 11
+      "proxy": 12
     }
   },
   "yoy": {
-    "value": 0.58541,
+    "value": 0.560556,
     "migLastLabel": "≈2025",
     "migPrevLabel": "≈2024"
   },
   "ttmPool": {
-    "total": 574.666866,
-    "n": 13,
+    "total": 581.451819,
+    "n": 14,
     "asOfSpreadDays": 84,
     "basisCount": {
-      "periods": 13
+      "periods": 14
     },
     "stages": {
       "design": {
         "value": 189.970701,
-        "share": 0.330575,
+        "share": 0.326718,
         "companies": [
           {
             "id": "nvda",
@@ -1265,7 +1327,7 @@
       },
       "foundry": {
         "value": 41.708963,
-        "share": 0.072579,
+        "share": 0.071732,
         "companies": [
           {
             "id": "tsmc",
@@ -1279,7 +1341,7 @@
       },
       "memory": {
         "value": 170.056186,
-        "share": 0.295921,
+        "share": 0.292468,
         "companies": [
           {
             "id": "samsung",
@@ -1309,7 +1371,7 @@
       },
       "equipment": {
         "value": 4.406089,
-        "share": 0.007667,
+        "share": 0.007578,
         "companies": [
           {
             "id": "asml",
@@ -1323,7 +1385,7 @@
       },
       "invest": {
         "value": 2.530003,
-        "share": 0.004403,
+        "share": 0.004351,
         "companies": [
           {
             "id": "softbank",
@@ -1336,8 +1398,8 @@
         ]
       },
       "app": {
-        "value": 7.391335,
-        "share": 0.012862,
+        "value": 14.176287,
+        "share": 0.024381,
         "companies": [
           {
             "id": "tencent",
@@ -1346,12 +1408,20 @@
             "asOf": "2026-06-30",
             "aiShare": 0.192868,
             "basis": "periods"
+          },
+          {
+            "id": "pdd",
+            "name": "PDD Holdings 拼多多",
+            "ttm": 6.784953,
+            "asOf": "2026-06-30",
+            "aiShare": 0.504307,
+            "basis": "periods"
           }
         ]
       },
       "cloud": {
         "value": 158.60359,
-        "share": 0.275992,
+        "share": 0.272772,
         "companies": [
           {
             "id": "google",
@@ -1729,17 +1799,17 @@
     "tencent": {
       "pe": {
         "value": null,
-        "median": null,
+        "median": 7.938686,
         "relative": null,
-        "cohortN": 0,
+        "cohortN": 1,
         "lowerCheaper": true,
         "insufficient": true
       },
       "ps": {
         "value": 4.751434,
-        "median": 4.751434,
+        "median": 3.289031,
         "relative": null,
-        "cohortN": 1,
+        "cohortN": 2,
         "lowerCheaper": true,
         "insufficient": true
       },
@@ -1753,9 +1823,9 @@
       },
       "evSales": {
         "value": 4.608987,
-        "median": 4.608987,
+        "median": 2.672896,
         "relative": null,
-        "cohortN": 1,
+        "cohortN": 2,
         "lowerCheaper": true,
         "insufficient": true
       },
@@ -2016,6 +2086,48 @@
         "median": 52.967104,
         "relative": null,
         "cohortN": 3,
+        "lowerCheaper": true,
+        "insufficient": true
+      }
+    },
+    "pdd": {
+      "pe": {
+        "value": 7.938686,
+        "median": 7.938686,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "ps": {
+        "value": 1.826629,
+        "median": 3.289031,
+        "relative": null,
+        "cohortN": 2,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "fcfYield": {
+        "value": null,
+        "median": 0.051127,
+        "relative": null,
+        "cohortN": 1,
+        "lowerCheaper": false,
+        "insufficient": true
+      },
+      "evSales": {
+        "value": 0.736805,
+        "median": 2.672896,
+        "relative": null,
+        "cohortN": 2,
+        "lowerCheaper": true,
+        "insufficient": true
+      },
+      "evEbitda": {
+        "value": null,
+        "median": null,
+        "relative": null,
+        "cohortN": 0,
         "lowerCheaper": true,
         "insufficient": true
       }
