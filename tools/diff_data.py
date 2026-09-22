@@ -41,11 +41,13 @@ def load_state(path: str) -> dict:
         order = meta.get("company_order") or []
         comps = {f.stem: json.loads(f.read_text(encoding="utf-8"))
                  for f in (p / "companies").glob("*.json")}
-        missing = [cid for cid in order if cid not in comps]
         extra = [cid for cid in comps if cid not in order]
-        if missing or extra:
-            sys.exit(f"❌ {path} 的 company_order 与 companies/*.json 不一致：缺 {missing}；多 {extra}")
-        return {"meta": meta, "companies": [comps[cid] for cid in order]}
+        if extra:
+            sys.exit(f"❌ {path} 的 companies/*.json 有不在 company_order 里的分片：{extra}")
+        skipped = [cid for cid in order if cid not in comps]
+        if skipped:
+            print(f"（{path} 为部分备份：{len(skipped)} 家无分片，跳过不比较）", file=sys.stderr)
+        return {"meta": meta, "companies": [comps[cid] for cid in order if cid in comps], "_skipped": set(skipped)}
     data = json.loads(p.read_text(encoding="utf-8"))
     if "companies" not in data:
         sys.exit(f"❌ {path} 既不是 data/ 目录，也不是含 companies 的 JSON 文件")
@@ -56,6 +58,26 @@ def fmt(v):
     if v is None:
         return "null"
     return json.dumps(v, ensure_ascii=False)[:60]
+
+
+def diff_rb(old_rb, new_rb, out, indent="        "):
+    """revenue_breakdown 对比：条目名/金额、products 增删。"""
+    oi = {i.get("name"): i for i in (old_rb or {}).get("items", [])}
+    ni = {i.get("name"): i for i in (new_rb or {}).get("items", [])}
+    for nm in ni.keys() - oi.keys():
+        out.append(f"{indent}+ 拆分行新增: {nm}")
+    for nm in oi.keys() - ni.keys():
+        out.append(f"{indent}− 拆分行删除: {nm}")
+    for nm in oi.keys() & ni.keys():
+        flds = []
+        if oi[nm].get("revenue") != ni[nm].get("revenue"):
+            flds.append(f"金额 {fmt(oi[nm].get('revenue'))} → {fmt(ni[nm].get('revenue'))}")
+        op = {p.get("name") for p in oi[nm].get("products") or []}
+        np_ = {p.get("name") for p in ni[nm].get("products") or []}
+        if np_ - op: flds.append(f"products+ {sorted(np_ - op)}")
+        if op - np_: flds.append(f"products− {sorted(op - np_)}")
+        if flds:
+            out.append(f"{indent}~ 拆分行 {nm}: " + "; ".join(str(f) for f in flds))
 
 
 def diff_company(cid, old, new, out):
@@ -89,9 +111,12 @@ def diff_company(cid, old, new, out):
                 flds.append(f"segment~ {sname}: rev {fmt(so[sname].get('revenue'))} → {fmt(sn[sname].get('revenue'))}"
                             + (f" op {fmt(so[sname].get('op_income'))} → {fmt(sn[sname].get('op_income'))}"
                                if so[sname].get("op_income") != sn[sname].get("op_income") else ""))
+        diff_rb(o.get("revenue_breakdown"), n.get("revenue_breakdown"), out)
         if flds:
             out.append(f"    ~ period 变更: {pid}")
             out.extend(f"        {f}" for f in flds)
+        elif o.get("revenue_breakdown") != n.get("revenue_breakdown"):
+            out.append(f"    ~ period 变更: {pid}（仅 revenue_breakdown 变化）")
     # years
     oy = {y.get("fy"): y for y in old.get("years", [])}
     ny = {y.get("fy"): y for y in new.get("years", [])}
@@ -102,9 +127,12 @@ def diff_company(cid, old, new, out):
     for fy in sorted(oy.keys() & ny.keys()):
         flds = [f"{k}: {fmt(oy[fy].get(k))} → {fmt(ny[fy].get(k))}"
                 for k in YEAR_FIELDS if oy[fy].get(k) != ny[fy].get(k)]
+        diff_rb(oy[fy].get("revenue_breakdown"), ny[fy].get("revenue_breakdown"), out)
         if flds:
             out.append(f"    ~ year 变更: {fy}")
             out.extend(f"        {f}" for f in flds)
+        elif oy[fy].get("revenue_breakdown") != ny[fy].get("revenue_breakdown"):
+            out.append(f"    ~ year 变更: {fy}（仅 revenue_breakdown 变化）")
     # quote
     oq, nq = old.get("quote") or {}, new.get("quote") or {}
     flds = [f"{k}: {fmt(oq.get(k))} → {fmt(nq.get(k))}"
@@ -123,12 +151,16 @@ def main():
     old_state, new_state = load_state(a.old), load_state(a.new)
     olds = {c["id"]: c for c in old_state["companies"]}
     news = {c["id"]: c for c in new_state["companies"]}
+    old_skipped = old_state.get("_skipped", set())   # 部分备份：这些 id 在旧侧没有数据，不算「新增」
 
     out = []
     for cid in olds.keys() - news.keys():
         out.append(f"  − 公司删除: {cid}")
     for cid in news.keys() - olds.keys():
-        out.append(f"  + 公司新增: {cid}")
+        if cid in old_skipped:
+            out.append(f"  · 未比较（旧侧为部分备份，无 {cid} 分片）")
+        else:
+            out.append(f"  + 公司新增: {cid}")
     for cid in sorted(olds.keys() & news.keys()):
         block = []
         diff_company(cid, olds[cid], news[cid], block)

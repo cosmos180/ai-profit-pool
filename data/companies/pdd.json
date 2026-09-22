@@ -72,7 +72,58 @@
           "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
           "data_status": "official"
         }
-      ]
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 27.1169,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 26.8385,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "fy": "FY2025",
@@ -114,7 +165,58 @@
           "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926034813/tm269789d1_ex99-1.htm",
           "data_status": "official"
         }
-      ]
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 31.1426,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 30.6106,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     }
   ],
   "quarters": [],
@@ -166,7 +268,58 @@
           "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924064321/tm2415048d1_ex99-1.htm",
           "data_status": "official"
         }
-      ]
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 5.8801,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 6.1432,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2024q2",
@@ -215,7 +368,58 @@
           "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924092851/tm2422641d1_ex99-1.htm",
           "data_status": "official"
         }
-      ]
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 6.7586,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 6.5973,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2024q3",
@@ -264,7 +468,58 @@
           "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465924121500/tm2429127d1_ex99-1.htm",
           "data_status": "official"
         }
-      ]
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 7.0325,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 7.1254,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2024q4",
@@ -313,7 +568,58 @@
           "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465925026115/tm259886d1_ex99-1.htm",
           "data_status": "official"
         }
-      ]
+      ],
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 7.8105,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 7.343,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-fy2024-annual",
@@ -364,7 +670,58 @@
         }
       ],
       "eps_diluted": 76.01,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 27.1169,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 26.8385,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2025q1",
@@ -415,7 +772,58 @@
         }
       ],
       "eps_diluted": 9.94,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 6.7141,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 6.4699,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2025q2",
@@ -466,7 +874,58 @@
         }
       ],
       "eps_diluted": 20.75,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 7.7759,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 6.7399,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2025q3",
@@ -517,7 +976,58 @@
         }
       ],
       "eps_diluted": 19.7,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 7.4937,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 7.7158,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2025q4",
@@ -568,7 +1078,58 @@
         }
       ],
       "eps_diluted": 16.51,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 8.5813,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 9.1379,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-fy2025-annual",
@@ -619,7 +1180,58 @@
         }
       ],
       "eps_diluted": 67.03,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 31.1426,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 30.6106,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2026q1",
@@ -670,7 +1282,58 @@
         }
       ],
       "eps_diluted": 8.48,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 7.2392,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 8.1608,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     },
     {
       "period_id": "pdd-2026q2",
@@ -721,7 +1384,58 @@
         }
       ],
       "eps_diluted": 18.45,
-      "eps_diluted_basis": "gaap"
+      "eps_diluted_basis": "gaap",
+      "revenue_breakdown": {
+        "label": "收入类型（SEC 6-K 两条业务线 · 产品/场景见行内标注）",
+        "complete": true,
+        "items": [
+          {
+            "name": "在线营销服务及其他 Online marketing services and others（广告）",
+            "revenue": 8.4946,
+            "products": [
+              {
+                "name": "搜索/浏览结果位商品推广",
+                "note": "商品列表匹配进搜索与浏览结果，按展示量或点击量计费（20-F 官方枚举）"
+              },
+              {
+                "name": "固定价展示广告位",
+                "note": "商家以固定价格投放的展示类营销服务（20-F 官方枚举）"
+              }
+            ],
+            "product_note": "服务类型为 20-F Item 4 业务概述枚举；公司不披露分产品广告收入，以上为场景参考、非金额拆分。"
+          },
+          {
+            "name": "交易服务 Transaction services（佣金·支付）",
+            "revenue": 8.0649,
+            "products": [
+              {
+                "name": "拼多多主站成交佣金",
+                "note": "就平台上完成的商品销售向商家收取的费用（20-F 交易服务定义）"
+              },
+              {
+                "name": "Temu 平台服务费",
+                "note": "20-F 定义 our platforms = 拼多多 + Temu；Temu 收入未单独披露，计入哪条业务线公司未明示——场景列举非金额拆分"
+              },
+              {
+                "name": "多多买菜（次日自提）",
+                "note": "2020-08 推出的拼多多平台延伸业务（20-F Item 4 点名）；未单独披露收入"
+              },
+              {
+                "name": "支付处理等增值服务",
+                "note": "交易服务含支付处理相关费用（6-K 成本叙述与 20-F 口径）"
+              }
+            ],
+            "product_note": "公司仅按两条业务线披露收入；以上为 20-F 业务描述口径的场景列举，无分业务金额。"
+          }
+        ],
+        "sources": [
+          {
+            "label": "products/场景依据：PDD Holdings FY2025 20-F（2026-04-29）Item 4 业务概述——在线营销服务官方枚举为「商品列表匹配进搜索/浏览结果位（按展示或点击计费）」与「固定价展示广告位」；交易服务为「就平台上完成的销售向商家收取费用」；our platforms 定义 = 拼多多 + Temu，业务章节另点名多多买菜（2020-08 推出的次日自提业务）。公司不披露分产品/分业务收入——products 仅作场景参考，不参与对账。",
+            "url": "https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm",
+            "data_status": "official"
+          }
+        ]
+      }
     }
   ]
 }
