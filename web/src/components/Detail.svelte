@@ -121,6 +121,21 @@
   // 而非画误导连线（配合 D2 的 segYoY=null）。组件零算术，只透传 as-reported 文案。
   const frameworkChange = $derived((isPeriod ? p : y)?.framework_change || null)
 
+  // —— 拆分顶层 ≡ 报告分部 去重：两者同名同额时只渲染收入拆分区（携带 products/层级），
+  // 「季度/业务板块营收」区不再重复同一批行；对账行（Reconcile）移到拆分区下方保留。
+  // 判定是纯数据比较（名称集合 + 金额逐位相等），无口径推断。
+  const rbDupesSegments = $derived.by(() => {
+    const carrier = isPeriod ? p : y
+    if (!carrier || isForecast) return false
+    const rb = Selectors.revenueBreakdown(carrier)
+    if (!rb || !Array.isArray(rb.items) || !rb.items.length) return false
+    const segs = carrier.segments || []
+    if (!segs.length || segs.length !== rb.items.length) return false
+    const byName = new Map(segs.map(s => [s.name, s.revenue]))
+    return rb.items.every(it => byName.has(it.name)
+      && Math.abs((byName.get(it.name) ?? 0) - it.revenue) < 1e-9)
+  })
+
   // —— forecast：锚点 ——
   const anchors = $derived.by(() => {
     if (!y || !isForecast) return []
@@ -180,8 +195,11 @@
     <Sankey company={c} year={p} />
 
     <RevenueBreakdown owner={p} company={c} periodId={p.period_id} />
+    {#if rbDupesSegments && periodRec}
+      <div class="card" style="margin-top:-8px"><Reconcile rec={periodRec} carrier={p} /></div>
+    {/if}
 
-    {#if periodSegRows.length}
+    {#if periodSegRows.length && !rbDupesSegments}
       <div class="section-h">季度分部营收 · 降序</div>
       <div class="card">
         <div class="plat">
@@ -255,7 +273,11 @@
     <Sankey company={c} year={y} />
 
     <RevenueBreakdown owner={y} company={c} fy={y.fiscal_year} />
+    {#if rbDupesSegments && rec}
+      <div class="card" style="margin-top:-8px"><Reconcile {rec} carrier={y} /></div>
+    {/if}
 
+    {#if platRows.length && !rbDupesSegments}
     <div class="section-h">业务板块营收 · 降序</div>
     <div class="card">
       <div class="plat">
@@ -274,6 +296,7 @@
       </div>
       {#if rec}<Reconcile {rec} carrier={y} />{/if}
     </div>
+    {/if}
 
     <!-- 利润块三态 -->
     {#if profitState === 'table'}
