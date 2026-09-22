@@ -2,6 +2,12 @@
 
 用于 Multica / Codex / Claude 等 agent 协作补齐 `ai-profit-pool` 的上市公司财报数据。目标不是写分析文章,而是产出可审计、可 merge、可回归测试的 `periods[]` 报告期原子数据。
 
+> **数据布局（2026-09-22 起）**：真相源已分片为 `data/meta.json` + `data/companies/<id>.json`
+> （一司一文件）；根 `companies.json` 退役为 gitignore 的组装产物。本 skill 所产
+> 公司对象 JSON 的消费方式不变（喂 `python3 tools/merge.py <文件>`，或先落
+> `candidates/`）；校验命令为 `python3 validate.py data schema.json`。
+> 文中旧的 `companies.json` 路径字样按此映射理解。
+
 ## 0. 角色边界
 
 你是数据采集与初审 agent。你可以查官方财报、抽取数字、做交叉校验、输出 JSON 草稿,但不要直接改 `companies.json`、不要改 UI、不要提交代码。最终 merge、build、提交由项目负责人完成。
