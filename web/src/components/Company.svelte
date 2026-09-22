@@ -54,6 +54,8 @@
         periodId: p.period_id,
         tag: periodTag(p),
         end: p.period_end,
+        rev: p.revenue,
+        ni: p.net_income,
         revLabel: Fmt.bn(p.revenue, 1),
         niLabel: Fmt.bn(p.net_income, 1),
         nmLabel: Fmt.pct(Selectors.netMargin(p)),
@@ -180,10 +182,21 @@
       {#each quarterRows as q (q.id)}
         <button class="ycard qcard" onclick={() => nav.goPeriod(c.id, q.periodId)} disabled={!q.periodId}>
           <div class="yhead"><span class="yfy">{q.tag}</span><span class="ybadge act">实际</span></div>
-          <div class="yrev num">{q.revLabel}</div>
-          <div class="yrevlbl">营收 · 截至 {q.end}</div>
-          <div class="yrow"><span class="l">净利润</span><span class="v num">{q.niLabel}</span></div>
-          <div class="yrow"><span class="l">净利率</span><span class="v num">{q.nmLabel}</span></div>
+          {#if q.rev != null}
+            <div class="yrev num">{q.revLabel}</div>
+            <div class="yrevlbl">营收 · 截至 {q.end}</div>
+            <div class="yrow"><span class="l">净利润</span><span class="v num">{q.niLabel}</span></div>
+            <div class="yrow"><span class="l">净利率</span><span class="v num">{q.nmLabel}</span></div>
+          {:else if q.ni != null}
+            <!-- 仅净利补录的季度原子（营收未录）：主数值切到净利润并显式声明，避免「主值空/副值有」的矛盾观感；净利率依赖营收，不渲染空行 -->
+            <div class="yrev num">{q.niLabel}</div>
+            <div class="yrevlbl">净利润 · 营收未录 · 截至 {q.end}</div>
+          {:else}
+            <div class="yrev num">—</div>
+            <div class="yrevlbl">营收未录 · 截至 {q.end}</div>
+            <div class="yrow"><span class="l">净利润</span><span class="v num">{q.niLabel}</span></div>
+            <div class="yrow"><span class="l">净利率</span><span class="v num">{q.nmLabel}</span></div>
+          {/if}
           <span class="yopen">查看季度 →</span>
         </button>
       {/each}

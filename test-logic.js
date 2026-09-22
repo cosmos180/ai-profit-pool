@@ -2479,4 +2479,46 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.ok(typeof t.caveatNote === "string" && t.caveatNote.length > 20);
 }
 
+// =====================================================================
+// n/m 展示封顶（NM_MULT_CAP）——倍数 > 200× 只改渲染：cell.nmCap 标记 + note 携真值，
+// value/state/sortKey/covered 全部不动（排序仍按真值参排）。独立合成池，避免污染上方
+// A1 四态断言的行数与排序期望。
+// =====================================================================
+{
+  const mk = (id, name, stage, quote, ann) => ({
+    id, name, status: "populated", chain_stage: stage, logo_text: id.slice(0, 2),
+    quote,
+    years: [{ fy: "FY26E", status: "forecast" }],
+    periods: [Object.assign({ kind: "annual", status: "actual", period_end: "2025-12-31", fiscal_year: "FY2025" }, ann)],
+  });
+  // X：净利 0.01 / 市值 100 → trailing PE 10000（Intel 型被压薄分母）；Y：正常 20× 对照。
+  const X = mk("xx", "ExtremeCo X", "design", { market_cap: 100, price: 50, price_currency: "USD", net_debt: 0 },
+    { revenue: 50, net_income: 0.01, cfo: 12, capex: 2, op_income: 8, d_and_a: 2 });
+  const Y = mk("yy", "NormalCo Y", "design", { market_cap: 100, price: 50, price_currency: "USD", net_debt: 10 },
+    { revenue: 50, net_income: 5, cfo: 12, capex: 2, op_income: 8, d_and_a: 2 });
+
+  Store._data = { meta: CANON_META, companies: [X, Y] };
+  _refreshStages(CANON_META);
+  const t = Selectors.compsTable();
+  const cellOf = (id, key) => t.rows.find(r => r.id === id).cells[key];
+
+  const cx = cellOf("xx", "trailingPE");
+  assert.equal(cx.state, "ok");                    // 封顶不改状态
+  assert.equal(cx.value, 10000);                   // 真值原样
+  assert.equal(cx.sortKey, 10000);                 // 排序键仍是真值
+  assert.equal(cx.nmCap, 200);                     // 仅加展示标记
+  assert.ok(/10000\.0×/.test(cx.note));            // 真值进 tooltip note
+  assert.ok(/封顶/.test(cx.note));
+  const cy = cellOf("yy", "trailingPE");
+  assert.equal(cy.value, 20);
+  assert.equal(cy.nmCap, undefined);               // 200× 以内不带标记
+  assert.equal(cy.note, "");
+  // EV/EBITDA 同契约：X=(100+0)/(8+2)=10 正常；封顶只对超限倍数生效
+  assert.equal(cellOf("xx", "evEbitda").nmCap, undefined);
+  // covered 计入 ok（有值），不因封顶排除
+  assert.equal(t.columns.find(c => c.key === "trailingPE").covered, 2);
+  // caveatNote 披露封顶约定
+  assert.ok(/200×/.test(t.caveatNote));
+}
+
 console.log("logic tests passed");

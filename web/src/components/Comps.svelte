@@ -56,8 +56,10 @@
   const ariaSort = col =>
     sortCol === col.key ? (sortDir === 'asc' ? 'ascending' : 'descending') : (col.sortable ? 'none' : undefined)
 
-  // 纯呈现：按 kind 选 Fmt（非计算）。
-  const fmtCell = cell => cell.kind === 'pct' ? Fmt.pct(cell.value) : Fmt.mult(cell.value)
+  // 纯呈现：按 kind 选 Fmt（非计算）。nmCap（>200× n/m 封顶）时走 multCap——只改渲染串。
+  const fmtCell = cell => cell.kind === 'pct'
+    ? Fmt.pct(cell.value)
+    : (cell.nmCap ? Fmt.multCap(cell.value, cell.nmCap) : Fmt.mult(cell.value))
 
   // 同环节相对位角标：class 与悬浮文案（方向语义据 lowerCheaper 分流，纯呈现）。
   const relCls = rel => {
@@ -133,10 +135,10 @@
                 <span class="cv-rel {relCls(cell.rel)}" title={relTitle(cell.rel, col.kind)}></span>
               {/if}
               {#if cell.state === 'ok'}
-                <!-- note 非空时挂 tooltip（C2：前瞻 PE 格披露 consensus 基准；其余 ok 格 note 为空不受影响） -->
-                <span class="cv-val" title={cell.note || null}>{fmtCell(cell)}</span>
+                <!-- note 非空时挂 tooltip（C2：前瞻 PE 格披露 consensus 基准；nmCap 格披露封顶真值） -->
+                <span class="cv-val" class:nm={cell.nmCap} title={cell.note || null}>{fmtCell(cell)}</span>
               {:else if cell.state === 'distorted'}
-                <span class="cv-val">{fmtCell(cell)}</span><span class="cv-flag distort" title={cell.note}>⚠</span>
+                <span class="cv-val" class:nm={cell.nmCap}>{fmtCell(cell)}</span><span class="cv-flag distort" title={cell.note}>⚠</span>
               {:else if cell.state === 'na'}
                 <span class="cv-dash muted">—</span><span class="cv-flag na" title={cell.note}>不适用</span>
               {:else}

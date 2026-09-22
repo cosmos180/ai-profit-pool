@@ -13,6 +13,11 @@ export const Fmt = {
     return Math.round(p) + '%'
   },
   mult: (v) => v == null ? '—' : v.toFixed(1) + '×',
+  // n/m 封顶档：倍数超 cap（默认 200×）渲染 ">cap×"——分母利润过薄时倍数零信息量且挤占
+  // 列宽，真值由 tooltip / 排序键承载。与 mult 同为纯呈现，不改任何 selector 语义。
+  multCap: (v, cap = 200) => v == null ? '—' : (v > cap ? `>${cap}×` : v.toFixed(1) + '×'),
+  // 封顶格的真值 tooltip（multCap 的配套）：封顶才非 undefined，未封顶格不挂 title。
+  multCapTitle: (v, cap = 200) => (v != null && v > cap) ? `真值 ${v.toFixed(1)}× · 超 ${cap}× 展示封顶——分母过薄，倍数不具横比信息量` : undefined,
   yoy: (v) => v == null ? '—' : (v >= 0 ? '+' : '') + (v * 100).toFixed(1) + '%',
   segLabel: (s) => ({ yes: '分部利润 · 可得', partial: '分部利润 · 部分', no: '分部利润 · 不可得' }[s] || '分部利润 · 未知'),
 }

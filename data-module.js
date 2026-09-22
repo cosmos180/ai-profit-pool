@@ -714,6 +714,11 @@ const Selectors = {
     { key: "fcfYield",   sel: "fcfYield",  caveat: "fcf_yield", rel: "fcfYield", label: "FCF yield",   kind: "pct",  accent: false },
     { key: "ps",         sel: "ps",        caveat: "ps",        rel: "ps",       label: "PS",          kind: "mult", accent: false, optional: true },
   ],
+  /* n/m 展示封顶：倍数 > 200× 时格内不再渲染具体数字（分母利润被压得太薄，倍数零信息量，
+     还挤占列宽——如 Intel trailing PE、Arm trailing/EV-EBITDA）。纯展示契约：
+     cell.nmCap 只驱动 Fmt.multCap 渲染；value/state/sortKey/covered 全部不动，
+     排序仍按真值参排，真值写进 note（tooltip）。 */
+  NM_MULT_CAP: 200,
   COMPS_NA_REASON: {
     pe:        "投资控股，净利润含投资公允价值损益，PE 无经营含义 → 诚实留空。",
     ev_sales:  "合并净负债含电信子公司债务 → EV/Sales 失真，不适用。",
@@ -781,6 +786,12 @@ const Selectors = {
             cell.note = cell.note ? `${cell.note} ${btext}` : btext;
           }
         }
+        // n/m 封顶（NM_MULT_CAP）：只加展示标记与 tooltip 真值，不动 value/sortKey/state。
+        if (value != null && col.kind === "mult" && value > this.NM_MULT_CAP) {
+          cell.nmCap = this.NM_MULT_CAP;
+          const nmNote = `倍数 ${value.toFixed(1)}× 超过 ${this.NM_MULT_CAP}× 展示封顶——分母利润过薄，倍数不具横比信息量；格内显示封顶值，排序仍按真值。`;
+          cell.note = cell.note ? `${cell.note} ${nmNote}` : nmNote;
+        }
         cells[col.key] = cell;
       }
       const st = stageOf(c);
@@ -829,6 +840,7 @@ const Selectors = {
         "单元格四态：正常出值；⚠ 失真（净利含投资公允价值损益等，出值但仅供参考、仍参与排序）；" +
         "— 不适用（结构上无经营含义，如投资控股公司的 PE）；— 待补（缺一致预期 EPS / 净负债等输入，" +
         "补录后自动点亮）。排序时所有 — 恒沉底，不伪造 0 或估算填坑。" +
+        "倍数超 200× 的格显示「>200×」（分母利润过薄、倍数失去横比信息量），悬浮可见真值、排序仍按真值。" +
         "基准差异：trailing 列基于最新实际财年 GAAP 净利，前瞻 PE 基于外部一致预期 EPS——" +
         "后者可能为 GAAP 或 Non-GAAP，跨列比较前请查看各格基准标注（「基准未标注」= 尚未取证，出值照常但口径待核）。",
     };

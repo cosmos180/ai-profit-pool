@@ -32,10 +32,11 @@
   }
 
   // relKey = stageValuationRel 的指标键(与 defs.key 的数据键名不同：ev_sales→evSales 等)。
+  // mult 系一律走 multCap：倍数超 200×（如 Intel 被压薄的净利）显示 ">200×"，真值挂 title。
   const defs = $derived([
-    { key: 'pe', relKey: 'pe', lbl: 'PE 市盈率', val: Selectors.pe(company), fmt: Fmt.mult, denom: '市值 / 净利润', sw: 'var(--ok)' },
-    { key: 'ps', relKey: 'ps', lbl: 'PS 市销率', val: Selectors.ps(company), fmt: Fmt.mult, denom: '市值 / 营收', sw: 'var(--ok)' },
-    { key: 'ev_sales', relKey: 'evSales', lbl: 'EV/Sales', val: Selectors.evSales(company), fmt: Fmt.mult, denom: '(市值+净负债) / 营收', sub2: evSub2, sw: 'var(--ok)' },
+    { key: 'pe', relKey: 'pe', lbl: 'PE 市盈率', val: Selectors.pe(company), fmt: Fmt.multCap, denom: '市值 / 净利润', sw: 'var(--ok)' },
+    { key: 'ps', relKey: 'ps', lbl: 'PS 市销率', val: Selectors.ps(company), fmt: Fmt.multCap, denom: '市值 / 营收', sw: 'var(--ok)' },
+    { key: 'ev_sales', relKey: 'evSales', lbl: 'EV/Sales', val: Selectors.evSales(company), fmt: Fmt.multCap, denom: '(市值+净负债) / 营收', sub2: evSub2, sw: 'var(--ok)' },
     { key: 'fcf_yield', relKey: 'fcfYield', lbl: 'FCF yield', val: Selectors.fcfYield(company), fmt: Fmt.pct, denom: '自由现金流 / 市值', sw: 'var(--ok)' },
   ])
 
@@ -96,7 +97,7 @@
       {:else if d.caveat === 'distorted'}
         <div class="card kpi distort">
           <div class="k-lbl"><span class="swatch" style="background:var(--est)"></span>{d.lbl}<span class="k-flag distort">口径失真</span></div>
-          <div class="k-val num">{d.fmt(d.val)}</div>
+          <div class="k-val num" title={Fmt.multCapTitle(d.val)}>{d.fmt(d.val)}</div>
           <div class="k-sub">{d.denom}</div>
           {#if d.sub2}<div class="k-sub">{d.sub2}</div>{/if}
           <div class="k-note">{d.reason || '该倍数受口径影响，仅供参考。'}</div>
@@ -104,7 +105,7 @@
       {:else}
         <div class="card kpi accent">
           <div class="k-lbl"><span class="swatch" style="background:{d.sw}"></span>{d.lbl}</div>
-          <div class="k-val num">{d.fmt(d.val)}</div>
+          <div class="k-val num" title={Fmt.multCapTitle(d.val)}>{d.fmt(d.val)}</div>
           <div class="k-sub">{d.denom}</div>
           {#if d.sub2}<div class="k-sub">{d.sub2}</div>{/if}
           {#if d.rel}<div class="k-rel">{d.rel}</div>{/if}
@@ -126,7 +127,7 @@
       {/if}
     </div>
     <div class="fwd-body">
-      <div class="fwd-val num">{Fmt.mult(fwdPE)}</div>
+      <div class="fwd-val num" title={Fmt.multCapTitle(fwdPE)}>{Fmt.multCap(fwdPE)}</div>
       <div class="fwd-sub">
         {#if fwdPE != null}
           价格 / 一致预期 EPS{fwdYear ? `（${fwdYear.fy}）` : ''} · 来源 <b>consensus</b>，非官方 trailing
