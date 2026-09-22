@@ -6,6 +6,7 @@
   import { Fmt } from '../lib/fmt.js'
   import { Safe } from '../lib/safe.js'
   import { ccy, money } from '../lib/ccy.svelte.js'
+  import CcyToggle from './CcyToggle.svelte'
   import Trend from '../charts/Trend.svelte'
   import ValuationCard from './ValuationCard.svelte'
   import SourcesBlock from './SourcesBlock.svelte'
@@ -151,15 +152,7 @@
     <span class="tagx">{c.sector}</span>
     <span class="segtag {Safe.cls(c.seg_profit)}">{Fmt.segLabel(c.seg_profit)}</span>
   </div>
-  {#if srcCcy}
-    <div class="ccy-toggle" role="group" aria-label="显示币种">
-      <span class="ct-lbl">显示币种</span>
-      <button class="ct-chip" class:on={ccy.mode !== 'src'} onclick={() => ccy.set('usd')}
-        title="库内统一 USD 口径（按各期入账汇率折算），跨公司可比">USD</button>
-      <button class="ct-chip" class:on={ccy.mode === 'src'} onclick={() => ccy.set('src')}
-        title="{srcCcy} 报告币种：按各期财报原币精确还原（该期入账汇率 ×），与官方 filing 逐位一致；同比亦按原币计算（去汇率影响）。预测年与估值卡仍为 USD。">{srcCcy} 报告币种</button>
-    </div>
-  {/if}
+  <CcyToggle company={c} />
   {#if c.lead}<p class="lead">{c.lead}</p>{/if}
 
   <div class="section-h">最新报告期{#if latestView?.label} · {latestView.label}{/if}</div>

@@ -10,6 +10,7 @@
   import RevenueBreakdown from './RevenueBreakdown.svelte'
   import SourcesBlock from './SourcesBlock.svelte'
   import { ccy, money } from '../lib/ccy.svelte.js'
+  import CcyToggle from './CcyToggle.svelte'
 
   const c = $derived(nav.companyId ? Store.byId(nav.companyId) : null)
   const forecast = $derived(c && nav.fy ? Selectors.forecastYear(c) : null)
@@ -145,6 +146,7 @@
       <span class="dbadge ybadge act">实际 · GAAP</span>
     {/if}
   </div>
+  <CcyToggle company={c} />
 
   {#snippet frameworkBreak()}
     {#if frameworkChange}
