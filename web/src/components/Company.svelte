@@ -22,22 +22,54 @@
   const latestReportCards = $derived.by(() => {
     if (!latestView?.complete) return []
     const cards = [
-      { lbl: '营收', val: Fmt.bn(latestView.revenue, 1), sub: `${latestView.label} · 截至 ${latestView.coverage.as_of}`, cls: '', sw: 'var(--past)' },
-      { lbl: '净利润', val: Fmt.bn(latestView.net_income, 1), sub: '最新实际季度', cls: 'accent', sw: 'var(--ok)' },
+      { lbl: '营收', val: money(latestView.revenue, latestPeriod), sub: `${latestView.label} · 截至 ${latestView.coverage.as_of}`, cls: '', sw: 'var(--past)' },
+      { lbl: '净利润', val: money(latestView.net_income, latestPeriod), sub: '最新实际季度', cls: 'accent', sw: 'var(--ok)' },
     ]
-    if (latestView.op_income != null) cards.push({ lbl: '经营利润', val: Fmt.bn(latestView.op_income, 1), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
-    if (latestPeriod?.gross_profit != null) cards.push({ lbl: '毛利', val: Fmt.bn(latestPeriod.gross_profit, 1), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
+    if (latestView.op_income != null) cards.push({ lbl: '经营利润', val: money(latestView.op_income, latestPeriod), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
+    if (latestPeriod?.gross_profit != null) cards.push({ lbl: '毛利', val: money(latestPeriod.gross_profit, latestPeriod), sub: '公司层面', cls: 'accent', sw: 'var(--ok)' })
     return cards
   })
   const periodTag = p => p?.calendar_year != null && p?.calendar_quarter ? `${p.calendar_year}${p.calendar_quarter}` : (p?.period_end || p?.period_id || '—')
+
+  // —— 显示币种（呈现分流，无业务算术）：USD（库内统一口径）⇄ 报告币种（原币精确还原）——
+  // money(v, carrier)：src 模式且该期可还原（币种相符 + 有 fx）→ Fmt.local，否则回退 Fmt.bn。
+  // carrier 是该金额的数据期（period）；还原即 × 该期入账汇率——与官方 filing 逐位一致。
+  const srcCcy = $derived(c ? Selectors.srcCcyOf(c) : null)
+  const inSrc = $derived(nav.ccy === 'src' && !!srcCcy)
+  const money = (v, carrier) => {
+    if (inSrc) {
+      const lv = Selectors.toSrc(v, carrier, srcCcy)
+      if (lv != null) return Fmt.local(lv, srcCcy)
+    }
+    return Fmt.bn(v, 1)
+  }
+  // Trend 的 localize（数值版）：按 FY 映射年度期 fx；预测年无期 → 用最新已知年汇率兜底
+  // （图中标注「预测年按最新年汇率折算」，绝不显示错量级的 USD 裸值）。
+  const fxByFy = $derived.by(() => {
+    if (!c) return {}
+    const m = {}
+    for (const p of Selectors.actualAnnuals(c)) {
+      if (p.fiscal_year && p.fx_to_usd && p.currency === srcCcy) m[p.fiscal_year] = p.fx_to_usd
+    }
+    return m
+  })
+  const trendLocalize = $derived.by(() => {
+    if (!inSrc) return null
+    const fxs = Object.values(fxByFy)
+    const latest = fxs.length ? fxs[fxs.length - 1] : null
+    return (v, fy) => {
+      const fx = fxByFy[fy] != null ? fxByFy[fy] : latest
+      return fx != null && v != null ? v * fx : null
+    }
+  })
 
   // KPI 卡（原 renderCompany cards 逻辑）。fmt 已在此完成，val/sub 是格式化串。
   const kpis = $derived.by(() => {
     if (!c) return []
     return la
       ? [
-          { lbl: `${la.fiscal_year} 营收`, val: Fmt.bn(la.revenue), sub: '最新实际', cls: '', sw: 'var(--past)' },
-          { lbl: `${la.fiscal_year} 净利润`, val: Fmt.bn(la.net_income), sub: '净利率 ' + Fmt.pct(Selectors.netMargin(la)), cls: 'accent', sw: 'var(--ok)' },
+          { lbl: `${la.fiscal_year} 营收`, val: money(la.revenue, la), sub: '最新实际', cls: '', sw: 'var(--past)' },
+          { lbl: `${la.fiscal_year} 净利润`, val: money(la.net_income, la), sub: '净利率 ' + Fmt.pct(Selectors.netMargin(la)), cls: 'accent', sw: 'var(--ok)' },
           { lbl: `${la.fiscal_year} 毛利率`, val: Fmt.pct(Selectors.grossMargin(la)), sub: 'GAAP', cls: 'accent', sw: 'var(--ok)' },
         ]
       : [{ lbl: '实际财年', val: '—', sub: '尚未补录 actual 年', cls: '', sw: 'var(--past)' }]
@@ -56,8 +88,8 @@
         end: p.period_end,
         rev: p.revenue,
         ni: p.net_income,
-        revLabel: Fmt.bn(p.revenue, 1),
-        niLabel: Fmt.bn(p.net_income, 1),
+        revLabel: money(p.revenue, p),
+        niLabel: money(p.net_income, p),
         nmLabel: Fmt.pct(Selectors.netMargin(p)),
       }))
   })
@@ -66,11 +98,12 @@
   const yearRows = $derived.by(() => {
     if (!c) return []
     return Selectors.actualAnnuals(c).map(y => {
-      const ry = Selectors.annualRevYoY(c, y.fiscal_year)
+      // src 模式下同比按原币还原（真实经营增速，去汇率折算噪声）；USD 模式保持库内口径。
+      const ry = inSrc ? Selectors.annualRevYoYSrc(c, y.fiscal_year) : Selectors.annualRevYoY(c, y.fiscal_year)
       return {
         fy: y.fiscal_year, ry,
-        revLabel: Fmt.bn(y.revenue, 1),
-        niLabel: y.net_income != null ? Fmt.bn(y.net_income, 1) : '—',
+        revLabel: money(y.revenue, y),
+        niLabel: y.net_income != null ? money(y.net_income, y) : '—',
         nmLabel: Fmt.pct(Selectors.netMargin(y)),
       }
     })
@@ -79,6 +112,7 @@
     if (!c) return []
     return c.years.filter(y => y.status === 'forecast').map(y => ({
       fy: y.fy,
+      // 预测年是 years[] 侧事实，无原币载体 → 恒按 USD 呈现（子标注明），不拿错期汇率硬折。
       revLabel: '≈' + Fmt.bn(y.revenue, 0),
       niLabel: y.net_income != null ? '≈' + Fmt.bn(y.net_income, 0) : '—',
       nmLabel: Fmt.pct(Selectors.netMargin(y)),
@@ -93,8 +127,8 @@
     if (!cy) return []
     const fcf = Selectors.fcf(cy)
     return [
-      { lbl: 'capex 强度', val: Fmt.pct(Selectors.capexIntensity(cy)), sub: cy.capex != null ? 'capex ' + Fmt.bn(cy.capex, 1) + ' / 营收' : '未录入 capex', cls: '', sw: 'var(--est)' },
-      { lbl: '自由现金流 FCF', val: Fmt.bn(fcf, 1), sub: cy.cfo != null ? 'CFO ' + Fmt.bn(cy.cfo, 1) + ' − capex' : '缺 CFO 无法派生', cls: fcf != null && fcf < 0 ? '' : 'accent', sw: 'var(--ok)' },
+      { lbl: 'capex 强度', val: Fmt.pct(Selectors.capexIntensity(cy)), sub: cy.capex != null ? 'capex ' + money(cy.capex, cy) + ' / 营收' : '未录入 capex', cls: '', sw: 'var(--est)' },
+      { lbl: '自由现金流 FCF', val: money(fcf, cy), sub: cy.cfo != null ? 'CFO ' + money(cy.cfo, cy) + ' − capex' : '缺 CFO 无法派生', cls: fcf != null && fcf < 0 ? '' : 'accent', sw: 'var(--ok)' },
       { lbl: 'FCF 利润率', val: Fmt.pct(Selectors.fcfMargin(cy)), sub: 'FCF / 营收', cls: 'accent', sw: 'var(--ok)' },
       { lbl: '现金转化率', val: Fmt.pct(Selectors.cashConversion(cy)), sub: 'FCF / 净利润 · 利润含金量', cls: 'accent', sw: 'var(--ok)' },
     ]
@@ -123,6 +157,15 @@
     <span class="tagx">{c.sector}</span>
     <span class="segtag {Safe.cls(c.seg_profit)}">{Fmt.segLabel(c.seg_profit)}</span>
   </div>
+  {#if srcCcy}
+    <div class="ccy-toggle" role="group" aria-label="显示币种">
+      <span class="ct-lbl">显示币种</span>
+      <button class="ct-chip" class:on={nav.ccy !== 'src'} onclick={() => nav.setCcy('usd')}
+        title="库内统一 USD 口径（按各期入账汇率折算），跨公司可比">USD</button>
+      <button class="ct-chip" class:on={nav.ccy === 'src'} onclick={() => nav.setCcy('src')}
+        title="{srcCcy} 报告币种：按各期财报原币精确还原（该期入账汇率 ×），与官方 filing 逐位一致；同比亦按原币计算（去汇率影响）。预测年与估值卡仍为 USD。">{srcCcy} 报告币种</button>
+    </div>
+  {/if}
   {#if c.lead}<p class="lead">{c.lead}</p>{/if}
 
   <div class="section-h">最新报告期{#if latestView?.label} · {latestView.label}{/if}</div>
@@ -155,7 +198,7 @@
     {/each}
   </div>
 
-  <Trend company={c} />
+  <Trend company={c} localize={trendLocalize} ccy={inSrc ? srcCcy : 'USD'} />
 
   {#if hasActual}
     <div class="section-h">{cashHeading}</div>
@@ -224,7 +267,7 @@
         <button class="ycard is-fc" onclick={() => nav.goDetail(c.id, y.fy)}>
           <div class="yhead"><span class="yfy">{y.fy}</span><span class="ybadge fc">预测</span></div>
           <div class="yrev num">{y.revLabel}</div>
-          <div class="yrevlbl">营收 · 卖方一致预期</div>
+          <div class="yrevlbl">营收 · 卖方一致预期{#if inSrc} · USD 口径{/if}</div>
           <div class="yrow"><span class="l">净利润</span><span class="v num">{y.niLabel}</span></div>
           <div class="yrow"><span class="l">净利率</span><span class="v num">{y.nmLabel}</span></div>
           <span class="yopen">查看预测锚点 →</span>
@@ -233,5 +276,5 @@
     </div>
   {/if}
 
-  <div class="note-block"><b>口径说明：</b>{note}</div>
+  <div class="note-block"><b>口径说明：</b>{note}{#if inSrc} 当前为 <b>{srcCcy} 报告币种</b>视图：各期金额按该期财报入账汇率精确还原为原币（与官方披露逐位一致），同比按原币计算以剔除汇率折算影响；预测年（无原币载体）与估值快照仍为 USD。{/if}</div>
 {/if}

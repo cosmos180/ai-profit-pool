@@ -6,10 +6,22 @@
   import { onMount } from 'svelte'
   import { Selectors } from '../lib/data.js'
   import { Safe } from '../lib/safe.js'
+  import { Fmt } from '../lib/fmt.js'
 
-  let { company } = $props()
+  // localize：显示币种切换注入的「USD → 报告币种」数值换算（null = USD 模式）。
+  // 组件只消费换算后的数值，几何/比例不碰口径；localize 未命中（如预测年缺 fx）→
+  // null → 该柱如实降级（标签 —、高度 0），绝不把 USD 裸值混进原币坐标。
+  let { company, localize = null, ccy = 'USD' } = $props()
 
-  const data = $derived(company?.years || [])
+  const raw = $derived(company?.years || [])
+  // 标签统一走 Fmt（local 档带符号/数量级缩放；USD 模式保持原裸数字，零可见变化）
+  const numLbl = v => (localize ? Fmt.local(v, ccy) : (v ?? '—'))
+
+  const data = $derived(raw.map(y => {
+    if (!localize) return y
+    const conv = v => (v == null ? null : localize(v, y.fy))
+    return { ...y, revenue: conv(y.revenue), net_income: y.net_income == null ? null : conv(y.net_income) }
+  }))
 
   // 容器实测宽度（布局量，ResizeObserver 驱动）。初值取原实现的下限 820。
   let hostW = $state(820)
@@ -47,7 +59,7 @@
   const gridlines = $derived(
     [0, 1, 2, 3, 4].map(i => {
       const gv = max * i / 4
-      return { gy: yS(gv), label: gv.toFixed(0) }
+      return { gy: yS(gv), label: localize ? Fmt.local(gv, ccy) : gv.toFixed(0) }
     })
   )
 
@@ -55,17 +67,17 @@
     data.map((y, i) => {
       const cx = padL + groupW * i + groupW / 2
       const fc = y.status === 'forecast'
-      const revY = yS(y.revenue)
+      const revY = yS(y.revenue || 0)
       const niY = yS(y.net_income || 0)
       const x1 = cx - barW - 3, x2 = cx + 3
       return {
         cx, fc, x1, x2,
-        revY, revH: Math.max(0, (y.revenue / max) * innerH), revFill: fc ? 'url(#h2)' : 'var(--past)',
-        revLabel: y.revenue,
+        revY, revH: Math.max(0, ((y.revenue || 0) / max) * innerH), revFill: fc ? 'url(#h2)' : 'var(--past)',
+        revLabel: numLbl(y.revenue),
         // niH 用于矩形高度（布局量），净利为负时钳到 0 避免非法负高度（如软银 FY2023 -1.5B）；
         // 真实数值仍由 niLabel 如实呈现（-1.504），不伪造。原实现未钳，本迁移做无损修正。
         niY, niH: Math.max(0, ((y.net_income || 0) / max) * innerH), niFill: fc ? 'url(#h3)' : 'var(--ok)',
-        niLabel: y.net_income || '—',  // 原 renderTrend 用 ||：净利为 0/null 均显 "—"（呈现降级，非业务算术）
+        niLabel: numLbl(y.net_income),  // 净利为 0/null 均显 "—"（呈现降级，非业务算术）
         fy: y.fy,
       }
     })
@@ -134,7 +146,8 @@
   <div class="chart-legend">
     <div class="i"><span class="lg" style="background:var(--past)"></span>营收（实际）</div>
     <div class="i"><span class="lg" style="background:var(--ok)"></span>净利润（实际）</div>
-    <div class="i"><span class="lg lg-hatch"></span>预测</div>
+    <div class="i"><span class="lg lg-hatch"></span>预测{#if localize} · 按最新年汇率折算{/if}</div>
     <div class="i"><span class="lg" style="background:transparent;border-top:2px dashed var(--ink-soft);height:2px;border-radius:0;margin-top:5px"></span>净利率 %</div>
+    {#if localize}<div class="i"><span class="lg" style="background:transparent;height:2px;margin-top:5px"></span>币种 {ccy} · 各年按财报入账汇率还原</div>{/if}
   </div>
 </div>

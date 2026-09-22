@@ -2521,4 +2521,45 @@ assert.equal(ab.memory, 0); assert.equal(ab.invest, 0);
   assert.ok(/200×/.test(t.caveatNote));
 }
 
+// =====================================================================
+// 显示币种还原（srcCcyOf / toSrc / annualRevYoYSrc）——公司页「USD ⇄ 报告币种」切换的
+// selector 契约：原币=×该期入账汇率精确还原；币种不符/缺 fx → null 回退 USD；
+// 原币同比去汇率折算噪声，币种断裂回退 USD 口径。
+// =====================================================================
+{
+  const mkC = (cur, rows) => ({
+    id: "zz", name: "Z", status: "populated",
+    years: [{ fy: "FY26E", status: "forecast" }],
+    periods: rows.map(([fy, rev, fx]) => ({
+      period_id: `zz-${fy.toLowerCase()}`, kind: "annual", status: "actual",
+      period_start: `${fy.slice(2)}-01-01`, period_end: `${fy.slice(2)}-12-31`,
+      fiscal_year: fy, currency: cur, fx_to_usd: fx, revenue: rev,
+      segments: [], sources: [],
+    })),
+  });
+  const cny = mkC("CNY", [["FY2023", 80, 7.2], ["FY2024", 86.4, 7.2], ["FY2025", 100, 7.0]]);
+  const p25 = cny.periods[2];
+
+  // 币种识别：非 USD 报表 → 报告币种；USD 报表 → null（视图不提供切换，库内即原币）
+  assert.equal(Selectors.srcCcyOf(cny), "CNY");
+  assert.equal(Selectors.srcCcyOf(mkC("USD", [["FY2025", 100, 1]])), null);
+
+  // toSrc：×该期入账汇率精确还原财报原值；失败关闭（币种不符/缺 fx/缺值 → null）
+  assert.equal(Selectors.toSrc(100, p25, "CNY"), 700);
+  assert.equal(Selectors.toSrc(100, { ...p25, currency: "USD" }, "CNY"), null);
+  assert.equal(Selectors.toSrc(100, { ...p25, fx_to_usd: null }, "CNY"), null);
+  assert.equal(Selectors.toSrc(null, p25, "CNY"), null);
+
+  // 同比两口径分流：库内(USD)值 86.4→100 = +15.74%；原币还原 (100×7.0)/(86.4×7.2) = +12.53%
+  // —— 后者剔除汇率折算噪声才是经营增速，切换视图时明确分流。
+  assert.ok(Math.abs(Selectors.annualRevYoYSrc(cny, "FY2025") - (700 / 622.08 - 1)) < 1e-12);
+  assert.ok(Math.abs(Selectors.annualRevYoY(cny, "FY2025") - (100 - 86.4) / 86.4) < 1e-12);
+  // 币种断裂（上年 USD 本年 CNY）→ 回退 USD 口径 annualRevYoY，不硬折
+  const mixed = mkC("USD", [["FY2024", 12, 1]]);
+  mixed.periods.push({ ...p25 });
+  assert.equal(Selectors.annualRevYoYSrc(mixed, "FY2025"), Selectors.annualRevYoY(mixed, "FY2025"));
+  // 最早财年无基期 → null（两口径一致）
+  assert.equal(Selectors.annualRevYoYSrc(cny, "FY2023"), null);
+}
+
 console.log("logic tests passed");

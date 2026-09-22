@@ -33,6 +33,12 @@ h1.title{font-size:clamp(22px,3.3vw,30px);margin:13px 0 4px;font-weight:700;lett
 .lead{color:var(--ink-soft);font-size:13.5px;max-width:66ch;margin:0;line-height:1.6}.lead b{color:var(--ink)}
 .cmeta-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 14px}
 .cmeta-row .tickerbadge{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:3px 10px}
+/* 显示币种切换（公司页）：与 cmeta-row 同族的紧凑 chip 组，只有非 USD 报表公司渲染 */
+.ccy-toggle{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:-4px 0 16px}
+.ct-lbl{font-size:11px;font-family:var(--mono);color:var(--ink-faint);letter-spacing:.04em}
+.ct-chip{appearance:none;cursor:pointer;font-family:var(--mono);font-size:11px;padding:3px 11px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft)}
+.ct-chip:hover{border-color:var(--ink-faint)}
+.ct-chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .cmeta-row .tagx,.cmeta-row .segtag{font-size:11px;padding:3px 9px}
 .section-h{font-size:12px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:28px 0 13px;display:flex;align-items:center;gap:10px}
 .section-h::after{content:"";flex:1;height:1px;background:var(--line-soft)}

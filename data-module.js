@@ -1077,6 +1077,39 @@ const Selectors = {
     return prev ? (cur - prev) / prev : null;
   },
 
+  /* ---- 显示币种（呈现辅助 · 算不存）：报告币种还原 ----
+     srcCcyOf(c)：报告币种 = 最新 actual 年度期的 currency（非 USD 才返回，否则 null，
+       视图据此隐藏切换）。USD 报表公司不提供切换（库内即原币）。
+     toSrc(v, p, ccy)：库内 USD bn × 该期 fx_to_usd → 原币 bn（精确还原财报原值）。
+       期缺失/币种不符/无 fx → null（视图回退 USD，绝不拿错期汇率硬折）。
+     annualRevYoYSrc(c, fy)：报告币种同比——两期同源币种且均有 fx 时按原币还原比较
+       （真实经营增速，去汇率折算噪声）；否则回退 annualRevYoY（USD 口径）。
+     口径纪律：还原用「该期财报入账汇率」而非查看当日汇率——当日汇率会让历史数
+     随今天的价漂移、与官方 filing 对不上；只对当下市值类折算才有意义（估值卡保持 USD）。 */
+  srcCcyOf(c) {
+    const anns = this.actualAnnuals(c);
+    for (let i = anns.length - 1; i >= 0; i--) {
+      if (anns[i].currency && anns[i].currency !== "USD") return anns[i].currency;
+    }
+    return null;
+  },
+  toSrc(v, p, ccy) {
+    if (v == null || !p || !p.fx_to_usd || !ccy) return null;
+    if (p.currency && p.currency !== ccy) return null;
+    return v * p.fx_to_usd;
+  },
+  annualRevYoYSrc(c, fy) {
+    const anns = this.actualAnnuals(c);
+    const i = anns.findIndex(p => p.fiscal_year === fy);
+    if (i <= 0) return null;
+    const prev = anns[i - 1], cur = anns[i];
+    if (prev.currency && prev.currency === cur.currency
+        && prev.fx_to_usd > 0 && cur.fx_to_usd > 0 && prev.revenue && cur.revenue) {
+      return (cur.revenue * cur.fx_to_usd) / (prev.revenue * prev.fx_to_usd) - 1;
+    }
+    return this.annualRevYoY(c, fy);
+  },
+
   /* a period carries a financial fact if any monetary field is non-null */
   _hasFinancialFact(p) {
     return !!p && (p.revenue != null || p.gross_profit != null || p.op_income != null

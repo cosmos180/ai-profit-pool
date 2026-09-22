@@ -9,6 +9,9 @@ class Nav {
   // 登记表报告镜头（口径，非指标）：'auto' = 组件按覆盖度自动选（默认 TTM，不足退最新季），
   // 或显式 'latestQuarter' | 'ttm' | 'calendarYear' | 'fiscalYear'。仅作用于登记表数值/角标区。
   reportLens = $state('auto')
+  // 显示币种（公司页）：'usd' = 库内统一 USD 口径（默认，跨公司可比）；
+  // 'src' = 报告币种（按各期财报原币精确还原，仅非 USD 报表公司提供切换）。跨页面保留。
+  ccy = $state('usd')
 
   goHome() { this.companyId = null; this.fy = null; this.periodId = null; this.view = 'home'; scrollTop() }
   goComps() { this.companyId = null; this.fy = null; this.periodId = null; this.view = 'comps'; scrollTop() }
@@ -18,6 +21,7 @@ class Nav {
   goPeriod(id, periodId) { this.companyId = id; this.fy = null; this.periodId = periodId; this.view = 'detail'; scrollTop() }
   setHomeMetric(m) { this.homeMetric = m }
   setReportLens(l) { this.reportLens = l }
+  setCcy(x) { this.ccy = x }
 }
 
 function scrollTop() {
